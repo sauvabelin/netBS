@@ -1,0 +1,52 @@
+{% extends '@NetBSCore/layout/backend.layout.twig' %}
+
+{% macro subGroup(groupe) %}
+
+    {% import _self as wallah %}
+
+    <li>
+        <p>
+            <i class="fas fa-angle-right"></i>
+            <a href="{{ path('netbs.fichier.groupe.page_groupe', {id: groupe.id}) }}">{{ groupe.nom }}</a> <span class="text-muted">{{ groupe.groupeType.nom }}</span>
+            {% for child in groupe.enfants %}
+            <ul class="fa-ul">
+                {{ wallah.subGroup(child) }}
+            </ul>
+            {% endfor %}
+        </p>
+    </li>
+
+{% endmacro %}
+
+{% block main %}
+
+    {% import _self as wallah %}
+
+    {{ registerJs(asset('bundles/netbscore/js/modal.js')) }}
+
+    {% set newGroupeBtn %}<button data-modal data-modal-url="{{ path("netbs.fichier.groupe.modal_add") }}" class="btn btn-primary">Nouvelle unité</button>{% endset %}
+
+
+    <div class="container-fluid">
+
+        {% include '@NetBSCore/includes/header.include.twig' with {
+            header: 'Liste des unités',
+            subHeader: 'Toutes les unités et sous-unités enregistrées',
+            actions: [
+                newGroupeBtn
+            ]
+        } %}
+
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list">
+                    {% for root in roots %}
+                        {{ wallah.subGroup(root) }}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+imports:
+    - { resource: lists.yml }
+
+
+services:
+
+    sauvabelin.isp_config_manager:
+        class: SauvabelinBundle\Service\ISPConfigManager
+        arguments:
+            - "%ispconfig_host%"
+            - "%ispconfig_user%"
+            - "%ispconfig_password%"
+            - "%ispconfig_maildir%"
+            - "%ispconfig_homedir%"
+            - "%ispconfig_client_id%"
+            - "%ispconfig_server_id%"
+            - "%ispconfig_uid%"
+            - "%ispconfig_gid%"
+
+    sauvabelin.command.post_install:
+        class: SauvabelinBundle\Command\PostInstallCommand
+        tags:
+            - { name: console.command }
+            - { name: netbs.post_install_script }
+
+    sauvabelin.form.membre_extension:
+        class: SauvabelinBundle\Form\MembreTypeExtension
+        tags:
+            - { name: form.type_extension, extended_type: NetBS\FichierBundle\Form\Personne\MembreType }
+
+    sauvabelin.listener.main_menu:
+        class: SauvabelinBundle\Listener\MainMenuListener
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure }
+
+    sauvabelin.listener.dashboard_layout:
+        class: SauvabelinBundle\Listener\DashboardListener
+        arguments:
+            - "@request_stack"
+        tags:
+            - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: extendsDashboard }
+
+    sauvabelin.voter.mailing_lists:
+        class: SauvabelinBundle\Voter\MailingListVoter
+        tags:
+            - { name: security.voter }
+
+    sauvabelin.subscriber.user:
+        class: SauvabelinBundle\Subscriber\UserSubscriber
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+    sauvabelin.subscriber.mailing_lists:
+        class: SauvabelinBundle\Subscriber\MailingListSubscriber
+        arguments:
+            - "@sauvabelin.isp_config_manager"
+        tags:
+            - { name: doctrine.event_subscriber,  }
+
+    sauvabelin.listener.verify_user_password_change:
+        class: SauvabelinBundle\Listener\ForceNewPasswordListener
+        arguments:
+            - "@security.token_storage"
+            - "@router"
+            - "@session"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: verifyUser }

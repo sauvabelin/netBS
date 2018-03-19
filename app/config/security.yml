@@ -1,0 +1,40 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+
+    encoders:
+        "%netbs_secure_user_class%":
+            algorithm: sha512
+            iterations: 5000
+
+    providers:
+        database:
+            entity:
+                class: "%netbs_secure_user_class%"
+                property: username
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        netbs:
+            anonymous:  true
+            pattern:    ^/netBS
+            form_login:
+                login_path:   netbs.secure.login.login
+                check_path:   netbs.secure.login.login
+                default_target_path:  netbs.core.home.dashboard
+            remember_me:
+                secret:   '%secret%'
+                lifetime: 604800
+                path:     /netBS
+            logout:
+                path:   netbs.secure.login.logout
+                target: netbs.secure.login.login
+            logout_on_user_change: true
+
+    access_control:
+        - { path: ^/netBS/secure/login,   roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+        - { path: ^/netBS,                roles: [ IS_AUTHENTICATED_FULLY, ROLE_USER ] }

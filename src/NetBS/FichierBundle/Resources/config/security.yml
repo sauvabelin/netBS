@@ -1,0 +1,44 @@
+services:
+
+    netbs.fichier.security.voter.structure:
+        class: NetBS\FichierBundle\Voter\StructureVoter
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: security.voter }
+
+    netbs.fichier.security.voter.attribution:
+        class: NetBS\FichierBundle\Voter\AttributionVoter
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: security.voter }
+
+    netbs.fichier.security.voter.contact:
+        class: NetBS\FichierBundle\Voter\ContactVoter
+        arguments:
+            - "@netbs.fichier.config"
+            - "@netbs.fichier.contact_manager"
+        tags:
+            - { name: security.voter }
+
+    netbs.fichier.security.voter.groupe:
+        class: NetBS\FichierBundle\Voter\GroupeVoter
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: security.voter }
+
+    netbs.fichier.security.voter.membre_famille:
+        class: NetBS\FichierBundle\Voter\MembreFamilleVoter
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: security.voter }
+
+    netbs.fichier.security.voter.obtention_distinction:
+        class: NetBS\FichierBundle\Voter\ObtentionDistinctionVoter
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: security.voter }

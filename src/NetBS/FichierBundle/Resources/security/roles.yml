@@ -1,0 +1,20 @@
+roles:
+    ROLE_SG:
+        description: "Secrétaire général"
+        poids: 80000
+        children:
+            ROLE_CREATE:
+                description: "Permet de créer des entités dans un groupe"
+                poids: 50
+
+            ROLE_READ:
+                description: "Permet de voir les entités d'un groupe"
+                poids: 50
+
+            ROLE_UPDATE:
+                description: "Permet de mettre à jour les entités d'un groupe"
+                poids: 50
+
+            ROLE_DELETE:
+                description: "Permet de supprimer les entités d'un groupe"
+                poids: 50

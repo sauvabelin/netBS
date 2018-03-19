@@ -1,0 +1,26 @@
+
+.form-horizontal {
+
+    .form-group {
+
+        margin-bottom:0;
+        padding:0;
+
+    }
+
+    &.well {
+
+        background:$gray-100;
+        padding:$spacer/2 $spacer*1.5;
+        border-radius:$border-radius-lg;
+        border:1px solid $gray-200;
+    }
+}
+
+.form-group {
+
+    label {
+
+        color:$gray-600;
+    }
+}

@@ -1,0 +1,14 @@
+galerie:
+    resource: "@GalerieBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+sauvabelin:
+    resource: "@SauvabelinBundle/Controller/"
+    type:     annotation
+    prefix:   /netBS/bs
+
+
+netbs:
+    resource: '@NetBSCoreBundle/Resources/config/routing.yml'
+    prefix: /netBS

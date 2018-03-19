@@ -1,0 +1,34 @@
+services:
+
+    netbs.fichier.exporter.csv_membre:
+        class:  NetBS\FichierBundle\Exporter\CSVMembre
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.exporter }
+
+    netbs.fichier.exporter.pdf_list_membres:
+        class: NetBS\FichierBundle\Exporter\PDFListMembres
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.exporter }
+
+    netbs.fichier.exporter.pdf_list_groupe:
+        class: NetBS\FichierBundle\Exporter\PDFListGroupe
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.exporter }
+
+    netbs.fichier.exporter.pdf_etiquettes:
+        class: NetBS\FichierBundle\Exporter\PDFEtiquettes
+        tags:
+            - { name: netbs.exporter }
+
+    netbs.fichier.exporter.csv_rega:
+        class: NetBS\FichierBundle\Exporter\CSVRega
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.exporter }

@@ -1,0 +1,12 @@
+bs:
+    fonction.commandant_id:             -1
+    fonction.secretaire_general_id:     -1
+
+    fonction.louveteau_id:              -1
+    fonction.eclaireur_id:              -1
+
+    fonction.mail_redirect_weight_min:  500
+    fonction.mail_redirect_weight_max:  999
+
+    fonction.mailbox_weight_min:        1000
+    fonction.mailbox_weight_max:        10000

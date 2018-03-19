@@ -1,0 +1,21 @@
+
+//Mixins
+@import "mixins/user-select";
+
+@import "variables";
+@import "~bootstrap/scss/bootstrap";
+
+@import "layout/menu";
+@import "layout/header";
+@import "layout/global";
+
+//Plugins
+@import "plugin/datetimepicker";
+@import "plugin/datatables";
+@import "plugin/select2";
+
+//Bootstrap
+@import "bootstrap/cards";
+@import "bootstrap/buttons";
+@import "bootstrap/tabs";
+@import "bootstrap/form";

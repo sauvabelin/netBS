@@ -1,0 +1,61 @@
+
+services:
+
+    netbs.fichier.searcher.membres:
+        class: NetBS\FichierBundle\Searcher\MembreSearcher
+        tags:
+            - { name: netbs.searcher }
+            - { name: netbs.list.model }
+
+    netbs.fichier.list.fonctions:
+        class: NetBS\FichierBundle\ListModel\FonctionsList
+        tags:
+            - { name: netbs.list.model }
+
+    netbs.fichier.list.groupe_modeles:
+        class: NetBS\FichierBundle\ListModel\GroupeTypesList
+        tags:
+            - { name: netbs.list.model }
+
+    netbs.fichier.list.groupe_categories:
+        class: NetBS\FichierBundle\ListModel\GroupeCategoriesList
+        tags:
+            - { name: netbs.list.model }
+
+    netbs.fichier.list.distinctions:
+        class: NetBS\FichierBundle\ListModel\DistinctionsList
+        tags:
+            - { name: netbs.list.model }
+
+    netbs.fichier.list.famille_membres:
+        class: NetBS\FichierBundle\ListModel\FamilleMembresList
+        tags:
+            - { name: netbs.list.model }
+
+    netbs.fichier.list.membre_dynamic:
+        class: NetBS\FichierBundle\ListModel\DynamicMembreList
+        tags:
+            - { name: netbs.list.model }
+            - { name: netbs.dynamic_model, managedClass: NetBS\FichierBundle\Document\Membre }
+
+    netbs.fichier.list.membre_attributions:
+        class: NetBS\FichierBundle\ListModel\MembreAttributionsList
+        tags:
+            - { name: netbs.list.model }
+
+
+    netbs.fichier.list.membre_obtentions_distinction:
+        class: NetBS\FichierBundle\ListModel\MembreObtentionsDistinctionList
+        tags:
+            - { name: netbs.list.model }
+
+    netbs.fichier.list.groupe_attributions:
+        class: NetBS\FichierBundle\ListModel\GroupeAttributionsList
+        tags:
+            - { name: netbs.list.model }
+
+    netbs.fichier.automatic.birthday:
+        class: NetBS\FichierBundle\Automatics\BirtdayAutomatic
+        tags:
+          - { name: netbs.list.model }
+          - { name: netbs.automatic_list }

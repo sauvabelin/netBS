@@ -1,0 +1,186 @@
+
+fonctions:
+    commandant:
+        abbreviation: Cdt
+        poids: 10000
+    commandant désigné:
+        abbreviation: CdtDes
+        poids: 9999
+
+    #edc
+    'membre edc':
+        abbreviation: MEqCdt
+        poids: 3000
+    quartier-maitre:
+        abbreviation: QM
+        poids: 8000
+    quartier-maitre adjoint:
+        abbreviation: QMA
+        poids: 7500
+    'secrétaire général':
+        abbreviation: SG
+        poids: 6000
+    secrétaire general adjoint:
+        abbreviation: SGA
+        poids: 1000
+    trésorier:
+        abbreviation: Très.
+        poids: 6000
+    'responsable communication':
+        abbreviation: R..com
+        poids: 6000
+    'responsable formation externe':
+        abbreviation: Resp. form
+        poids: 6000
+    'responsable formation interne':
+        abbreviation: Resp. form
+        poids: 6000
+    'responsable locaux':
+        abbreviation: resp locaux
+        poids: 6000
+    'coach JS':
+        abbreviation: R JS
+        poids: 6000
+    'chef de branche':
+        abbreviation: CB
+        poids: 5000
+    'chef de branche louveteaux':
+        abbreviation: CBL
+        poids: 5000
+    'chef de branche louvettes':
+        abbreviation: CBLe
+        poids: 5000
+    'chef de branche éclaireurs':
+        abbreviation: CBE
+        poids: 5000
+    'chef de branche éclaireuses':
+        abbreviation: CBEe
+        poids: 5000
+    'chef de branche rouges':
+        abbreviation: CBP
+        poids: 5000
+    'chef de branche louveteaux adjoint':
+        abbreviation: CBLA
+        poids: 1000
+    'chef de branche louvettes adjoint':
+        abbreviation: CBLeA
+        poids: 1000
+    'chef de branche adjoint':
+        abbreviation: CBA
+        poids: 1000
+
+    'chef de branche éclaireurs adjoint':
+        abbreviation: CBEA
+        poids: 1000
+
+    'chef de branche éclaireuses adjoint':
+        abbreviation: CBEeA
+        poids: 1000
+
+    'chef de branche rouge adjoint':
+        abbreviation: CBPA
+        poids: 1000
+
+    #admin
+    'chef du matériel':
+        abbreviation: CMat
+        poids: 1000
+    'Chef tentes':
+        abbreviation: chef tentes
+        poids: 1000
+    'responsable économat':
+        abbreviation: Eco
+        poids: 1000
+    'chef du matériel adjoint':
+        abbreviation: CMatA
+        poids: 500
+    'Chef tentes adjoint':
+        abbreviation: adj chef tentes
+        poids: 500
+    'responsable économat adjoint':
+        abbreviation: EcoA
+        poids: 500
+    responsable publications:
+        abbreviation: RPU
+        poids: 600
+    chef du première classe:
+        abbreviation: CPrCI
+        poids: 400
+    chef du première classe adjoint:
+        abbreviation: CPrCIA
+        poids: 300
+
+    #autre
+    'chef de clan':
+        abbreviation: CCl
+        poids: 1050
+    "chef d'équipe":
+        abbreviation: CE
+        poids: 300
+    "adjoint chef d'équipe":
+        abbreviation: chef d'équipe adj
+        poids: 250
+    Chef de camp d'été:
+        abbreviation: CCEté
+        poids: 300
+    Chef de camp d'été adjoint:
+        abbreviation: CCEtéA
+        poids: 250
+    Chef de la Saint-Georges:
+        abbreviation: CS-G
+        poids: 250
+    Chef du protocole:
+        abbreviation: CProt
+        poids: 1000
+    Membre de clan:
+        abbreviation: membre clan
+        poids: 500
+
+
+    #meute
+    'chef de meute':
+        abbreviation: CM
+        poids: 1000
+    'chef de meute adjoint':
+        abbreviation: CMA
+        poids: 700
+    'chef louveteaux/louvettes':
+        abbreviation: CL
+        poids: 100
+
+    #troupe
+    'chef de troupe':
+        abbreviation: CT
+        poids: 1000
+    'chef de troupe adjoint':
+        abbreviation: CTA
+        poids: 700
+    adjoint:
+        abbreviation: Adj
+        poids: 250
+    'chef à disposition':
+        abbreviation: chef à disp.
+        poids: 200
+    'chef de patrouille':
+        abbreviation: CP
+        poids: 100
+
+    #smallies
+    routier:
+        abbreviation: rouge
+        poids: 50
+    éclaireur ou éclaireuse:
+        abbreviation: Gars
+        poids: 10
+    louveteau ou louvette:
+        abbreviation: lvtx
+        poids: 10
+
+
+    #autre
+    'fonction inconnue':
+        abbreviation: INCONNU
+        poids: 9999999
+    "membre d'association":
+        abbreviation: membre
+        poids: 100

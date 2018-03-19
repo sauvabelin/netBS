@@ -1,0 +1,52 @@
+
+services:
+    netbs.fichier.log_representer.membre:
+        class: NetBS\FichierBundle\LogRepresenter\MembreLogRepresenter
+        tags:
+            - { name: netbs.log_representer }
+
+    netbs.fichier.log_representer.attribution:
+        class: NetBS\FichierBundle\LogRepresenter\AttributionLogRepresenter
+        tags:
+            - { name: netbs.log_representer }
+
+    netbs.fichier.log_representer.groupe:
+        class: NetBS\FichierBundle\LogRepresenter\GroupeLogRepresenter
+        tags:
+            - { name: netbs.log_representer }
+
+    netbs.fichier.log_representer.famille:
+        class: NetBS\FichierBundle\LogRepresenter\FamilleLogRepresenter
+        tags:
+            - { name: netbs.log_representer }
+
+    netbs.fichier.log_representer.geniteur:
+        class: NetBS\FichierBundle\LogRepresenter\GeniteurLogRepresenter
+        tags:
+            - { name: netbs.log_representer }
+
+    netbs.fichier.log_representer.obtention_distinction:
+        class: NetBS\FichierBundle\LogRepresenter\ObtentionDistinctionLogRepresenter
+        tags:
+            - { name: netbs.log_representer }
+
+    netbs.fichier.log_representer.adresse:
+        class: NetBS\FichierBundle\LogRepresenter\AdresseLogRepresenter
+        arguments:
+            - "@netbs.fichier.contact_manager"
+        tags:
+            - { name: netbs.log_representer }
+
+    netbs.fichier.log_representer.telephone:
+        class: NetBS\FichierBundle\LogRepresenter\TelephoneLogRepresenter
+        arguments:
+            - "@netbs.fichier.contact_manager"
+        tags:
+            - { name: netbs.log_representer }
+
+    netbs.fichier.log_representer.email:
+        class: NetBS\FichierBundle\LogRepresenter\EmailLogRepresenter
+        arguments:
+            - "@netbs.fichier.contact_manager"
+        tags:
+            - { name: netbs.log_representer }

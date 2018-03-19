@@ -1,0 +1,16 @@
+services:
+
+    sauvabelin.list.rule_mailing_lists:
+        class: SauvabelinBundle\ListModel\RuleMailingListsList
+        tags:
+            - { name: netbs.list.model }
+
+    sauvabelin.list.redirect_mailing_lists:
+        class: SauvabelinBundle\ListModel\RedirectMailingListsList
+        tags:
+            - { name: netbs.list.model }
+
+    sauvabelin.list.displayable_mailing_lists:
+        class: SauvabelinBundle\ListModel\DisplayableMailingListsList
+        tags:
+            - { name: netbs.list.model }

@@ -1,0 +1,8 @@
+roles:
+    ROLE_ADMIN:
+        description: "Role administrateur système"
+        poids: 10000000
+        children:
+            ROLE_USER:
+                description: "Autorisation d'accès à l'application"
+                poids: 1

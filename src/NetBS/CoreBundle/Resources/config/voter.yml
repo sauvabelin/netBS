@@ -1,0 +1,15 @@
+services:
+    netbs.core.security.voter.dynamic_list:
+        class: NetBS\CoreBundle\Voter\DynamicListVoter
+        tags:
+            - { name: security.voter }
+
+    netbs.core.security.voter.parameter:
+        class: NetBS\CoreBundle\Voter\ParameterVoter
+        tags:
+            - { name: security.voter }
+
+    netbs.core.security.voter.export_configuration:
+        class: NetBS\CoreBundle\Voter\ExportConfigurationVoter
+        tags:
+            - { name: security.voter }

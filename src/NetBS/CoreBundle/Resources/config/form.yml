@@ -1,0 +1,31 @@
+services:
+
+    form.type.datepicker:
+        class: NetBS\CoreBundle\Form\Type\DatepickerType
+        arguments:
+            - "@netbs.params"
+        tags:
+            - { name: form.type }
+
+    form.type.switch:
+        class: NetBS\CoreBundle\Form\Type\SwitchType
+        tags:
+            - { name: form.type }
+
+    form.type.text_mask:
+        class: NetBS\CoreBundle\Form\Type\TextMaskType
+        tags:
+            - { name: form.type }
+
+    form.type.select2_document:
+        class: NetBS\CoreBundle\Form\Type\Select2DocumentType
+        tags:
+            - { name: form.type }
+
+    form.type.ajax_select2_document:
+        class: NetBS\CoreBundle\Form\Type\AjaxSelect2DocumentType
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@netbs.core.select2_providers_manager"
+        tags:
+            - { name: form.type }

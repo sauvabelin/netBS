@@ -1,0 +1,60 @@
+
+imports:
+    - { resource: "voter.yml" }
+
+services:
+
+    netbs.secure.user_manager:
+        class: NetBS\SecureBundle\Service\UserManager
+        arguments:
+            - "@security.password_encoder"
+            - "@netbs.secure.config"
+            - "@doctrine.orm.entity_manager"
+
+    netbs.secure.config:
+        class: NetBS\SecureBundle\Service\SecureConfig
+
+    netbs.secure.list.users:
+        class: NetBS\SecureBundle\ListModel\UsersList
+        tags:
+            - { name: netbs.list.model }
+
+    netbs.secure.extend_main_menu_listener:
+        class: NetBS\SecureBundle\Listener\MainMenuListener
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure, priority: 60 }
+
+    netbs.secure.select2.roles_provider:
+        class: NetBS\SecureBundle\Select2\RolesProvider
+        tags:
+            - { name: netbs.select2_provider }
+
+    netbs.secure.select2.user_provider:
+        class: NetBS\SecureBundle\Select2\UserProvider
+        tags:
+            - { name: netbs.select2_provider }
+
+    netbs.secure.fichier.subscriber.doctrine_mapper:
+        class: NetBS\SecureBundle\Subscriber\DoctrineMapperSubscriber
+        arguments:
+            - "@netbs.fichier.config"
+            - "@netbs.secure.config"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    netbs.secure.form.user:
+        class: NetBS\SecureBundle\Form\UserType
+        arguments:
+            - "@netbs.fichier.config"
+            - "@netbs.secure.config"
+        tags:
+            - { name: form.type }
+
+    netbs.secure.helper.user:
+        class: NetBS\SecureBundle\Helper\UserHelper
+        arguments:
+            - "@netbs.secure.config"
+        tags:
+            - { name: netbs.helper }

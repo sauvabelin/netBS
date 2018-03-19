@@ -1,0 +1,12 @@
+
+.btn {
+
+    &.btn-xs {
+
+        padding:0 0.5rem 0.2rem 0.5rem;
+    }
+}
+
+.btn-secondary {
+    @include button-variant(white, $gray-400);
+}

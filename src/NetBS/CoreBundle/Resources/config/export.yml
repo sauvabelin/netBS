@@ -1,0 +1,15 @@
+
+services:
+
+    netbs.core.previewer.pdf:
+        class: NetBS\CoreBundle\Exporter\PDFPreviewer
+        tags:
+            - { name: netbs.previewer }
+
+    netbs.core.previewer.csv:
+        class: NetBS\CoreBundle\Exporter\CSVPreviewer
+        arguments:
+            - "@property_accessor"
+            - "@twig"
+        tags:
+            - { name: netbs.previewer }

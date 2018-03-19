@@ -1,0 +1,30 @@
+<table class="table table-striped table-hover {{ tableClass }}" id="mass-items-table-{{ _updater_id }}">
+    <thead>
+        <tr>
+            {% for header in itemsForm %}
+                <th>{{ header.vars.label }}</th>
+            {% endfor %}
+            {% if allowDelete %}
+                <th></th> {# les options #}
+            {% endif %}
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for item in items %}
+        <tr>
+            {% for field in item.children %}
+                <td>
+                    {{ form_widget(field) }}
+                    {{ form_errors(field) }}
+                </td>
+            {% endfor %}
+            {% if allowDelete %}
+                <td>
+                    <button class="btn btn-rounded btn-space btn-secondary" type="button" data-delete-element-{{ _updater_id }}><i class="fas fa-times fa-sm"></i></button>
+                </td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,8 @@
+services:
+
+    netbs.secure.security.voter.user:
+        class: NetBS\SecureBundle\Voter\UserVoter
+        arguments:
+            - "@netbs.secure.config"
+        tags:
+            - { name: security.voter }

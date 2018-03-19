@@ -1,0 +1,52 @@
+services:
+
+    netbs.list.engine:
+        class: NetBS\ListBundle\Service\ListEngine
+        public: true
+        arguments:
+            - "@netbs.list.model_manager"
+            - "@netbs.list.renderer_manager"
+            - "@netbs.list.column_manager"
+            - "@property_accessor"
+            - "@event_dispatcher"
+            - "@debug.stopwatch"
+
+    netbs.list.twig_extension:
+        class: NetBS\ListBundle\Twig\ListExtension
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: twig.extension }
+
+    netbs.list.column.simple_column:
+        class: NetBS\ListBundle\Column\SimpleColumn
+        tags:
+            - { name: netbs.list.column }
+
+    netbs.list.column.closure_column:
+        class: NetBS\ListBundle\Column\ClosureColumn
+        tags:
+            - { name: netbs.list.column }
+
+    netbs.list.column.datetime_column:
+        class: NetBS\ListBundle\Column\DateTimeColumn
+        tags:
+            - { name: netbs.list.column }
+
+    netbs.list.model_manager:
+        class: NetBS\ListBundle\Service\ListManager
+
+    netbs.list.renderer_manager:
+        class: NetBS\ListBundle\Service\RendererManager
+
+    netbs.list.column_manager:
+        class: NetBS\ListBundle\Service\ColumnManager
+
+    netbs.list.list_collector:
+        class: NetBS\ListBundle\Profiler\ListCollector
+        arguments:
+            - "@netbs.list.model_manager"
+            - "@netbs.list.renderer_manager"
+            - "@netbs.list.engine"
+        tags:
+            - { name: data_collector, template: '@NetBSList/Profiler/layout.html.twig', id: 'netbs.list.collector' }

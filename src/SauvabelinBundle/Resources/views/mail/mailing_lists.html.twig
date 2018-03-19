@@ -1,0 +1,90 @@
+{% extends '@NetBSCore/layout/backend.layout.twig' %}
+
+{% block main %}
+
+    <div class="container-fluid">
+
+        {{ registerJs(asset('bundles/netbscore/js/modal.js')) }}
+        {% set addRuleButton %}<button data-modal data-modal-url="{{ path("sauvabelin.mailing_lists.modal_add_rule") }}" class="btn btn-primary">Nouvelle mailing liste Expression Language</button>{% endset %}
+        {% set addRedirectButton %}<button data-modal data-modal-url="{{ path("sauvabelin.mailing_lists.modal_add_redirect") }}" class="btn btn-primary">Nouvelle mailing liste de redirection</button>{% endset %}
+
+        {% include '@NetBSCore/includes/header.include.twig' with {
+            header: "Mailing listes",
+            subHeader: "Toutes les mailing listes automatiques basées sur le fichier",
+            actions: [
+                addRuleButton,
+                addRedirectButton
+            ]
+        } %}
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card bg-warning text-white">
+                    <div class="card-header">
+                        <h5 class="card-title">Attention (Avant de tout péter)</h5>
+                    </div>
+
+                    <div class="card-body">
+                        Les mailing listes ne sont que le reflet des listes ISPConfig. Les listes Expression Language fonctionnent ainsi:
+                        <ol>
+                            <li>Un membre est modifié (attribution ajoutée, distinction retirée...)</li>
+                            <li>Le système parcourt toutes les mailing listes et regarde toutes celles où le membre est censé être</li>
+                            <li>Il envoie ensuite une requête au panel serveur ISPConfig pour mettre à jour les mailing listes concérnées</li>
+                        </ol>
+
+                        Ajouter, modifier ou supprimer une liste ici ne va pas la mettre à jour côté serveur! Il faudra le faire
+                        manuellement, le changement sera effectif pour toute modification sur un membre <b>après</b>!
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="card bg-danger text-white">
+                    <div class="card-header">
+                        <h5 class="card-title">Fonctionnement</h5>
+                    </div>
+
+                    <div class="card-body">
+                        Les mailing listes ne sont pas liées aux groupes ou distinctions qui les concèrnent. Si vous changez le nom
+                        d'un groupe, d'une distinction, d'une fonction... dont une mailing liste dépend, celle-ci ne fonctionnera plus! Il
+                        faudra également la mettre à jour avec les nouvelles valeurs.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h5 class="card-title">Mailing listes de redirection</h5>
+                        <h6 class="card-subtitle">Listes redirigeant sur d'autres listes</h6>
+                    </div>
+
+                    <div class="card-body">
+                        {{ render_list('bs.redirect_mailing_lists', 'netbs') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h5 class="card-title">Mailing listes expression language</h5>
+                        <h6 class="card-subtitle">Listes basées sur des règles <a href="https://symfony.com/doc/current/components/expression_language.html">Expression language</a></h6>
+                    </div>
+
+                    <div class="card-body">
+                        {{ render_list('bs.rule_mailing_lists', 'netbs') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}

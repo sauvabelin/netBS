@@ -1,0 +1,96 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+    - { resource: dql_functions.yml }
+    - { resource: "@SauvabelinBundle/Resources/config/services.yml" }
+    - { resource: "@GalerieBundle/Resources/config/services.yml" }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: fr
+
+framework:
+    #esi: ~
+    #translator: { fallbacks: ['%locale%'] }
+    secret: '%secret%'
+    router:
+        resource: '%kernel.project_dir%/app/config/routing.yml'
+        strict_requirements: ~
+    form: ~
+    csrf_protection: ~
+    validation: { enable_annotations: true }
+    serializer: { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale: '%locale%'
+    trusted_hosts: ~
+    session:
+        cookie_lifetime: 2592000 # optional, it is set to 30 days here
+        gc_maxlifetime: 2592000 # optional, it is set to 30 days here
+    fragments: ~
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+
+# Twig Configuration
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    form_themes:
+        - "@NetBSCore/form/base.theme.twig"
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver: pdo_mysql
+        host: '%database_host%'
+        port: '%database_port%'
+        dbname: '%database_name%'
+        user: '%database_user%'
+        password: '%database_password%'
+        charset: UTF8
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        entity_managers:
+            default:
+                auto_mapping: true
+                filters:
+                    softdeleteable:
+                        class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                        enabled: true
+
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: '%mailer_transport%'
+    host: '%mailer_host%'
+    username: '%mailer_user%'
+    password: '%mailer_password%'
+    spool: { type: memory }
+
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     "%kernel.root_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64"
+        options:    []
+
+
+stof_doctrine_extensions:
+    default_locale: "%locale%"
+    orm:
+        default:
+            timestampable: true
+            softdeleteable: true
+
+net_bs_fichier:
+    entities:
+        membre_class: SauvabelinBundle\Entity\BSMembre
+        groupe_class: SauvabelinBundle\Entity\BSGroupe
+
+net_bs_secure:
+    entities:
+        user_class: "%netbs_secure_user_class%"

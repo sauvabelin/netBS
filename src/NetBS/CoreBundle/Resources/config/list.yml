@@ -1,0 +1,70 @@
+services:
+
+    netbs.core.list.parameters:
+        class: NetBS\CoreBundle\ListModel\ParametersList
+        tags:
+            - { name: netbs.list.model }
+
+    netbs.core.list.basic_renderer:
+        class: NetBS\CoreBundle\ListModel\BasicRenderer
+        arguments:
+            - "@twig"
+        tags:
+            - { name: netbs.list.renderer }
+
+    netbs.core.list.netbs_renderer:
+        class: NetBS\CoreBundle\ListModel\NetBSRenderer
+        arguments:
+            - "@twig"
+            - "@event_dispatcher"
+        tags:
+            - { name: netbs.list.renderer }
+
+    netbs.core.list.action_column:
+        class: NetBS\CoreBundle\ListModel\Column\ActionColumn
+        tags:
+            - { name: netbs.list.column }
+
+    netbs.core.list.link_column:
+        class: NetBS\CoreBundle\ListModel\Column\LinkColumn
+        arguments:
+            - "@router.default"
+        tags:
+            - { name: netbs.list.column }
+
+    netbs.core.list.remove_from_dynamic_column:
+        class: NetBS\CoreBundle\ListModel\Column\RemoveFromDynamicColumn
+        arguments:
+            - "@router.default"
+        tags:
+            - { name: netbs.list.column }
+
+    netbs.core.list.popover_column:
+        class: NetBS\CoreBundle\ListModel\Column\PopoverColumn
+        tags:
+            - { name: netbs.list.column }
+
+    netbs.core.list.array_column:
+        class: NetBS\CoreBundle\ListModel\Column\ArrayColumn
+        tags:
+            - { name: netbs.list.column }
+
+    netbs.core.list.helper_column:
+        class: NetBS\CoreBundle\ListModel\Column\HelperColumn
+        arguments:
+            - "@netbs.core.twig.helper_extension"
+            - "@netbs.core.helper_manager"
+        tags:
+            - { name: netbs.list.column }
+
+    netbs.core.list.xeditable_column:
+        class: NetBS\CoreBundle\ListModel\Column\XEditableColumn
+        arguments:
+            - "@netbs.core.twig.xeditable_extension"
+        tags:
+            - { name: netbs.list.column }
+
+    netbs.core.list.logged_changes:
+        class: NetBS\CoreBundle\ListModel\LoggedChangesList
+        tags:
+            - { name: netbs.list.model }

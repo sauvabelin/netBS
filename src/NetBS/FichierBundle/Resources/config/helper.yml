@@ -1,0 +1,23 @@
+services:
+
+
+    netbs.fichier.helper.membre:
+        class: NetBS\FichierBundle\Helper\MembreHelper
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.helper }
+
+    netbs.fichier.helper.famille:
+        class: NetBS\FichierBundle\Helper\FamilleHelper
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.helper }
+
+    netbs.fichier.helper.groupe:
+        class: NetBS\FichierBundle\Helper\GroupeHelper
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.helper }

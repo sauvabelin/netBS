@@ -1,0 +1,213 @@
+imports:
+    - { resource: "voter.yml" }
+    - { resource: "block.yml" }
+    - { resource: "form.yml" }
+    - { resource: "list.yml" }
+    - { resource: "export.yml" }
+
+
+services:
+    netbs.core.query_maker:
+        class: NetBS\CoreBundle\Service\QueryMaker
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
+    netbs.core.orm.subscriber.dynamic_list:
+        class: NetBS\CoreBundle\Listener\PostLoadDynamicListListener
+        tags:
+            - { name: doctrine.event_listener, event: postLoad }
+
+    netbs.notifier:
+        class: NetBS\CoreBundle\Service\Notifier
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@logger"
+
+    netbs.params:
+        class: NetBS\CoreBundle\Service\ParameterManager
+        public: true
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@cache.app"
+
+    netbs.core.history:
+        class: NetBS\CoreBundle\Service\History
+        public: true
+        arguments:
+            - "@session"
+            - "@request_stack"
+            - "@router.default"
+
+    netbs.core.logger_manager:
+        public: true
+        class: NetBS\CoreBundle\Service\LoggerManager
+
+    netbs.core.post_install_script_manager:
+        class: NetBS\CoreBundle\Service\PostInstallScriptManager
+        public: true
+
+    netbs.core.select2_providers_manager:
+        class: NetBS\CoreBundle\Select2\Select2ProviderManager
+
+
+    netbs.core.renderer.netbs.toolbar_listener:
+        class: NetBS\CoreBundle\Listener\NetbsToolbarListener
+        arguments:
+            - "@netbs.core.dynamic_list_manager"
+            - "@netbs.core.bridge_manager"
+            - "@netbs.core.exporter_manager"
+            - "@netbs.core.mass_updater_manager"
+            - "@twig"
+            - "@netbs.fichier.config"
+        tags:
+            - { name: kernel.event_listener, event: netbs.list_model.renderer.toolbar, method: extend }
+
+    netbs.core.history_listener:
+        class: NetBS\CoreBundle\Listener\HistoryListener
+        arguments:
+            - "@netbs.core.history"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
+
+    netbs.core.helper_manager:
+        class: NetBS\CoreBundle\Service\HelperManager
+
+    netbs.core.automatic_lists_manager:
+        public: true
+        class: NetBS\CoreBundle\Service\AutomaticListsManager
+
+    netbs.core.bridge_manager:
+        public: true
+        class: NetBS\CoreBundle\Service\ListBridgeManager
+
+    netbs.core.exporter_manager:
+        public: true
+        arguments:
+            - "@netbs.core.bridge_manager"
+        class: NetBS\CoreBundle\Service\ExporterManager
+
+    netbs.core.previewer_manager:
+        class: NetBS\CoreBundle\Service\PreviewerManager
+
+    netbs.core.extend_main_menu_listener:
+        class: NetBS\CoreBundle\Listener\MainMenuListener
+        arguments:
+            - "@security.token_storage"
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure, priority: 100 }
+
+    netbs.core.dynamic_list_manager:
+        public: true
+        class: NetBS\CoreBundle\Service\DynamicListManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@security.token_storage"
+            - "@netbs.core.bridge_manager"
+
+    netbs.core.mass_updater_manager:
+        public: true
+        class: NetBS\CoreBundle\Service\MassUpdaterManager
+
+    netbs.core.form.dynamic_list_type:
+        class: NetBS\CoreBundle\Form\DynamicListType
+        arguments:
+            - "@netbs.core.dynamic_list_manager"
+        tags:
+            - { name: form.type }
+
+    netbs.core.twig.assets_extension:
+        class: NetBS\CoreBundle\Twig\Extension\AssetsExtension
+        tags:
+            - { name: twig.extension }
+
+    netbs.core.twig.helper_extension:
+        class: NetBS\CoreBundle\Twig\Extension\HelperExtension
+        tags:
+            - { name: twig.extension }
+
+    netbs.core.twig.util_extension:
+        class: NetBS\CoreBundle\Twig\Extension\UtilExtension
+        tags:
+            - { name: twig.extension }
+
+    netbs.core.twig.xeditable_extension:
+        class: NetBS\CoreBundle\Twig\Extension\XEditableExtension
+        arguments:
+            - "@form.factory"
+            - "@twig"
+        tags:
+            - { name: twig.extension }
+
+    netbs.core.twig.output_extension:
+        class: NetBS\CoreBundle\Twig\Extension\OutputExtension
+        tags:
+            - { name: twig.extension }
+
+    netbs.core.twig.param_extension:
+        class: NetBS\CoreBundle\Twig\Extension\ParamExtension
+        arguments:
+            - "@netbs.params"
+        tags:
+            - { name: twig.extension }
+
+    netbs.core.searcher_manager:
+        public: true
+        class: NetBS\CoreBundle\Searcher\SearcherManager
+        arguments:
+            - "@request_stack"
+            - "@twig"
+            - "@form.factory"
+            - "@netbs.core.query_maker"
+
+    netbs.core.searcher.binder.equal:
+        class: NetBS\CoreBundle\Searcher\EqualBinder
+        tags:
+            - { name: netbs.searcher.binder }
+
+    netbs.core.searcher.binder.daterange:
+        class: NetBS\CoreBundle\Searcher\DaterangeBinder
+        tags:
+            - { name: netbs.searcher.binder }
+
+    netbs.core.searcher.binder.numberrange:
+        class: NetBS\CoreBundle\Searcher\NumberrangeBinder
+        tags:
+            - { name: netbs.searcher.binder }
+
+    netbs.core.searcher.binder.ajax_select2:
+        class: NetBS\CoreBundle\Searcher\Select2Binder
+        tags:
+            - { name: netbs.searcher.binder }
+
+    netbs.core.subscriber.doctrine_mapper:
+        class: NetBS\CoreBundle\Subscriber\DoctrineMapperSubscriber
+        arguments:
+            - "@netbs.secure.config"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    netbs.core.subscriber.doctrine_logger_subscriber:
+        class: NetBS\CoreBundle\Subscriber\DoctrineLoggerSubscriber
+        arguments:
+            - "@netbs.core.logger_manager"
+            - "@security.token_storage"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    netbs.core.listener.pre_render_layout:
+        class: NetBS\CoreBundle\Listener\DashboardListener
+        arguments:
+            - "@request_stack"
+            - "@security.token_storage"
+        tags:
+            - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: preRender }
+
+    netbs.core.netbs_collector:
+        class: NetBS\CoreBundle\Profiler\NetBSCollector
+        arguments:
+            - "@netbs.core.bridge_manager"
+            - "@netbs.core.exporter_manager"
+            - "@netbs.core.previewer_manager"
+        tags:
+            - { name: data_collector, template: '@NetBSCore/Profiler/layout.html.twig', id: 'netbs.core.netbs_collector' }

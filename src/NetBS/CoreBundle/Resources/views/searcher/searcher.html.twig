@@ -1,0 +1,29 @@
+{% extends '@NetBSCore/layout/backend.layout.twig' %}
+
+{% block main %}
+
+    <div class="container-fluid" style="background: white;">
+        <h3>Rechercher</h3>
+        {% block searchForm %}{% endblock %}
+    </div>
+
+    <div class="container-fluid">
+
+        {% set maxResults = param('search', 'max_results') + 0 %}
+
+        {% if maxResults > searcher.results|length %}
+        <div class="card card-table">
+            <div class="card-header">
+                <h5 class="card-title">Résultats</h5>
+            </div>
+            <div class="card-body">
+                {{ render_list(searcher, 'netbs') }}
+            </div>
+        </div>
+        {% else %}
+            <p class="alert alert-warning">La requête a retourné {{ searcher.results|length }} résultats, la limite est fixée à {{ maxResults }}. Veuillez affiner votre recherche.</p>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

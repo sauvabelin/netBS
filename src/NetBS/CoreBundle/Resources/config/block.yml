@@ -1,0 +1,45 @@
+services:
+
+    netbs.core.block.layout:
+        class: NetBS\CoreBundle\Block\LayoutManager
+        arguments:
+            - "@netbs.core.blocks_manager"
+            - "@event_dispatcher"
+        public: true
+
+    netbs.core.blocks_manager:
+        class: NetBS\CoreBundle\Block\BlockManager
+
+    netbs.block.template:
+        class: NetBS\CoreBundle\Block\TemplateBlock
+        tags:
+            - { name: netbs.block }
+
+    netbs.core.blocks.layout.netbs:
+        class: NetBS\CoreBundle\Block\Layout\NetBSLayout
+        arguments:
+            - "@twig"
+        tags:
+            - { name: netbs.block.layout }
+
+    netbs.core.blocks.basic_card:
+        class: NetBS\CoreBundle\Block\BasicCardBlock
+        tags:
+            - { name: netbs.block }
+
+    netbs.core.blocks.card:
+        class: NetBS\CoreBundle\Block\CardBlock
+        tags:
+            - { name: netbs.block }
+
+    netbs.core.blocks.list:
+        class: NetBS\CoreBundle\Block\ListBlock
+        arguments:
+            - "@netbs.list.engine"
+        tags:
+            - { name: netbs.block }
+
+    netbs.core.blocks.tabs:
+        class: NetBS\CoreBundle\Block\TabsCardBlock
+        tags:
+            - { name: netbs.block }

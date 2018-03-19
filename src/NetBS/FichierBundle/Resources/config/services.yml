@@ -1,0 +1,136 @@
+imports:
+    - { resource: "list.yml" }
+    - { resource: "helper.yml" }
+    - { resource: "exporter.yml" }
+    - { resource: "security.yml" }
+    - { resource: "form.yml" }
+    - { resource: "log_representer.yml" }
+
+services:
+    netbs.fichier.config:
+        public: true
+        class: NetBS\FichierBundle\Service\FichierConfig
+
+    netbs.fichier.attribution.mass_updater:
+        class: NetBS\FichierBundle\MassUpdater\AttributionMassUpdater
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.mass_updater }
+
+    netbs.fichier.attribution.mass_obtention_distinction:
+        class: NetBS\FichierBundle\MassUpdater\ObtentionDistinctionMassUpdater
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.mass_updater }
+
+    netbs.fichier.contact_manager:
+        class: NetBS\FichierBundle\Service\ContactManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@netbs.fichier.config"
+
+    netbs.fichier.search_binder.attribution:
+        class: NetBS\FichierBundle\Searcher\ActiveAttributionBinder
+        tags:
+            - { name: netbs.searcher.binder }
+
+#dynamic stuff
+    netbs.fichier.dynamic_bridge.attribution_to_membre:
+        class: NetBS\FichierBundle\Bridge\AttributionToMembreBridge
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.bridge }
+
+    netbs.fichier.dynamic_bridge.groupe_to_attributions:
+        class: NetBS\FichierBundle\Bridge\GroupeToAttribution
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+              - { name: netbs.bridge }
+
+    netbs.fichier.dynamic_bridge.membre_to_adressable:
+        class: NetBS\FichierBundle\Bridge\MembreToAdressable
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+              - { name: netbs.bridge }
+
+    netbs.fichier.dynamic_bridge.famille_to_adressable:
+        class: NetBS\FichierBundle\Bridge\FamilleToAdressable
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+              - { name: netbs.bridge }
+
+#select2 providers
+    netbs.fichier.select2.membre_provider:
+        class: NetBS\FichierBundle\Select2\MembreProvider
+        public: true
+        tags:
+            - { name: netbs.select2_provider }
+
+    netbs.fichier.select2.distinction_provider:
+        class: NetBS\FichierBundle\Select2\DistinctionProvider
+        tags:
+            - { name: netbs.select2_provider }
+
+    netbs.fichier.select2.fonction_provider:
+        class: NetBS\FichierBundle\Select2\FonctionProvider
+        tags:
+            - { name: netbs.select2_provider }
+
+    netbs.fichier.select2.groupe_provider:
+        class: NetBS\FichierBundle\Select2\GroupeProvider
+        tags:
+            - { name: netbs.select2_provider }
+
+    netbs.fichier.select2.groupe_type_provider:
+        class: NetBS\FichierBundle\Select2\GroupeTypeProvider
+        tags:
+            - { name: netbs.select2_provider }
+
+    netbs.fichier.select2.famille_provider:
+        class: NetBS\FichierBundle\Select2\FamilleProvider
+        public: true
+        tags:
+            - { name: netbs.select2_provider }
+
+    netbs.fichier.select2.groupe_categorie_provider:
+        class: NetBS\FichierBundle\Select2\GroupeCategorieProvider
+        tags:
+            - { name: netbs.select2_provider }
+
+#listeners
+    netbs.fichier.pre_render_block_layout:
+        class: NetBS\FichierBundle\Listener\PreRenderLayoutListener
+        arguments:
+            - "@security.token_storage"
+            - "@request_stack"
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: preRender }
+
+    netbs.fichier.extend_main_menu_listener:
+        class: NetBS\FichierBundle\Listener\MainMenuListener
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure, priority: 80 }
+
+    netbs.fichier.subscriber.doctrine_mapper:
+        class: NetBS\FichierBundle\Subscriber\DoctrineMapperSubscriber
+        arguments:
+            - "@netbs.fichier.config"
+            - "@netbs.secure.config"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    netbs.fichier.subscriber.post_load_contact:
+        class: NetBS\FichierBundle\Subscriber\DoctrinePostLoadContactSubscriber
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: doctrine.event_subscriber }
