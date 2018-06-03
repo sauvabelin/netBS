@@ -47,23 +47,30 @@ services:
         tags:
             - { name: security.voter }
 
-    sauvabelin.subscriber.user:
-        class: SauvabelinBundle\Subscriber\UserSubscriber
-        tags:
-            - { name: doctrine.event_subscriber, connection: default }
+#    sauvabelin.subscriber.mailing_lists:
+#        class: SauvabelinBundle\Subscriber\MailingListSubscriber
+#        arguments:
+#            - "@sauvabelin.isp_config_manager"
+#        tags:
+#            - { name: doctrine.event_subscriber }
 
-    sauvabelin.subscriber.mailing_lists:
-        class: SauvabelinBundle\Subscriber\MailingListSubscriber
-        arguments:
-            - "@sauvabelin.isp_config_manager"
-        tags:
-            - { name: doctrine.event_subscriber,  }
 
-    sauvabelin.listener.verify_user_password_change:
-        class: SauvabelinBundle\Listener\ForceNewPasswordListener
-        arguments:
-            - "@security.token_storage"
-            - "@router"
-            - "@session"
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: verifyUser }
+#    sauvabelin.subscriber.user:
+#        class: SauvabelinBundle\Subscriber\UserSubscriber
+#        arguments:
+#            - "@sauvabelin.isp_config_manager"
+#            - "@request_stack"
+#            - "@doctrine.orm.entity_manager"
+#        tags:
+#            - { name: doctrine.event_subscriber, connection: default }
+#            - { name: kernel.event_listener, event: netbs.secure.event.user_password_change, method: userPasswordChange }
+
+
+#    sauvabelin.listener.verify_user_password_change:
+#        class: SauvabelinBundle\Listener\ForceNewPasswordListener
+#        arguments:
+#            - "@security.token_storage"
+#            - "@router"
+#            - "@session"
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.request, method: verifyUser }

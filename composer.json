@@ -11,7 +11,8 @@
             "NetBS\\FichierBundle\\": "src/NetBS/FichierBundle",
             "NetBS\\ListBundle\\": "src/NetBS/ListBundle",
             "SauvabelinBundle\\": "src/SauvabelinBundle",
-            "GalerieBundle\\": "src/GalerieBundle"
+            "GalerieBundle\\": "src/GalerieBundle",
+            "Sysmoh\\DBTaskBundle\\": "src/Sysmoh/DBTaskBundle"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
@@ -25,10 +26,13 @@
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "doctrine/orm": "^2.5",
+        "enqueue/enqueue-bundle": "^0.8.22",
+        "enqueue/fs": "^0.8.23",
         "gdm/ispconfig-soap-client": "^0.0.3",
         "h4cc/wkhtmltopdf-amd64": "^0.12.3",
         "incenteev/composer-parameter-handler": "^2.0",
         "knplabs/knp-snappy-bundle": "^1.4",
+        "liip/imagine-bundle": "^2.0",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^5.0.0",
         "setasign/fpdf": "^1.8",

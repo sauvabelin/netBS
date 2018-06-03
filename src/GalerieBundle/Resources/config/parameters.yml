@@ -1,0 +1,8 @@
+galerie:
+    max_width: 1920
+    max_height: 1080
+    jpeg_quality: 90
+    thumbnail_quality: 70
+    thumbnail_width: 300
+    thumbnail_height: 200
+    accepted_extensions: "jpg,jpeg,png"

@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new NetBS\ListBundle\NetBSListBundle(),
             new SauvabelinBundle\SauvabelinBundle(),
             new GalerieBundle\GalerieBundle(),
+            new Sysmoh\DBTaskBundle\SysmohDBTaskBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

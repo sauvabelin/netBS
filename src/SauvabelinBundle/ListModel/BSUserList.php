@@ -22,10 +22,6 @@ class BSUserList extends UsersList
                 XEditableColumn::PROPERTY   => 'wikiAccount',
                 XEditableColumn::TYPE_CLASS => SwitchType::class
             ])
-            ->addColumn('Force nouveau mot de passe', null, XEditableColumn::class, [
-                XEditableColumn::PROPERTY   => 'newPasswordRequired',
-                XEditableColumn::TYPE_CLASS => SwitchType::class
-            ])
         ;
     }
 }

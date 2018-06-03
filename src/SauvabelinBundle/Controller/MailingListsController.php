@@ -69,6 +69,8 @@ class MailingListsController extends Controller
             $em->persist($form->getData());
             $em->flush();
 
+
+
             $this->addFlash("success", "Mailing list ajoutée!");
             return Modal::refresh();
         }

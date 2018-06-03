@@ -2,6 +2,7 @@
 
 namespace NetBS\SecureBundle\Controller;
 
+use NetBS\SecureBundle\Event\UserPasswordChangeEvent;
 use NetBS\SecureBundle\Form\ChangePasswordType;
 use NetBS\SecureBundle\Form\UserType;
 use NetBS\SecureBundle\Model\ChangePassword;
@@ -99,6 +100,8 @@ class UserController extends Controller
 
             $user->setPassword($password);
             $manager->updateUser($user);
+
+            $this->get('event_dispatcher')->dispatch(UserPasswordChangeEvent::NAME, new UserPasswordChangeEvent($user, $newPassword));
 
             $this->addFlash("success", "Mot de passe changé avec succès!");
             return $this->redirectToRoute('netbs.secure.user.account_page');

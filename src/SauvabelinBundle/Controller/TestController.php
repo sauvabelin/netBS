@@ -35,7 +35,6 @@ class TestController extends Controller
 
         $manager    = $this->get('sauvabelin.isp_config_manager');
         //$result     = $manager->createMailbox(20, 'hamdoulilah', 'abcd.efghij', 'yoloswag22', 'abcd.efghij@sauvabelin.ch');
-
         $result     = $manager->getMailbox('yolo.swag@sauvabelin.ch');
 
         dump($result);

@@ -76,7 +76,7 @@ class ISPConfigManager
 
     public function getMailbox($email) {
 
-        $mailbox    = $this->client->mailUserGet(['email' => $email]);
+        $mailbox    = $this->getClient()->mailUserGet(['email' => $email]);
 
         return count($mailbox) ? $mailbox[0] : null;
     }
@@ -88,7 +88,7 @@ class ISPConfigManager
 
         $maildir    = intval($id) . "." . StrUtil::slugify($username);
 
-        return $this->client->mailUserAdd($this->clientId, [
+        return $this->getClient()->mailUserAdd($this->clientId, [
             'server_id'     => $this->serverId,
             'email'         => $email,
             'login'         => $email,
@@ -108,7 +108,7 @@ class ISPConfigManager
 
     public function getMailingList($from) {
 
-        $mailingListes = $this->client->mailForwardGet(['source' => $from]);
+        $mailingListes = $this->getClient()->mailForwardGet(['source' => $from]);
 
         return count($mailingListes) ? $mailingListes[0] : null;
     }
@@ -117,7 +117,7 @@ class ISPConfigManager
 
         if($this->getMailingList($from)) return false;
 
-        return false !== $this->client->mailForwardAdd($this->clientId, [
+        return false !== $this->getClient()->mailForwardAdd($this->clientId, [
             'source'        => $from,
             'destination'   => $this->parseDestination($to),
             'server_id'     => $this->serverId,
@@ -135,7 +135,7 @@ class ISPConfigManager
 
         $remote['destination'] = $this->parseDestination($to);
 
-        return false !== $this->client->mailForwardUpdate($this->clientId, $remote['forwarding_id'], $remote);
+        return false !== $this->getClient()->mailForwardUpdate($this->clientId, $remote['forwarding_id'], $remote);
     }
 
     public function deleteMailingList($from) {
@@ -145,7 +145,7 @@ class ISPConfigManager
         if(!$remote)
             return false;
 
-        return false !== $this->client->mailForwardDelete($remote['forwarding_id']);
+        return false !== $this->getClient()->mailForwardDelete($remote['forwarding_id']);
     }
 
     private function parseDestination($to) {
@@ -156,9 +156,11 @@ class ISPConfigManager
     private function getClient() {
 
         if(!$this->client)
-            $this->client       = new SoapClient($host, $username, $password, stream_context_create([
+            $this->client = new SoapClient($this->host, $this->username, $this->password, stream_context_create([
                 'http'  => [ 'method' => 'GET' ],
                 'ssl'   => [ 'verify_peer' => false, 'allow_self_signed'=> true ]
             ]));
+
+        return $this->client;
     }
 }

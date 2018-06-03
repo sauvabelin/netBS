@@ -2,7 +2,6 @@
 
 namespace SauvabelinBundle\Entity;
 
-use NetBS\CoreBundle\Utils\StrUtil;
 use NetBS\FichierBundle\Mapping\BaseGroupe;
 use Doctrine\ORM\Mapping as ORM;
 

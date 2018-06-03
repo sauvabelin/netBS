@@ -31,12 +31,6 @@ class BSUser extends BaseUser
     protected $emailBS = null;
 
     /**
-     * @var bool
-     * @ORM\Column(name="new_password_required", type="boolean")
-     */
-    protected $newPasswordRequired  = false;
-
-    /**
      * @return string
      */
     public function getEmailBS()
@@ -56,7 +50,7 @@ class BSUser extends BaseUser
     /**
      * @return bool
      */
-    public function isNextcloudAccount()
+    public function hasNextcloudAccount()
     {
         return $this->nextcloudAccount;
     }
@@ -72,7 +66,7 @@ class BSUser extends BaseUser
     /**
      * @return bool
      */
-    public function isWikiAccount()
+    public function hasWikiAccount()
     {
         return $this->wikiAccount;
     }
@@ -84,24 +78,6 @@ class BSUser extends BaseUser
     {
         $this->wikiAccount = $wikiAccount;
     }
-
-    /**
-     * @return bool
-     */
-    public function isNewPasswordRequired()
-    {
-        return $this->newPasswordRequired;
-    }
-
-    /**
-     * @param bool $newPasswordRequired
-     */
-    public function setNewPasswordRequired($newPasswordRequired)
-    {
-        $this->newPasswordRequired = $newPasswordRequired;
-    }
-
-
 
     public function isInGroup($groupe) {
 
