@@ -1,8 +1,12 @@
 imports:
     - { resource: lists.yml }
 
-
 services:
+
+    pheanstalk:
+        class: Pheanstalk\Pheanstalk
+        arguments:
+            - "%pheanstalk_url%"
 
     sauvabelin.isp_config_manager:
         class: SauvabelinBundle\Service\ISPConfigManager

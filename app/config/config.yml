@@ -86,6 +86,45 @@ stof_doctrine_extensions:
             timestampable: true
             softdeleteable: true
 
+
+oneup_flysystem:
+    adapters:
+        nextcloud_webdav:
+            webdav:
+                client: webdav.nextcloud_client
+
+    filesystems:
+        nextcloud_webdav:
+            adapter: nextcloud_webdav
+
+
+liip_imagine:
+    loaders:
+        netbs_galerie:
+            flysystem:
+                filesystem_service: oneup_flysystem.nextcloud_webdav_filesystem
+    data_loader: netbs_galerie
+
+    resolvers:
+        default:
+            web_path: ~
+
+    filter_sets:
+        cache: ~
+        thumbnail:
+            quality: 75
+            filters:
+                thumbnail: { size: [200,200], mode: outbound }
+                auto_rotate: ~
+
+        bignail:
+            quality: 85
+            filters:
+                downscale:
+                    max: [1920, 1080]
+                    auto_rotate: ~
+
+
 net_bs_fichier:
     entities:
         membre_class: SauvabelinBundle\Entity\BSMembre
@@ -94,3 +133,4 @@ net_bs_fichier:
 net_bs_secure:
     entities:
         user_class: "%netbs_secure_user_class%"
+

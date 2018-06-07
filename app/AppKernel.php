@@ -18,6 +18,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+            new \Oneup\FlysystemBundle\OneupFlysystemBundle(),
+            new Liip\ImagineBundle\LiipImagineBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 
             new NetBS\CoreBundle\NetBSCoreBundle(),
@@ -26,7 +28,6 @@ class AppKernel extends Kernel
             new NetBS\ListBundle\NetBSListBundle(),
             new SauvabelinBundle\SauvabelinBundle(),
             new GalerieBundle\GalerieBundle(),
-            new Sysmoh\DBTaskBundle\SysmohDBTaskBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
