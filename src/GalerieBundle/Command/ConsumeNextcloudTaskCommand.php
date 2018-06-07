@@ -27,7 +27,7 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $amount     = intval($input->getArgument('amount'));
-        $mapper     = $this->getContainer()->get('netbs.galerie.mapper');
+        $mapper     = $this->getContainer()->get('galerie.mapper');
         $pheanstalk = $this->getContainer()->get('pheanstalk');
         $tubes      = $pheanstalk->listTubes();
 
@@ -45,6 +45,7 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
                 ->reserve();
 
             dump($job->getData());
+            /*
 
             $data   = json_decode($job->getData(), true);
             $node   = new NCNode($data);
@@ -63,6 +64,7 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
                     $mapper->remove($node);
                 }
             }
+            */
 
             $pheanstalk->delete($job);
         }

@@ -1,0 +1,13 @@
+{% extends '@NetBSCore/layout/backend.layout.twig' %}
+
+{% set title %}Galerie{% endset %}
+
+{% block main %}
+    <div class="container-fluid">
+        {% include '@NetBSCore/includes/header.include.twig' with {
+        header: "Galerie",
+        subHeader: "Administration du cache de la galerie BS"
+        } %}
+
+    </div>
+{% endblock %}

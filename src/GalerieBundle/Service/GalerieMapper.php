@@ -11,6 +11,8 @@ use Liip\ImagineBundle\Service\FilterService;
 
 class GalerieMapper
 {
+    const CREATED       = "CREATED";
+
     const THUMBNAIL     = "thumbnail";
     const BIGNAIL       = "bignail";
 
@@ -25,6 +27,13 @@ class GalerieMapper
         $this->em           = $manager;
         $this->cacheManager = $cacheManager;
         $this->filter       = $filter;
+    }
+
+    public function handle($operation, NCNode $node) {
+
+        switch($operation) {
+
+        }
     }
 
     public function map(NCNode $node) {

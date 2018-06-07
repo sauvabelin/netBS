@@ -35,6 +35,13 @@ security:
                 target: netbs.secure.login.login
             logout_on_user_change: true
 
+        api:
+            anonymous:  true
+            pattern:    ^/api/netBS
+            http_basic:
+                provider: database
+
     access_control:
         - { path: ^/netBS/secure/login,   roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/netBS,                roles: [ IS_AUTHENTICATED_FULLY, ROLE_USER ] }
+        - { path: ^/api/netBS,            roles: [ IS_AUTHENTICATED_FULLY ]}
