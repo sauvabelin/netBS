@@ -2,6 +2,7 @@
 
 namespace GalerieBundle\Controller;
 
+use GalerieBundle\Model\GalerieMarkdownParser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,9 +33,14 @@ class GalerieAPIController extends Controller
         if(!$directory)
             throw $this->createNotFoundException();
 
+        $parser = new GalerieMarkdownParser($directory, $this->get('liip_imagine.cache.manager'));
+
+
         return new JsonResponse($this->get('serializer')->serialize([
-            'children'  => $tree->getChildren($directory),
-            'medias'    => $tree->getMedias($directory)
+            'current'       => $directory,
+            'description'   => $parser->text($directory->getDescription()),
+            'children'      => $tree->getChildren($directory),
+            'medias'        => $tree->getMedias($directory)
         ], 'json'), 200, [], true);
     }
 }

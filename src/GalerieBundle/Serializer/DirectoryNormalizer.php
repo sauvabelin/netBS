@@ -3,7 +3,6 @@
 namespace GalerieBundle\Serializer;
 
 use GalerieBundle\Entity\Directory;
-use GalerieBundle\Model\GalerieMarkdownParser;
 use GalerieBundle\Service\GalerieTree;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -29,11 +28,9 @@ class DirectoryNormalizer implements NormalizerInterface
     public function normalize($directory, $format = null, array $context = array())
     {
         $thumbnail      = $this->tree->getThumbnail($directory);
-        $parser         = new GalerieMarkdownParser($directory, $this->cacheManager);
 
         return [
             'name'          => $directory->getName(),
-            'description'   => $parser->text($directory->getDescription()),
             'path'          => $directory->getWebdavUrl(),
             'thumbnail'     => $thumbnail !== null
                 ? $this->cacheManager->getBrowserPath($thumbnail->getsearchPath(), 'thumbnail')

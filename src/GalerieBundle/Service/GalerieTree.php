@@ -21,13 +21,16 @@ class GalerieTree
      */
     public function getThumbnail(Directory $directory) {
 
-        return $this->em->getRepository('GalerieBundle:Media')
+        $result = $this->em->getRepository('GalerieBundle:Media')
             ->createQueryBuilder('m')
             ->where("m.webdavUrl LIKE :dir")
             ->setParameter("dir", $directory->getWebdavUrl() . "%")
             ->setMaxResults(1)
             ->getQuery()
-            ->getSingleResult();
+            ->execute();
+
+        if(is_array($result) && count($result) > 0)
+            return $result[0];
     }
 
     public function getMedias(Directory $directory) {

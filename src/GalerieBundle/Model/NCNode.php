@@ -3,9 +3,12 @@
 namespace GalerieBundle\Model;
 
 use GalerieBundle\Entity\Media;
+use GalerieBundle\Util\WebdavTrait;
 
 class NCNode
 {
+    use WebdavTrait;
+
     private $etag;
 
     private $filename;
@@ -46,11 +49,11 @@ class NCNode
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getSize()
     {
-        return $this->size;
+        return intval($this->size);
     }
 
     /**

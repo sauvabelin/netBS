@@ -11,6 +11,8 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@liip_imagine.cache.manager"
             - "@liip_imagine.service.filter"
+            - "@netbs.params"
+            - "@webdav.nextcloud_client"
 
     galerie.tree:
         class: GalerieBundle\Service\GalerieTree

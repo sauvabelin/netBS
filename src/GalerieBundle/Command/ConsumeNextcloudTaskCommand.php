@@ -18,7 +18,7 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
         $this
             ->setName('netbs:galerie:consume_nextcloud_task_command')
             ->setDescription('Consumes some nextcloud tasks')
-            ->addArgument("amount", InputArgument::OPTIONAL, "Nombre de tâches à traiter", 20);
+            ->addArgument("amount", InputArgument::OPTIONAL, "Nombre de tâches à traiter", 1);
     }
 
     /**
@@ -36,7 +36,6 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
 
         $stats      = $pheanstalk->statsTube('netbs.galerie.waiting');
         $amount     = $amount > intval($stats['total-jobs']) ? intval($stats['total-jobs']) : $amount;
-        $amount = 1;
 
         for($i = 0; $i < $amount; $i++) {
 
@@ -45,27 +44,11 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
                 ->reserve();
 
             dump($job->getData());
-            /*
 
             $data   = json_decode($job->getData(), true);
             $node   = new NCNode($data);
 
-            if(substr($node->getWebdavUrl(), 0, 14) === "files/galerie/") {
-
-                if($data['type']  === "CREATED" || $data['type'] === "COPIED") {
-                    $mapper->map($node);
-                }
-
-                if($data['type'] === "RENAMED") {
-                    $mapper->update($node);
-                }
-
-                if($data['type'] === "DELETED") {
-                    $mapper->remove($node);
-                }
-            }
-            */
-
+            $mapper->handle($data['type'], $node);
             $pheanstalk->delete($job);
         }
     }
