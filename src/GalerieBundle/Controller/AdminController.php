@@ -34,6 +34,13 @@ class AdminController extends Controller
         return $this->render('@Galerie/manage_directories.html.twig');
     }
 
+    /**
+     *
+     */
+    public function mapDirectory() {
+
+    }
+
     private function countEntites($namespace) {
 
         return $this->get('doctrine.orm.entity_manager')

@@ -2,3 +2,4 @@ galerie:
     description_filename: "readme.md"
     mime_types: "image/jpeg,image/png"
     max_size: 1572864
+    access_token: "galerieBS"

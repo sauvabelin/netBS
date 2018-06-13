@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new \Oneup\FlysystemBundle\OneupFlysystemBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new \Nelmio\CorsBundle\NelmioCorsBundle(),
 
             new NetBS\CoreBundle\NetBSCoreBundle(),
             new NetBS\FichierBundle\NetBSFichierBundle(),

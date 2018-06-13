@@ -32,6 +32,7 @@
         "knplabs/knp-snappy-bundle": "^1.4",
         "league/flysystem-webdav": "^1.0",
         "liip/imagine-bundle": "^2.0",
+        "nelmio/cors-bundle": "^1.5",
         "oneup/flysystem-bundle": "^3.0",
         "pda/pheanstalk": "^3.1",
         "sensio/distribution-bundle": "^5.0.19",

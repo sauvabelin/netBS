@@ -16,7 +16,7 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('netbs:galerie:consume_nextcloud_task_command')
+            ->setName('netbs:galerie:consume')
             ->setDescription('Consumes some nextcloud tasks')
             ->addArgument("amount", InputArgument::OPTIONAL, "Nombre de tâches à traiter", 1);
     }

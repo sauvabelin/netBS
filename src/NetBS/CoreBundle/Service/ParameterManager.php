@@ -34,6 +34,16 @@ class ParameterManager
         ));
     }
 
+    public function setValue($namespace, $key, $value) {
+
+        $param      = $this->getParameter($namespace, $key);
+        $param->setValue($value);
+        $this->manager->persist($param);
+        $this->manager->flush();
+
+        $this->cacheParameter($param);
+    }
+
     public function getValue($namespace, $key) {
 
         $path       = $this->getCachePath($namespace, $key);

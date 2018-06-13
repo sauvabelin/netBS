@@ -1,5 +1,10 @@
 services:
 
+    galerie:
+        class: GalerieBundle\Service\Galerie
+        arguments:
+            - "@netbs.params"
+
     webdav.nextcloud_client:
         class: Sabre\DAV\Client
         arguments:

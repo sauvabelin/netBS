@@ -98,11 +98,11 @@ class GalerieMapper
     public function update(NCNode $node) {
 
         $media  = $this->getMedia($node);
-        $this->removeCache($media);
 
         if(!$media)
             return $this->map($node);
 
+        $this->removeCache($media);
         $this->checkDirectoryTree($node);
         $media->setFilename($node->getFilename());
         $media->setWebdavUrl($node->getWebdavUrl());
