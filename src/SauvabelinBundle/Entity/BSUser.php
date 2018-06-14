@@ -12,6 +12,7 @@ use NetBS\SecureBundle\Mapping\BaseUser;
  */
 class BSUser extends BaseUser
 {
+    //Nextcloud data
     /**
      * @var bool
      * @ORM\Column(name="nextcloud_account", type="boolean")
@@ -20,9 +21,22 @@ class BSUser extends BaseUser
 
     /**
      * @var bool
+     * @ORM\Column(name="nextcloud_admin", type="boolean")
+     */
+    protected $nextcloudAdmin   = false;
+
+    //Wikimedia data
+    /**
+     * @var bool
      * @ORM\Column(name="wiki_account", type="boolean")
      */
-    protected $wikiAccount = true;
+    protected $wikiAccount  = true;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="wiki_admin", type="boolean")
+     */
+    protected $wikiAdmin    = false;
 
     /**
      * @var string
@@ -77,6 +91,38 @@ class BSUser extends BaseUser
     public function setWikiAccount($wikiAccount)
     {
         $this->wikiAccount = $wikiAccount;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNextcloudAdmin()
+    {
+        return $this->nextcloudAdmin;
+    }
+
+    /**
+     * @param bool $nextcloudAdmin
+     */
+    public function setNextcloudAdmin($nextcloudAdmin)
+    {
+        $this->nextcloudAdmin = $nextcloudAdmin;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWikiAdmin()
+    {
+        return $this->wikiAdmin;
+    }
+
+    /**
+     * @param bool $wikiAdmin
+     */
+    public function setWikiAdmin($wikiAdmin)
+    {
+        $this->wikiAdmin = $wikiAdmin;
     }
 
     public function isInGroup($groupe) {

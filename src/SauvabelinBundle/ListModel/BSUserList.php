@@ -14,12 +14,20 @@ class BSUserList extends UsersList
         parent::configureColumns($configuration);
 
         $configuration
-            ->addColumn('Nextcloud', null, XEditableColumn::class, [
+            ->addColumn('Accès nextcloud', null, XEditableColumn::class, [
             XEditableColumn::PROPERTY       => 'nextcloudAccount',
             XEditableColumn::TYPE_CLASS     => SwitchType::class
             ])
-            ->addColumn('Wiki', null, XEditableColumn::class, [
+            ->addColumn('Admin nextcloud', null, XEditableColumn::class, [
+                XEditableColumn::PROPERTY       => 'nextcloudAdmin',
+                XEditableColumn::TYPE_CLASS     => SwitchType::class
+            ])
+            ->addColumn('Accès au wiki', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY   => 'wikiAccount',
+                XEditableColumn::TYPE_CLASS => SwitchType::class
+            ])
+            ->addColumn('Admin wiki', null, XEditableColumn::class, [
+                XEditableColumn::PROPERTY   => 'wikiAdmin',
                 XEditableColumn::TYPE_CLASS => SwitchType::class
             ])
         ;
