@@ -3,6 +3,11 @@ galerie:
     type:     annotation
     prefix:   /
 
+galerie_api:
+    resource: "@GalerieBundle/ApiController/"
+    type:     annotation
+    prefix:   /api/v1/netBS
+
 sauvabelin:
     resource: "@SauvabelinBundle/Controller/"
     type:     annotation
@@ -11,6 +16,10 @@ sauvabelin:
 netbs:
     resource: '@NetBSCoreBundle/Resources/config/routing.yml'
     prefix: /netBS
+
+netbs_api:
+    resource: '@NetBSCoreBundle/Resources/config/routing_api.yml'
+    prefix: /api/v1/netBS
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.yaml"

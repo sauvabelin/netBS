@@ -1,6 +1,6 @@
 <?php
 
-namespace GalerieBundle\Controller;
+namespace GalerieBundle\ApiController;
 
 use GalerieBundle\Model\GalerieMarkdownParser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,32 +19,11 @@ class GalerieAPIController extends Controller
      * @param Request $request
      * @return Response
      * @internal param $path
-     * @Route("/api/netBS/galerie/directory", name="netbs.galerie.api.directory")
+     * @Route("/galerie/directory", name="netbs.galerie.api.directory")
      */
     public function getDirectoryAction(Request $request) {
 
-        return $this->generateApiResponse($request);
-    }
-
-    /**
-     * @param Request $request
-     * @Route("/galerie/parent-api-call/directory")
-     * @return JsonResponse
-     */
-    public function parentApiCallAction(Request $request) {
-
-        $token      = $request->get('token');
-        $galerie    = $this->get('galerie');
-
-        if($token !== $galerie->getToken())
-            throw $this->createAccessDeniedException();
-
-        return $this->generateApiResponse($request);
-    }
-
-    private function generateApiResponse(Request $request) {
-
-        $path       = $request->get('path');
+        $path       = urldecode($request->get('path'));
         $path       = trim($path) === "" || $path === null || $path === "root" ? "files/" : $path;
         $tree       = $this->get('galerie.tree');
         $repo       = $this->getDoctrine()->getRepository('GalerieBundle:Directory');

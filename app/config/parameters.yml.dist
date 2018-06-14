@@ -34,3 +34,8 @@ parameters:
     nextcloud_webdav_uri: http://localhost/nextcloud/remote.php/webdav/
     nextcloud_username: null
     nextcloud_password: null
+
+    jwt_private_key_path: '%kernel.root_dir%/../config/jwt/private.pem'
+    jwt_public_key_path:  '%kernel.root_dir%/../config/jwt/public.pem'
+    jwt_key_pass_phrase:  'your_secret_passphrase'
+    jwt_token_ttl:        3600
