@@ -9,6 +9,7 @@ use NetBS\CoreBundle\Entity\DynamicList;
 use NetBS\CoreBundle\Entity\ExportConfiguration;
 use NetBS\CoreBundle\Entity\LoggedChange;
 use NetBS\CoreBundle\Entity\Notification;
+use NetBS\CoreBundle\Entity\UserLog;
 use NetBS\SecureBundle\Service\SecureConfig;
 
 class DoctrineMapperSubscriber implements EventSubscriber
@@ -58,6 +59,12 @@ class DoctrineMapperSubscriber implements EventSubscriber
                     'fetch'         => 'EAGER'
                 ]);
                 break;
+            case UserLog::class:
+                $eventArgs->getClassMetadata()->mapManyToOne([
+                    'fieldName'     => 'user',
+                    'targetEntity'  => $this->secureConfig->getUserClass(),
+                    'fetch'         => 'EAGER'
+                ]);
             default:
                 return;
         }

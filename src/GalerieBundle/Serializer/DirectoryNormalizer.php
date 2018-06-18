@@ -31,7 +31,7 @@ class DirectoryNormalizer implements NormalizerInterface
 
         return [
             'name'          => $directory->getName(),
-            'path'          => $directory->getWebdavUrl(),
+            'path'          => $directory->getSearchPath(),
             'thumbnail'     => $thumbnail !== null
                 ? $this->cacheManager->getBrowserPath($thumbnail->getsearchPath(), 'thumbnail')
                 : null

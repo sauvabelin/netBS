@@ -13,8 +13,6 @@ use GalerieBundle\Util\WebdavTrait;
  */
 class Directory
 {
-    use WebdavTrait;
-
     /**
      * @var int
      *
@@ -45,6 +43,12 @@ class Directory
      */
     private $description;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remote_id", type="string", length=255)
+     */
+    private $remoteId;
 
     /**
      * Get id.
@@ -63,7 +67,7 @@ class Directory
      *
      * @return Directory
      */
-    public function setWebdavUrl($webdavUrl)
+    public function setSearchPath($webdavUrl)
     {
         $this->webdavUrl = $webdavUrl;
 
@@ -75,7 +79,7 @@ class Directory
      *
      * @return string
      */
-    public function getWebdavUrl()
+    public function getSearchPath()
     {
         return $this->webdavUrl;
     }
@@ -126,5 +130,21 @@ class Directory
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemoteId()
+    {
+        return $this->remoteId;
+    }
+
+    /**
+     * @param string $remoteId
+     */
+    public function setRemoteId($remoteId)
+    {
+        $this->remoteId = $remoteId;
     }
 }

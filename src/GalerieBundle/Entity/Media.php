@@ -13,8 +13,6 @@ use GalerieBundle\Util\WebdavTrait;
  */
 class Media
 {
-    use WebdavTrait;
-
     /**
      * @var int
      *
@@ -58,7 +56,6 @@ class Media
      * @ORM\Column(name="webdavUrl", type="string", length=255)
      */
     private $webdavUrl;
-
 
     /**
      * Get id.
@@ -173,7 +170,7 @@ class Media
      *
      * @return Media
      */
-    public function setWebdavUrl($webdavUrl)
+    public function setSearchPath($webdavUrl)
     {
         $this->webdavUrl = $webdavUrl;
 
@@ -185,7 +182,7 @@ class Media
      *
      * @return string
      */
-    public function getWebdavUrl()
+    public function getSearchPath()
     {
         return $this->webdavUrl;
     }

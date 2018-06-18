@@ -5,6 +5,16 @@ services:
         arguments:
             - "@netbs.params"
 
+    galerie.imagine.cache_resolver:
+        class: GalerieBundle\Imagine\EtagCacheResolver
+        arguments:
+            - "%kernel.project_dir%"
+            - "%web_path%"
+            - "@doctrine.orm.entity_manager"
+            - "@filesystem"
+        tags:
+            - { name: "liip_imagine.cache.resolver", resolver: netbs_cache_resolver }
+
     webdav.nextcloud_client:
         class: Sabre\DAV\Client
         arguments:
@@ -18,6 +28,7 @@ services:
             - "@liip_imagine.service.filter"
             - "@netbs.params"
             - "@webdav.nextcloud_client"
+            - "@galerie.tree"
 
     galerie.tree:
         class: GalerieBundle\Service\GalerieTree

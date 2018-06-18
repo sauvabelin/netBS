@@ -19,12 +19,38 @@ class GalerieAPIController extends Controller
      * @param Request $request
      * @return Response
      * @internal param $path
-     * @Route("/galerie/directory", name="netbs.galerie.api.directory")
+     * @Route("/api/v1/netBS/galerie/directory", name="netbs.galerie.api.directory")
      */
     public function getDirectoryAction(Request $request) {
 
+        return $this->generateDirectoryResponse($request);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @Route("/api/v1/public/netBS/galerie/directory", name="netbs.galerie.api.token.directory")
+     */
+    public function getAccessTokenDirectoryAction(Request $request) {
+
+        $token          = $request->headers->get('x-authorization');
+        $token          = str_replace("Bearer ", "", $token);
+        $actualToken    = $this->get('netbs.params')->getValue('galerie', 'access_token');
+
+        if($token !== $actualToken)
+            return new JsonResponse("access denied", 401);
+
+        return $this->generateDirectoryResponse($request);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    private function generateDirectoryResponse(Request $request) {
+
         $path       = urldecode($request->get('path'));
-        $path       = trim($path) === "" || $path === null || $path === "root" ? "files/" : $path;
+        $path       = trim($path) === "" || $path === null || $path === "root" ? "galerie/" : $path;
         $tree       = $this->get('galerie.tree');
         $repo       = $this->getDoctrine()->getRepository('GalerieBundle:Directory');
         $directory  = $repo->findOneBy(array('webdavUrl' => $path));

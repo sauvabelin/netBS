@@ -6,7 +6,7 @@ galerie:
 galerie_api:
     resource: "@GalerieBundle/ApiController/"
     type:     annotation
-    prefix:   /api/v1/netBS
+    prefix:   /
 
 sauvabelin:
     resource: "@SauvabelinBundle/Controller/"

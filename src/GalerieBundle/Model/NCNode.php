@@ -22,8 +22,8 @@ class NCNode
     public function __construct(array $data)
     {
         $this->etag         = $data['etag'];
-        $this->filename     = $data['filename'];
-        $this->webdavUrl    = $data['webdavUrl'];
+        $this->filename     = $data['name'];
+        $this->webdavUrl    = $data['path'];
         $this->size         = $data['size'];
         $this->mimetype     = $data['mimetype'];
     }
@@ -31,13 +31,17 @@ class NCNode
     public function toMedia() {
 
         $media = new Media();
-        $media->setWebdavUrl($this->getWebdavUrl());
+        $media->setSearchPath($this->getsearchPath());
         $media->setFilename($this->getFilename());
         $media->setMimetype($this->getMimetype());
         $media->setEtag($this->getEtag());
         $media->setSize($this->getSize());
 
         return $media;
+    }
+
+    public function isDirectory() {
+        return $this->mimetype === "httpd/unix-directory";
     }
 
     /**

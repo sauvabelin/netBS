@@ -105,19 +105,16 @@ liip_imagine:
                 filesystem_service: oneup_flysystem.nextcloud_webdav_filesystem
     data_loader: netbs_galerie
 
-    resolvers:
-        default:
-            web_path: ~
-
     filter_sets:
-        cache: ~
         thumbnail:
+            cache: netbs_cache_resolver
             quality: 75
             filters:
                 thumbnail: { size: [200,200], mode: outbound }
                 auto_rotate: ~
 
         bignail:
+            cache: netbs_cache_resolver
             quality: 85
             filters:
                 downscale:
@@ -136,7 +133,7 @@ nelmio_cors:
         origin_regex: false
         forced_allow_origin_value: ~
     paths:
-        '^/api/v1/netBS':
+        '^/api/v1':
             allow_origin: ['*']
             allow_headers: ['*']
             allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
