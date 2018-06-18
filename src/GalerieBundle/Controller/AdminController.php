@@ -2,6 +2,7 @@
 
 namespace GalerieBundle\Controller;
 
+use GalerieBundle\Entity\Directory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,9 @@ class AdminController extends Controller
      */
     public function dashboardAction()
     {
+        $mapper = $this->get('galerie.mapper');
+        $mapper->fullMapDirectory('galerie/futon/swag/yolo/unit10/');
+
         $em     = $this->getDoctrine()->getManager();
         return $this->render('@Galerie/dashboard.html.twig', [
 
@@ -34,11 +38,22 @@ class AdminController extends Controller
         return $this->render('@Galerie/manage_directories.html.twig');
     }
 
-    /**
-     *
-     */
-    public function mapDirectory() {
+    public function mapDirectoryAction() {
 
+
+    }
+
+    /**
+     * @param Directory $directory
+     * @Route("/directory/remove/{directory}", name="netbs.galerie.admin.remove_directory")
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function removeDirectoryAction(Directory $directory) {
+
+        $mapper = $this->get('galerie.mapper');
+        $mapper->removeDirectory($directory);
+
+        return $this->redirectToRoute('netbs.galerie.admin.directories');
     }
 
     private function countEntites($namespace) {

@@ -13,6 +13,7 @@ use Liip\ImagineBundle\Service\FilterService;
 use NetBS\CoreBundle\Service\ParameterManager;
 use Sabre\DAV\Client;
 use Sabre\HTTP\ClientHttpException;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class GalerieMapper
 {
@@ -245,14 +246,62 @@ class GalerieMapper
      */
     public function remove(Media $media) {
 
-        $this->removeCache($media);
+        try {
+            $this->removeCache($media);
+        } catch (\Exception $e) {
+
+        }
+
         $this->em->remove($media);
         $this->em->flush();
 
         return true;
     }
 
-    private function removeDirectory(Directory $directory) {
+    public function fullMapDirectory($path, SymfonyStyle $io = null) {
+
+        $data       = $this->request('PROPFIND', $this->decodePath($path));
+        $document   = new \DOMDocument();
+        $document->loadXML($data['body']);
+
+        $io->writeln("Mapping : " . $path);
+
+        /** @var \DOMElement $responseElement */
+        foreach($document->getElementsByTagName("response") as $responseElement) {
+
+            $href       = $responseElement->getElementsByTagName("href")->item(0)->textContent;
+            $itemPath   = substr($href, strpos($href, $this->params->getValue('galerie', 'root_directory')));
+            $itemPath   = $this->decodePath($itemPath);
+            $mimeNode   = $responseElement->getElementsByTagName("getcontenttype")->item(0);
+            $type       = $responseElement->getElementsByTagName('resourcetype');
+
+            if($path === $itemPath)
+                continue;
+
+            if($type->length > 0 && $type->item(0)->firstChild && $type->item(0)->firstChild->tagName === "d:collection")
+                $this->fullMapDirectory($itemPath, $io);
+
+            else {
+
+                $itemPath   = trim($itemPath, "/");
+                $name       = explode("/", $itemPath);
+                $name       = $name[count($name) - 1];
+                $io->writeln("Mapping media : " . $itemPath);
+
+                $ncnode = new NCNode([
+                    'etag'      => str_replace('"', "", $responseElement->getElementsByTagName('getetag')->item(0)->textContent),
+                    'name'      => $name,
+                    'path'      => "files/" . $itemPath,
+                    'size'      => $responseElement->getElementsByTagName('getcontentlength')->item(0)->textContent,
+                    'mimetype'  => $mimeNode->textContent
+                ]);
+
+                $this->map($ncnode);
+            }
+        }
+    }
+
+    public function removeDirectory(Directory $directory) {
 
         $medias         = $this->tree->getMedias($directory, true);
         $directories    = $this->tree->getChildren($directory, true);
@@ -263,6 +312,7 @@ class GalerieMapper
         foreach($directories as $directory)
             $this->em->remove($directory);
 
+        $this->em->remove($directory);
         $this->em->flush();
 
         return true;
