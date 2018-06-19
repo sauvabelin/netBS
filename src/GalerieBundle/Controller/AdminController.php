@@ -18,9 +18,6 @@ class AdminController extends Controller
      */
     public function dashboardAction()
     {
-        $mapper = $this->get('galerie.mapper');
-        $mapper->fullMapDirectory('galerie/futon/swag/yolo/unit10/');
-
         $em     = $this->getDoctrine()->getManager();
         return $this->render('@Galerie/dashboard.html.twig', [
 
@@ -36,11 +33,6 @@ class AdminController extends Controller
     public function manageDirectoriesAction() {
 
         return $this->render('@Galerie/manage_directories.html.twig');
-    }
-
-    public function mapDirectoryAction() {
-
-
     }
 
     /**

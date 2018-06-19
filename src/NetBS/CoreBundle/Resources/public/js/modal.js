@@ -13,7 +13,7 @@
 var BSModal = function(path, params) {
 
     this.path           = path;
-    this.id             = "mah-modal";//'dn_modal_' + Math.floor(Math.random() * 99999);
+    this.id             = 'dn_modal_' + Math.floor(Math.random() * 99999);
 
     this.launch         = function() {
 
@@ -40,7 +40,7 @@ var BSModal = function(path, params) {
     };
 
     this.generate       = function (content) {
-        return '<div id="' + this.id + '" class="modal fade" data-dynamic tabindex="-1" role="dialog" aria-hidden="true">' + content + '</div>';
+        return '<div id="' + this.id + '" class="modal fade netbs-modal" data-dynamic tabindex="-1" role="dialog" aria-hidden="true">' + content + '</div>';
     };
 
     this.attachButtonEvents = function() {

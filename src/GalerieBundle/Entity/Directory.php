@@ -9,7 +9,7 @@ use GalerieBundle\Util\WebdavTrait;
  * Directory
  *
  * @ORM\Table(name="netbs_galerie_directory")
- * @ORM\Entity(repositoryClass="GalerieBundle\Repository\DirectoryRepository")
+ * @ORM\Entity()
  */
 class Directory
 {

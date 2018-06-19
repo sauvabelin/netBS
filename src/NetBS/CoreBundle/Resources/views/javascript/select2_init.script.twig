@@ -8,9 +8,10 @@
 
             var $parent = $(document.body);
             var $modals = $('.netbs-modal');
-
-            if($modals.length)
+            if($modals.length) {
                 $parent = $modals.first();
+                console.log($parent);
+            }
 
             return $parent;
         },

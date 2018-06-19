@@ -9,7 +9,7 @@ use GalerieBundle\Util\WebdavTrait;
  * Media
  *
  * @ORM\Table(name="netbs_galerie_media")
- * @ORM\Entity(repositoryClass="GalerieBundle\Repository\MediaRepository")
+ * @ORM\Entity()
  */
 class Media
 {
