@@ -18,9 +18,9 @@ class WNGAttribution
 
     public $remarques;
 
-    public $netBSGroupe;
+    public $WNGUnite;
 
-    public $netBSFonction;
+    public $WNGFonction;
 
     public function __construct(array $d)
     {

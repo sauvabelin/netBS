@@ -17,11 +17,20 @@ class GroupeVoter extends FichierVoter
 
     protected function accept($operation, $subject, BaseUser $user)
     {
-        foreach($user->getMembre()->getActivesAttributions() as $attribution)
-            if($attribution->getGroupe()->getId() == $subject->getId())
-                foreach($attribution->getFonction()->getRoles() as $role)
-                    if(str_replace("ROLE_", "", $role->getRole()) === strtoupper($operation))
+        foreach($user->getMembre()->getActivesAttributions() as $attribution) {
+
+            if ($attribution->getGroupe()->getId() === $subject->getId()) {
+
+                dump($attribution->getFonction()->getRoles());
+                foreach ($attribution->getFonction()->getRoles() as $role) {
+
+                    dump(str_replace("ROLE_", "", $role->getRole()));
+                    dump(strtoupper($operation));
+                    if (str_replace("ROLE_", "", $role->getRole()) === strtoupper($operation))
                         return true;
+                }
+            }
+        }
 
         return false;
     }

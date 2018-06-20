@@ -26,7 +26,7 @@ class WNGHelper
 
     public static function toNumericString($string) {
 
-        return self::isEmpty($string) ? null : str_replace(' ', '', preg_replace('/\D/', '', $string));
+        return self::isEmpty($string) ? null : intval(preg_replace("/[^0-9]/", "", $string));
     }
 
     public static function toEmail($string) {
@@ -40,5 +40,11 @@ class WNGHelper
             return true;
 
         return str_replace(" ", "", $string) === "";
+    }
+
+    public static function similar($s1, $s2) {
+
+        similar_text($s1, $s2, $percent);
+        return $percent;
     }
 }

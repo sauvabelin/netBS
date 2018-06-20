@@ -3,6 +3,7 @@
 namespace NetBS\SecureBundle\Listener;
 
 use NetBS\CoreBundle\Event\ExtendMainMenuEvent;
+use NetBS\SecureBundle\Mapping\BaseUser;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class MainMenuListener
@@ -19,11 +20,16 @@ class MainMenuListener
 
     public function onMenuConfigure(ExtendMainMenuEvent $event)
     {
+        /** @var BaseUser $user */
+        $user       = $this->token->getToken()->getUser();
         $menu       = $event->getMenu();
         $category   = $menu->getCategory('secure.admin');
 
-        $category->addSubMenu('netbs.secure.admin.users', 'Utilisateurs', 'fas fa-key')
-            ->addSubLink('Gestion', 'netbs.secure.user.list_users')
-            ->addSubLink('Nouveau', 'netbs.secure.user.add_user');
+        if($user->hasRole("ROLE_ADMIN")) {
+
+            $category->addSubMenu('netbs.secure.admin.users', 'Utilisateurs', 'fas fa-key')
+                ->addSubLink('Gestion', 'netbs.secure.user.list_users')
+                ->addSubLink('Nouveau', 'netbs.secure.user.add_user');
+        }
     }
 }

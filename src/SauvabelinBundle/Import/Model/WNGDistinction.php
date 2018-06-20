@@ -12,8 +12,6 @@ class WNGDistinction
 
     public $remarques;
 
-    private $netBSDistinction;
-
     public function __construct(array $d)
     {
         $this->idDistinction    = $d['id_distinction'];
@@ -22,12 +20,5 @@ class WNGDistinction
 
         $distinction            = new Distinction($this->nom);
         $distinction->setRemarques($this->remarques);
-
-        $this->netBSDistinction = $distinction;
-    }
-
-    public function getDistinction() {
-
-        return $this->netBSDistinction;
     }
 }

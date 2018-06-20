@@ -140,7 +140,7 @@ mailing_lists_el:
         rule: 'user.isInGroup("gamaiun")'
         description: "Toutes les membres de Gamaiun"
     ccs@sauvabelin.ch:
-        rule: 'user.hasRole("chef de clan")'
+        rule: 'user.hasFonction("chef de clan")'
         description: "Les chefs de clan"
 
     #smt

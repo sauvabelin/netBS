@@ -1,3 +1,53 @@
+categories:
+    - 'brigade'
+    - 'équipe de commandement'
+    - 'branche'
+    - 'unité'
+    - 'sous-unité'
+    - 'association'
+    - 'organisation interne'
+
+types:
+    brigade:
+        cat: brigade
+        effectifs: 0
+    'équipe de commandement':
+        cat: équipe de commandement
+        effectifs: 1
+    'équipe interne':
+        cat: organisation interne
+        effectifs: 1
+    'groupe de travail':
+        cat: organisation interne
+        effectifs: 1
+    branche:
+        cat: branche
+        effectifs: 0
+    clan:
+        cat: unité
+        effectifs: 1
+    troupe:
+        cat: unité
+        effectifs: 1
+    meute:
+        cat: unité
+        effectifs: 1
+    patrouille:
+        cat: sous-unité
+        effectifs: 1
+    sizaine:
+        cat: sous-unité
+        effectifs: 1
+    association:
+        cat: association
+        effectifs: 1
+    adabs:
+        cat: association
+        effectifs: 1
+    conseil des anciens:
+        cat: association
+        effectifs: 1
+
 
 unites:
     migration:
@@ -18,6 +68,11 @@ unites:
 
             administration:
                 model: association
+                children:
+                    team formation:
+                        model: équipe interne
+                    team communication:
+                        model: équipe interne
             branche louveteaux:
                 model: branche
                 children:

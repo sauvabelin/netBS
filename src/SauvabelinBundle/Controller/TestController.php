@@ -6,6 +6,7 @@ use SauvabelinBundle\Entity\BSGroupe;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Yaml\Yaml;
 
 class TestController extends Controller
 {
@@ -14,6 +15,9 @@ class TestController extends Controller
      */
     public function testGroupe() {
 
+        dump(Yaml::parse(file_get_contents(__DIR__ . "/../Resources/structure/groups.yml")));
+
+        /*
         $type   = $this->get('doctrine.orm.entity_manager')->getRepository('NetBSFichierBundle:GroupeType')->findOneBy(array('nom' => 'patrouille'));
         $nc     = $this->get('sauvabelin.nextcloud.group_manager');
         $groupe = new BSGroupe();
@@ -24,6 +28,7 @@ class TestController extends Controller
         $r = $nc->createNCGroup($groupe);
 
         dump($r->getMessage(), $r->getStatus(), $r->getStatusCode());
+        */
 
         return new Response();
     }

@@ -193,6 +193,7 @@
     {# formulaire non final, gros bug sa mère la tchoin #}
     {% if form.children|length == 0 %}
 
+        {{ dump(form.parent.vars.data) }}
         {% if is_granted('update', form.parent.vars.data) %}
             {{ block('webAssets') }}
             <a href="#" {{ block('xeditable') }}></a>

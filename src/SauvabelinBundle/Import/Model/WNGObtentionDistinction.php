@@ -12,7 +12,7 @@ class WNGObtentionDistinction
 
     public $date;
 
-    public $netBSDistinction;
+    public $WNGDistinction;
 
     public function __construct(array $d)
     {

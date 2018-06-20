@@ -35,7 +35,7 @@ abstract class BaseGroupe implements ValidableInterface
     /**
      * @var string
      * @Assert\NotBlank()
-     * @ORM\Column(name="nom", type="string", length=255, unique=true)
+     * @ORM\Column(name="nom", type="string", length=255)
      */
     protected $nom;
 

@@ -38,12 +38,14 @@ class MainMenuListener
             ->addSubLink('Rechercher des membres', 'netbs.fichier.membre.search')
             ->addSubLink('Liste des unités', 'netbs.fichier.groupe.page_groupes_hierarchy');
 
-        $category
-            ->addSubMenu('fichier.structure', 'Structure', 'fas fa-th')
+        if($user->hasRole("ROLE_SG")) {
+
+            $category
+                ->addSubMenu('fichier.structure', 'Structure', 'fas fa-th')
                 ->addSubLink('Distinctions', 'netbs.fichier.distinction.page_distinctions')
                 ->addSubLink("Types de groupes", 'netbs.fichier.groupe_type.page_groupe_types')
                 ->addSubLink("Catégories de groupes", 'netbs.fichier.groupe_categorie.page_groupe_categories')
-                ->addSubLink('Fonctions', 'netbs.fichier.fonction.page_fonctions')
-            ;
+                ->addSubLink('Fonctions', 'netbs.fichier.fonction.page_fonctions');
+        }
     }
 }

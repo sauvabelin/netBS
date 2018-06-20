@@ -3,6 +3,7 @@
 namespace GalerieBundle\Listener;
 
 use NetBS\CoreBundle\Event\ExtendMainMenuEvent;
+use SauvabelinBundle\Entity\BSUser;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class MainMenuListener
@@ -19,6 +20,11 @@ class MainMenuListener
 
     public function onMenuConfigure(ExtendMainMenuEvent $event)
     {
+        /** @var BSUser $user */
+        $user       = $this->storage->getToken()->getUser();
+
+        //$user->isInGroup()
+
         $menu       = $event->getMenu();
         $category   = $menu->getCategory('other');
         $submenu    = $category->addSubMenu('other.gallery', 'Galerie', 'fas fa-images');

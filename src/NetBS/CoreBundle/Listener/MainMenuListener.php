@@ -54,6 +54,7 @@ class MainMenuListener
         if($user->hasRole('ROLE_SG'))
             $secureCat->addLink('secure.admin.changelog', 'Modifications', 'fas fa-history', 'netbs.core.changelog.list');
 
-        $secureCat->addLink('secure.admin.parameters', 'Paramètres', 'fas fa-cog', 'netbs.core.parameters.list');
+        if($user->hasRole("ROLE_ADMIN"))
+            $secureCat->addLink('secure.admin.parameters', 'Paramètres', 'fas fa-cog', 'netbs.core.parameters.list');
     }
 }

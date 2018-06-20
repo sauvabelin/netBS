@@ -4,12 +4,18 @@ namespace SauvabelinBundle\DataFixtures\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use NetBS\FichierBundle\Entity\Fonction;
+use NetBS\SecureBundle\Entity\Role;
 
 class LoadFonctions extends BSFixture
 {
     public function load(ObjectManager $manager)
     {
         $data   = $this->loadYAML('fonctions.yml');
+        $roles  = [];
+
+        /** @var Role $role */
+        foreach($manager->getRepository('NetBSSecureBundle:Role')->findAll() as $role)
+            $roles[$role->getRole()] = $role;
 
         foreach($data['fonctions'] as $name => $params) {
 
@@ -18,6 +24,9 @@ class LoadFonctions extends BSFixture
                 ->setAbbreviation($params['abbreviation'])
                 ->setNom($name)
                 ->setPoids($params['poids']);
+
+            foreach($params['roles'] as $requiredRole)
+                $fonction->addRole($roles[$requiredRole]);
 
             $manager->persist($fonction);
         }
@@ -34,5 +43,10 @@ class LoadFonctions extends BSFixture
         foreach($updates as $key => $fn)
             $this->loadParameterWithId($manager, 'bs', $key,
                 $manager->getRepository('NetBSFichierBundle:Fonction')->findOneBy(array('nom' => $fn)));
+    }
+
+    public function getOrder()
+    {
+        return 500;
     }
 }

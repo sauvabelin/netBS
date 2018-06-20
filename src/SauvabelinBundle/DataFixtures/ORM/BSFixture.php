@@ -5,6 +5,7 @@ namespace SauvabelinBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\ContainerAwareFixture;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Yaml\Yaml;
 
 abstract class BSFixture extends ContainerAwareFixture implements OrderedFixtureInterface
@@ -27,6 +28,14 @@ abstract class BSFixture extends ContainerAwareFixture implements OrderedFixture
         $param->setValue($item->getId());
         $manager->persist($param);
         $manager->flush();
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer() {
+
+        return $this->container;
     }
 
     public function getOrder()

@@ -64,7 +64,9 @@ class WNGMembre
 
     public $remarques;
 
-    private $membre;
+    public $WNGAttributions = [];
+
+    public $WNGObtentionsDistinctions = [];
 
     public function __construct(array $d)
     {
@@ -81,7 +83,7 @@ class WNGMembre
         $this->nomMere              = $d['nom_mere'];
         $this->prenomMere           = $d['prenom_mere'];
         $this->professionMere       = $d['profession_mere'];
-        $this->rue                  = $d['adresse'];
+        $this->adresse              = $d['adresse'];
         $this->npa                  = intval(WNGHelper::toNumericString($d['npa']));
         $this->localite             = $d['ville'];
         $this->numeroAvs            = $d['no_avs'];
@@ -95,56 +97,5 @@ class WNGMembre
         $this->demission            = WNGHelper::toDatetime($d['date_demission_bs']);
         $this->demissionAdabs       = WNGHelper::toDatetime($d['date_demission_adabs']);
         $this->remarques            = $d['remarques_membre'];
-
-        $this->membre   = $this->toMembre();
-    }
-
-    protected function toMembre() {
-
-        $membre = new BSMembre();
-
-        if($this->inscription)
-            $membre->setInscription($this->inscription);
-
-        if($this->dateNaissance)
-            $membre->setNaissance($this->dateNaissance);
-
-        $membre
-            ->setNumeroBS($this->numeroMembre)
-            ->setDesinscription($this->demission)
-            ->setPrenom($this->prenom)
-            ->setSexe($this->sexe);
-
-        $statut = null;
-
-        switch (intval($this->idFichier)) {
-            case 4:
-                $statut = BaseMembre::DESINSCRIT;
-                break;
-            case 5:
-                $statut = BaseMembre::DECEDE;
-                break;
-            default:
-                $statut = BaseMembre::INSCRIT;
-                break;
-        }
-
-        $membre->setStatut($statut);
-
-        $email  = WNGHelper::toEmail($this->email);
-        $msn    = WNGHelper::toEmail($this->msn);
-        $phone  = WNGHelper::toNumericString($this->telephone);
-        $natel  = WNGHelper::toNumericString($this->natel);
-
-        if($email)
-            $membre->addEmail(new Email($email));
-        if($msn)
-            $membre->addEmail(new Email($msn));
-        if($phone)
-            $membre->addTelephone(new Telephone($phone));
-        if($natel)
-            $membre->addTelephone(new Telephone($natel));
-
-        return $membre;
     }
 }
