@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
 use NetBS\SecureBundle\Mapping\BaseRole;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Fonction
@@ -26,21 +27,21 @@ abstract class BaseFonction
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="nom", type="string", length=255)
      */
     protected $nom;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="abbreviation", type="string", length=255)
      */
     protected $abbreviation;
 
     /**
      * @var int
-     *
+     * @Assert\Type("integer")
      * @ORM\Column(name="poids", type="integer", nullable=true)
      */
     protected $poids;

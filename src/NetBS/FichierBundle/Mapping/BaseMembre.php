@@ -26,7 +26,7 @@ abstract class BaseMembre extends Personne implements EqualInterface
     /**
      * @var BaseFamille
      * @Groups({"withFamille"})
-     * @Assert\NotNull()
+     * @Assert\NotBlank()
      */
     protected $famille;
 

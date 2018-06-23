@@ -26,9 +26,10 @@ class ObtentionDistinctionType extends AbstractType
                 'class'     => $this->config->getMembreClass()
             ))
             ->add('distinction', AjaxSelect2DocumentType::class, array(
-                'label' => 'Distinction',
-                'class' => $this->config->getDistinctionClass()
-            ))
+                'label'     => 'Distinction',
+                'class'     => $this->config->getDistinctionClass(),
+                'required'  => true
+                ))
             ->add('date', DatepickerType::class, array('label' => 'Date d\'obtention'))
         ;
     }

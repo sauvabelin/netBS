@@ -46,6 +46,7 @@ abstract class BaseGeniteur extends Personne implements EqualInterface
 
     /**
      * @var BaseFamille
+     * @Assert\NotBlank()
      * @Groups({"geniteurFamille"})
      */
     protected $famille;

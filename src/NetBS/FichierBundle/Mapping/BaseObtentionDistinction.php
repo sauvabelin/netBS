@@ -34,11 +34,13 @@ abstract class BaseObtentionDistinction
 
     /**
      * @var BaseDistinction
+     * @Assert\NotBlank()
      */
     protected $distinction;
 
     /**
      * @var BaseMembre
+     * @Assert\NotBlank()
      */
     protected $membre;
 

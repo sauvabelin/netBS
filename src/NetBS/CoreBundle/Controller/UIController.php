@@ -5,6 +5,7 @@ namespace NetBS\CoreBundle\Controller;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseGroupe;
 use NetBS\FichierBundle\Mapping\BaseMembre;
+use NetBS\SecureBundle\Voter\CRUD;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,7 +18,6 @@ class UIController extends Controller
      * @Route("/ui/global-search", name="netbs.core.ui.global_search")
      * @param Request $request
      * @return JsonResponse
-     * @Security("is_granted('ROLE_SG')")
      */
     public function globalSearchAction(Request $request)
     {
@@ -31,6 +31,9 @@ class UIController extends Controller
 
         /** @var BaseMembre $membre */
         foreach($membres as $membre) {
+
+            if(!$this->isGranted(CRUD::READ, $membre))
+                continue;
 
             $descr      = '';
             if($attr = $membre->getActiveAttribution())
@@ -46,6 +49,9 @@ class UIController extends Controller
         /** @var BaseFamille $famille */
         foreach($familles as $famille) {
 
+            if(!$this->isGranted(CRUD::READ, $famille))
+                continue;
+
             $descr  = '';
             if($adresse = $famille->getSendableAdresse())
                 $descr = $adresse->getNpa() . ' ' . $adresse->getLocalite();
@@ -58,12 +64,17 @@ class UIController extends Controller
         }
 
         /** @var BaseGroupe $groupe */
-        foreach($groupes as $groupe)
-            $results[]  = [
+        foreach($groupes as $groupe) {
+
+            if(!$this->isGranted(CRUD::READ, $groupe))
+                continue;
+
+            $results[] = [
                 'name'          => $groupe->getNom(),
                 'description'   => $groupe->getGroupeType()->getNom(),
                 'path'          => $router->generate('netbs.fichier.groupe.page_groupe', ['id' => $groupe->getId()])
             ];
+        }
 
         return new JsonResponse($results);
     }

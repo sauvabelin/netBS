@@ -26,7 +26,7 @@ abstract class BaseDistinction
 
     /**
      * @var string
-     * @Assert\NotNull
+     * @Assert\NotBlank()
      * @ORM\Column(name="nom", type="string", length=255)
      */
     protected $nom;

@@ -51,6 +51,7 @@ abstract class BaseGroupe implements ValidableInterface
 
     /**
      * @var GroupeType
+     * @Assert\NotBlank()
      */
     protected $groupeType;
 

@@ -31,6 +31,7 @@ abstract class BaseAttribution
      *
      * @ORM\Column(name="dateDebut", type="datetime")
      * @Groups({"default"})
+     * @Assert\NotBlank()
      */
     protected $dateDebut;
 
@@ -44,21 +45,21 @@ abstract class BaseAttribution
 
     /**
      * @var BaseGroupe
-     * @Assert\NotNull
+     * @Assert\NotBlank()
      * @Groups({"attributionWithGroupe"})
      */
     protected $groupe;
 
     /**
      * @var BaseFonction
-     * @Assert\NotNull()
+     * @Assert\NotBlank()
      * @Groups({"attributionWithFonction"})
      */
     protected $fonction;
 
     /**
      * @var BaseMembre
-     * @Assert\NotNull()
+     * @Assert\NotBlank()
      * @Groups({"attributionWithMembre"})
      */
     protected $membre;

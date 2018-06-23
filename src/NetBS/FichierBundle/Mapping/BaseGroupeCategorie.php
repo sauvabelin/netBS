@@ -4,6 +4,7 @@ namespace NetBS\FichierBundle\Mapping;
 
 use Doctrine\ORM\Mapping as ORM;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * GroupeCategorie
@@ -24,7 +25,7 @@ class BaseGroupeCategorie
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="nom", type="string", length=255)
      */
     protected $nom;
