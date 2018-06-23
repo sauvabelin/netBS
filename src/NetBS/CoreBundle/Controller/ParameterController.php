@@ -3,12 +3,14 @@
 namespace NetBS\CoreBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ParameterController extends Controller
 {
     /**
      * @Route("/parameters/list", name="netbs.core.parameters.list")
+     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function listParametersAction()
     {

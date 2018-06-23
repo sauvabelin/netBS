@@ -2,6 +2,8 @@
 
 namespace SauvabelinBundle\Import\Model;
 
+use SauvabelinBundle\Import\Encoding;
+
 class WNGHelper
 {
     public static function toDatetime($date) {
@@ -46,5 +48,12 @@ class WNGHelper
 
         similar_text($s1, $s2, $percent);
         return $percent;
+    }
+
+    public static function sanitize($str) {
+
+        return Encoding::toUTF8($str);
+        //return iconv("UTF-8", "UTF-8//IGNORE", $str);
+        //return mb_convert_encoding($str, "UTF-8", "ISO-8859-1");
     }
 }

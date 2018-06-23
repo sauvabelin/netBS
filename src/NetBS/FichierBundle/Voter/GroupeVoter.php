@@ -2,6 +2,7 @@
 
 namespace NetBS\FichierBundle\Voter;
 
+use NetBS\FichierBundle\Mapping\BaseGroupe;
 use NetBS\SecureBundle\Mapping\BaseUser;
 
 class GroupeVoter extends FichierVoter
@@ -15,21 +16,27 @@ class GroupeVoter extends FichierVoter
         return $this->config->getGroupeClass();
     }
 
+    /**
+     * @param string $operation
+     * @param BaseGroupe $subject
+     * @param BaseUser $user
+     * @return bool
+     */
     protected function accept($operation, $subject, BaseUser $user)
     {
-        foreach($user->getMembre()->getActivesAttributions() as $attribution) {
+        while($subject !== null) {
+            foreach ($user->getMembre()->getActivesAttributions() as $attribution) {
 
-            if ($attribution->getGroupe()->getId() === $subject->getId()) {
+                if ($attribution->getGroupe()->getId() === $subject->getId()) {
 
-                dump($attribution->getFonction()->getRoles());
-                foreach ($attribution->getFonction()->getRoles() as $role) {
-
-                    dump(str_replace("ROLE_", "", $role->getRole()));
-                    dump(strtoupper($operation));
-                    if (str_replace("ROLE_", "", $role->getRole()) === strtoupper($operation))
-                        return true;
+                    foreach ($attribution->getFonction()->getRoles() as $role) {
+                        if (str_replace("ROLE_", "", $role->getRole()) === strtoupper($operation))
+                            return true;
+                    }
                 }
             }
+
+            $subject = $subject->getParent();
         }
 
         return false;

@@ -5,6 +5,7 @@ namespace NetBS\FichierBundle\Controller;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\FonctionType;
 use NetBS\FichierBundle\Mapping\BaseFonction;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ class FonctionController extends Controller
 {
     /**
      * @Route("/manage", name="netbs.fichier.fonction.page_fonctions")
+     * @Security("is_granted('ROLE_SG')")
      */
     public function pageFonctionsAction() {
 
@@ -32,6 +34,7 @@ class FonctionController extends Controller
      * @param Request $request
      * @Route("/modal/add", name="netbs.fichier.fonction.modal_add")
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Security("is_granted('ROLE_SG')")
      */
     public function addFonctionModalAction(Request $request) {
 

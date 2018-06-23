@@ -4,6 +4,7 @@ namespace NetBS\FichierBundle\Controller;
 
 use NetBS\FichierBundle\Form\Personne\GeniteurType;
 use NetBS\FichierBundle\Mapping\BaseGeniteur;
+use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +28,9 @@ class GeniteurController extends Controller
 
         if(!$famille)
             throw $this->createNotFoundException();
+
+        if(!$this->isGranted(CRUD::UPDATE, $famille))
+            throw $this->createAccessDeniedException("Ajout de géniteur refusé");
 
         /** @var BaseGeniteur $geniteur */
         $geniteur       = $configurator->createGeniteur();
@@ -67,6 +71,9 @@ class GeniteurController extends Controller
 
         if(!$geniteur)
             throw $this->createNotFoundException();
+
+        if(!$this->isGranted(CRUD::DELETE, $geniteur))
+            throw $this->createAccessDeniedException("Suppression de géniteur refusée");
 
         $fid    = $geniteur->getFamille()->getId();
 

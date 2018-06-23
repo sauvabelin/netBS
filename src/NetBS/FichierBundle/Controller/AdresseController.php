@@ -3,7 +3,6 @@
 namespace NetBS\FichierBundle\Controller;
 
 use NetBS\CoreBundle\Utils\Modal;
-use NetBS\FichierBundle\Entity\Adresse;
 use NetBS\FichierBundle\Form\Contact\AdresseType;
 use NetBS\SecureBundle\Voter\CRUD;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -34,7 +33,7 @@ class AdresseController extends Controller
         $owner  = $em->getRepository(base64_decode($ownerType))->find($ownerId);
         $adrss  = $em->getRepository($class)->find($adresseId);
 
-        if(!$this->isGranted(CRUD::UPDATE, $owner))
+        if(!$this->isGranted(CRUD::DELETE, $adrss))
             throw $this->createAccessDeniedException("Vous n'avez pas le droit de supprimer cette adresse.");
 
         $owner->removeAdresse($adrss);

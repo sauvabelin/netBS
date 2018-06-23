@@ -22,21 +22,28 @@ class MembresMerger
 
     public function generatePool(array $membres) {
 
-        foreach($membres as $m1)
-            foreach ($membres as $m2)
-                $this->isOfSameFamily($m1, $m2);
+        foreach($membres as $m1) {
+
+            $foundFamily = false;
+
+            foreach ($membres as $m2) {
+
+                if($m1 === $m2)
+                    continue;
+
+                if(WNGHelper::similar($m1->nom, $m2->nom) > 90 && self::similarAddress($m1, $m2)) {
+
+                    $foundFamily = true;
+                    $this->merge($m1, $m2);
+                    break;
+                }
+            }
+
+            if(!$foundFamily)
+                $this->pool[] = new ArrayCollection([$m1]);
+        }
 
         return $this->pool;
-    }
-
-    public function isOfSameFamily(WNGMembre $membre1, WNGMembre $membre2) {
-
-        if($membre1 === $membre2)
-            return;
-
-        if(WNGHelper::similar($membre1->nom, $membre2->nom) > 90)
-            if($this->similarAddress($membre1, $membre2))
-                $this->merge($membre1, $membre2);
     }
 
     private function merge(WNGMembre $membre1, WNGMembre $membre2) {
@@ -48,7 +55,7 @@ class MembresMerger
                 return;
             }
 
-            elseif($collection->contains($membre2) && !$collection->contains($membre1)) {
+            if($collection->contains($membre2) && !$collection->contains($membre1)) {
                 $collection->add($membre1);
                 return;
             }
@@ -60,10 +67,16 @@ class MembresMerger
         $this->pool[]   = new ArrayCollection([$membre1, $membre2]);
     }
 
-    private function similarAddress(WNGMembre $m1, WNGMembre $m2) {
+    public static function similarAddress(WNGMembre $m1 = null, WNGMembre $m2 = null) {
 
-        $rue1   = $this->trimAdresse($m1->adresse);
-        $rue2   = $this->trimAdresse($m2->adresse);
+        if($m1 === null && $m2 === null)
+            return true;
+
+        if($m1 === null || $m2 === null)
+            return false;
+
+        $rue1   = self::trimAdresse($m1->adresse);
+        $rue2   = self::trimAdresse($m2->adresse);
 
         if(WNGHelper::similar($rue1, $rue2) > 85)
             if(WNGHelper::toNumericString($rue1) === WNGHelper::toNumericString($rue2))
@@ -73,7 +86,7 @@ class MembresMerger
         return false;
     }
 
-    private function trimAdresse($rue) {
+    public static function trimAdresse($rue) {
 
         $rue        = strtolower($rue);
 
@@ -86,6 +99,6 @@ class MembresMerger
         elseif(strpos($rue, "chemin de ") === 0)
             $rue    = substr($rue, strlen("chemin de "));
 
-        return $rue;
+        return trim($rue);
     }
 }

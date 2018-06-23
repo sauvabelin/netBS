@@ -4,6 +4,7 @@ namespace NetBS\CoreBundle\Controller;
 
 use Doctrine\Common\Collections\Collection;
 use NetBS\CoreBundle\Model\XEditable;
+use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,7 +25,7 @@ class XEditableController extends Controller
         $item       = $em->find(base64_decode($xeditable->getData('itemClass')), $xeditable->getId());
         $type       = $this->get('form.type.' . $xeditable->getBaseType());
 
-        if(!$this->isGranted('update', $item))
+        if(!$this->isGranted(CRUD::UPDATE, $item))
             throw $this->createAccessDeniedException("Vous n'avez pas le droit de modifier cet élément.");
 
         $form       = $this->createFormBuilder($item, array('csrf_protection' => false))

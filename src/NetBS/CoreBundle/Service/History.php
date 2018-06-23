@@ -62,9 +62,9 @@ class History
         $this->session->set(self::SESSION_KEY, serialize($history));
     }
 
-    public function getPreviousRoute() {
+    public function getPreviousRoute($previousness = 2) {
 
-        $route  = $this->goToHistory(2);
+        $route  = $this->goToHistory($previousness);
         return new RedirectResponse($this->router->generate($route->getRouteName(), $route->getParams()));
     }
 

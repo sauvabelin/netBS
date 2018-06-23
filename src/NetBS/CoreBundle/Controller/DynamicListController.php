@@ -5,6 +5,7 @@ namespace NetBS\CoreBundle\Controller;
 use NetBS\CoreBundle\Entity\DynamicList;
 use NetBS\CoreBundle\Form\DynamicListType;
 use NetBS\CoreBundle\Utils\Modal;
+use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,8 +24,7 @@ class DynamicListController extends Controller
         $dynamics   = $this->get('netbs.core.dynamic_list_manager');
 
         return $this->render('@NetBSCore/dynamics/manage_dynamic_lists.html.twig', array(
-
-            'lists'         => $dynamics->getCurrentUserLists()
+            'lists' => $dynamics->getCurrentUserLists()
         ));
     }
 
@@ -37,6 +37,9 @@ class DynamicListController extends Controller
     public function removeElementFromListAction(DynamicList $list, $itemId) {
 
         $em     = $this->get('doctrine.orm.entity_manager');
+
+        if(!$this->isGranted(CRUD::UPDATE, $list))
+            throw $this->createAccessDeniedException();
 
         foreach($list->getItems() as $item) {
             if($item->getId() == $itemId) {
@@ -58,6 +61,9 @@ class DynamicListController extends Controller
      */
     public function removeListAction(DynamicList $list) {
 
+        if(!$this->isGranted(CRUD::DELETE, $list))
+            throw $this->createAccessDeniedException();
+
         $em     = $this->get('doctrine.orm.entity_manager');
 
         $em->remove($list);
@@ -72,6 +78,9 @@ class DynamicListController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function manageListAction(DynamicList $list) {
+
+        if(!$this->isGranted(CRUD::READ, $list))
+            throw $this->createAccessDeniedException();
 
         $model      = $this->get('netbs.core.dynamic_list_manager')->getModelForClass($list->getItemsClass());
         $form       = $this->createForm(DynamicListType::class, $list);
@@ -99,8 +108,6 @@ class DynamicListController extends Controller
 
     protected function performListAddage($listId, $listItems, $itemsClass) {
 
-        dump($listId, $listItems, $itemsClass);
-
         $dynamics   = $this->get('netbs.core.dynamic_list_manager');
         $em         = $this->get('doctrine.orm.entity_manager');
 
@@ -112,6 +119,9 @@ class DynamicListController extends Controller
 
         if($list === null)
             throw $this->createNotFoundException("Aucune liste avec cet identifiant trouvé pour l'utilisateur courant!");
+
+        if(!$this->isGranted(CRUD::UPDATE, $list))
+            throw $this->createAccessDeniedException();
 
         if(is_array($listItems)) {
 

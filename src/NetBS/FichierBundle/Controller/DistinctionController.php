@@ -5,9 +5,11 @@ namespace NetBS\FichierBundle\Controller;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\DistinctionType;
 use NetBS\FichierBundle\Mapping\BaseDistinction;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DistinctionController
@@ -17,6 +19,7 @@ class DistinctionController extends Controller
 {
     /**
      * @Route("/manage", name="netbs.fichier.distinction.page_distinctions")
+     * @Security("is_granted('ROLE_SG')")
      */
     public function pageDistinctionsAction() {
 
@@ -30,8 +33,9 @@ class DistinctionController extends Controller
 
     /**
      * @param Request $request
+     * @return Response
      * @Route("/modal/add", name="netbs.fichier.distinction.modal_add")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Security("has_role('ROLE_SG')")
      */
     public function addDistinctionModalAction(Request $request) {
 
@@ -46,6 +50,7 @@ class DistinctionController extends Controller
         if($form->isValid() && $form->isSubmitted()) {
 
             $em         = $this->get('doctrine.orm.entity_manager');
+
             $em->persist($form->getData());
             $em->flush();
 

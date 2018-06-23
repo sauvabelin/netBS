@@ -50,13 +50,13 @@ types:
 
 
 unites:
+
     migration:
         model: association
     APMBS:
         model: association
     ADABS:
         model: adabs
-
     conseil des anciens:
         model: conseil des anciens
 
@@ -269,7 +269,7 @@ unites:
                     le clan:
                         model: clan
 
-                    gamaiun:
+                    gamaïun:
                         model: clan
 
             branche SMT:

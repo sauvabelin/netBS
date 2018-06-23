@@ -4,6 +4,7 @@ namespace NetBS\FichierBundle\Controller;
 
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\GroupeCategorieType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +32,7 @@ class GroupeCategorieController extends Controller
      * @param Request $request
      * @Route("/modal/add", name="netbs.fichier.groupe_categorie.modal_add")
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Security("is_granted('ROLE_SG')")
      */
     public function addGroupeCategorieModalAction(Request $request) {
 

@@ -7,6 +7,7 @@ use NetBS\CoreBundle\Block\CardBlock;
 use NetBS\CoreBundle\Block\TabsCardBlock;
 use NetBS\FichierBundle\Form\FamilleType;
 use NetBS\FichierBundle\Mapping\BaseFamille;
+use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +35,9 @@ class FamilleController extends Controller
 
         if(!$famille)
             throw $this->createNotFoundException("Aucune famille trouvée");
+
+        if(!$this->isGranted(CRUD::READ, $famille))
+            throw $this->createAccessDeniedException();
 
         $layout     = $this->get('netbs.core.block.layout');
         $form       = $this->createForm(FamilleType::class, $famille)->createView();

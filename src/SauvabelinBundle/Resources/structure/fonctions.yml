@@ -371,11 +371,16 @@ fonctions:
         roles:
             - "ROLE_READ"
 
+    équipier ou équipière:
+        abbreviation: équipier
+        poids: 10
+        roles:
+            - "ROLE_READ"
 
     #autre
     'fonction inconnue':
         abbreviation: INCONNU
-        poids: 9999999
+        poids: 1
         roles:
             - "ROLE_READ"
 

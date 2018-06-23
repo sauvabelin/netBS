@@ -4,6 +4,7 @@ namespace SauvabelinBundle\Command;
 
 use SauvabelinBundle\Entity\BSGroupe;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -28,6 +29,9 @@ class PostInstallCommand extends ContainerAwareCommand
         $config = $this->getContainer()->get('netbs.fichier.config');
         $em     = $this->getContainer()->get('doctrine.orm.entity_manager');
         $io     = new SymfonyStyle($input, $output);
+
+        $io->writeln("Importation des données WNG");
+        $this->getApplication()->find('sauvabelin:import:wng')->run(new ArrayInput([]), $output);
 
         $io->writeln("Creation de la vue SQL nextcloud user-groups");
         $em->getConnection()->exec($this->getNextcloudUserGroupsViewSQL());

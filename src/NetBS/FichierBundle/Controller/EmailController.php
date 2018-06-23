@@ -5,6 +5,7 @@ namespace NetBS\FichierBundle\Controller;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Entity\Email;
 use NetBS\FichierBundle\Form\Contact\BSEmailType;
+use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,9 @@ class EmailController extends Controller
         $em     = $this->get('doctrine.orm.entity_manager');
         $owner  = $em->getRepository(base64_decode($ownerType))->find($ownerId);
         $email  = $em->getRepository($class)->find($emailId);
+
+        if(!$this->isGranted(CRUD::DELETE, $email))
+            throw $this->createAccessDeniedException("Suppression d'email refusée");
 
         $owner->removeEmail($email);
         $em->remove($email);
@@ -57,6 +61,9 @@ class EmailController extends Controller
             $em     = $this->get('doctrine.orm.entity_manager');
             $holder = $em->getRepository(base64_decode($ownerType))->find($ownerId);
             $holder->addEmail($form->getData());
+
+            if(!$this->isGranted(CRUD::UPDATE, $holder))
+                throw $this->createAccessDeniedException("Ajout d'email refusé");
 
             $em->persist($holder);
             $em->flush();

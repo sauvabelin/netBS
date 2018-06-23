@@ -5,6 +5,7 @@ namespace NetBS\FichierBundle\Controller;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\AttributionType;
 use NetBS\FichierBundle\Mapping\BaseAttribution;
+use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,6 +44,10 @@ class AttributionController extends Controller
 
         $form->handleRequest($request);
         if($form->isValid() && $form->isSubmitted()) {
+
+            $membre = $form->getData()->getMembre();
+            if(!$this->isGranted(CRUD::UPDATE, $membre))
+                throw $this->createAccessDeniedException("Ajout d'attribution refusé");
 
             $em->persist($form->getData());
             $em->flush();

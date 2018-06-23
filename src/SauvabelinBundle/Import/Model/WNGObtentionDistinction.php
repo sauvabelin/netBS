@@ -12,6 +12,9 @@ class WNGObtentionDistinction
 
     public $date;
 
+    /**
+     * @var WNGDistinction
+     */
     public $WNGDistinction;
 
     public function __construct(array $d)

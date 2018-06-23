@@ -2,6 +2,7 @@
 
 namespace NetBS\CoreBundle\Controller;
 
+use NetBS\SecureBundle\Voter\CRUD;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,17 +17,16 @@ class HelperController extends Controller
      */
     public function getHelpAction(Request $request)
     {
-        dump($request->request->all());
         $helperManager  = $this->get('netbs.core.helper_manager');
         $class          = base64_decode($request->request->get('class'));
         $id             = $request->request->get('id');
-
-        dump($class);
-        dump($id);
         $item           = $this->getDoctrine()->getRepository($class)->find($id);
 
         if(!$item)
             throw $this->createNotFoundException("Object not found");
+
+        if(!$this->isGranted(CRUD::READ, $item))
+            throw $this->createAccessDeniedException();
 
         $helper         = $helperManager->getFor($class);
         $data           = [

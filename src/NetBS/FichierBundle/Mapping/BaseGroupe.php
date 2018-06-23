@@ -185,10 +185,10 @@ abstract class BaseGroupe implements ValidableInterface
     }
 
     /**
-     * @param GroupeType $type
+     * @param BaseGroupeType $type
      * @return self
      */
-    public function setGroupeType(GroupeType $type)
+    public function setGroupeType(BaseGroupeType $type)
     {
         $this->groupeType = $type;
         return $this;
@@ -197,7 +197,7 @@ abstract class BaseGroupe implements ValidableInterface
     /**
      * Get groupeModel
      *
-     * @return GroupeType
+     * @return BaseGroupeType
      */
     public function getGroupeType()
     {

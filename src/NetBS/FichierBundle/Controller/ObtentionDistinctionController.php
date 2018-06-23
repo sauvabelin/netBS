@@ -5,6 +5,7 @@ namespace NetBS\FichierBundle\Controller;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\ObtentionDistinctionType;
 use NetBS\FichierBundle\Mapping\BaseObtentionDistinction;
+use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,9 @@ class ObtentionDistinctionController extends Controller
 
         if(!$membre)
             throw $this->createNotFoundException();
+
+        if(!$this->isGranted(CRUD::UPDATE, $membre))
+            throw $this->createAccessDeniedException("Accès refusé");
 
         $od->setMembre($membre);
 

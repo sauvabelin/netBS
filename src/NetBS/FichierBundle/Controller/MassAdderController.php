@@ -3,6 +3,7 @@
 namespace NetBS\FichierBundle\Controller;
 
 use NetBS\CoreBundle\Controller\MassUpdaterController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,6 +18,7 @@ class MassAdderController extends MassUpdaterController
      * @Route("/adder", name="netbs.fichier.mass.add")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Security("is_granted('ROLE_SG')")
      */
     public function dataCreateAction(Request $request) {
 

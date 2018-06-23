@@ -6,6 +6,7 @@ use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseGroupe;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,7 @@ class UIController extends Controller
      * @Route("/ui/global-search", name="netbs.core.ui.global_search")
      * @param Request $request
      * @return JsonResponse
+     * @Security("is_granted('ROLE_SG')")
      */
     public function globalSearchAction(Request $request)
     {

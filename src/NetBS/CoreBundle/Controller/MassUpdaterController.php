@@ -3,6 +3,7 @@
 namespace NetBS\CoreBundle\Controller;
 
 use NetBS\CoreBundle\Model\BaseMassUpdater;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -26,6 +27,7 @@ class MassUpdaterController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/update-data", name="netbs.core.mass_updater.data_update")
+     * @Security("is_granted('ROLE_SG')")
      */
     public function dataUpdateAction(Request $request) {
 
@@ -70,6 +72,7 @@ class MassUpdaterController extends Controller
      * @param array $data
      * @param BaseMassUpdater $updater
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @Security("is_granted('ROLE_SG')")
      */
     protected function handleUpdater(Request $request, array $data, BaseMassUpdater $updater) {
 
@@ -99,7 +102,7 @@ class MassUpdaterController extends Controller
             $em->flush();
 
             $this->addFlash('success', "Modifications enregistrées pour " . count($items) . " éléments");
-            return $this->redirectToRoute('netbs.core.home.dashboard');
+            return $this->get('netbs.core.history')->getPreviousRoute(3);
         }
 
         return $this->render('@NetBSCore/updater/updater.html.twig', array(

@@ -16,7 +16,8 @@ trait ContactTrait
      */
     public function addEmail(BaseEmail $email)
     {
-        $this->getContactInformation()->addEmail($email);
+        if($email->getEmail())
+            $this->getContactInformation()->addEmail($email);
     }
 
     /**
@@ -46,7 +47,8 @@ trait ContactTrait
      */
     public function addTelephone(BaseTelephone $telephone)
     {
-        $this->getContactInformation()->addTelephone($telephone);
+        if($telephone->getTelephone())
+            $this->getContactInformation()->addTelephone($telephone);
     }
 
     /**
@@ -77,7 +79,8 @@ trait ContactTrait
      */
     public function addAdresse(BaseAdresse $adresse)
     {
-        $this->getContactInformation()->addAdresse($adresse);
+        if($adresse->getRue())
+            $this->getContactInformation()->addAdresse($adresse);
 
         return $this;
     }

@@ -9,6 +9,8 @@ use NetBS\CoreBundle\Block\TemplateBlock;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\GroupeType;
 use NetBS\FichierBundle\Mapping\BaseGroupe;
+use NetBS\SecureBundle\Voter\CRUD;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +29,7 @@ class GroupeController extends Controller
      * @param Request $request
      * @Route("/modal/add", name="netbs.fichier.groupe.modal_add")
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Security("is_granted('ROLE_SG')")
      */
     public function addGroupeModalAction(Request $request) {
 
@@ -53,6 +56,7 @@ class GroupeController extends Controller
 
     /**
      * @Route("/groupes", name="netbs.fichier.groupe.page_groupes_hierarchy")
+     * @Security("is_granted('ROLE_SG')")
      * @return Response
      */
     public function pageGroupesHierarchyAction() {
@@ -78,6 +82,9 @@ class GroupeController extends Controller
 
         if(!$groupe)
             throw $this->createNotFoundException();
+
+        if(!$this->isGranted(CRUD::READ, $groupe))
+            throw $this->createAccessDeniedException("Vous n'avez pas les accès requis pour consulter ce groupe");
 
         $layout = $this->get('netbs.core.block.layout');
         $form   = $this->createForm(GroupeType::class, $groupe)->createView();
@@ -149,6 +156,9 @@ class GroupeController extends Controller
 
         if(!$groupe)
             throw $this->createNotFoundException();
+
+        if(!$this->isGranted(CRUD::READ, $groupe))
+            throw $this->createAccessDeniedException("Vous n'avez pas les accès requis pour consulter ce groupe");
 
         if(!in_array($type, ['pdf', 'excel']))
             throw $this->createAccessDeniedException("Type $type is not allowed!");

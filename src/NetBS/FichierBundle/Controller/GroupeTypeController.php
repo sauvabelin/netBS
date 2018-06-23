@@ -4,6 +4,7 @@ namespace NetBS\FichierBundle\Controller;
 
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\GroupeTypeType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,7 @@ class GroupeTypeController extends Controller
 {
     /**
      * @Route("/manage", name="netbs.fichier.groupe_type.page_groupe_types")
+     * @Security("is_granted('ROLE_SG')")
      */
     public function pageGroupeTypesAction() {
 
@@ -30,6 +32,7 @@ class GroupeTypeController extends Controller
      * @param Request $request
      * @Route("/modal/add", name="netbs.fichier.groupe_type.modal_add")
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Security("is_granted('ROLE_SG')")
      */
     public function addGroupeTypeModalAction(Request $request) {
 

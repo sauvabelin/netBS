@@ -18,8 +18,14 @@ class WNGAttribution
 
     public $remarques;
 
+    /**
+     * @var WNGUnite
+     */
     public $WNGUnite;
 
+    /**
+     * @var WNGFonction
+     */
     public $WNGFonction;
 
     public function __construct(array $d)

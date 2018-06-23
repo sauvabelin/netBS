@@ -9,6 +9,7 @@ use NetBS\CoreBundle\Block\TemplateBlock;
 use NetBS\FichierBundle\Form\Contact\ContactInformationType;
 use NetBS\FichierBundle\Form\Personne\MembreType;
 use NetBS\FichierBundle\Mapping\BaseMembre;
+use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +35,9 @@ class MembreController extends Controller
 
         if(!$membre)
             throw $this->createNotFoundException();
+
+        if(!$this->isGranted(CRUD::READ, $membre))
+            throw $this->createAccessDeniedException("Accès à la page de {$membre->getFullName()} refusé");
 
         $designer   = $this->get('netbs.core.block.layout');
         $lists      = $this->get('netbs.core.dynamic_list_manager')->getAvailableLists($config->getMembreClass());

@@ -3,6 +3,7 @@
 namespace NetBS\CoreBundle\Controller;
 
 use NetBS\CoreBundle\Entity\LoggedChange;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ class ChangelogController extends Controller
      * @param Request $request
      * @Route("/list", name="netbs.core.changelog.list")
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Security("is_granted('ROLE_SG')")
      */
     public function lookupChangesAction(Request $request) {
 
@@ -27,6 +29,7 @@ class ChangelogController extends Controller
      * @Route("/approve", name="netbs.core.changelog.approve")
      * @param Request $request
      * @return Response
+     * @Security("is_granted('ROLE_SG')")
      */
     public function approveChangesAction(Request $request) {
 
@@ -55,6 +58,7 @@ class ChangelogController extends Controller
      * @internal param LoggedChange $change
      * @Route("ajax/preview", name="netbs.core.changelog.preview_change")
      * @return Response
+     * @Security("is_granted('ROLE_SG')")
      */
     public function ajaxPreviewChangeAction(Request $request) {
 
