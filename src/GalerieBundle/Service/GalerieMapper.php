@@ -50,42 +50,41 @@ class GalerieMapper
 
     /**
      * @param $operation
-     * @param NCNode $origin
-     * @param NCNode $destination
+     * @param NCNode $node
      * @return bool
      * @throws MappingException
      */
-    public function handle($operation, $origin, $destination) {
+    public function handle($operation, NCNode $node) {
 
-        if($origin && $origin->getMimetype() === "text/markdown" || $destination && $destination->getMimetype() === "text/markdown")
-            return $this->handleDescription($operation, $origin, $destination);
+        if($node && $node->getMimetype() === "text/markdown")
+            return $this->handleDescription($operation, $node);
 
         switch($operation) {
             case self::CREATED:
-                return $this->map($origin);
+                return $this->map($node);
                 break;
             case self::RENAMED:
-                if($destination->isDirectory())
-                    return $this->moveDirectory($destination);
+                if($node->isDirectory())
+                    return $this->moveDirectory($node);
                 else {
-                    $media = $this->getMedia($destination);
+                    $media = $this->getMedia($node);
                     if ($media)
-                        return $this->move($media, $destination);
+                        return $this->move($media, $node);
                 }
                 break;
 
             case self::UPDATED:
-                $media  = $this->getMedia($origin);
+                $media  = $this->getMedia($node);
                 if($media)
-                    return $this->update($this->getMedia($origin));
+                    return $this->update($this->getMedia($node));
                 else
-                    return $this->map($origin);
+                    return $this->map($node);
                 break;
             case self::DELETED:
-                if($origin->isDirectory())
-                    return $this->removeDirectory($this->checkDirectoryTree($origin, false));
+                if($node->isDirectory())
+                    return $this->removeDirectory($this->checkDirectoryTree($node, false));
                 else
-                    return $this->remove($this->getMedia($origin));
+                    return $this->remove($this->getMedia($node));
                 break;
             default:
                 break;
@@ -157,33 +156,32 @@ class GalerieMapper
 
     /**
      * @param $operation
-     * @param NCNode $origin
-     * @param NCNode $destination
+     * @param NCNode $node
      * @return bool
      * @throws MappingException
      */
-    public function handleDescription($operation, NCNode $origin, $destination) {
+    public function handleDescription($operation, NCNode $node) {
 
-        $originDir  = $this->checkDirectoryTree($origin);
+        $originDir  = $this->checkDirectoryTree($node);
 
         try {
             switch ($operation) {
                 case self::CREATED:
-                    $this->validateDescriptionFilename($origin->getFilename(), true);
-                    $originDir->setDescription($this->request('GET', $origin->getsearchPath()));
+                    $this->validateDescriptionFilename($node->getFilename(), true);
+                    $originDir->setDescription($this->request('GET', $node->getsearchPath())['body']);
                     break;
                 case self::DELETED:
-                    if ($this->validateDescriptionFilename($origin->getFilename(), false))
+                    if ($this->validateDescriptionFilename($node->getFilename(), false))
                         $originDir->setDescription(null);
                     break;
                 case self::UPDATED:
-                    if ($this->validateDescriptionFilename($origin->getFilename(), false))
-                        $originDir->setDescription($this->request('GET', $origin->getsearchPath()));
+                    if ($this->validateDescriptionFilename($node->getFilename(), false))
+                        $originDir->setDescription($this->request('GET', $node->getsearchPath())['body']);
                     break;
                 case self::RENAMED:
-                    if ($destination instanceof NCNode && $this->validateDescriptionFilename($destination->getFilename())) {
-                        $destinationDir = $this->checkDirectoryTree($destination);
-                        $destinationDir->setDescription($this->request('GET', $destination->getsearchPath()));
+                    if ($node instanceof NCNode && $this->validateDescriptionFilename($node->getFilename())) {
+                        $destinationDir = $this->checkDirectoryTree($node);
+                        $destinationDir->setDescription($this->request('GET', $node->getsearchPath()));
                         $this->em->persist($destinationDir);
                     }
                     break;
@@ -197,7 +195,7 @@ class GalerieMapper
 
         catch (\Exception $e) {
             throw new MappingException(null, "danger",
-                "[GALERIE] Une erreur est survenue pendant la récupération du fichier de description {$origin->getsearchPath()}");
+                "[GALERIE] Une erreur est survenue pendant la récupération du fichier de description {$node->getsearchPath()}");
         }
 
         return true;
@@ -244,7 +242,10 @@ class GalerieMapper
      * @param Media $media
      * @return bool
      */
-    public function remove(Media $media) {
+    public function remove(Media $media = null) {
+
+        if($media === null)
+            return false;
 
         try {
             $this->removeCache($media);
@@ -321,12 +322,13 @@ class GalerieMapper
     /**
      * @param Media $media
      */
-    public function removeCache(Media $media) {
+    public function removeCache(Media $media = null) {
 
-        $this->cacheManager->remove($media->getSearchPath());
+        if($media)
+            $this->cacheManager->remove($media->getSearchPath());
     }
 
-    public function generateCache(Media $media) {
+    public function generateCache(Media $media = null) {
 
         try {
             $this->filter->getUrlOfFilteredImage($media->getsearchPath(), self::THUMBNAIL);
@@ -441,30 +443,5 @@ class GalerieMapper
         } catch (ClientHttpException $e) {
             return null;
         }
-
-        /*
-        $data   = $this->client->request("PROPFIND", $this->encodePath($path));
-
-        if($data['statusCode'] <= 200 || $data['statusCode'] > 299)
-            throw new MappingException(null, "critical",
-                "[GALERIE] Une erreur de mapping a eu lieu avec $path, dites le à l'administrateur");
-
-        $dom    = new \DOMDocument();
-
-        $dom->loadXML($data['body']);
-
-        $items  = $dom->getElementsByTagName("response");
-
-        foreach($items as $item) {
-
-            $responsePath   = $item->getElementsByTagName("href")->item(0)->textContent;
-
-            if(substr($this->decodePath($responsePath), strpos($this->decodePath($responsePath), $path)) === $path) {
-
-                $etag = str_replace('"', "", $item->getElementsByTagName('getetag')->item(0)->textContent);
-                return $etag;
-            }
-        }
-        */
     }
 }

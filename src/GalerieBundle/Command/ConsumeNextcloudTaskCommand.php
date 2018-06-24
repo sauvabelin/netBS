@@ -50,11 +50,10 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
             dump($job->getData());
 
             $data           = json_decode($job->getData(), true);
-            $destination    = $data['destination'] === null ? null : new NCNode($data['destination']);
-            $origin         = $data['origin'] === null ? null : new NCNode($data['origin']);
+            $node           = new NCNode($data);
 
             try {
-                $mapper->handle($data['type'], $origin, $destination);
+                $mapper->handle($data['type'], $node);
             } catch (MappingException $e) {
                 $logger->logUsername($data['username'], $e->getLevel(), $e->getMessage());
             }
