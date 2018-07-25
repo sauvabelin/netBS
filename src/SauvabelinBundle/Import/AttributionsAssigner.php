@@ -121,18 +121,13 @@ class AttributionsAssigner
 
         foreach($this->groupes as $netBSGroupe) {
 
-            if(WNGHelper::similar($netBSGroupe->getNom(), $WNGUnite->nomUnite) > 75
-                || WNGHelper::similar($netBSGroupe->getGroupeType()->getNom() . " " . $netBSGroupe->getNom(), $WNGUnite->nomUnite) > 75) {
+            if(WNGHelper::similar($netBSGroupe->getNom(), $this->cleanGroupeName($WNGUnite->nomUnite)) > 85
+                || WNGHelper::similar($netBSGroupe->getGroupeType()->getNom() . " " . $netBSGroupe->getNom(), $this->cleanGroupeName($WNGUnite->nomUnite)) > 85) {
                 $chosenGroupe = $netBSGroupe;
 
-                if(WNGHelper::similar($WNGAttribution->remarques, "Frégate") > 75) {
-                    dump($netBSGroupe->getNom());
-                    dump($WNGAttribution);
-                }
-
                 foreach ($netBSGroupe->getEnfants() as $child) {
-                    if (WNGHelper::similar($child->getNom(), $WNGAttribution->remarques) > 75
-                        || WNGHelper::similar($child->getGroupeType()->getNom() . " " . $child->getNom(), $WNGAttribution->remarques) > 75) {
+                    if (WNGHelper::similar($child->getNom(), $this->cleanGroupeName($WNGAttribution->remarques)) > 77
+                        || WNGHelper::similar($child->getGroupeType()->getNom() . " " . $child->getNom(), $this->cleanGroupeName($WNGAttribution->remarques)) > 77) {
                         $chosenGroupe = $child;
                         break 2;
                     }
@@ -143,6 +138,7 @@ class AttributionsAssigner
         }
 
         if($chosenGroupe === null) {
+
             $chosenGroupe  = $this->migrationsGroupe;
             $remarques = "Données précédentes: Unité: {$WNGUnite->nomUnite}, Remarques: {$WNGAttribution->remarques}";
         }
@@ -151,5 +147,22 @@ class AttributionsAssigner
             'groupe'    => $chosenGroupe,
             'remarques' => $remarques
         ];
+    }
+
+    private function cleanGroupeName($str) {
+
+        if($str === "Le Clan")
+            return $str;
+
+        $str = strtolower($str);
+        $str = WNGHelper::sanitize($str);
+        $str = str_replace("troupe de ", "", $str);
+        $str = str_replace("meute de ", "", $str);
+        $str = str_replace("clan ", "", $str);
+
+        if($str === "santis")
+            return "säntis";
+
+        return $str;
     }
 }

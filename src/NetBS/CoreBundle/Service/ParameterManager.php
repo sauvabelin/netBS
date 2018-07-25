@@ -34,6 +34,12 @@ class ParameterManager
         ));
     }
 
+    public function getParameters($namespace) {
+
+        return $this->manager->getRepository('NetBSCoreBundle:Parameter')
+            ->findBy(array('namespace' => $namespace));
+    }
+
     public function setValue($namespace, $key, $value) {
 
         $param      = $this->getParameter($namespace, $key);

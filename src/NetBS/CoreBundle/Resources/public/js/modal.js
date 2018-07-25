@@ -53,27 +53,23 @@ var BSModal = function(path, params) {
         $confirm.on('click', function() {
 
             $.post(mdl.path, $form.serialize())
-                .done(mdl.handleSubmit)
+                .done(function(data, status, response) {
+
+                    var code    = parseInt(response.status);
+
+                    if(data === "redirected")
+                        window.location.href = response.getResponseHeader("Location");
+                    if(code === 201)
+                        location.reload();
+                    else
+                        $('#' + mdl.id).modal('hide');
+                })
                 .fail(function(data) {
+
                     $modal.html(data.responseText);
                     mdl.attachButtonEvents();
                 })
             ;
         });
     };
-
-    this.handleSubmit   = function(data, status, response) {
-
-        var code    = parseInt(response.status);
-
-        if(code === 201)
-            location.reload();
-        else if(code === 200)
-            $('#' + this.id).modal('hide');
-    };
-
-    this.remove         = function() {
-
-        $('#' + this.id).modal('hide');
-    }
 };

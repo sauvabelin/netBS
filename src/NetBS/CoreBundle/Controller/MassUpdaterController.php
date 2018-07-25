@@ -27,7 +27,7 @@ class MassUpdaterController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/update-data", name="netbs.core.mass_updater.data_update")
-     * @Security("is_granted('ROLE_SG')")
+     * @Security("is_granted('ROLE_UPDATE_EVERYWHERE')")
      */
     public function dataUpdateAction(Request $request) {
 
@@ -72,7 +72,7 @@ class MassUpdaterController extends Controller
      * @param array $data
      * @param BaseMassUpdater $updater
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @Security("is_granted('ROLE_SG')")
+     * @Security("is_granted('ROLE_UPDATE_EVERYWHERE')")
      */
     protected function handleUpdater(Request $request, array $data, BaseMassUpdater $updater) {
 

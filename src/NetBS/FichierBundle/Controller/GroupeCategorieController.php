@@ -17,6 +17,7 @@ class GroupeCategorieController extends Controller
 {
     /**
      * @Route("/manage", name="netbs.fichier.groupe_categorie.page_groupe_categories")
+     * @Security("is_granted('ROLE_READ_EVERYWHERE')")
      */
     public function pageGroupeCategorieAction() {
 
@@ -32,7 +33,7 @@ class GroupeCategorieController extends Controller
      * @param Request $request
      * @Route("/modal/add", name="netbs.fichier.groupe_categorie.modal_add")
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Security("is_granted('ROLE_SG')")
+     * @Security("is_granted('ROLE_CREATE_EVERYWHERE')")
      */
     public function addGroupeCategorieModalAction(Request $request) {
 

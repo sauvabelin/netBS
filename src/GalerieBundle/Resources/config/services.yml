@@ -15,6 +15,11 @@ services:
         tags:
             - { name: "liip_imagine.cache.resolver", resolver: netbs_cache_resolver }
 
+    galerie.nextcloud_bridge:
+        class: GalerieBundle\Service\NextcloudBridge
+        arguments:
+            - "@webdav.nextcloud_client"
+
     webdav.nextcloud_client:
         class: Sabre\DAV\Client
         arguments:

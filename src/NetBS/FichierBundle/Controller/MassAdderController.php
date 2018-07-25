@@ -18,7 +18,7 @@ class MassAdderController extends MassUpdaterController
      * @Route("/adder", name="netbs.fichier.mass.add")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @Security("is_granted('ROLE_SG')")
+     * @Security("is_granted('ROLE_CREATE_EVERYWHERE')")
      */
     public function dataCreateAction(Request $request) {
 

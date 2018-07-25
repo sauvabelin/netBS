@@ -7,6 +7,7 @@ use NetBS\CoreBundle\Form\Type\SwitchType;
 use NetBS\FichierBundle\Exporter\Config\EtiquettesConfig;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,6 +24,8 @@ class EtiquettesType extends AbstractType
             ->add('margeInferieure', NumberType::class, array('label' => "Marge en bas"))
             ->add('margeDroite', NumberType::class, array('label' => "Marge à droite"))
             ->add('FPDFConfig', FPDFType::class, array('label' => 'Configuration générale'))
+            ->add('displayNotAdressable', SwitchType::class, array('label' => "Inclure les sans adresses"))
+            ->add('title', TextType::class, array('label' => 'Titre', 'required' => false))
         ;
     }
 

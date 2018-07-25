@@ -1,0 +1,15 @@
+{% extends '@NetBSCore/layout/modal.layout.twig' %}
+
+{% block title %}Mapper un dossier distant{% endblock %}
+
+{% block content %}
+    Cet outil vous permet de mapper un dossier de la stammbox manuellement. Récupérez le chemin du dossier, celui-ci commence
+    forcément par <b>galerie</b> et se termine par le nom du dossier à mapper.<br/>
+    Par exemple: <i>galerie/montfort/ce '18/jour 2</i>
+    <hr/>
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-lg-12">{{ form_row(form.url) }}</div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

@@ -30,6 +30,5 @@ class MainMenuListener
         $submenu    = $category->addSubMenu('other.gallery', 'Galerie', 'fas fa-images');
 
         $submenu->addSubLink("Administration", "netbs.galerie.admin.dashboard");
-        $submenu->addSubLink("Gestion des dossiers", "netbs.galerie.admin.directories");
     }
 }

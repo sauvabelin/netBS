@@ -86,7 +86,7 @@ class GroupeAttributionsList extends BaseListModel
                     'class' => $this->config->getFonctionClass()
                 ]
             ))
-            ->addColumn('Date de naissance', 'membre.naissance', DateTimeColumn::class)
+            ->addColumn('Depuis le', 'dateDebut', DateTimeColumn::class)
             ->addColumn('Remarques', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY   => 'remarques',
                 XEditableColumn::TYPE_CLASS => TextareaType::class

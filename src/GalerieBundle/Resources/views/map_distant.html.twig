@@ -1,0 +1,48 @@
+{% extends '@NetBSCore/layout/backend.layout.twig' %}
+
+{% set title = "Mapping stammbox" %}
+
+{% block scriptOp %}
+    <script type="text/javascript">
+        var steps = [
+            {
+                title: "Récupération des informations de mapping",
+                action: function() {
+                    $.get()
+                }
+            }
+        ];
+    </script>
+{% endblock %}
+
+{% block main %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+
+                {% include '@NetBSCore/includes/header.include.twig' with {
+                    header: "Mapping de dossier",
+                    subHeader: "Forcer la synchronisation entre un dossier de la stammbox et la galerie"
+                } %}
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Analyse de {{ directory }}</h3>
+                        <h6 class="card-subtitle">L'outil va récupérer les données de mapping et procéder à une synchronisation</h6>
+                    </div>
+
+                    <div class="card-body">
+                        <pre>
+                            <code>
+                                {{ data['body'] }}
+                            </code>
+                        </pre>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -156,10 +156,8 @@ class DoctrineLoggerSubscriber implements EventSubscriber
 
         $user   = $this->storage->getToken()->getUser();
 
-        /* TODO uncomment
         if($user->hasRole('ROLE_SG'))
             return false;
-        */
 
         return true;
     }

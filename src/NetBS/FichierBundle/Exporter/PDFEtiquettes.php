@@ -50,22 +50,28 @@ class PDFEtiquettes implements ExporterInterface, ConfigurableExporterInterface
     public function export($adressables)
     {
         /** @var EtiquettesConfig $config */
+        $config = $this->configuration;
         $fpdf   = new EtiquettesBuilder($this->configuration);
 
         $fpdf->AddPage();
 
         foreach ($adressables as $adressable) {
-            
-            $adresse = $adressable->getSendableAdresse();
 
-            if ($adresse) {
+            $adresse    = $adressable->getSendableAdresse();
+            $lines      = [];
 
-                $fpdf->addEtiquette(array(
-                    $adressable->__toString(),
-                    $adresse->getRue(),
-                    $adresse->getNpa() . " " . $adresse->getLocalite()
-                ));
+            if(!empty($config->title))
+                $lines[] = $config->title;
+
+            $lines[]    = $adressable->__toString();
+
+            if($adresse) {
+
+                $lines[]    = $adresse->getRue();
+                $lines[]    = $adresse->getNpa() . " " . $adresse->getLocalite();
             }
+
+            $fpdf->addEtiquette($lines);
         }
 
         return  new StreamedResponse(function() use ($fpdf) {

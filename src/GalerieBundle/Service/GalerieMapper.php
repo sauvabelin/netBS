@@ -56,7 +56,7 @@ class GalerieMapper
      */
     public function handle($operation, NCNode $node) {
 
-        if($node && $node->getMimetype() === "text/markdown")
+        if($node && $node->getMimetype() === $this->params->getValue('galerie', 'description_mime_type'))
             return $this->handleDescription($operation, $node);
 
         switch($operation) {

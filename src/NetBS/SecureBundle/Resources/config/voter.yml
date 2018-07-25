@@ -6,3 +6,8 @@ services:
             - "@netbs.secure.config"
         tags:
             - { name: security.voter }
+
+    netbs.secure.security.voter.roles:
+        class: NetBS\SecureBundle\Voter\RoleVoter
+        tags:
+            - { name: security.voter }

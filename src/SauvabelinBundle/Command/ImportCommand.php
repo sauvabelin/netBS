@@ -251,6 +251,9 @@ class ImportCommand extends ContainerAwareCommand
         $netBSMembre->setSexe($membre->sexe);
         $netBSMembre->setDesinscription($membre->demission);
 
+        if($membre->getNetBSNatel())
+            $netBSMembre->addTelephone($membre->getNetBSNatel());
+
         $statut = null;
 
         switch (intval($membre->idFichier)) {

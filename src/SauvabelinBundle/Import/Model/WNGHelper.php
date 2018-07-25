@@ -46,7 +46,7 @@ class WNGHelper
 
     public static function similar($s1, $s2) {
 
-        similar_text($s1, $s2, $percent);
+        similar_text(strtolower($s1), strtolower($s2), $percent);
         return $percent;
     }
 

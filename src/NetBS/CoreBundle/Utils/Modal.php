@@ -3,6 +3,7 @@
 namespace NetBS\CoreBundle\Utils;
 
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class Modal
@@ -10,6 +11,14 @@ class Modal
     public static function refresh($content = null) {
 
         return new Response($content, Response::HTTP_CREATED);
+    }
+
+    public static function redirect(RedirectResponse $response) {
+
+        $response->setStatusCode(200);
+        $response->setContent("redirected");
+
+        return $response;
     }
 
     public static function renderModal(Form $form) {

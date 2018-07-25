@@ -303,9 +303,7 @@ class BaseUser implements
      */
     public function hasRole($rolestr) {
 
-        $roles = $this->getAllRoles();
-
-        foreach($roles as $role)
+        foreach($this->getAllRoles() as $role)
             if($role->getRole() === $rolestr)
                 return true;
 

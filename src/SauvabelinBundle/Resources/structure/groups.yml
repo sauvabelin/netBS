@@ -29,6 +29,9 @@ types:
     troupe:
         cat: unité
         effectifs: 1
+    équipe:
+        cat: unité
+        effectifs: 1
     meute:
         cat: unité
         effectifs: 1
@@ -124,6 +127,8 @@ unites:
             branche éclaireurs:
                 model: branche
                 children:
+                    équipe garçons:
+                        model: équipe
                     zanfleuron:
                         model: troupe
                         children:
@@ -197,6 +202,8 @@ unites:
             branche éclaireuses:
                 model: branche
                 children:
+                    équipe filles:
+                        model: équipe
                     solalex:
                         model: troupe
                         children:

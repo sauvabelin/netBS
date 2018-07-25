@@ -79,9 +79,8 @@ class MembresMerger
         $rue2   = self::trimAdresse($m2->adresse);
 
         if(WNGHelper::similar($rue1, $rue2) > 85)
-            if(WNGHelper::toNumericString($rue1) === WNGHelper::toNumericString($rue2))
-                if($m1->npa === $m2->npa)
-                    return true;
+            if($m1->npa === $m2->npa)
+                return true;
 
         return false;
     }
@@ -90,14 +89,31 @@ class MembresMerger
 
         $rue        = strtolower($rue);
 
-        if(strpos($rue, "ch. ") === 0)
+        if(strpos($rue, "chemin du ") === 0)
+            $rue    = substr($rue, strlen("chemin du "));
+        elseif(strpos($rue, "chemin des ") === 0)
+            $rue    = substr($rue, strlen("chemin des "));
+        elseif(strpos($rue, "chemin de ") === 0)
+            $rue    = substr($rue, strlen("chemin de "));
+        elseif(strpos($rue, "chemin ") === 0)
+            $rue    = substr($rue, strlen("chemin "));
+
+        elseif(strpos($rue, "ch. du ") === 0)
+            $rue    = substr($rue, strlen("ch. du "));
+        elseif(strpos($rue, "ch du ") === 0)
+            $rue    = substr($rue, strlen("ch du "));
+        elseif(strpos($rue, "ch. des ") === 0)
+            $rue    = substr($rue, strlen("ch. des "));
+        elseif(strpos($rue, "ch des ") === 0)
+            $rue    = substr($rue, strlen("ch des "));
+        elseif(strpos($rue, "ch. ") === 0)
             $rue    = substr($rue, strlen("ch. "));
         elseif(strpos($rue, "ch ") === 0)
             $rue    = substr($rue, strlen("ch "));
-        elseif(strpos($rue, "chemin du ") === 0)
-            $rue    = substr($rue, strlen("chemin du "));
-        elseif(strpos($rue, "chemin de ") === 0)
-            $rue    = substr($rue, strlen("chemin de "));
+        elseif(strpos($rue, "ch. de ") === 0)
+            $rue    = substr($rue, strlen("ch. de "));
+        elseif(strpos($rue, "ch de ") === 0)
+            $rue    = substr($rue, strlen("ch de "));
 
         return trim($rue);
     }

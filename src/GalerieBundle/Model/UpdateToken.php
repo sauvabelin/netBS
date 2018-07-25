@@ -7,10 +7,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UpdateToken
 {
     /**
-     * @Assert\Regex(pattern="/[^a-z_\-0-9]/i", match=true,
+     * @Assert\Regex(pattern="/^[a-z\-0-9]+$/i", match=true,
      *      message="La clé ne peut contenir que des chiffres et des lettres")
      */
     private $token;
+
+    public function __construct($token)
+    {
+        $this->token    = $token;
+    }
 
     /**
      * @return mixed

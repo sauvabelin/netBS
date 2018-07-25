@@ -19,7 +19,7 @@ class DistinctionController extends Controller
 {
     /**
      * @Route("/manage", name="netbs.fichier.distinction.page_distinctions")
-     * @Security("is_granted('ROLE_SG')")
+     * @Security("is_granted('ROLE_READ_EVERYWHERE')")
      */
     public function pageDistinctionsAction() {
 
@@ -35,7 +35,7 @@ class DistinctionController extends Controller
      * @param Request $request
      * @return Response
      * @Route("/modal/add", name="netbs.fichier.distinction.modal_add")
-     * @Security("has_role('ROLE_SG')")
+     * @Security("has_role('ROLE_CREATE_EVERYWHERE')")
      */
     public function addDistinctionModalAction(Request $request) {
 

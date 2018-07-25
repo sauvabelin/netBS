@@ -127,6 +127,19 @@ class WNGMembre
         return new Telephone($number);
     }
 
+    public function getNetBSNatel() {
+
+        if($this->natel === null)
+            return null;
+
+        $number = $this->natel;
+        if($number[0] !== 0 && strlen($number) === 9)
+            $number = "0" . $number;
+
+        return new Telephone($number);
+
+    }
+
     public function getNetBSEmail() {
 
         if($this->email === null)

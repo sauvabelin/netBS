@@ -22,6 +22,10 @@ class EtiquettesConfig
 
     public $margeInterieureHorizontale  = 10;
 
+    public $displayNotAdressable        = true;
+
+    public $title                       = "Aux parents de";
+
     public function __construct()
     {
         $this->FPDFConfig   = new FPDFConfig();

@@ -46,7 +46,7 @@ class GroupeHelper extends BaseHelper
      */
     public function getRepresentation($item)
     {
-        return $item->getNom() . " (" . $item->getGroupeType()->getNom() . ")";
+        return $item->getNom();
     }
 
     /**
