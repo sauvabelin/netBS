@@ -43,7 +43,7 @@ class AdminController extends Controller
         $mapper = $this->get('galerie.mapper');
         $mapper->removeDirectory($directory);
 
-        return $this->redirectToRoute('netbs.galerie.admin.directories');
+        return $this->redirectToRoute('netbs.galerie.admin.dashboard');
     }
 
     /**

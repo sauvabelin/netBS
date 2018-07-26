@@ -10,10 +10,10 @@ class ParameterController extends Controller
 {
     /**
      * @Route("/parameters/list", name="netbs.core.parameters.list")
-     * @Security("is_granted('ROLE_ADMIN')")
      */
     public function listParametersAction()
     {
+        dump($this->get('security.token_storage')->getToken()->getRoles());
         return $this->render('@NetBSCore/parameters/list_parameters.html.twig');
     }
 }

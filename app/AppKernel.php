@@ -31,7 +31,6 @@ class AppKernel extends Kernel
             new NetBS\ListBundle\NetBSListBundle(),
             new SauvabelinBundle\SauvabelinBundle(),
             new GalerieBundle\GalerieBundle(),
-            new Ovesco\HikeBundle\OvescoHikeBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

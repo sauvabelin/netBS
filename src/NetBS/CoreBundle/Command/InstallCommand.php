@@ -65,7 +65,10 @@ class InstallCommand extends ContainerAwareCommand
         foreach($scripts as $script) {
 
             $io->writeln("Running " . $script->getName() . "...");
-            $this->getApplication()->find($script->getName())->run(new ArrayInput([]), $output);
+            $this->getApplication()->find($script->getName())->run(new ArrayInput([
+                '--dummy'   => $dummy,
+                '--purge'   => $purge
+            ]), $output);
         }
 
         $io->writeln("Publishing assets");

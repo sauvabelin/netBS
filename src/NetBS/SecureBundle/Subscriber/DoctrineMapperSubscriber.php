@@ -52,6 +52,7 @@ class DoctrineMapperSubscriber implements EventSubscriber
 
         $eventArgs->getClassMetadata()->mapManyToMany([
             'fieldName'     => 'roles',
+            'fetch'         => 'eager',
             'targetEntity'  => $this->secureConfig->getRoleClass()
         ]);
 

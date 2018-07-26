@@ -6,6 +6,7 @@ use SauvabelinBundle\Entity\BSGroupe;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -18,7 +19,20 @@ class PostInstallCommand extends ContainerAwareCommand
     {
         $this
             ->setName('netbs:post-install:sauvabelin')
-            ->setDescription('Script post installation de la BS pour gestion de bails à l\'ancienne');
+            ->setDescription('Script post installation de la BS pour gestion de bails à l\'ancienne')
+            ->addOption('purge', null, InputOption::VALUE_OPTIONAL, 'If set to true, purge database')
+            ->addOption('dummy', null, InputOption::VALUE_OPTIONAL, 'If set to true, loads some dummy data');
+    }
+
+    protected function getBoolValue($val) {
+
+        if($val === null)
+            return null;
+
+        if($val === "false" || $val === "0")
+            return false;
+
+        return true;
     }
 
     /**
@@ -30,8 +44,13 @@ class PostInstallCommand extends ContainerAwareCommand
         $em     = $this->getContainer()->get('doctrine.orm.entity_manager');
         $io     = new SymfonyStyle($input, $output);
 
-        $io->writeln("Importation des données WNG");
-        $this->getApplication()->find('sauvabelin:import:wng')->run(new ArrayInput([]), $output);
+        $purge      = $this->getBoolValue($input->getOption('purge'));
+        $dummy      = $this->getBoolValue($input->getOption('dummy'));
+
+        if(!$dummy) {
+            $io->writeln("Importation des données WNG");
+            $this->getApplication()->find('sauvabelin:import:wng')->run(new ArrayInput([]), $output);
+        }
 
         $io->writeln("Creation de la vue SQL nextcloud user-groups");
         $em->getConnection()->exec($this->getNextcloudUserGroupsViewSQL());

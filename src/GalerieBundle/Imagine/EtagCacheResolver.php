@@ -22,8 +22,8 @@ class EtagCacheResolver implements ResolverInterface
     public function __construct($webRoot, $webpath, EntityManager $manager, Filesystem $filesystem)
     {
         $prefix             = "/galerie/cache/";
-        $this->webRoot      = $webRoot . "/web" . $prefix . "/";
-        $this->webpath      = $webpath . "/web" . $prefix . "/";
+        $this->webRoot      = $webRoot . "/web" . $prefix;
+        $this->webpath      = $webpath . "/web" . $prefix;
         $this->manager      = $manager;
         $this->filesystem   = $filesystem;
     }

@@ -5,7 +5,7 @@ namespace GalerieBundle\Model;
 use GalerieBundle\Entity\Media;
 use GalerieBundle\Util\WebdavTrait;
 
-class NCNode
+class NCNode implements \JsonSerializable
 {
     use WebdavTrait;
 
@@ -26,6 +26,17 @@ class NCNode
         $this->webdavUrl    = $data['path'];
         $this->size         = $data['size'];
         $this->mimetype     = $data['mimetype'];
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            "name"      => $this->filename,
+            "path"      => $this->webdavUrl,
+            "size"      => $this->size,
+            "etag"      => $this->etag,
+            "mimetype"  => $this->mimetype
+        ];
     }
 
     public function toMedia() {

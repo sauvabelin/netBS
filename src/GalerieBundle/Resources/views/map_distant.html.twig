@@ -2,24 +2,106 @@
 
 {% set title = "Mapping stammbox" %}
 
-{% block scriptOp %}
+{% set scriptOp %}
     <script type="text/javascript">
-        var steps = [
-            {
-                title: "Récupération des informations de mapping",
-                action: function() {
-                    $.get()
+
+        var app = new Vue({
+            el: '#vueapp',
+            data: function() {
+                return {
+
+                    children: [],
+                    medias: [],
+                    directory: "{{ directory }}",
+                    status: "",
+                    error: "",
+                    current: -1
+                }
+            },
+
+            mounted: function() {
+
+                var $this   = this;
+                this.status = "Récupération des informations de mapping";
+
+                $.get("{{ path('netbs.galerie.mapping.mapping_information') }}", {directory: "{{ directory|toBase64 }}"})
+                    .always(function(data) {
+
+                        $this.status = "Informations de mapping récupérées";
+
+                        if(data === false)
+                            $this.error = "Dossier inexistant, veuillez vérifier le chemin du dossier";
+
+                        else {
+                            data.children.forEach(function(item) {
+                                $this.children.push(item);
+                            });
+
+                            data.medias.forEach(function(item) {
+
+                                item.loading    = false;
+                                item.error      = null;
+                                item.success    = false;
+
+                                $this.medias.push(item);
+                            })
+                        }
+                    });
+            },
+
+            watch: {
+                current: function() {
+
+                    if(this.current >= this.medias.length)
+                        return;
+
+                    var $this = this;
+                    this.mapMedia(this.medias[this.current], function() {
+
+                        if($this.current < $this.medias.length)
+                            $this.current++;
+                    })
+                }
+            },
+
+            methods: {
+
+                childMapUrl: function(child) {
+
+                    var route = "{{ path('netbs.galerie.mapping.map_distant', {directory: "SLUG"}) }}";
+                    return route.replace("SLUG", "") + child.encoded;
+                },
+
+                mapMedia: function(media, cb) {
+
+                    media.loading = true;
+                    $.post("{{ path('netbs.galerie.mapping.map_media') }}", {media: media})
+                        .always(function(data, txt, xhr) {
+
+                            media.loading = false;
+                            var code    = parseInt(xhr.status);
+
+                            if(code !== 200)
+                                media.error = xhr.responseText;
+                            else
+                                media.success = true;
+
+                            cb();
+                        });
                 }
             }
-        ];
+        });
     </script>
-{% endblock %}
+{% endset %}
 
 {% block main %}
 
+    {{ registerJs(asset('bundles/galerie/js/vue.min.js')) }}
+    {{ registerScript(scriptOp) }}
+
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
+            <div class="col" id="vueapp">
 
                 {% include '@NetBSCore/includes/header.include.twig' with {
                     header: "Mapping de dossier",
@@ -32,14 +114,79 @@
                         <h6 class="card-subtitle">L'outil va récupérer les données de mapping et procéder à une synchronisation</h6>
                     </div>
 
+                    {% verbatim %}
                     <div class="card-body">
-                        <pre>
-                            <code>
-                                {{ data['body'] }}
-                            </code>
-                        </pre>
+                        <div v-if="status.length > 0" class="alert alert-primary">{{ status }}</div>
+                        <div v-if="error.length > 0" class="alert alert-danger">{{ error }}</div>
+
+                        <div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div>
+                                    Nombre de médias trouvés: <b>{{ medias.length }}</b><br/>
+                                    Nombre de dossiers enfants trouvés: <b>{{ children.length }}</b>
+                                </div>
+
+                                <button v-if="medias.length > 0" class="btn btn-success" @click="current = 0">Synchroniser les médias</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endverbatim %}
+                </div>
+
+                {% verbatim %}
+                <div class="card card-table" v-if="children.length > 0">
+                    <div class="card-header">
+                        <h3 class="card-title">Dossiers enfants</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Chemin dans la stammbox</th>
+                                <th>Options</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="child in children">
+                                <td>{{ child.path }}</td>
+                                <td>
+                                    <a target="_blank" v-bind:href="childMapUrl(child)" class="btn btn-outline-info">Mapper ce dossier</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+
+                <div class="card card-table" v-if="medias.length > 0">
+                    <div class="card-header">
+                        <h3 class="card-title">Medias contenus</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Nom du fichier</th>
+                                <th>Taille</th>
+                                <th>Etag</th>
+                                <th>Options</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(media, k) in medias" v-bind:class="{'table-warning': media.loading, 'table-danger': media.error !== null, 'table-success': media.success}">
+                                <td>{{ media.name }}</td>
+                                <td>{{ Math.round(media.size/1024) }} KB</td>
+                                <td>{{ media.etag }}</td>
+                                <td>
+                                    <button v-if="media.error === null && media.success === false" @click="medias.splice(k, 1)" class="btn btn-outline-danger">Ne pas mapper</button>
+                                    <span class="text-danger" v-if="media.error !== null">{{ media.error }}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endverbatim %}
 
             </div>
         </div>

@@ -259,13 +259,17 @@ class GalerieMapper
         return true;
     }
 
-    public function fullMapDirectory($path, SymfonyStyle $io = null) {
+    public function getInformation($path) {
 
-        $data       = $this->request('PROPFIND', $this->decodePath($path));
+        $data       = $this->client->request('PROPFIND', $this->encodePath($path));
+
+        if($data['statusCode'] === 404)
+            return false;
+
         $document   = new \DOMDocument();
         $document->loadXML($data['body']);
-
-        $io->writeln("Mapping : " . $path);
+        $children   = [];
+        $medias     = [];
 
         /** @var \DOMElement $responseElement */
         foreach($document->getElementsByTagName("response") as $responseElement) {
@@ -276,18 +280,17 @@ class GalerieMapper
             $mimeNode   = $responseElement->getElementsByTagName("getcontenttype")->item(0);
             $type       = $responseElement->getElementsByTagName('resourcetype');
 
-            if($path === $itemPath)
+            if(trim($path, '/') === trim($itemPath, '/'))
                 continue;
 
             if($type->length > 0 && $type->item(0)->firstChild && $type->item(0)->firstChild->tagName === "d:collection")
-                $this->fullMapDirectory($itemPath, $io);
+                $children[] = $itemPath;
 
             else {
 
                 $itemPath   = trim($itemPath, "/");
                 $name       = explode("/", $itemPath);
                 $name       = $name[count($name) - 1];
-                $io->writeln("Mapping media : " . $itemPath);
 
                 $ncnode = new NCNode([
                     'etag'      => str_replace('"', "", $responseElement->getElementsByTagName('getetag')->item(0)->textContent),
@@ -297,9 +300,31 @@ class GalerieMapper
                     'mimetype'  => $mimeNode->textContent
                 ]);
 
-                $this->map($ncnode);
+                $medias[] = $ncnode;
             }
         }
+
+        return [
+            'children'  => $children,
+            'medias'    => $medias
+        ];
+    }
+
+
+    public function fullMapDirectory($path, SymfonyStyle $io = null) {
+
+        $io->writeln("[DIRECTORY] " . $path);
+        $data       = $this->getInformation($path);
+
+        /** @var NCNode $media */
+        foreach($data['medias'] as $media) {
+
+            $io->writeln("[MEDIA] " . $media->getWebdavUrl());
+            $this->map($media);
+        }
+
+        foreach($data['children'] as $child)
+            $this->fullMapDirectory($child, $io);
     }
 
     public function removeDirectory(Directory $directory) {

@@ -1,8 +1,3 @@
-ovesco_hike:
-    resource: "@OvescoHikeBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 galerie:
     resource: "@GalerieBundle/Controller/"
     type:     annotation
