@@ -51,6 +51,11 @@ services:
         tags:
             - { name: security.voter }
 
+    sauvabelin.voter.news:
+        class: SauvabelinBundle\Voter\NewsVoter
+        tags:
+            - { name: security.voter }
+
 #    sauvabelin.subscriber.mailing_lists:
 #        class: SauvabelinBundle\Subscriber\MailingListSubscriber
 #        arguments:

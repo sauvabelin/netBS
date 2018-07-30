@@ -29,10 +29,16 @@ class MainMenuListener
             if($link->getKey() === 'fichier')
                 $link->addSubLink('Ajouter un membre', 'sauvabelin.membre.add_membre');
 
+        $adminCategory  = $menu->getCategory('secure.admin');
+
+        if(!$user->hasRole("ROLE_SG"))
+            return;
+
+        $adminCategory->addLink("admin.news", "Gestion des news", "fas fa-newspaper", "sauvabelin.news.manage");
+
         if(!$user->hasRole("ROLE_ADMIN"))
             return;
 
-        $adminCategory  = $menu->getCategory('secure.admin');
         $mailsMenu      = $adminCategory->addSubMenu('bs.mails', 'Mails BS', 'fas fa-envelope');
         $mailsMenu->addSubLink("Mailing listes", "sauvabelin.mailing_lists.lists_mailing_lists");
     }

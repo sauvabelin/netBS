@@ -14,3 +14,13 @@ services:
         class: SauvabelinBundle\ListModel\DisplayableMailingListsList
         tags:
             - { name: netbs.list.model }
+
+    sauvabelin.list.news:
+        class: SauvabelinBundle\ListModel\NewsList
+        tags:
+            - { name: netbs.list.model }
+
+    sauvabelin.list.news_channels:
+        class: SauvabelinBundle\ListModel\NewsChannelsList
+        tags:
+            - { name: netbs.list.model }
