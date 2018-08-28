@@ -2,7 +2,9 @@
 
 namespace NetBS\FichierBundle\Voter;
 
+use NetBS\FichierBundle\Entity\ObtentionDistinction;
 use NetBS\SecureBundle\Mapping\BaseUser;
+use NetBS\SecureBundle\Voter\CRUD;
 
 class ObtentionDistinctionVoter extends GroupeVoter
 {
@@ -16,8 +18,17 @@ class ObtentionDistinctionVoter extends GroupeVoter
         return $this->config->getObtentionDistinctionClass();
     }
 
+    /**
+     * @param string $operation
+     * @param ObtentionDistinction $subject
+     * @param BaseUser $user
+     * @return bool
+     */
     protected function accept($operation, $subject, BaseUser $user)
     {
+        if($operation === CRUD::READ && $subject->getMembre()->getId() === $user->getMembreId())
+            return true;
+
         foreach ($subject->getMembre()->getActivesAttributions() as $attribution)
             if(parent::accept($operation, $attribution->getGroupe(), $user))
                 return true;

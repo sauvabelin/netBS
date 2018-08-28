@@ -39,4 +39,13 @@ class SecureConfig
         $class  = $this->getUserClass();
         return new $class();
     }
+
+    /**
+     * @return BaseRole
+     */
+    public function createRole() {
+
+        $class  = $this->getRoleClass();
+        return new $class();
+    }
 }

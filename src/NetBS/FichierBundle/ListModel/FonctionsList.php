@@ -37,7 +37,7 @@ class FonctionsList extends BaseListModel
      */
     public function getManagedItemsClass()
     {
-        return $this->config->getFonctionClass();
+        return $this->getFichierConfig()->getFonctionClass();
     }
 
     /**

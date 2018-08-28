@@ -14,8 +14,6 @@ class NetBSRenderer implements RendererInterface
 
     protected $dispatcher;
 
-    protected $utilExtension;
-
     public function __construct(\Twig_Environment $engine, EventDispatcherInterface $dispatcher)
     {
         $this->engine           = $engine;

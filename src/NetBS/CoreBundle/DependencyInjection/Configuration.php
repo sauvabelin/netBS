@@ -20,10 +20,26 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('netbs_core');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
-
+        $rootNode
+            ->children()
+                ->arrayNode('mailer')
+                    ->children()
+                        ->scalarNode('subject_prefix')->defaultValue('')->end()
+                        ->scalarNode('default_from')->defaultNull()->end()
+                        ->arrayNode('channels')
+                            ->useAttributeAsKey('alias')
+                            ->arrayPrototype()
+                                ->children()
+                                    ->scalarNode('subject')->defaultNull()->end()
+                                    ->scalarNode('from')->defaultNull()->end()
+                                    ->scalarNode('template')->isRequired()->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
         return $treeBuilder;
     }
 }

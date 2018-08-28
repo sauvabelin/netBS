@@ -2,7 +2,9 @@
 
 namespace NetBS\FichierBundle\Voter;
 
+use NetBS\FichierBundle\Mapping\BaseAttribution;
 use NetBS\SecureBundle\Mapping\BaseUser;
+use NetBS\SecureBundle\Voter\CRUD;
 
 class AttributionVoter extends GroupeVoter
 {
@@ -15,8 +17,16 @@ class AttributionVoter extends GroupeVoter
         return $this->config->getAttributionClass();
     }
 
+    /**
+     * @param string $operation
+     * @param BaseAttribution $subject
+     * @param BaseUser $user
+     * @return bool
+     */
     protected function accept($operation, $subject, BaseUser $user)
     {
+        if($operation === CRUD::READ && $subject->getMembre()->getId() === $user->getMembreId())
+            return true;
 
         foreach($subject->getMembre()->getActivesAttributions() as $attribution)
             if(parent::accept($operation, $attribution->getGroupe(), $user))

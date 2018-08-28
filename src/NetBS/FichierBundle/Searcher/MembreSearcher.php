@@ -22,7 +22,7 @@ class MembreSearcher extends BaseSearcher
      */
     public function getManagedItemsClass()
     {
-        return $this->config->getMembreClass();
+        return $this->getFichierConfig()->getMembreClass();
     }
 
     /**

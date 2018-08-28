@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityManager;
 use NetBS\FichierBundle\Entity\Geniteur;
 use NetBS\FichierBundle\Entity\Membre;
 use NetBS\FichierBundle\Entity\ObtentionDistinction;
+use NetBS\FichierBundle\Mapping\BaseFamille;
+use NetBS\FichierBundle\Utils\Entity\ValidityTrait;
 use SauvabelinBundle\Entity\BSMembre;
 use SauvabelinBundle\Import\AttributionsAssigner;
 use SauvabelinBundle\Import\Importator;
@@ -129,6 +131,7 @@ class ImportCommand extends ContainerAwareCommand
         });
 
         $famille        = $config->createFamille();
+        $famille->setValidity(BaseFamille::VALIDE);
         $famille->setNom(WNGHelper::sanitize($collection[0]->nom));
 
         if($bestAdresse && $bestAdresse->getNetBSAdresse())

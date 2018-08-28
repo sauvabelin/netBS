@@ -59,7 +59,7 @@ class GroupeAttributionsList extends BaseListModel
      */
     public function getManagedItemsClass()
     {
-        return $this->config->getAttributionClass();
+        return $this->getFichierConfig()->getAttributionClass();
     }
 
     /**
@@ -83,7 +83,7 @@ class GroupeAttributionsList extends BaseListModel
                 XEditableColumn::PROPERTY   => 'fonction',
                 XEditableColumn::TYPE_CLASS => AjaxSelect2DocumentType::class,
                 XEditableColumn::PARAMS     => [
-                    'class' => $this->config->getFonctionClass()
+                    'class' => $this->getFichierConfig()->getFonctionClass()
                 ]
             ))
             ->addColumn('Depuis le', 'dateDebut', DateTimeColumn::class)

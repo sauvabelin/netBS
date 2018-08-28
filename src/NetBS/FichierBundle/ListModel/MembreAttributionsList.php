@@ -20,7 +20,7 @@ class MembreAttributionsList extends BaseListModel
 {
     const MEMBRE_ID = 'membreId';
 
-    use EntityManagerTrait, RouterTrait, FichierConfigTrait;
+    use EntityManagerTrait, FichierConfigTrait;
 
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -50,7 +50,7 @@ class MembreAttributionsList extends BaseListModel
      */
     public function getManagedItemsClass()
     {
-        return $this->config->getAttributionClass();
+        return $this->getFichierConfig()->getAttributionClass();
     }
 
     /**
@@ -73,7 +73,7 @@ class MembreAttributionsList extends BaseListModel
             ->addColumn('Fonction', null, XEditableColumn::class, array(
                 XEditableColumn::PROPERTY   => 'fonction',
                 XEditableColumn::TYPE_CLASS => AjaxSelect2DocumentType::class,
-                XEditableColumn::PARAMS     => ['class' => $this->config->getFonctionClass()]
+                XEditableColumn::PARAMS     => ['class' => $this->getFichierConfig()->getFonctionClass()]
             ))
             ->addColumn('Début', null, XEditableColumn::class, array(
                 XEditableColumn::PROPERTY   => 'dateDebut',
@@ -88,7 +88,7 @@ class MembreAttributionsList extends BaseListModel
                 XEditableColumn::TYPE_CLASS => TextareaType::class
             ])
             ->addColumn('Actions', null, ActionColumn::class, ['actions' => [
-                new RemoveAction($this->router)
+                RemoveAction::class
             ]])
         ;
     }

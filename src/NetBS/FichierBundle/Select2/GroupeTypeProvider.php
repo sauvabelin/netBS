@@ -17,7 +17,7 @@ class GroupeTypeProvider implements Select2ProviderInterface
      */
     public function getManagedClass()
     {
-        return $this->config->getGroupeTypeClass();
+        return $this->fichierConfig->getGroupeTypeClass();
     }
 
     /**

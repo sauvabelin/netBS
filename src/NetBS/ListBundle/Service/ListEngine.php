@@ -5,6 +5,7 @@ namespace NetBS\ListBundle\Service;
 use NetBS\ListBundle\Event\ListEvents;
 use NetBS\ListBundle\Event\PostRenderListEvent;
 use NetBS\ListBundle\Event\PreRenderListEvent;
+use NetBS\ListBundle\Model\ConfiguredColumn;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use NetBS\ListBundle\Model\ListModelInterface;
 use NetBS\ListBundle\Model\RendererInterface;
@@ -131,19 +132,23 @@ class ListEngine
         $model->configureColumns($configuration);
 
         $snapshot = new SnapshotTable($model, $items, $configuration);
+        $j        = 0;
 
-        foreach($configuration->getColumns() as $j => $columnInfo) {
+        /** @var ConfiguredColumn $columnInfo */
+        foreach($configuration->getColumns() as $columnInfo) {
 
-            $column = $this->columnManager->getColumn($columnInfo['class']);
-            $snapshot->setHeader($j, $columnInfo['header']);
+            $column = $this->columnManager->getColumn($columnInfo->getClass());
+            $snapshot->setHeader($j, $columnInfo->getHeader());
 
             $resolver   = new OptionsResolver();
             $column->configureOptions($resolver);
-            $params     = $resolver->resolve($columnInfo['params']);
+            $params     = $resolver->resolve($columnInfo->getParams());
 
             $i = 0;
             foreach($items as $item)
-                $snapshot->set($i++, $j, $column->getContent($this->getItemValue($item, $columnInfo['accessor']), $params));
+                $snapshot->set($i++, $j, $column->getContent($this->getItemValue($item, $columnInfo->getAccessor()), $params));
+
+            $j++;
         }
 
         return $snapshot;

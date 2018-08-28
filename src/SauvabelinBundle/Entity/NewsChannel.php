@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * NewsChannel
  *
  * @ORM\Table(name="sauvabelin_netbs_news_channel")
- * @ORM\Entity(repositoryClass="SauvabelinBundle\Repository\NewsChannelRepository")
+ * @ORM\Entity()
  */
 class NewsChannel
 {
@@ -27,6 +27,13 @@ class NewsChannel
      * @ORM\Column(name="nom", type="string", length=255, unique=true)
      */
     protected $nom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="color", type="string", length=255, unique=true)
+     */
+    protected $color;
 
     /**
      * @var string
@@ -141,5 +148,23 @@ class NewsChannel
     public function getNews()
     {
         return $this->news;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param string $color
+     * @return NewsChannel
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+        return $this;
     }
 }

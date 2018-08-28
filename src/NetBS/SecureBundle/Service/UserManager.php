@@ -77,26 +77,25 @@ class UserManager
         $this->em->flush();
     }
 
-    public function buildUsername($base) {
+    public function buildUsername($username) {
 
-        $i          = 0;
-        $username   = $base;
+        $i = 0;
 
-        while($this->usernameTaken($username))
-            $username = $base . $i++;
+        while($this->getUserRepo()->findOneBy(array('username' => $username)) !== null)
+            $username = $username . $i++;
 
         return $username;
     }
 
-    protected function usernameTaken(BaseUser $user) {
+    protected function usernameExists(BaseUser $user) {
 
         $result = $this->getUserRepo()->findOneBy(array('username' => $user->getUsername()));
         return $result !== null && $result->getId() !== $user->getId();
     }
 
-    protected function emailTaken(BaseUser $user) {
+    protected function emailExists(BaseUser $user) {
 
-        if(empty($email))
+        if(empty($user->getEmail()))
             return false;
 
         $result = $this->getUserRepo()->findOneBy(array('email' => $user->getEmail()));
@@ -105,10 +104,10 @@ class UserManager
 
     protected function checkUsernameAndEmail(BaseUser $user) {
 
-        if($this->emailTaken($user))
+        if($this->emailExists($user))
             throw new UserCreationException("Email already taken");
 
-        if($this->usernameTaken($user))
+        if($this->usernameExists($user))
             throw new UserCreationException("Username already taken");
     }
 

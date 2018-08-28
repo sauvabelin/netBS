@@ -7,6 +7,13 @@ services:
         tags:
             - { name: security.voter }
 
+    netbs.secure.security.voter.bs_roles:
+        class: NetBS\SecureBundle\Voter\BSRoleVoter
+        arguments:
+            - "@netbs.secure.config"
+        tags:
+            - { name: security.voter }
+
     netbs.secure.security.voter.roles:
         class: NetBS\SecureBundle\Voter\RoleVoter
         tags:

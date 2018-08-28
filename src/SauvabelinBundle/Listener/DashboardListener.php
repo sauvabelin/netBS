@@ -2,6 +2,7 @@
 
 namespace SauvabelinBundle\Listener;
 
+use Doctrine\ORM\EntityManager;
 use NetBS\CoreBundle\Block\CardBlock;
 use NetBS\CoreBundle\Block\ListBlock;
 use NetBS\CoreBundle\Event\PreRenderLayoutEvent;
@@ -11,11 +12,18 @@ class DashboardListener
 {
     protected $stack;
 
-    public function __construct(RequestStack $stack)
+    protected $manager;
+
+    public function __construct(RequestStack $stack, EntityManager $manager)
     {
         $this->stack    = $stack;
+        $this->manager  = $manager;
     }
 
+    /**
+     * @param PreRenderLayoutEvent $event
+     * @throws \Exception
+     */
     public function extendsDashboard(PreRenderLayoutEvent $event) {
 
         $route  = $this->stack->getCurrentRequest()->get('_route');
@@ -25,14 +33,25 @@ class DashboardListener
 
         $config = $event->getConfigurator();
         $row    = $config->addRow();
+        $news   = $this->manager->getRepository('SauvabelinBundle:News')->createQueryBuilder('n')
+            ->orderBy('n.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
 
-        $row->addColumn(0, 6, 12)->setBlock(CardBlock::class, array(
+        $row->addColumn(0, 4, 6, 12)->setBlock(CardBlock::class, array(
+            'title'     => 'News',
+            'subtitle'  => 'Dernières news publiées',
+            'template'  => '@Sauvabelin/news/news.block.twig',
+            'params'    => ['news' => $news]
+        ));
+
+        $row->addColumn(1, 4, 6, 12)->setBlock(CardBlock::class, array(
             'title'     => 'Calendrier BS',
             'subtitle'  => 'Calendriers internes et publiques',
             'template'  => '@Sauvabelin/dashboard/calendrier.block.twig'
         ));
 
-        $row->addColumn(1, 6, 12)->setBlock(ListBlock::class, [
+        $row->addColumn(2, 4, 6, 12)->setBlock(ListBlock::class, [
             'alias'     => 'bs.displayable_mailing_lists',
             'title'     => 'Mailing listes',
             'subtitle'  => "Toutes les mailing listes BS"

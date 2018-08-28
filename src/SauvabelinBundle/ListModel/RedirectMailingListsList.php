@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class RedirectMailingListsList extends BaseListModel
 {
-    use EntityManagerTrait, RouterTrait;
+    use EntityManagerTrait;
 
     /**
      * Retrieves all elements managed by this list
@@ -65,7 +65,7 @@ class RedirectMailingListsList extends BaseListModel
             ])
             ->addColumn('Actions', null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY   => [
-                    new RemoveAction($this->router)
+                    RemoveAction::class
                 ]
             ]);
     }

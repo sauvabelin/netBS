@@ -355,7 +355,7 @@ fonctions:
     #smallies
     routier:
         abbreviation: rouge
-        poids: 50
+        poids: 100
         roles:
             - "ROLE_READ"
 

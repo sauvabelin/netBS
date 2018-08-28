@@ -17,7 +17,7 @@ class GroupeCategorieProvider implements Select2ProviderInterface
      */
     public function getManagedClass()
     {
-        return $this->config->getGroupeCategorieClass();
+        return $this->fichierConfig->getGroupeCategorieClass();
     }
 
     /**

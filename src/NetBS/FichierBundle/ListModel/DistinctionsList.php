@@ -29,7 +29,7 @@ class DistinctionsList extends BaseListModel
      */
     public function getManagedItemsClass()
     {
-        return $this->config->getDistinctionClass();
+        return $this->getFichierConfig()->getDistinctionClass();
     }
 
     /**

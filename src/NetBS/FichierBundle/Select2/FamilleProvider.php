@@ -17,7 +17,7 @@ class FamilleProvider implements Select2ProviderInterface
      */
     public function getManagedClass()
     {
-        return $this->config->getFamilleClass();
+        return $this->fichierConfig->getFamilleClass();
     }
 
     /**

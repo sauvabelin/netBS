@@ -17,7 +17,7 @@ class DistinctionProvider implements Select2ProviderInterface
      */
     public function getManagedClass()
     {
-        return $this->config->getDistinctionClass();
+        return $this->fichierConfig->getDistinctionClass();
     }
 
     /**

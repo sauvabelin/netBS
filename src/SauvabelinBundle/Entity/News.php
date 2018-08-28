@@ -9,7 +9,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * News
  *
  * @ORM\Table(name="news")
- * @ORM\Entity(repositoryClass="SauvabelinBundle\Repository\NewsRepository")
+ * @ORM\Entity()
  */
 class News
 {
@@ -37,6 +37,13 @@ class News
      * @ORM\Column(name="contenu", type="text")
      */
     protected $contenu;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="importante", type="boolean")
+     */
+    protected $importante;
 
     /**
      * @var BSUser
@@ -156,5 +163,23 @@ class News
     public function getChannel()
     {
         return $this->channel;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImportante()
+    {
+        return $this->importante;
+    }
+
+    /**
+     * @param bool $importante
+     * @return News
+     */
+    public function setImportante($importante)
+    {
+        $this->importante = $importante;
+        return $this;
     }
 }

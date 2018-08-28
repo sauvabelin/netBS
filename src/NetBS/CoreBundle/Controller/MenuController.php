@@ -6,6 +6,7 @@ use NetBS\CoreBundle\Event\ExtendMainMenuEvent;
 use NetBS\CoreBundle\Menu\MainMenu;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class MenuController extends Controller
 {

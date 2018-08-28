@@ -70,7 +70,9 @@ swiftmailer:
     host: '%mailer_host%'
     username: '%mailer_user%'
     password: '%mailer_password%'
-    spool: { type: memory }
+    spool:
+        type: file
+        path: "%kernel.root_dir%/../spool"
 
 knp_snappy:
     pdf:
@@ -149,6 +151,16 @@ lexik_jwt_authentication:
             enabled: true
             prefix:  Bearer
             name:    x-authorization
+
+net_bs_core:
+    mailer:
+        subject_prefix: "[netBS] "
+        default_from: "it@sauvabelin.ch"
+        channels:
+            security:
+                subject: "Alerte de sécurité"
+                template: "@NetBSSecure/mailer/security.mail.twig"
+
 
 net_bs_fichier:
     entities:

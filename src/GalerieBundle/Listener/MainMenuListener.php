@@ -23,12 +23,13 @@ class MainMenuListener
         /** @var BSUser $user */
         $user       = $this->storage->getToken()->getUser();
 
-        //$user->isInGroup()
+        if($user->hasRole("ROLE_MANAGE_GALERIE")) {
 
-        $menu       = $event->getMenu();
-        $category   = $menu->getCategory('other');
-        $submenu    = $category->addSubMenu('other.gallery', 'Galerie', 'fas fa-images');
+            $menu = $event->getMenu();
+            $category = $menu->getCategory('other');
+            $submenu = $category->addSubMenu('other.gallery', 'Galerie', 'fas fa-images');
 
-        $submenu->addSubLink("Administration", "netbs.galerie.admin.dashboard");
+            $submenu->addSubLink("Administration", "netbs.galerie.admin.dashboard");
+        }
     }
 }

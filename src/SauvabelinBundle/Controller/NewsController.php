@@ -7,9 +7,9 @@ use SauvabelinBundle\Entity\News;
 use SauvabelinBundle\Entity\NewsChannel;
 use SauvabelinBundle\Form\NewsChannelType;
 use SauvabelinBundle\Form\NewsType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class NewsController
@@ -63,20 +63,26 @@ class NewsController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("/modal/add-news", name="sauvabelin.news.add_news")
+     * @Route("/modal/edit-news/{id}", defaults={"id"=null}, name="sauvabelin.news.edit_news")
      */
-    public function addNewsModalAction(Request $request) {
+    public function editNewsModalAction(Request $request, $id) {
 
-        $form   = $this->createForm(NewsType::class, new News());
+        $em     = $this->get('doctrine.orm.entity_manager');
+        $title  = $id ? "Modifier" : "Publier";
+        $news   = new News();
+
+        if($id)
+            $news = $em->find('SauvabelinBundle:News', $id);
+        else
+            $news->setUser($this->getUser());
+
+        $form   = $this->createForm(NewsType::class, $news);
+
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $em     = $this->get('doctrine.orm.entity_manager');
-            $news   = $form->getData();
-            $news->setUser($this->getUser());
-
-            $em->persist($news);
+            $em->persist($form->getData());
             $em->flush();
 
             $this->addFlash("success", "News publiée!");
@@ -84,7 +90,7 @@ class NewsController extends Controller
         }
 
         return $this->render('@NetBSFichier/generic/add_generic.modal.twig', [
-            'title' => 'Publier une news',
+            'title' => $title . ' une news',
             'form'  => $form->createView()
         ], Modal::renderModal($form));
     }

@@ -34,6 +34,21 @@ class TestController extends Controller
     }
 
     /**
+     * @Route("/test/mail")
+     */
+    public function testMail() {
+
+        $mailer = $this->get('netbs.mailer');
+
+        $mailer->send('@Sauvabelin/mailer/account_created.piece.twig', 'Compte créé', 'mashallah@gmail.com', [
+            'username'  => 'guillaume',
+            'password'  => 'yoloswag22'
+        ]);
+        return new Response();
+    }
+
+
+    /**
      * @Route("/test")
      */
     public function test() {

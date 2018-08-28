@@ -48,7 +48,7 @@ class CirculaireMembreType extends AbstractType
             ))
             ->add('r1statut', ChoiceType::class, [
                 'label'     => 'Statut',
-                'choices'   => Geniteur::getStatutChoices()
+                'choices'   => array_flip(Geniteur::getStatutChoices())
             ])
             ->add('r1sexe', SexeType::class, array('label' => 'Sexe', 'required' => false))
             ->add('r1nom', TextType::class, array('label' => 'Nom', 'required' => false))
@@ -62,7 +62,7 @@ class CirculaireMembreType extends AbstractType
 
             ->add('r2statut', ChoiceType::class, [
                 'label'     => 'Statut',
-                'choices'   => Geniteur::getStatutChoices()
+                'choices'   => array_flip(Geniteur::getStatutChoices())
             ])
             ->add('r2sexe', SexeType::class, array('label' => 'Sexe', 'required' => false))
             ->add('r2nom', TextType::class, array('label' => 'Nom', 'required' => false))

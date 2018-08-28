@@ -9,7 +9,7 @@
     <div class="col-md-6">
         <H4>Adresse postale</H4>
         {% if adresse %}
-            <h5>Définie pour {{ adresse.owner }}</h5>
+            <h5 class="text-muted">Définie pour {{ adresse.owner }}</h5>
             {% include '@NetBSFichier/adresse/adresse.partial.twig' with {well: true} %}
         {% else %}
             <p class="alert alert-danger">
@@ -26,7 +26,7 @@
     <div class="col-md-6">
         <H4>Téléphone</H4>
         {% if telephone %}
-            <h5><b>{{ telephone.telephone }}</b> - Défini pour {{ telephone.owner }}</h5>
+            <h5><b>{{ telephone.telephone }}</b> - <span class="text-muted">Défini pour {{ telephone.owner }}</span></h5>
         {% else %}
             <p class="text-muted">Aucun numéro de téléphone trouvé pour {{ item }}</p>
             <button data-modal data-modal-url="{{ path('netbs.fichier.telephone.modal_creation', {ownerType: get_class(item)|toBase64, ownerId: item.id}) }}" class="btn btn-secondary">Ajouter un numéro à {{ item }}</button>
@@ -38,7 +38,7 @@
 
         <H4>E-mail</H4>
         {% if email %}
-            <h5><b>{{ email.email }}</b> - Défini pour {{ email.owner }}</h5>
+            <h5><b>{{ email.email }}</b> - <span class="text-muted">Défini pour {{ email.owner }}</span></h5>
         {% else %}
             <p class="text-muted">Aucun e-mail trouvé pour {{ item }}</p>
             <button data-modal data-modal-url="{{ path('netbs.fichier.email.modal_creation', {ownerType: get_class(item)|toBase64, ownerId: item.id}) }}" class="btn btn-secondary">Ajouter un e-mail à {{ item }}</button>

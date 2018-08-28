@@ -4,6 +4,7 @@ namespace SauvabelinBundle\Form;
 
 use SauvabelinBundle\Entity\NewsChannel;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +16,7 @@ class NewsChannelType extends AbstractType
     {
         $builder
             ->add("nom", TextType::class, ['label' => "Nom du channel"])
+            ->add('color', ColorType::class, ['label' => 'Couleur'])
             ->add("postRule", TextareaType::class, ['label' => "Règle d'écriture (expression language)"])
         ;
     }

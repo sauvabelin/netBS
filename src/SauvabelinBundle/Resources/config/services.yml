@@ -27,6 +27,21 @@ services:
             - { name: console.command }
             - { name: netbs.post_install_script }
 
+    sauvabelin.subscriber.doctrine_user:
+        class: SauvabelinBundle\Subscriber\DoctrineUserAccountSubscriber
+        arguments:
+            - "@security.password_encoder"
+            - "@netbs.mailer"
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+    sauvabelin.subscriber.event_user:
+        class: SauvabelinBundle\Subscriber\EventUserAccountSubscriber
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: kernel.event_subscriber }
+
     sauvabelin.form.membre_extension:
         class: SauvabelinBundle\Form\MembreTypeExtension
         tags:
@@ -43,6 +58,7 @@ services:
         class: SauvabelinBundle\Listener\DashboardListener
         arguments:
             - "@request_stack"
+            - "@doctrine.orm.entity_manager"
         tags:
             - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: extendsDashboard }
 
@@ -51,10 +67,22 @@ services:
         tags:
             - { name: security.voter }
 
+    sauvabelin.form.type.news_channel:
+        class: SauvabelinBundle\Form\Type\NewsChannelType
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - { name: form.type }
+
     sauvabelin.voter.news:
         class: SauvabelinBundle\Voter\NewsVoter
         tags:
             - { name: security.voter }
+
+    sauvabelin.serializer.news_normalizer:
+        class: SauvabelinBundle\Serializer\NewsNormalizer
+        tags:
+            - { name: serializer.normalizer }
 
 #    sauvabelin.subscriber.mailing_lists:
 #        class: SauvabelinBundle\Subscriber\MailingListSubscriber
@@ -75,11 +103,11 @@ services:
 #            - { name: kernel.event_listener, event: netbs.secure.event.user_password_change, method: userPasswordChange }
 
 
-#    sauvabelin.listener.verify_user_password_change:
-#        class: SauvabelinBundle\Listener\ForceNewPasswordListener
-#        arguments:
-#            - "@security.token_storage"
-#            - "@router"
-#            - "@session"
-#        tags:
-#            - { name: kernel.event_listener, event: kernel.request, method: verifyUser }
+    sauvabelin.listener.verify_user_password_change:
+        class: SauvabelinBundle\Listener\ForceNewPasswordListener
+        arguments:
+            - "@security.token_storage"
+            - "@router"
+            - "@session"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: verifyUser }

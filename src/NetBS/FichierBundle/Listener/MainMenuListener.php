@@ -33,10 +33,11 @@ class MainMenuListener
                 $unitLink->addSubLink($attribution->getGroupe()->getNom(), 'netbs.fichier.groupe.page_groupe', ['id' => $attribution->getGroupe()->getId()]);
         }
 
-        $category
-            ->addSubMenu('fichier', 'Fichier', 'fas fa-users')
-            ->addSubLink('Rechercher des membres', 'netbs.fichier.membre.search')
-            ->addSubLink('Liste des unités', 'netbs.fichier.groupe.page_groupes_hierarchy');
+        if($user->hasRole("ROLE_READ_EVERYWHERE"))
+            $category
+                ->addSubMenu('fichier', 'Fichier', 'fas fa-users')
+                ->addSubLink('Rechercher des membres', 'netbs.fichier.membre.search')
+                ->addSubLink('Liste des unités', 'netbs.fichier.groupe.page_groupes_hierarchy');
 
         if($user->hasRole("ROLE_SG")) {
 

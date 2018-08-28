@@ -29,7 +29,7 @@ class GroupeCategoriesList extends BaseListModel
      */
     public function getManagedItemsClass()
     {
-        return $this->config->getGroupeCategorieClass();
+        return $this->getFichierConfig()->getGroupeCategorieClass();
     }
 
     /**

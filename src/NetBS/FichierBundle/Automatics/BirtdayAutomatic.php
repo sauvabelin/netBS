@@ -58,7 +58,7 @@ class BirtdayAutomatic extends BaseAutomatic implements ConfigurableAutomaticInt
     {
         return $this->entityManager->createQueryBuilder()
             ->select('m')
-            ->from('NetBSFichierBundle:Membre', 'm')
+            ->from($this->getFichierConfig()->getMembreClass(), 'm')
             ->where('DAYOFYEAR(m.naissance) >= :startDay')
             ->andWhere('DAYOFYEAR(m.naissance) <= :endDay')
             ->setParameter('startDay', intval($data->getFrom()->format('z')) + 1)

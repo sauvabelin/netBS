@@ -34,6 +34,12 @@ class BSUser extends BaseUser
 
     /**
      * @var bool
+     * @ORM\Column(name="new_password_required", type="boolean")
+     */
+    protected $newPasswordRequired  = false;
+
+    /**
+     * @var bool
      * @ORM\Column(name="wiki_admin", type="boolean")
      */
     protected $wikiAdmin    = false;
@@ -150,6 +156,22 @@ class BSUser extends BaseUser
                 return true;
 
         return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNewPasswordRequired()
+    {
+        return $this->newPasswordRequired;
+    }
+
+    /**
+     * @param bool $newPasswordRequired
+     */
+    public function setNewPasswordRequired($newPasswordRequired)
+    {
+        $this->newPasswordRequired = $newPasswordRequired;
     }
 }
 

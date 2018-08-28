@@ -8,6 +8,9 @@ imports:
 
 services:
 
+    netbs.mailer:
+        class: NetBS\CoreBundle\Service\Mailer
+
     netbs.logger:
         class: NetBS\CoreBundle\Service\UserLogger
         arguments:
@@ -52,6 +55,9 @@ services:
     netbs.core.post_install_script_manager:
         class: NetBS\CoreBundle\Service\PostInstallScriptManager
         public: true
+
+    netbs.core.list_actions_manager:
+        class: NetBS\CoreBundle\Service\ListActionsManager
 
     netbs.core.select2_providers_manager:
         class: NetBS\CoreBundle\Select2\Select2ProviderManager

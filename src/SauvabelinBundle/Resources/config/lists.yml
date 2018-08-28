@@ -24,3 +24,8 @@ services:
         class: SauvabelinBundle\ListModel\NewsChannelsList
         tags:
             - { name: netbs.list.model }
+
+    sauvabelin.list.latest_accounts:
+        class: SauvabelinBundle\ListModel\LatestAccountsCreatedList
+        tags:
+            - { name: netbs.list.model }

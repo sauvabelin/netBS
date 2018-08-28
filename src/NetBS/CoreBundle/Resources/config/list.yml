@@ -1,5 +1,37 @@
 services:
 
+#actions
+    netbs.core.list.action.link:
+        class: NetBS\CoreBundle\ListModel\Action\LinkAction
+        arguments:
+            - "@router"
+        tags:
+            - {name: netbs.list_action }
+
+    netbs.core.list.action.icon:
+        class: NetBS\CoreBundle\ListModel\Action\IconAction
+        arguments:
+            - "@router"
+        tags:
+            - {name: netbs.list_action }
+
+    netbs.core.list.action.remove:
+        class: NetBS\CoreBundle\ListModel\Action\RemoveAction
+        arguments:
+            - "@security.authorization_checker"
+            - "@router"
+        tags:
+            - {name: netbs.list_action }
+
+    netbs.core.list.action.modal:
+        class: NetBS\CoreBundle\ListModel\Action\ModalAction
+        arguments:
+            - "@twig.extension.assets"
+            - "@netbs.core.twig.assets_extension"
+            - "@router"
+        tags:
+            - {name: netbs.list_action }
+
     netbs.core.list.parameters:
         class: NetBS\CoreBundle\ListModel\ParametersList
         tags:
@@ -20,8 +52,17 @@ services:
         tags:
             - { name: netbs.list.renderer }
 
+    netbs.core.list.huge_renderer:
+        class: NetBS\CoreBundle\ListModel\HugeListRenderer
+        arguments:
+            - "@twig"
+        tags:
+            - { name: netbs.list.renderer }
+
     netbs.core.list.action_column:
         class: NetBS\CoreBundle\ListModel\Column\ActionColumn
+        arguments:
+            - "@netbs.core.list_actions_manager"
         tags:
             - { name: netbs.list.column }
 

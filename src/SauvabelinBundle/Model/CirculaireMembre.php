@@ -10,6 +10,7 @@ use NetBS\FichierBundle\Entity\Fonction;
 use NetBS\FichierBundle\Entity\Geniteur;
 use NetBS\FichierBundle\Entity\Groupe;
 use NetBS\FichierBundle\Entity\Telephone;
+use NetBS\FichierBundle\Mapping\Personne;
 use SauvabelinBundle\Entity\BSMembre;
 use SauvabelinBundle\Entity\Membre;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -107,13 +108,13 @@ class CirculaireMembre implements GroupSequenceProviderInterface
      * @var string
      * @Assert\NotBlank(groups={"geniteur1"})
      */
-    public $r1statut;
+    public $r1statut = Geniteur::MERE;
 
     /**
      * @var string
      * @Assert\NotBlank(groups={"geniteur1"})
      */
-    public $r1sexe;
+    public $r1sexe  = Personne::FEMME;
 
     /**
      * @var string
@@ -161,13 +162,13 @@ class CirculaireMembre implements GroupSequenceProviderInterface
      * @var string
      * @Assert\NotBlank(groups={"geniteur2"})
      */
-    public $r2statut;
+    public $r2statut = Geniteur::PERE;
 
     /**
      * @var string
      * @Assert\NotBlank(groups={"geniteur2"})
      */
-    public $r2sexe;
+    public $r2sexe = Personne::HOMME;
 
     /**
      * @var string

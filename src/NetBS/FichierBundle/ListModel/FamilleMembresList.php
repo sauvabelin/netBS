@@ -25,7 +25,7 @@ class FamilleMembresList extends BaseListModel
      */
     protected function buildItemsList()
     {
-        return $this->entityManager->getRepository($this->config->getFamilleClass())
+        return $this->entityManager->getRepository($this->getFichierConfig()->getFamilleClass())
             ->find($this->getParameter(self::FAMILLE_ID))->getMembres();
     }
 
@@ -44,6 +44,6 @@ class FamilleMembresList extends BaseListModel
      */
     public function getManagedItemsClass()
     {
-        return $this->config->getMembreClass();
+        return $this->getFichierConfig()->getMembreClass();
     }
 }

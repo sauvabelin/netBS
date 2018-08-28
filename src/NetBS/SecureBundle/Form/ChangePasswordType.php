@@ -17,7 +17,7 @@ class ChangePasswordType extends AbstractType
             ->add('old_password', PasswordType::class, array('label' => "Mot de passe actuel"))
             ->add('new_password', RepeatedType::class, array(
                 'type'              => PasswordType::class,
-                'invalid_message'   => "Les mots de passes ne sont pas identiques",
+                'invalid_message'   => "Les mots de passe ne sont pas identiques",
                 'first_options'     => ['label' => "Nouveau mot de passe"],
                 'second_options'    => ['label' => "Répéter"]
             ));

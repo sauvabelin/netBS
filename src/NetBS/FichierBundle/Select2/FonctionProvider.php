@@ -17,7 +17,7 @@ class FonctionProvider implements Select2ProviderInterface
      */
     public function getManagedClass()
     {
-        return $this->config->getFonctionClass();
+        return $this->fichierConfig->getFonctionClass();
     }
 
     /**

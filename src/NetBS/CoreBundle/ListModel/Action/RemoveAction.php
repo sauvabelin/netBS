@@ -3,26 +3,44 @@
 namespace NetBS\CoreBundle\ListModel\Action;
 
 use Doctrine\Common\Util\ClassUtils;
+use NetBS\CoreBundle\ListModel\Column\LinkColumn;
+use NetBS\SecureBundle\Voter\CRUD;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 
-class RemoveAction implements ActionInterface
+class RemoveAction extends IconAction
 {
-    protected $router;
+    protected $checker;
 
-    public function __construct(Router $router)
+    public function __construct(AuthorizationChecker $checker, Router $router)
     {
-        $this->router   = $router;
+        $this->checker  = $checker;
+
+        parent::__construct($router);
     }
 
-    public function render($item)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $path   = $this->router->generate('netbs.core.action.remove_item', [
+        parent::configureOptions($resolver);
+
+        $resolver->setDefault('theme', 'danger')
+            ->setDefault('route', null)
+            ->setDefault('icon', 'fas fa-times');
+    }
+
+    public function render($item, $params = [])
+    {
+        if(!$this->checker->isGranted(CRUD::DELETE, $item))
+            return "";
+
+        $params[LinkColumn::ROUTE]  = $this->router->generate('netbs.core.action.remove_item', [
             'itemId'    => $item->getId(),
             'itemClass' => base64_encode(ClassUtils::getRealClass(get_class($item)))
         ]);
 
-        return "<a onclick='return confirm(\"Etes-vous sûr ?\");' class='btn btn-xs btn-danger' href='$path' data-toggle='tooltip' data-placement='top' title='Supprimer cet élément'>
-                    <i class='fas fa-times fa-xs'></i>
-                </a>";
+        $params[LinkAction::ATTRS]  = $params[LinkAction::ATTRS] . ' onclick="return confirm(\'Etes-vous sûr de vouloir supprimer cet élément?\');"';
+
+        return parent::render($item, $params);
     }
 }

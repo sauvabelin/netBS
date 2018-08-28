@@ -54,22 +54,29 @@ var BSModal = function(path, params) {
 
             $.post(mdl.path, $form.serialize())
                 .done(function(data, status, response) {
-
-                    var code    = parseInt(response.status);
-
-                    if(data === "redirected")
-                        window.location.href = response.getResponseHeader("Location");
-                    if(code === 201)
-                        location.reload();
-                    else
-                        $('#' + mdl.id).modal('hide');
+                    mdl.handleSubmit(data, status, response);
                 })
                 .fail(function(data) {
-
                     $modal.html(data.responseText);
                     mdl.attachButtonEvents();
                 })
             ;
         });
     };
+
+    this.handleSubmit = function(data, status, response) {
+
+        var code    = parseInt(response.status);
+
+        if(data === "redirected")
+            window.location.href = response.getResponseHeader("Location");
+        if(code === 201)
+            location.reload();
+        else
+            this.remove();
+    };
+
+    this.remove = function() {
+        $('#' + this.id).modal('hide');
+    }
 };

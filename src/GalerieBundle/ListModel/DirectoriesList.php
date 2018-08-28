@@ -3,6 +3,7 @@
 namespace GalerieBundle\ListModel;
 
 use GalerieBundle\Entity\Directory;
+use NetBS\CoreBundle\ListModel\Action\IconAction;
 use NetBS\CoreBundle\ListModel\Action\LinkAction;
 use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
@@ -55,9 +56,13 @@ class DirectoriesList extends BaseListModel
             }, SimpleColumn::class)
             ->addColumn("Actions", null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY   => [
-                    new LinkAction(function(Directory $directory) {
-                        return $this->router->generate("netbs.galerie.admin.remove_directory", ['directory' => $directory->getId()]);
-                    }, "fas fa-times", "danger")
+                    IconAction::class => [
+                        IconAction::ICON    => 'fas fa-times',
+                        LinkAction::THEME   => 'danger',
+                        IconAction::ROUTE   => function(Directory $directory) {
+                            return $this->router->generate("netbs.galerie.admin.remove_directory", ['directory' => $directory->getId()]);
+                        }
+                    ]
                 ]
             ])
         ;

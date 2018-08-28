@@ -26,6 +26,9 @@ class PostInstallCommand extends ContainerAwareCommand
 
     protected function getBoolValue($val) {
 
+        if(is_bool($val))
+            return $val;
+
         if($val === null)
             return null;
 
@@ -43,9 +46,7 @@ class PostInstallCommand extends ContainerAwareCommand
         $config = $this->getContainer()->get('netbs.fichier.config');
         $em     = $this->getContainer()->get('doctrine.orm.entity_manager');
         $io     = new SymfonyStyle($input, $output);
-
-        $purge      = $this->getBoolValue($input->getOption('purge'));
-        $dummy      = $this->getBoolValue($input->getOption('dummy'));
+        $dummy  = $this->getBoolValue($input->getOption('dummy'));
 
         if(!$dummy) {
             $io->writeln("Importation des données WNG");

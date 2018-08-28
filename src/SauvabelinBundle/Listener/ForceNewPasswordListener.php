@@ -35,11 +35,21 @@ class ForceNewPasswordListener
         if(!$user instanceof BSUser)
             return;
 
+        if($user->hasRole('ROLE_ADMIN'))
+            return;
+
         if($user->isNewPasswordRequired()
             && $event->getRequest()->getRequestUri() !== $this->router->generate('netbs.secure.user.account_page')
             && $event->getRequestType() === 1) {
 
-            $this->session->getFlashBag()->add('info', "Avant de pouvoir continuer, veuillez définir un nouveau mot de passe.");
+            if($user->hasRole("ROLE_ADMIN")) {
+
+                $this->session->getFlashBag()->add('warning',
+                    "T'es admin mais pense à changer de mot de passe!");
+                return;
+            }
+
+            $this->session->getFlashBag()->add('info', "Avant de pouvoir continuer, veuillez changer de mot de passe.");
             $event->setResponse(new RedirectResponse($this->router->generate('netbs.secure.user.account_page')));
         }
     }

@@ -14,6 +14,7 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
+/spool/
 /web/bundles/
 .DS_Store
 .idea

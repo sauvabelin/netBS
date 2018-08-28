@@ -90,6 +90,11 @@ class BaseUser implements
         $this->salt             = sha1(StrUtil::randomString() . uniqid());
     }
 
+    public function __toString()
+    {
+        return $this->membre ? $this->membre->getFullName() : $this->getUsername();
+    }
+
     /**
      * @param UserInterface $user
      * @return bool
@@ -107,6 +112,14 @@ class BaseUser implements
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMembreId() {
+
+        return $this->membre ? $this->membre->getId() : null;
     }
 
     /**

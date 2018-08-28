@@ -3,7 +3,7 @@
     {{ registerCss(asset('bundles/netbscore/lib/toastr/toastr.min.css')) }}
     {{ registerJs(asset('bundles/netbscore/lib/toastr/toastr.min.js')) }}
 
-    <script>
+    <script type="text/javascript">
     var BSDynamic   = {
 
         addToList: function(listId, itemsClass, selectedIds) {
@@ -30,10 +30,12 @@
 
                 var code    = parseInt(response.status);
 
-                if(code === 201) {
+                console.log(code);
+                if(code === 202) {
 
                     if(addTo)
                         addTo(data.listId);
+
                     modal.remove();
                 }
                 else

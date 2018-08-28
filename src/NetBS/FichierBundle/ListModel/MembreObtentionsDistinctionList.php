@@ -18,7 +18,7 @@ class MembreObtentionsDistinctionList extends BaseListModel
 {
     const MEMBRE_ID = 'membreId';
 
-    use EntityManagerTrait, RouterTrait, FichierConfigTrait;
+    use EntityManagerTrait, FichierConfigTrait;
 
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -37,6 +37,7 @@ class MembreObtentionsDistinctionList extends BaseListModel
             ->join('od.membre', 'm')
             ->where('m.id = :id')
             ->setParameter('id', $this->getParameter(self::MEMBRE_ID))
+            ->orderBy('od.date', 'DESC')
             ->getQuery()
             ->execute();
     }
@@ -47,7 +48,7 @@ class MembreObtentionsDistinctionList extends BaseListModel
      */
     public function getManagedItemsClass()
     {
-        return $this->config->getObtentionDistinctionClass();
+        return $this->getFichierConfig()->getObtentionDistinctionClass();
     }
 
     /**
@@ -72,7 +73,7 @@ class MembreObtentionsDistinctionList extends BaseListModel
                 XEditableColumn::TYPE_CLASS => DatepickerType::class
             ])
             ->addColumn('Actions', null, ActionColumn::class, ['actions' => [
-                new RemoveAction($this->router)
+                RemoveAction::class
             ]])
         ;
     }

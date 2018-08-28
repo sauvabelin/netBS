@@ -198,7 +198,7 @@
             <a href="#" {{ block('xeditable') }}></a>
         {% elseif is_granted('read', form.parent.vars.data) %}
             {{ block('webAssets') }}
-            <a href="#" style="color:grey;border-bottom:none;cursor:default" {{ block('xeditable') }}></a>
+            <a href="#" data-disabled style="color:#686868;border-bottom:none;cursor:default" {{ block('xeditable') }}></a>
         {% else %}
             <span style="color:red">You shall not pass!</span>
         {% endif %}
@@ -282,5 +282,13 @@
     {% endset %}
 
     {{ registerScript(initialization) }}
+
+    {% set unclick %}
+        <script type="text/javascript">
+            $('[data-disabled]').off('click');
+        </script>
+    {% endset %}
+
+    {{ registerScript(unclick, 100) }}
 
 {% endblock %}

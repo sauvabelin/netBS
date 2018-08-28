@@ -17,7 +17,7 @@ class MembreProvider implements Select2ProviderInterface
      */
     public function getManagedClass()
     {
-        return $this->config->getMembreClass();
+        return $this->fichierConfig->getMembreClass();
     }
 
     /**

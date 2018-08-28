@@ -31,7 +31,7 @@ class GroupeTypesList extends BaseListModel
      */
     public function getManagedItemsClass()
     {
-        return $this->config->getGroupeTypeClass();
+        return $this->getFichierConfig()->getGroupeTypeClass();
     }
 
     /**

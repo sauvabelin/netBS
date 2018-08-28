@@ -33,6 +33,8 @@ class DynamicListController extends Controller
      * @param DynamicList $list
      * @param $itemId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function removeElementFromListAction(DynamicList $list, $itemId) {
 
@@ -58,6 +60,8 @@ class DynamicListController extends Controller
      * @Route("/remove/list/{id}", name="netbs.core.dynamics_list.remove_list")
      * @param DynamicList $list
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function removeListAction(DynamicList $list) {
 
@@ -76,6 +80,7 @@ class DynamicListController extends Controller
      * @Route("/manage/{id}", name="netbs.core.dynamics_list.manage_list")
      * @param DynamicList $list
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \NetBS\ListBundle\Exceptions\ListModelNotFoundException
      */
     public function manageListAction(DynamicList $list) {
 
@@ -160,7 +165,7 @@ class DynamicListController extends Controller
             return $this->json([
                 'listId' =>$list->getId(),
                 'class'  => $list->getItemsClass()
-            ], 201);
+            ], 202);
         }
 
         return $this->render('@NetBSCore/dynamics/create.modal.twig', [

@@ -9,15 +9,15 @@ trait FichierConfigTrait
     /**
      * @var FichierConfig
      */
-    protected $config;
+    protected $fichierConfig;
 
     public function setFichierConfig(FichierConfig $config) {
 
-        $this->config   = $config;
+        $this->fichierConfig   = $config;
     }
 
     public function getFichierConfig() {
 
-        return $this->config;
+        return $this->fichierConfig;
     }
 }

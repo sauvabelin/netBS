@@ -3,8 +3,10 @@
 namespace NetBS\SecureBundle\Controller;
 
 use NetBS\SecureBundle\Event\UserPasswordChangeEvent;
+use NetBS\SecureBundle\Form\AdminChangePasswordType;
 use NetBS\SecureBundle\Form\ChangePasswordType;
 use NetBS\SecureBundle\Form\UserType;
+use NetBS\SecureBundle\Model\AdminChangePassword;
 use NetBS\SecureBundle\Model\ChangePassword;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,7 +42,9 @@ class UserController extends Controller
         if($form->isValid() && $form->isSubmitted()) {
 
             $user   = $form->getData();
+
             $manager->updateUser($user);
+            $this->addFlash("success", "{$user->getUsername()} mis à jour");
             return $this->redirectToRoute('netbs.secure.user.list_users');
         }
 

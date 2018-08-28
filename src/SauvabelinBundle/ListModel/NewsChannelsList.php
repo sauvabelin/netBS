@@ -4,6 +4,7 @@ namespace SauvabelinBundle\ListModel;
 
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
+use NetBS\ListBundle\Column\ClosureColumn;
 use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use SauvabelinBundle\Entity\NewsChannel;
@@ -47,8 +48,17 @@ class NewsChannelsList extends BaseListModel
     public function configureColumns(ListColumnsConfiguration $configuration)
     {
         $configuration
+            ->addColumn("Couleur", null, ClosureColumn::class, [
+                ClosureColumn::CLOSURE  => function(NewsChannel $channel) {
+                    return "<span class='badge' style='background:{$channel->getColor()};color:white'>{$channel->getNom()}</span>";
+                }
+            ])
             ->addColumn("Nom", null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY   => "nom",
+                XEditableColumn::TYPE_CLASS => TextType::class
+            ])
+            ->addColumn("Couleur", null, XEditableColumn::class, [
+                XEditableColumn::PROPERTY   => "color",
                 XEditableColumn::TYPE_CLASS => TextType::class
             ])
         ;

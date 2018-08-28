@@ -2,10 +2,12 @@
 
 namespace NetBS\FichierBundle\Voter;
 
+use Doctrine\Common\Util\ClassUtils;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseGeniteur;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\SecureBundle\Mapping\BaseUser;
+use NetBS\SecureBundle\Voter\CRUD;
 
 class MembreFamilleVoter extends GroupeVoter
 {
@@ -25,11 +27,11 @@ class MembreFamilleVoter extends GroupeVoter
 
     protected function accept($operation, $subject, BaseUser $user)
     {
-        if(get_class($subject) === $this->config->getMembreClass())
+        if(ClassUtils::getClass($subject) === $this->config->getMembreClass())
             return $this->acceptMembre($operation, $subject, $user);
-        elseif(get_class($subject) === $this->config->getFamilleClass())
+        elseif(ClassUtils::getClass($subject) === $this->config->getFamilleClass())
             return $this->acceptFamille($operation, $subject, $user);
-        elseif(get_class($subject) === $this->config->getGeniteurClass())
+        elseif(ClassUtils::getClass($subject) === $this->config->getGeniteurClass())
             return $this->acceptGeniteur($operation, $subject, $user);
         return false;
     }
@@ -43,6 +45,9 @@ class MembreFamilleVoter extends GroupeVoter
      */
     protected function acceptMembre($operation, $subject, BaseUser $user)
     {
+        if($user->getMembre() && $subject->getId() === $user->getMembreId())
+            return true;
+
         foreach($subject->getActivesAttributions() as $attribution)
             if(parent::accept($operation, $attribution->getGroupe(), $user))
                 return true;
@@ -59,6 +64,9 @@ class MembreFamilleVoter extends GroupeVoter
      */
     protected function acceptFamille($operation, $subject, BaseUser $user)
     {
+        if($user->getMembre() && $subject->getId() === $user->getMembre()->getFamille()->getId())
+            return true;
+
         foreach($subject->getMembres() as $membre)
             if($this->acceptMembre($operation, $membre, $user))
                 return true;

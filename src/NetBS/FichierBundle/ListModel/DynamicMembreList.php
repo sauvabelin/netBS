@@ -41,7 +41,7 @@ class DynamicMembreList extends AbstractDynamicListModel
      */
     public function getManagedItemsClass()
     {
-        return $this->config->getMembreClass();
+        return $this->getFichierConfig()->getMembreClass();
     }
 
     /**

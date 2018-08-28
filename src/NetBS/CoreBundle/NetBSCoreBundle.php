@@ -9,6 +9,7 @@ use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterDynamicsModel;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterExporterPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterHelpersPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterLayoutPass;
+use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterListActionsPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterLogRepresentersPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterPostInstallScriptsPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterPreviewersPass;
@@ -37,6 +38,7 @@ class NetBSCoreBundle extends Bundle
         $container->addCompilerPass(new RegisterLogRepresentersPass());
         $container->addCompilerPass(new RegisterPreviewersPass());
         $container->addCompilerPass(new RegisterPostInstallScriptsPass());
+        $container->addCompilerPass(new RegisterListActionsPass());
     }
 
 }

@@ -1,0 +1,82 @@
+{% set newsStyle %}
+    <style>
+
+        .news-container {
+
+            max-height:500px;
+            overflow:auto;
+        }
+
+        .news-item {
+
+            margin-bottom:1rem;
+        }
+
+        .news-item-left {
+
+            width:100px;
+            height:auto;
+            background:red;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            color:white;
+        }
+
+        .news-item-right {
+
+            flex:1;
+            position:relative;
+            background:white;
+        }
+
+        .news-item-right .bg {
+
+            position:absolute;
+            width:100%;
+            height:100%;
+        }
+
+        .news-contenu {
+
+            padding:1rem;
+        }
+
+    </style>
+{% endset %}
+
+{{ registerStyle(newsStyle) }}
+
+<div class="news-container">
+    {% for item in news %}
+
+        {% set WIP = item.isImportante %}
+
+        <div class="d-flex align-items-stretch news-item">
+            <div class="news-item-left" style="background-color:{{ item.channel.color }};border:1px solid {{ item.channel.color }}">
+                <h5>{{ item.user }}</h5>
+                <h5>{{ item.createdAt|date('d.m.Y') }}</h5>
+                <h6 style="background:white;color:black;border-radius:3px;padding:0.3rem 0.6rem;">{{ item.channel.nom }}</h6>
+            </div>
+
+            <div class="news-item-right">
+                <div class="bg" style="
+                        {% if WIP %}background:{{ item.channel.color }};border:1px solid {{ item.channel.color }};opacity:0.3;
+                {% else %}border:1px solid #eee;
+                    {% endif %}"></div>
+
+                <div class="news-contenu">
+                    <h4>{{ item.titre }}</h4>
+
+                    <p>{{ item.contenu }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<hr/>
+<div class="d-flex justify-content-end">
+    <btn class="btn btn-primary" data-modal data-modal-url="{{ path('sauvabelin.news.edit_news') }}">Ajouter une news</btn>
+</div>
