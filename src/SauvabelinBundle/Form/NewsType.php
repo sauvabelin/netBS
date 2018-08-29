@@ -32,7 +32,6 @@ class NewsType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        dump($view);
     }
 
     public function configureOptions(OptionsResolver $resolver)
