@@ -4,14 +4,12 @@ namespace SauvabelinBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use NetBS\CoreBundle\Service\Mailer;
 use NetBS\CoreBundle\Utils\StrUtil;
 use NetBS\FichierBundle\Mapping\BaseAttribution;
 use NetBS\FichierBundle\Mapping\BaseMembre;
-use NetBS\SecureBundle\Event\UserPasswordChangeEvent;
 use NetBS\SecureBundle\Mapping\BaseUser;
 use SauvabelinBundle\Entity\BSUser;
 use SauvabelinBundle\Entity\LatestCreatedAccount;
@@ -134,11 +132,13 @@ class DoctrineUserAccountSubscriber implements EventSubscriber
         $latestAccount->setPassword($password);
         $manager->persist($latestAccount);
 
+        /*
         $subject    = $membre->getPrenom() . ", ton compte Sauvabelin a été créé!";
         $this->mailer->send('@Sauvabelin/mailer/account_created.piece.twig', $subject, $user, [
             'username'  => $username,
             'password'  => $password
         ]);
+        */
 
         $manager->persist($user);
         $manager->flush();

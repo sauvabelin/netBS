@@ -212,7 +212,7 @@ class ImportCommand extends ContainerAwareCommand
 
             for($j = 0; $j < count($items); $j++) {
                 if($fn($items[$j], $collection[$i])) {
-                    $score[$j++];
+                    $score[$j]++;
                     $found = true;
                 }
             }
