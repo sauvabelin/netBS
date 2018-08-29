@@ -8,7 +8,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 /**
  * News
  *
- * @ORM\Table(name="news")
+ * @ORM\Table(name="sauvabelin_netbs_news")
  * @ORM\Entity()
  */
 class News
