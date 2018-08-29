@@ -13,7 +13,6 @@ class ParameterController extends Controller
      */
     public function listParametersAction()
     {
-        dump($this->get('security.token_storage')->getToken()->getRoles());
         return $this->render('@NetBSCore/parameters/list_parameters.html.twig');
     }
 }
