@@ -37,7 +37,8 @@ class GroupeProvider implements Select2ProviderInterface
      */
     public function toString($item)
     {
-        return $item->getNom() . " (" . $item->getGroupeType()->getNom() . ")";
+	$parent = $item->getParent() ? " [" . $item->getParent()->getNom() . "] " : "";
+        return $item->getNom() . $parent .  " (" . $item->getGroupeType()->getNom() . ")";
     }
 
 
