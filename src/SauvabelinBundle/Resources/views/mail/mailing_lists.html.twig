@@ -5,7 +5,7 @@
     <div class="container-fluid">
 
         {{ registerJs(asset('bundles/netbscore/js/modal.js')) }}
-        {% set addRuleButton %}<button data-modal data-modal-url="{{ path("sauvabelin.mailing_lists.modal_add_rule") }}" class="btn btn-primary">Nouvelle mailing liste Expression Language</button>{% endset %}
+        {% set addRuleButton %}<button data-modal data-modal-url="{{ path("sauvabelin.mailing_lists.modal_add_rule") }}" class="btn btn-primary">Nouvelle mailing liste EL</button>{% endset %}
         {% set addRedirectButton %}<button data-modal data-modal-url="{{ path("sauvabelin.mailing_lists.modal_add_redirect") }}" class="btn btn-primary">Nouvelle mailing liste de redirection</button>{% endset %}
 
         {% include '@NetBSCore/includes/header.include.twig' with {
