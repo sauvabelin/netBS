@@ -11,6 +11,28 @@ $h-padding: 1.5rem;
 $icon-width: 2.5rem;
 $category-color: #b6b4b7;
 
+@media (max-width: 720px) {
+
+    .menu {
+        position: fixed;
+        left:-$menu-width;
+        z-index:200;
+        height:100%;
+
+        transition:left .2s;
+
+        .menu-content {
+
+            overflow:auto;
+        }
+    }
+
+    .menu.visible {
+
+        left:0;
+    }
+}
+
 .menu {
 
     width:$menu-width;
@@ -42,6 +64,7 @@ $category-color: #b6b4b7;
     .menu-content {
 
         padding: 1rem 0;
+        height:calc(100% - #{$header-height});
 
         &.menu-content-lighter {
 

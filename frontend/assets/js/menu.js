@@ -1,3 +1,4 @@
+
 function scanLi(li, clickCallable) {
 
     var submenu = li.querySelector(':scope > ul');

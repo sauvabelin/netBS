@@ -29,9 +29,9 @@
                 }
             }
 
-            &.user-menu-section {
+            &.user-menu-section, &.mobile-menu-section {
 
-                padding:0 $base-padding;
+                padding-right:$base-padding;
             }
 
             &.section-right {

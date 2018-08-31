@@ -57,3 +57,10 @@ body {
 
     padding: 2rem 0;
 }
+
+@media (max-width: 720px) {
+
+    .main {
+        width: 100% !important;
+    }
+}
