@@ -65,7 +65,7 @@ class RuleMailingListsList extends BaseListModel
             ])
             ->addColumn('Actions', null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY   => [
-                    new RemoveAction($this->router)
+                    RemoveAction::class
                 ]
             ]);
     }
