@@ -77,7 +77,6 @@ abstract class BaseFamille implements AdressableInterface, TelephonableInterface
         $this->validity             = self::EN_ATTENTE;
         $this->membres              = new ArrayCollection();
         $this->geniteurs            = new ArrayCollection();
-        $this->contactInformation   = new BaseContactInformation();
     }
 
     public static function getValidityChoices() {

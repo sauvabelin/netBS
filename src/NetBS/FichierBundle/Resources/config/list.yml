@@ -1,6 +1,13 @@
 
 services:
 
+    netbs.fichier.renderer.netbs.toolbar_listener:
+        class: NetBS\FichierBundle\Listener\NetBSToolbarListener
+        arguments:
+            - "@twig"
+        tags:
+            - { name: kernel.event_listener, event: netbs.list_model.renderer.toolbar, method: extend }
+
     netbs.fichier.searcher.membres:
         class: NetBS\FichierBundle\Searcher\MembreSearcher
         tags:

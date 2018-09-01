@@ -28,7 +28,8 @@ class RemoveFromDynamicColumn extends BaseColumn
      */
     public function getContent($item, array $params = [])
     {
-        $path = $this->router->generate('netbs.core.dynamics_list.remove_item', array('id' => $params['listId'], 'itemId' => $item->getId()));
+        $data = json_encode(["removed_ids" => [$item->getId()]]);
+        $path = $this->router->generate('netbs.core.dynamics_list.remove_items', array('id' => $params['listId'])) . "?data=$data";
         return "<a href='$path' class='btn btn-xs btn-danger' data-toggle='tooltip' title='Retirer de la liste'><i class='fas fa-sm fa-times'></i></a>";
     }
 }

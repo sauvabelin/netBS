@@ -4,6 +4,7 @@ namespace NetBS\FichierBundle\Exporter;
 
 use NetBS\CoreBundle\Exporter\CSVColumns;
 use NetBS\CoreBundle\Exporter\CSVExporter;
+use NetBS\CoreBundle\Utils\StrUtil;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Service\FichierConfig;
 
@@ -52,14 +53,18 @@ class CSVRega extends CSVExporter
             ->addColumn('NO_PERS_BDNJS', function(BaseMembre $membre) {
                 return null;
             })
-            ->addColumn('NOM', 'famille.nom')
-            ->addColumn('PRENOM', 'prenom')
+            ->addColumn('NOM', function(BaseMembre $membre) {
+                return StrUtil::removeAccents($membre->getFamille()->getNom());
+            })
+            ->addColumn('PRENOM', function (BaseMembre $membre) {
+                return StrUtil::removeAccents($membre->getPrenom());
+            })
             ->addColumn('DAT_NAISSANCE', function(BaseMembre $membre) {
                 return $membre->getNaissance()->format('d.m.Y');
             })
             ->addColumn('RUE', function(BaseMembre $membre) {
                 if($adresse = $membre->getSendableAdresse())
-                    return $adresse->getRue();
+                    return StrUtil::removeAccents($adresse->getRue());
             })
             ->addColumn('NPA', function(BaseMembre $membre) {
                 if($adresse = $membre->getSendableAdresse())
@@ -67,7 +72,7 @@ class CSVRega extends CSVExporter
             })
             ->addColumn('LOCALITE', function(BaseMembre $membre) {
                 if($adresse = $membre->getSendableAdresse())
-                    return $adresse->getLocalite();
+                    return StrUtil::removeAccents($adresse->getLocalite());
             })
             ->addColumn('RUE', function(BaseMembre $membre) {
                 return 'CH';
@@ -77,7 +82,7 @@ class CSVRega extends CSVExporter
             })
             ->addColumn('CLASSE/GROUPE', function(BaseMembre $membre) {
                 if($attr = $membre->getActiveAttribution())
-                    return $attr->getGroupe()->getNom();
+                    return StrUtil::removeAccents($attr->getGroupe()->getNom());
             })
         ;
     }

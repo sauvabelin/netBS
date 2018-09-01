@@ -36,6 +36,17 @@ class LoadGroups extends BSFixture implements OrderedFixtureInterface
 
         $this->mapGroup($manager, $config, $types, $data['unites']);
         $manager->flush();
+
+        $updates    = [
+            'groupe.branche_eclaireurs_id'      => "branche éclaireurs",
+            'groupe.branche_eclaireuses_id'     => "branche éclaireuses",
+            'groupe.branche_louveteaux_id'      => "branche louveteaux",
+            'groupe.branche_louvettes_id'       => "branche louvettes"
+        ];
+
+        foreach($updates as $key => $fn)
+            $this->loadParameterWithId($manager, 'bs', $key,
+                $manager->getRepository('SauvabelinBundle:BSGroupe')->findOneBy(array('nom' => $fn)));
     }
 
     private function mapGroup(ObjectManager $manager, FichierConfig $config, array $types, array $data) {

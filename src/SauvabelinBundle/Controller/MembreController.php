@@ -2,6 +2,8 @@
 
 namespace SauvabelinBundle\Controller;
 
+use NetBS\FichierBundle\Mapping\BaseFamille;
+use SauvabelinBundle\Entity\BSUser;
 use SauvabelinBundle\Form\CirculaireMembreType;
 use SauvabelinBundle\Model\CirculaireMembre;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,6 +20,8 @@ class MembreController extends Controller
      */
     public function pageAddMembreAction(Request $request) {
 
+        /** @var BSUser $user */
+        $user               = $this->getUser();
         $config             = $this->get('netbs.fichier.config');
         $infos              = new CirculaireMembre();
         $em                 = $this->get('doctrine.orm.entity_manager');
@@ -45,7 +49,12 @@ class MembreController extends Controller
 
             $membre     = $infos->getMembre();
             $famille    = $infos->generateFamille();
+
+            if($user->hasRole('ROLE_SG'))
+                $famille->setValidity(BaseFamille::VALIDE);
+
             $famille->addMembre($membre);
+
             $em->persist($famille);
             $em->flush();
 

@@ -4,15 +4,16 @@ namespace SauvabelinBundle\Model;
 
 use NetBS\FichierBundle\Entity\Adresse;
 use NetBS\FichierBundle\Entity\Attribution;
+use NetBS\FichierBundle\Entity\ContactInformation;
 use NetBS\FichierBundle\Entity\Email;
 use NetBS\FichierBundle\Entity\Famille;
 use NetBS\FichierBundle\Entity\Fonction;
 use NetBS\FichierBundle\Entity\Geniteur;
 use NetBS\FichierBundle\Entity\Groupe;
 use NetBS\FichierBundle\Entity\Telephone;
+use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Mapping\Personne;
 use SauvabelinBundle\Entity\BSMembre;
-use SauvabelinBundle\Entity\Membre;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\GroupSequenceProviderInterface;
 
@@ -228,19 +229,23 @@ class CirculaireMembre implements GroupSequenceProviderInterface
         ];
     }
 
+    /**
+     * @return Famille
+     */
     public function generateFamille() {
 
         if($this->famille)
             return $this->famille;
 
         $famille    = new Famille();
+        $famille->setContactInformation(new ContactInformation());
         $famille->setNom($this->nom);
         $adresse    = new Adresse();
         $adresse->setRue($this->adresse)
             ->setNpa($this->npa)
             ->setLocalite($this->localite);
 
-        $famille->setAdresse($adresse);
+        $famille->addAdresse($adresse);
 
         if($this->telephone)
             $famille->addTelephone(new Telephone($this->telephone));
@@ -250,25 +255,32 @@ class CirculaireMembre implements GroupSequenceProviderInterface
 
         if($this->r1prenom) {
             $geniteur   = new Geniteur();
+
+            $geniteur->setContactInformation(new ContactInformation());
             $geniteur->setProfession($this->r1profession)
+                ->setStatut($this->r1statut)
                 ->setSexe($this->r1sexe)
                 ->setPrenom($this->r1prenom)
-                ->setStatut($this->r1statut)
                 ->setNom($this->r1nom);
 
-            $geniteur->setAdresse((new Adresse())->setRue($this->r1adresse)
-                    ->setNpa($this->r1npa)
-                    ->setLocalite($this->r1localite));
+            if(!empty($this->r1adresse) && !empty($this->r1npa) && !empty($this->r1localite))
+                $geniteur->addAdresse((new Adresse())->setRue($this->r1adresse)
+                        ->setNpa($this->r1npa)
+                        ->setLocalite($this->r1localite));
 
-            if($this->r1telephone)
+            if(!empty($this->r1telephone))
                 $geniteur->addTelephone(new Telephone($this->r1telephone));
-            if($this->r1email)
+            if(!empty($this->r1email))
                 $geniteur->addEmail(new Email($this->r1email));
 
             $famille->addGeniteur($geniteur);
         }
 
         if($this->r2prenom) {
+
+            $geniteur   = new Geniteur();
+
+            $geniteur->setContactInformation(new ContactInformation());
             $geniteur   = new Geniteur();
             $geniteur->setProfession($this->r2profession)
                 ->setSexe($this->r2sexe)
@@ -276,13 +288,14 @@ class CirculaireMembre implements GroupSequenceProviderInterface
                 ->setStatut($this->r2statut)
                 ->setNom($this->r2nom);
 
-            $geniteur->setAdresse((new Adresse())->setRue($this->r2adresse)
+            if(!empty($this->r2adresse) && !empty($this->r2npa) && !empty($this->r2localite))
+            $geniteur->addAdresse((new Adresse())->setRue($this->r2adresse)
                 ->setNpa($this->r2npa)
                 ->setLocalite($this->r2localite));
 
-            if($this->r2telephone)
+            if(!empty($this->r2telephone))
                 $geniteur->addTelephone(new Telephone($this->r2telephone));
-            if($this->r2email)
+            if(!empty($this->r2email))
                 $geniteur->addEmail(new Email($this->r2email));
 
             $famille->addGeniteur($geniteur);
@@ -294,8 +307,10 @@ class CirculaireMembre implements GroupSequenceProviderInterface
     public function getMembre() {
 
         $membre = new BSMembre();
+        $membre->setContactInformation(new ContactInformation());
         $membre
-            ->setNumero($this->numero)
+            ->setNumeroBS($this->numero)
+            ->setStatut(BaseMembre::INSCRIT)
             ->setNaissance($this->naissance)
             ->setPrenom($this->prenom)
             ->setSexe($this->sexe);

@@ -15,7 +15,7 @@ class Importator
 
     public function __construct()
     {
-        $this->pdo = new \PDO("mysql:dbname=c0import;host=localhost", "root", "Eipf+Lb04");
+        $this->pdo = new \PDO("mysql:dbname=sauvabelin_fich;host=localhost", "root", "");
     }
 
     /**

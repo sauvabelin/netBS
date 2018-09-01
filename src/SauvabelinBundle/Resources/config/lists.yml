@@ -29,3 +29,9 @@ services:
         class: SauvabelinBundle\ListModel\LatestAccountsCreatedList
         tags:
             - { name: netbs.list.model }
+
+    sauvabelin.automatic.gars_vieux:
+        class: SauvabelinBundle\Automatics\GarsQuiBougentAutomatic
+        tags:
+          - { name: netbs.list.model }
+          - { name: netbs.automatic_list }

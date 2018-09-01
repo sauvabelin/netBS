@@ -29,30 +29,30 @@ class DynamicListController extends Controller
     }
 
     /**
-     * @Route("/remove-item/{id}/{itemId}", name="netbs.core.dynamics_list.remove_item")
+     * @Route("/remove-items/{id}", name="netbs.core.dynamics_list.remove_items")
+     * @param Request $request
      * @param DynamicList $list
-     * @param $itemId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function removeElementFromListAction(DynamicList $list, $itemId) {
+    public function removeElementFromListAction(Request $request, DynamicList $list) {
 
         $em     = $this->get('doctrine.orm.entity_manager');
+        $ids    = json_decode($request->get('data'), true)['removed_ids'];
+        $ids    = array_map(function($id) {return intval($id);}, $ids);
 
         if(!$this->isGranted(CRUD::UPDATE, $list))
             throw $this->createAccessDeniedException();
 
-        foreach($list->getItems() as $item) {
-            if($item->getId() == $itemId) {
+        foreach($list->getItems() as $item)
+            if(in_array($item->getId(), $ids))
                 $list->removeItem($item);
-                break;
-            }
-        }
 
         $em->persist($list);
         $em->flush();
 
+        $this->addFlash("primary", count($ids) . " éléments retirés de la liste");
         return $this->redirectToRoute('netbs.core.dynamics_list.manage_list', array('id' => $list->getId()));
     }
 

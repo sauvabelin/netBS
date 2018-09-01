@@ -3,10 +3,7 @@
 namespace NetBS\FichierBundle\Listener;
 
 use Doctrine\ORM\EntityManager;
-use NetBS\CoreBundle\Block\CardBlock;
 use NetBS\CoreBundle\Event\PreRenderLayoutEvent;
-use NetBS\FichierBundle\Mapping\BaseMembre;
-use NetBS\SecureBundle\Mapping\BaseUser;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
