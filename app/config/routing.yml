@@ -28,3 +28,10 @@ netbs_api:
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.yaml"
+
+home:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: /netBS
+        permanent: true
