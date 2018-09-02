@@ -9,7 +9,7 @@
         {% set groupe   = section.groupe %}
         {% set membres  = section.membres %}
 
-        <div style="page-break-after: {% if not loop.last %}always{% else %}auto{% endif %}; width:100%;">
+        <div style="page-break-after: auto; width:100%;">
 
             <h4>{% if loop.first %}EM{% else %}{{ groupe.nom }}{% endif %}</h4>
 
@@ -47,9 +47,9 @@
 
                 {% endfor %}
             </table>
-        </div>
 
-        {% if not loop.last %}<hr/>{% endif %}
+            {% if not loop.last %}<hr/>{% endif %}
+        </div>
 
     {% endfor %}
 
