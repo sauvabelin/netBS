@@ -8,6 +8,13 @@ services:
         arguments:
             - "%pheanstalk_url%"
 
+    sauvabelin.exporter.liste_unite:
+        class: SauvabelinBundle\Exporter\PDFUnite
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.exporter }
+
     sauvabelin.isp_config_manager:
         class: SauvabelinBundle\Service\ISPConfigManager
         arguments:
@@ -61,6 +68,16 @@ services:
             - "@doctrine.orm.entity_manager"
         tags:
             - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: extendsDashboard }
+
+    sauvabelin.listener.page_groupe_layout:
+        class: SauvabelinBundle\Listener\PageGroupeListener
+        arguments:
+            - "@request_stack"
+            - "@netbs.params"
+            - "@twig"
+        tags:
+            - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: extendsPageGroupe }
+
 
     sauvabelin.voter.mailing_lists:
         class: SauvabelinBundle\Voter\MailingListVoter

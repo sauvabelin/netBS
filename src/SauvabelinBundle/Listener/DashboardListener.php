@@ -41,14 +41,14 @@ class DashboardListener
         $row->addColumn(0, 4, 6, 12)->setBlock(CardBlock::class, array(
             'title'     => 'News',
             'subtitle'  => 'Dernières news publiées',
-            'template'  => '@Sauvabelin/news/news.block.twig',
+            'template'  => '@Sauvabelin/block/news.block.twig',
             'params'    => ['news' => $news]
         ));
 
         $row->addColumn(1, 4, 6, 12)->setBlock(CardBlock::class, array(
             'title'     => 'Calendrier BS',
             'subtitle'  => 'Calendriers internes et publiques',
-            'template'  => '@Sauvabelin/dashboard/calendrier.block.twig'
+            'template'  => '@Sauvabelin/block/calendrier.block.twig'
         ));
 
         $row->addColumn(2, 4, 6, 12)->setBlock(ListBlock::class, [

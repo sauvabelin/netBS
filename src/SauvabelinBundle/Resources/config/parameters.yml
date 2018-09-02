@@ -13,3 +13,5 @@ bs:
     groupe.branche_eclaireuses_id:      -1
     groupe.branche_louveteaux_id:       -1
     groupe.branche_louvettes_id:        -1
+
+    groupe_categorie.unite_id:          -1

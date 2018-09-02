@@ -23,6 +23,14 @@ class LoadGroups extends BSFixture implements OrderedFixtureInterface
             $categories[$category] = $item;
         }
 
+        $catUpdates = [
+            'groupe_categorie.unite_id'     => "unité"
+        ];
+
+        foreach($catUpdates as $key => $fn)
+            $this->loadParameterWithId($manager, 'bs', $key,
+                $manager->getRepository('NetBSFichierBundle:GroupeCategorie')->findOneBy(array('nom' => $fn)));
+
         foreach($data['types'] as $name => $type) {
 
             $item   = $config->createGroupeType();
