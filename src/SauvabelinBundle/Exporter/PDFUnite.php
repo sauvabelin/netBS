@@ -60,9 +60,14 @@ class PDFUnite extends PDFExporter
             if($groupe->getValidity() === BaseGroupe::OUVERT)
                 $sections[] = ['groupe' => $groupe, 'membres' => $this->orderSection($groupe)];
 
+        $total      = 0;
+        foreach($sections as $section)
+            $total += count($section['membres']);
+
         return $this->twig->render('@Sauvabelin/pdf/liste_unite.pdf.twig', array(
             'sections'  => $sections,
-            'groupe'    => $unite
+            'groupe'    => $unite,
+            'total'     => $total
         ));
     }
 

@@ -11,7 +11,7 @@
 
         <div style="page-break-after: auto; width:100%;">
 
-            <h4>{% if loop.first %}EM{% else %}{{ groupe.nom }}{% endif %}</h4>
+            <h4>{% if loop.first and sections|length > 1 %}EM{% else %}{{ groupe.nom }}{% endif %}</h4>
 
             <table class="table" style="width:100%;">
                 <tr>
@@ -50,6 +50,8 @@
 
             {% if not loop.last %}<hr/>{% endif %}
         </div>
+
+        <h5>Total: {{ total }} membres</h5>
 
     {% endfor %}
 
