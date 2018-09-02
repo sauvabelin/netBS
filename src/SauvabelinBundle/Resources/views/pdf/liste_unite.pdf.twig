@@ -13,15 +13,15 @@
 
             <h4>{% if loop.first %}EM{% else %}{{ groupe.nom }}{% endif %}</h4>
 
-            <table class="table">
+            <table class="table" style="width:100%;">
                 <tr>
-                    <th style="width:16%">Nom</th>
-                    <th style="width:16%">Prénom</th>
-                    <th style="width:10%">Naissance</th>
-                    <th style="width:23%">Rue</th>
-                    <th style="width:6%">Npa</th>
-                    <th style="width:16%">Localité</th>
-                    <th style="width:12%">Téléphone</th>
+                    <th style="text-align:left;font-size:12px;width:16%">Nom</th>
+                    <th style="text-align:left;font-size:12px;width:16%">Prénom</th>
+                    <th style="text-align:left;font-size:12px;width:10%">Naissance</th>
+                    <th style="text-align:left;font-size:12px;width:23%">Rue</th>
+                    <th style="text-align:left;font-size:12px;width:6%">Npa</th>
+                    <th style="text-align:left;font-size:12px;width:16%">Localité</th>
+                    <th style="text-align:left;font-size:12px;width:12%">Téléphone</th>
                 </tr>
 
                 {% for membre in membres %}
@@ -30,19 +30,19 @@
                     {% set telephone        = membre.sendableTelephone %}
                     {% set email            = membre.sendableEmail %}
                     <tr>
-                        <td>{{ membre.famille.nom }}</td>
-                        <td>{{ membre.prenom }}</td>
-                        <td>{{ membre.naissance|date("d.m.Y") }}</td>
+                        <td style="font-size:11px;">{{ membre.famille.nom }}</td>
+                        <td style="font-size:11px;">{{ membre.prenom }}</td>
+                        <td style="font-size:11px;">{{ membre.naissance|date("d.m.Y") }}</td>
                         {% if sendingAdresse %}
-                            <td>{{ sendingAdresse.rue }}</td>
-                            <td>{{ sendingAdresse.npa }}</td>
-                            <td>{{ sendingAdresse.localite }}</td>
+                            <td style="font-size:11px;">{{ sendingAdresse.rue }}</td>
+                            <td style="font-size:11px;">{{ sendingAdresse.npa }}</td>
+                            <td style="font-size:11px;">{{ sendingAdresse.localite }}</td>
                         {% else %}
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td style="font-size:11px;"></td>
+                            <td style="font-size:11px;"></td>
+                            <td style="font-size:11px;"></td>
                         {% endif %}
-                        <td>{% if telephone %}{{ telephone.telephone }}{% endif %}</td>
+                        <td style="font-size:11px;">{% if telephone %}{{ telephone.telephone }}{% endif %}</td>
                     </tr>
 
                 {% endfor %}
