@@ -55,8 +55,10 @@ class PDFUnite extends PDFExporter
         $unite      = $unites[0];
         $sections   = [];
 
+        /** @var BaseGroupe $groupe */
         foreach(array_merge([$unite], $unite->getEnfants()->toArray()) as $groupe)
-            $sections[] = ['groupe' => $groupe, 'membres' => $this->orderSection($groupe)];
+            if($groupe->getValidity() === BaseGroupe::OUVERT)
+                $sections[] = ['groupe' => $groupe, 'membres' => $this->orderSection($groupe)];
 
         return $this->twig->render('@Sauvabelin/pdf/liste_unite.pdf.twig', array(
             'sections'  => $sections,
