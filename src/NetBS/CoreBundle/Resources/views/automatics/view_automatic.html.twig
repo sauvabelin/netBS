@@ -25,16 +25,12 @@
             </div>
 
             <div class="col-9">
-                <div class="card {% if form.vars.submitted and form.vars.valid %}card-table{% endif %}">
+                <div class="card {% if form and form.vars.submitted and form.vars.valid %}card-table{% endif %}">
                     <div class="card-header">
                         <h5 class="card-title">Résultats</h5>
                     </div>
                     <div class="card-body">
-                        {% if form is null %}
-                            {{ render_list(model, 'netbs') }}
-                        {% endif %}
-
-                        {% if form.vars.submitted and form.vars.valid %}
+                        {% if form is null or (form.vars.submitted and form.vars) %}
                             {{ render_list(model, 'netbs') }}
                         {% elseif not form.vars.submitted %}
                             <div class="alert alert-primary m-0">Veuillez choisir des valeurs à soumettre</div>

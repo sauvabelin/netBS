@@ -1,8 +1,8 @@
-function netBSTable(tableId, mainCheckboxId, modelAlias, updateCountClass) {
+function netBSTable(tableId, dbInstance, mainCheckboxId, modelAlias, updateCountClass) {
 
     this.modelAlias         = modelAlias;
     this.updateCountClass   = updateCountClass;
-    this.table              = $('#' + tableId).DataTable();
+    this.table              = dbInstance;
 
     var nbs                 = this;
 

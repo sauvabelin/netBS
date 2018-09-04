@@ -23,8 +23,11 @@ class LoadGroups extends BSFixture implements OrderedFixtureInterface
             $categories[$category] = $item;
         }
 
+        $manager->flush();
+
         $catUpdates = [
-            'groupe_categorie.unite_id'     => "unité"
+            'groupe_categorie.sous_unite_id'    => 'sous-unité',
+            'groupe_categorie.unite_id'         => "unité"
         ];
 
         foreach($catUpdates as $key => $fn)

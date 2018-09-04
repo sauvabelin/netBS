@@ -2,7 +2,7 @@
 
 namespace NetBS\CoreBundle\DependencyInjection\Compiler;
 
-use NetBS\CoreBundle\Model\ConfigurableAutomaticInterface;
+use NetBS\CoreBundle\Model\BaseAutomatic;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Reference;
@@ -16,7 +16,7 @@ class RegisterAutomaticListsPass implements CompilerPassInterface
         foreach($container->findTaggedServiceIds('netbs.automatic_list') as $id => $params) {
 
             $class = $container->getDefinition($id)->getClass();
-            if(!in_array(ConfigurableAutomaticInterface::class, class_implements($class)))
+            if(!is_subclass_of($class, BaseAutomatic::class))
                 throw new \Exception("Automatic list $id must implement AutomaticListInterface !");
 
             $manager->addMethodCall('registerAutomatic', [new Reference($id)]);

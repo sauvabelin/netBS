@@ -2,6 +2,7 @@
 
 namespace NetBS\CoreBundle\ListModel\Column;
 
+use NetBS\ListBundle\Column\BaseColumn;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ArrayColumn extends PopoverColumn
@@ -35,6 +36,7 @@ class ArrayColumn extends PopoverColumn
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-        $resolver->setRequired(self::FORMATTING);
+        $resolver->setRequired(self::FORMATTING)
+            ->setDefault(BaseColumn::SORTABLE, false);
     }
 }

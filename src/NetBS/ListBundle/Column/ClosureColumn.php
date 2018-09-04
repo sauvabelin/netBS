@@ -16,6 +16,8 @@ class ClosureColumn extends BaseColumn
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver
             ->setRequired(self::CLOSURE);
     }

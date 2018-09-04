@@ -39,7 +39,10 @@ class PopoverColumn extends BaseColumn
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver
+            ->setDefault(BaseColumn::SORTABLE, false)
             ->setDefault(self::PLACEMENT, 'top')
             ->setDefault(self::TRIGGER, 'hover')
             ->setDefault(self::TYPE, 'popover')

@@ -143,6 +143,7 @@ class ListEngine
             $resolver   = new OptionsResolver();
             $column->configureOptions($resolver);
             $params     = $resolver->resolve($columnInfo->getParams());
+            $columnInfo->setParams($params);
 
             $i = 0;
             foreach($items as $item)

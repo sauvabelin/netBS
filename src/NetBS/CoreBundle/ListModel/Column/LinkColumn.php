@@ -20,7 +20,10 @@ class LinkColumn extends BaseColumn
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver
+            ->setDefault(BaseColumn::SORTABLE, false)
             ->setRequired(self::ROUTE)
             ->setRequired(self::LABEL);
     }

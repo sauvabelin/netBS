@@ -37,7 +37,10 @@ class LoadFonctions extends BSFixture
             'fonction.commandant_id'            => 'commandant',
             'fonction.secretaire_general_id'    => 'secrétaire général',
             'fonction.eclaireur_id'             => 'éclaireur ou éclaireuse',
-            'fonction.louveteau_id'             => 'louveteau ou louvette'
+            'fonction.louveteau_id'             => 'louveteau ou louvette',
+            'fonction.cp_id'                    => 'chef de patrouille',
+            'fonction.cl_id'                    => 'chef louveteaux/louvettes',
+            'fonction.rouge_id'                 => 'routier'
         ];
 
         foreach($updates as $key => $fn)

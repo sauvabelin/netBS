@@ -30,6 +30,8 @@ services:
 
     netbs.list.column.datetime_column:
         class: NetBS\ListBundle\Column\DateTimeColumn
+        arguments:
+            - "@netbs.params"
         tags:
             - { name: netbs.list.column }
 

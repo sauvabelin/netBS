@@ -6,6 +6,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class BaseColumn
 {
+    const SORTABLE  = 'sortable';
+
     /**
      * Return content related to the given object with the given params
      * @param object $item
@@ -20,5 +22,7 @@ abstract class BaseColumn
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver
+            ->setDefault('sortable', true);
     }
 }

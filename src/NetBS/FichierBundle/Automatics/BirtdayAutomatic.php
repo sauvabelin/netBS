@@ -20,7 +20,7 @@ class BirtdayAutomatic extends BaseAutomatic implements ConfigurableAutomaticInt
      */
     public function getName()
     {
-        return "Anniversaire";
+        return "Anniversaires";
     }
 
     /**
@@ -28,7 +28,7 @@ class BirtdayAutomatic extends BaseAutomatic implements ConfigurableAutomaticInt
      */
     public function getDescription()
     {
-        return "Retournes la liste des membres ayant leur anniversaire dans l'intervalle compris de dates indiquées";
+        return "Retournes la liste des gens nés entre deux jours donnés pour leurs anniversaires";
     }
 
     /**

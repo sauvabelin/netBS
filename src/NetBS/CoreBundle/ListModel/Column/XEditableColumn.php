@@ -22,6 +22,8 @@ class XEditableColumn extends BaseColumn
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver
             ->setRequired(self::TYPE_CLASS)
             ->setRequired(self::PROPERTY)

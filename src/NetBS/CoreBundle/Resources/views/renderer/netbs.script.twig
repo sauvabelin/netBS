@@ -1,10 +1,23 @@
 
+{% set disableSortColumns       = [] %}
+{% for column in table.configuration.columns %}
+    {% if not column.params.sortable %}
+        {% set disableSortColumns = disableSortColumns|merge([loop.index]) %}
+    {% endif %}
+{% endfor %}
+
 <script type="text/javascript">
 
     $(document).ready(function() {
 
         var {{ tableId }} = $('#{{ tableId }}').DataTable({
-            info: false
+            info: false,
+            columns: [
+                {orderable: false},
+                {% for column in table.configuration.columns %}
+                {orderable: {% if loop.index in disableSortColumn %}true{% endif %} }{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ]
         });
 
 

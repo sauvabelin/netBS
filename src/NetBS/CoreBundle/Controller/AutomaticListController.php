@@ -47,11 +47,13 @@ class AutomaticListController extends Controller
 
             if($form->isValid() && $form->isSubmitted())
                 $model->_setAutomaticData($form->getData());
+
+            $form = $form->createView();
         }
 
         return $this->render('@NetBSCore/automatics/view_automatic.html.twig', array(
             'model' => $model,
-            'form'  => $form->createView()
+            'form'  => $form
         ));
     }
 }

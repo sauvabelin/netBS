@@ -67,6 +67,30 @@ class PostInstallCommand extends ContainerAwareCommand
             $groupe->updateNCGroupName();
 
         $em->flush();
+
+        //Mise à jour correcte des attributions des clans et des rouges
+        $clans  = $em->getRepository('SauvabelinBundle:BSGroupe')->findOneBy(array('nom' => 'quatrième branche'))
+            ->getEnfants();
+
+        $rouges = $em->getRepository('SauvabelinBundle:BSGroupe')->findOneBy(array('nom' => 'troisième branche'))
+            ->getEnfants();
+
+        $rouge  = $em->getRepository('NetBSFichierBundle:Fonction')->findOneBy(array('abbreviation' => 'rouge'));
+        $gris   = $em->getRepository('NetBSFichierBundle:Fonction')->findOneBy(array('abbreviation' => 'membre clan'));
+
+        /** @var BSGroupe $clan */
+        foreach($clans as $clan)
+            foreach($clan->getActivesAttributions() as $attribution)
+                if($attribution->getFonction()->getNom() === "routier")
+                    $attribution->setFonction($gris);
+
+        /** @var BSGroupe $troupe */
+        foreach($rouges as $troupe)
+            foreach($troupe->getActivesAttributions() as $attribution)
+                if($attribution->getFonction()->getNom() === "éclaireur ou éclaireuse")
+                    $attribution->setFonction($rouge);
+
+        $em->flush();
     }
 
     private function getNextcloudUserGroupsViewSQL() {

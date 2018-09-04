@@ -35,3 +35,10 @@ services:
         tags:
           - { name: netbs.list.model }
           - { name: netbs.automatic_list }
+
+
+    sauvabelin.automatic.test_entree:
+        class: SauvabelinBundle\Automatics\TestDentreeAutomatic
+        tags:
+          - { name: netbs.list.model }
+          - { name: netbs.automatic_list }

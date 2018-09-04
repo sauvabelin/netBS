@@ -20,7 +20,10 @@ class ActionColumn extends BaseColumn
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault(self::ACTIONS_KEY, []);
+        parent::configureOptions($resolver);
+
+        $resolver->setDefault(self::ACTIONS_KEY, [])
+            ->setDefault(BaseColumn::SORTABLE, false);
     }
 
     /**

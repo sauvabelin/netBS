@@ -52,7 +52,7 @@ class DynamicListController extends Controller
         $em->persist($list);
         $em->flush();
 
-        $this->addFlash("primary", count($ids) . " éléments retirés de la liste");
+        $this->addFlash("info", count($ids) . " éléments retirés de la liste");
         return $this->redirectToRoute('netbs.core.dynamics_list.manage_list', array('id' => $list->getId()));
     }
 
@@ -162,6 +162,8 @@ class DynamicListController extends Controller
         if($form->isSubmitted() && $form->isValid()) {
 
             $list = $dynamics->saveNewList($form->getData());
+
+            $this->addFlash("info", "Liste {$list->getName()} créée avec succès!");
             return $this->json([
                 'listId' =>$list->getId(),
                 'class'  => $list->getItemsClass()

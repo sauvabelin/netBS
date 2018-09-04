@@ -37,12 +37,21 @@ class DynamicMembreList extends AbstractDynamicListModel
         $configuration
             ->addColumn('Prénom', null, HelperColumn::class)
             ->addColumn('Date de naissance', 'naissance', DateTimeColumn::class)
-            ->addColumn('actuellement', function(BaseMembre $membre) {
+            ->addColumn('Fonction', function(BaseMembre $membre) {
 
                 $attr   = $membre->getActiveAttribution();
                 if($attr) {
-                    return $attr->getFonction()->getNom() . " - " . $attr->getGroupe()->getNom();
+                    return $attr->getFonction()->getNom();
                 }
+
+                return "-";
+
+            }, SimpleColumn::class)
+            ->addColumn('Unité', function(BaseMembre $membre) {
+
+                $attr   = $membre->getActiveAttribution();
+                if($attr)
+                    return $attr->getGroupe()->getNom();
 
                 return "-";
 

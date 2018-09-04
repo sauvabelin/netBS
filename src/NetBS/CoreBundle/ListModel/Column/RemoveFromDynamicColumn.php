@@ -17,7 +17,10 @@ class RemoveFromDynamicColumn extends BaseColumn
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired('listId');
+        parent::configureOptions($resolver);
+
+        $resolver->setRequired('listId')
+            ->setDefault(BaseColumn::SORTABLE, false);
     }
 
     /**

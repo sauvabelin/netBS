@@ -27,7 +27,7 @@
             {% endfor %}
 
             <div class="col-2">
-                <a class="card bg-success text-white" href="#" data-modal data-modal-url="{{ path('netbs.core.dynamic_list.modal_add') }}">
+                <a class="card bg-success text-white" href="#" id="list_create">
                     <div class="card-header">
                         <h5 class="card-title">Nouvelle liste</h5>
                     </div>
@@ -38,7 +38,28 @@
             </div>
 
         </div>
-
     </div>
+
+    {% set scriptum %}
+    <script>
+        var modal = new BSModal("{{ path('netbs.core.dynamic_list.modal_add') }}");
+
+        modal.handleSubmit = function(data, status, response) {
+
+            var code    = parseInt(response.status);
+
+            if(code === 202)
+                location.reload();
+            else
+                this.remove();
+        };
+
+        document.getElementById('list_create').addEventListener('click', function() {
+            modal.launch();
+        });
+    </script>
+    {% endset %}
+
+    {{ registerScript(scriptum) }}
 
 {% endblock %}

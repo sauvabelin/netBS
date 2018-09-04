@@ -1,5 +1,12 @@
 services:
 
+    form.extension.errors:
+        class: NetBS\CoreBundle\Form\FormErrorExtension
+        arguments:
+            - "@session"
+        tags:
+            - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType }
+
     form.type.datepicker:
         class: NetBS\CoreBundle\Form\Type\DatepickerType
         arguments:
