@@ -2,7 +2,6 @@
 
 namespace SauvabelinBundle\Command;
 
-use GuzzleHttp\Exception\ClientException;
 use NetBS\CoreBundle\Utils\StrUtil;
 use NextcloudApiWrapper\Wrapper;
 use Sabre\DAV\Client;
@@ -48,6 +47,9 @@ class InitNextcloudCommand extends ContainerAwareCommand
         $io             = $this->io;
         $em             = $this->getContainer()->get('doctrine.orm.entity_manager');
         $this->client   = $this->getContainer()->get('webdav.nextcloud_client');
+
+        $this->client->addCurlSetting(CURLOPT_SSL_VERIFYHOST, false);
+        $this->client->addCurlSetting(CURLOPT_SSL_VERIFYPEER, false);
 
         $io->title("Building shared directories");
         //Chargement des dossiers partagés pour les différents groupes
