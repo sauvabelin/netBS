@@ -21,6 +21,7 @@ class MainMenuListener
     public function onMenuConfigure(ExtendMainMenuEvent $event)
     {
         /** @var BSUser $user */
+        /*
         $user       = $this->storage->getToken()->getUser();
 
         if($user->hasRole("ROLE_MANAGE_GALERIE")) {
@@ -31,5 +32,6 @@ class MainMenuListener
 
             $submenu->addSubLink("Administration", "netbs.galerie.admin.dashboard");
         }
+        */
     }
 }
