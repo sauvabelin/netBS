@@ -45,6 +45,21 @@ class LoadGroups extends BSFixture implements OrderedFixtureInterface
             $types[$name] = $item;
         }
 
+        $manager->flush();
+
+        $typesUpdates   = [
+            'groupe_type.troupe_id'         => 'troupe',
+            'groupe_type.meute_id'          => 'meute',
+            'groupe_type.clan_id'           => 'clan',
+            'groupe_type.association_id'    => 'association',
+            'groupe_type.edc_id'            => 'équipe de commandement',
+            'groupe_type.equipe_interne_id' => 'équipe interne',
+        ];
+
+        foreach($typesUpdates as $key => $fn)
+            $this->loadParameterWithId($manager, 'bs', $key,
+                $manager->getRepository('NetBSFichierBundle:GroupeType')->findOneBy(array('nom' => $fn)));
+
         $this->mapGroup($manager, $config, $types, $data['unites']);
         $manager->flush();
 

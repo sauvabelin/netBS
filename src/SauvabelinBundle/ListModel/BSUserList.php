@@ -26,6 +26,7 @@ class BSUserList extends UsersList
         ];
 
         $configuration
+
             ->addColumn('Accès nextcloud', null, XEditableColumn::class, [
             XEditableColumn::PROPERTY       => 'nextcloudAccount',
             XEditableColumn::TYPE_CLASS     => SwitchType::class

@@ -34,6 +34,7 @@ parameters:
     pheanstalk_url: 127.0.0.1
 
     nextcloud_webdav_uri: http://localhost/nextcloud/remote.php/webdav/
+    nextcloud_ocs_uri: http://localhost/nextcloud/ocs/
     nextcloud_username: null
     nextcloud_password: null
 

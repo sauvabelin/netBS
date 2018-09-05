@@ -44,7 +44,7 @@ types:
     association:
         cat: association
         effectifs: 1
-    adabs:
+    migration:
         cat: association
         effectifs: 1
     conseil des anciens:
@@ -55,11 +55,11 @@ types:
 unites:
 
     migration:
-        model: association
+        model: migration
     APMBS:
         model: association
     ADABS:
-        model: adabs
+        model: association
     conseil des anciens:
         model: conseil des anciens
 

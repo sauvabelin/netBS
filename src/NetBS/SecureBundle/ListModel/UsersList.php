@@ -28,10 +28,7 @@ class UsersList extends BaseListModel
      */
     protected function buildItemsList()
     {
-        $this->entityManager->getRepository('SauvabelinBundle:BSMembre')->findAll();
-
         return $this->entityManager->getRepository($this->getManagedItemsClass())->createQueryBuilder('u')
-            ->addSelect()
             ->innerJoin('u.membre', 'm')
             ->join('u.roles', 'r')
             ->orderBy('m.nom', 'ASC')
@@ -71,9 +68,7 @@ class UsersList extends BaseListModel
                     $html .= " <span class='label label-danger'>Désactivé</span>";
                 return $html;
             }, SimpleColumn::class)
-            ->addColumn("ID BDD", 'id', SimpleColumn::class)
             ->addColumn("E-mail", 'email', SimpleColumn::class)
-            ->addColumn("Membre lié", 'membre', HelperColumn::class)
             ->addColumn("Compte activé", null, XEditableColumn::class, array(
                 XEditableColumn::PROPERTY   => 'isActive',
                 XEditableColumn::TYPE_CLASS => SwitchType::class,

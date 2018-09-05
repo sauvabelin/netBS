@@ -53,6 +53,9 @@ class PostInstallCommand extends ContainerAwareCommand
             $this->getApplication()->find('sauvabelin:import:wng')->run(new ArrayInput([]), $output);
         }
 
+        $io->writeln("Creation de la vue SQL nextclouf groups");
+        $em->getConnection()->exec($this->getNextcloudGroupsViewSQL());
+
         $io->writeln("Creation de la vue SQL nextcloud user-groups");
         $em->getConnection()->exec($this->getNextcloudUserGroupsViewSQL());
 
@@ -93,6 +96,29 @@ class PostInstallCommand extends ContainerAwareCommand
         $em->flush();
     }
 
+    private function getNextcloudGroupsViewSQL() {
+
+        return <<<EOT
+CREATE OR REPLACE VIEW nextcloud_groups AS
+SELECT g.id AS group_id, g.nom, g.nc_group_name FROM sauvabelin_netbs_groupes g
+INNER JOIN netbs_fichier_groupe_types gt
+	ON g.groupeType_id = gt.id
+WHERE gt.id IN (
+	SELECT p.value FROM netbs_core_parameters p
+    WHERE p.namespace = "bs"
+    AND p.paramKey IN (
+		"groupe_type.troupe_id",
+        "groupe_type.meute_id", 
+        "groupe_type.clan_id",
+        "groupe_type.association_id",
+        "groupe_type.edc_id",
+        "groupe_type.equipe_interne_id"
+	)
+);
+EOT;
+
+    }
+
     private function getNextcloudUserGroupsViewSQL() {
         return <<<EOT
 CREATE OR REPLACE VIEW nextcloud_user_groups AS
@@ -102,8 +128,18 @@ JOIN sauvabelin_netbs_membres m
   ON m.id = u.membre_id
 JOIN netbs_fichier_attributions a
   ON a.membre_id = m.id
-JOIN sauvabelin_netbs_groupes g
-  ON a.groupe_id = g.id
+JOIN nextcloud_groups g
+  ON (a.groupe_id = g.group_id) OR (
+  	(SELECT parent_id FROM sauvabelin_netbs_groupes sng WHERE sng.id = a.groupe_id) = g.group_id
+	AND a.fonction_id IN (
+		SELECT pr.value FROM netbs_core_parameters pr
+        WHERE pr.namespace = "bs"
+        AND pr.paramKey IN (
+			"fonction.cl_id",
+            "fonction.cp_id"
+        )
+	)
+)
 WHERE a.dateDebut < NOW()
 AND (a.dateFin IS NULL OR a.dateFin > NOW())
 AND g.nc_group_name IS NOT NULL

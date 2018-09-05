@@ -19,3 +19,10 @@ bs:
 
     groupe_categorie.unite_id:          -1
     groupe_categorie.sous_unite_id:     -1
+
+    groupe_type.troupe_id:              -1
+    groupe_type.meute_id:               -1
+    groupe_type.clan_id:                -1
+    groupe_type.association_id:         -1
+    groupe_type.edc_id:                 -1
+    groupe_type.equipe_interne_id:      -1

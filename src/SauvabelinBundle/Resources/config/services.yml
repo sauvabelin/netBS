@@ -3,6 +3,18 @@ imports:
 
 services:
 
+    nextcloud.wrapper.factory:
+        public: false
+        class: SauvabelinBundle\DependencyInjection\NextcloudWrapperFactory
+
+    nextcloud.wrapper:
+        class: NextcloudApiWrapper\Wrapper
+        factory: 'nextcloud.wrapper.factory:createWrapper'
+        arguments:
+            - "%nextcloud_ocs_uri%"
+            - "%nextcloud_username%"
+            - "%nextcloud_password%"
+
     pheanstalk:
         class: Pheanstalk\Pheanstalk
         arguments:

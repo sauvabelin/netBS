@@ -39,15 +39,15 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
         $stats      = $pheanstalk->statsTube('netbs.galerie.waiting');
         $amount     = $amount > intval($stats['current-jobs-ready']) ? intval($stats['current-jobs-ready']) : $amount;
 
+        /*
         $first      = memory_get_usage();
         $previous   = $first;
+        */
         for($i = 0; $i < $amount; $i++) {
 
             $job = $pheanstalk->watch('netbs.galerie.waiting')
                 ->ignore('default')
                 ->reserve();
-
-            dump($job->getData());
 
             $data           = json_decode($job->getData(), true);
             $node           = new NCNode($data);
@@ -60,6 +60,7 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
 
             $pheanstalk->delete($job);
 
+            /*
             $currentMemory  = memory_get_usage();
             $output->writeln("Iteration $i");
             $output->writeln("current memory usage: " . $this->printMemory($currentMemory));
@@ -67,6 +68,7 @@ class ConsumeNextcloudTaskCommand extends ContainerAwareCommand
             $output->writeln("memory gap from before: " . $this->printMemory($currentMemory - $previous));
             $output->writeln("------------------\n");
             $previous   = $currentMemory;
+            */
         }
     }
 
