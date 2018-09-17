@@ -10,6 +10,15 @@ services:
 
     netbs.mailer:
         class: NetBS\CoreBundle\Service\Mailer
+        arguments:
+            - "@netbs.core.mailer.config"
+            - "@twig"
+            - "@swiftmailer.mailer"
+
+    sauvabelin.serializer.news_normalizer:
+        class: NetBS\CoreBundle\Serializer\NewsNormalizer
+        tags:
+            - { name: serializer.normalizer }
 
     netbs.logger:
         class: NetBS\CoreBundle\Service\UserLogger

@@ -103,11 +103,6 @@ services:
         tags:
             - { name: form.type }
 
-    sauvabelin.serializer.news_normalizer:
-        class: SauvabelinBundle\Serializer\NewsNormalizer
-        tags:
-            - { name: serializer.normalizer }
-
 #    sauvabelin.subscriber.mailing_lists:
 #        class: SauvabelinBundle\Subscriber\MailingListSubscriber
 #        arguments:

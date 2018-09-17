@@ -1,8 +1,8 @@
 <?php
 
-namespace SauvabelinBundle\Serializer;
+namespace NetBS\CoreBundle\Serializer;
 
-use SauvabelinBundle\Entity\News;
+use NetBS\CoreBundle\Entity\News;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class NewsNormalizer implements NormalizerInterface
@@ -20,7 +20,7 @@ class NewsNormalizer implements NormalizerInterface
             'titre'     => $news->getTitre(),
             'contenu'   => $news->getContenu(),
             'user'      => $news->getUser()->__toString(),
-            'importante'=> $news->isImportante(),
+            'pinned'    => $news->isPinned(),
             'channel'   => [
                 'nom'   => $news->getChannel()->getNom(),
                 'color' => $news->getChannel()->getColor()

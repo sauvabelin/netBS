@@ -1,28 +1,24 @@
 <?php
 
-namespace SauvabelinBundle\ApiController;
+namespace NetBS\CoreBundle\ApiController;
 
-use SauvabelinBundle\Entity\BSUser;
+use NetBS\SecureBundle\Mapping\BaseUser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Class GalerieAPIController
- * @package GalerieBundle\Controller
- */
 class ApiAnnuaireController extends Controller
 {
     /**
      * @param Request $request
      * @return Response
-     * @Route("/annuaire", name="sauvabelin.api.get_annuaire")
+     * @Route("/annuaire", name="netbs.core.api.get_annuaire")
      */
     public function getDirectoryAction(Request $request) {
 
-        $query  = $this->get('doctrine.orm.entity_manager')->getRepository('SauvabelinBundle:BSUser')
+        $query  = $this->get('doctrine.orm.entity_manager')->getRepository($this->get('netbs.secure.config')->getUserClass())
             ->createQueryBuilder('u');
 
         $users = $query
@@ -34,7 +30,7 @@ class ApiAnnuaireController extends Controller
 
         $result = [];
 
-        /** @var BSUser $user */
+        /** @var BaseUser $user */
         foreach($users as $user) {
 
             $membre         = $user->getMembre();

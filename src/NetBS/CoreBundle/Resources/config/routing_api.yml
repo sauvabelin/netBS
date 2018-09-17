@@ -1,3 +1,8 @@
+net_bs_api_core:
+    resource: "@NetBSCoreBundle/ApiController/"
+    type:     annotation
+    prefix:   /core
+
 net_bs_api_secure:
     resource: "@NetBSSecureBundle/ApiController/"
     type:     annotation

@@ -64,9 +64,9 @@ class NewsController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("/add-edit-news/{id}", defaults={"id"=null}, name="netbs.core.news.edit_news")
+     * @Route("/modal-add-edit-news/{id}", defaults={"id"=null}, name="netbs.core.news.modal_edit_news")
      */
-    public function editNewsModalAction(Request $request, $id) {
+    public function modalAddEditNewsAction(Request $request, $id) {
 
         $em     = $this->get('doctrine.orm.entity_manager');
         $title  = $id ? "Modifier" : "Publier";
@@ -77,7 +77,7 @@ class NewsController extends Controller
         else
             $news->setUser($this->getUser());
 
-        $form   = $this->createForm(NewsType::class, $news, ['attr' => ['create' => !$id]]);
+        $form   = $this->createForm(NewsType::class, $news);
 
         $form->handleRequest($request);
 
@@ -86,16 +86,6 @@ class NewsController extends Controller
             /** @var News $news */
             $news       = $form->getData();
 
-            if(!$id || !$news->getImage()) {
-
-                /** @var UploadedFile $banniere */
-                $banniere = $news->getImage();
-                $filename = md5(uniqid()) . '.' . $banniere->guessExtension();
-                $banniere->move($this->getParameter('netbs.core.news.image_upload_path'), $filename);
-
-                $news->setImage($filename);
-            }
-
             $em->persist($news);
             $em->flush();
 
@@ -103,9 +93,9 @@ class NewsController extends Controller
             return Modal::refresh();
         }
 
-        return $this->render('@NetBSCore/news/add_edit_news.html.twig', [
+        return $this->render('@NetBSFichier/generic/add_generic.modal.twig', [
             'title' => $title . ' une news',
             'form'  => $form->createView()
-        ]);
+        ], Modal::renderModal($form));
     }
 }

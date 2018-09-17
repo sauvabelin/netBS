@@ -108,6 +108,9 @@ liip_imagine:
     data_loader: netbs_galerie
 
     filter_sets:
+        news:
+            cache: ~
+
         thumbnail:
             cache: netbs_cache_resolver
             quality: 75

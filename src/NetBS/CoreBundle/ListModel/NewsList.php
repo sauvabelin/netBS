@@ -66,17 +66,16 @@ class NewsList extends BaseListModel
                     return "<span class='badge' style='background:{$channel->getColor()};color:white'>{$channel->getNom()}</span>";
                 }
             ])
-            ->addColumn("Epinglée", null, XEditableColumn::class, [
-                XEditableColumn::PROPERTY   => "pinned",
-                XEditableColumn::TYPE_CLASS => SwitchType::class
-            ])
+            ->addColumn("Epinglée", function(News $news) {
+                return $news->isPinned() ? "<span class='badge badge-success'>Oui</span>" : "Non";
+            }, SimpleColumn::class)
             ->addColumn("Date", "createdAt", DateTimeColumn::class)
             ->addColumn("Publiée par", "user", HelperColumn::class)
             ->addColumn("Options", null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY   => [
                     ModalAction::class  => [
                         LinkAction::ROUTE   => function(News $news) {
-                            return $this->router->generate('netbs.core.news.edit_news', ['id' => $news->getId()]);
+                            return $this->router->generate('netbs.core.news.modal_edit_news', ['id' => $news->getId()]);
                         }
                     ],
 

@@ -24,13 +24,7 @@ class NewsType extends AbstractType
                 'label'         => 'Channel',
                 'class'         => NewsChannel::class,
                 'choice_label'  => "nom"
-            ]);
-
-        if($options['attr']['create'])
-            $builder
-            ->add('image', FileType::class, ['label' => "Image de bannière"]);
-
-        $builder
+            ])
             ->add('pinned', SwitchType::class, ['label' => "Epinglée"])
             ->add("titre", TextType::class, ['label' => "Titre"])
             ->add("contenu", TextareaType::class, ['label' => "Contenu"])

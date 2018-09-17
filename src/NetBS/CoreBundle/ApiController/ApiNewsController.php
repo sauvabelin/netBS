@@ -1,6 +1,6 @@
 <?php
 
-namespace SauvabelinBundle\ApiController;
+namespace NetBS\CoreBundle\ApiController;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -8,23 +8,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Class GalerieAPIController
- * @package GalerieBundle\Controller
- */
 class ApiNewsController extends Controller
 {
     /**
      * @param Request $request
      * @return Response
-     * @Route("/news", name="sauvabelin.api.get_news")
+     * @Route("/news", name="netbs.core.api.get_news")
      */
     public function getDirectoryAction(Request $request) {
 
         $amount = $this->getValue($request, 'amount', 5);
         $page   = $this->getValue($request, 'page', 0);
 
-        $news   = $this->get('doctrine.orm.entity_manager')->getRepository('SauvabelinBundle:News')
+        $news   = $this->get('doctrine.orm.entity_manager')->getRepository('NetBSCoreBundle:News')
             ->createQueryBuilder('n')
             ->setMaxResults($amount)
             ->setFirstResult(intval($page)*intval($amount))

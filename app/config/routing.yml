@@ -13,11 +13,6 @@ sauvabelin:
     type:     annotation
     prefix:   /netBS/bs
 
-sauvabelin_api:
-    resource: "@SauvabelinBundle/ApiController/"
-    type:     annotation
-    prefix:   /api/v1/netBS/bs
-
 netbs:
     resource: '@NetBSCoreBundle/Resources/config/routing.yml'
     prefix: /netBS

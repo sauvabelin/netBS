@@ -46,14 +46,6 @@ class News
     protected $user;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="image_path", type="string", length=255, nullable=true)
-     * @Assert\File(mimeTypes={"image/jpeg", "image/jpg"})
-     */
-    protected $image;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="pinned", type="boolean")
@@ -188,25 +180,6 @@ class News
     public function setPinned($pinned)
     {
         $this->pinned = $pinned;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param string $image
-     * @return News
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
 
         return $this;
     }
