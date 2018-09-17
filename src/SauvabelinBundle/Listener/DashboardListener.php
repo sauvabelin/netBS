@@ -32,18 +32,8 @@ class DashboardListener
             return;
 
         $config = $event->getConfigurator();
-        $row    = $config->addRow();
-        $news   = $this->manager->getRepository('SauvabelinBundle:News')->createQueryBuilder('n')
-            ->orderBy('n.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
 
-        $row->addColumn(0, 4, 5, 12)->setBlock(CardBlock::class, array(
-            'title'     => 'News',
-            'subtitle'  => 'Dernières news publiées',
-            'template'  => '@Sauvabelin/block/news.block.twig',
-            'params'    => ['news' => $news]
-        ));
+        $row    = $config->getRow(10);
 
         $row->addColumn(1, 8, 7, 12)->setBlock(CardBlock::class, array(
             'title'     => 'Calendrier BS',

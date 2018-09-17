@@ -1,12 +1,12 @@
 <?php
 
-namespace SauvabelinBundle\Voter;
+namespace NetBS\CoreBundle\Voter;
 
+use NetBS\CoreBundle\Entity\News;
+use NetBS\CoreBundle\Entity\NewsChannel;
 use NetBS\SecureBundle\Mapping\BaseUser;
 use NetBS\SecureBundle\Voter\CRUD;
 use NetBS\SecureBundle\Voter\NetBSVoter;
-use SauvabelinBundle\Entity\News;
-use SauvabelinBundle\Entity\NewsChannel;
 
 class NewsVoter extends NetBSVoter
 {

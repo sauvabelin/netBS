@@ -56,5 +56,8 @@ class NetBSCoreExtension extends Extension
 
             $container->setDefinition('netbs.core.mailer.channel_' . $alias, $definition);
         }
+
+        //News
+        $container->setParameter('netbs.core.news.image_upload_path', $config['news']['image_upload_path']);
     }
 }

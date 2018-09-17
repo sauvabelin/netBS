@@ -1,8 +1,8 @@
 <?php
 
-namespace SauvabelinBundle\Form;
+namespace NetBS\CoreBundle\Form;
 
-use SauvabelinBundle\Entity\NewsChannel;
+use NetBS\CoreBundle\Entity\NewsChannel;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;

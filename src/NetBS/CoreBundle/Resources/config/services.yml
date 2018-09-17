@@ -212,7 +212,7 @@ services:
         class: NetBS\CoreBundle\Listener\DashboardListener
         arguments:
             - "@request_stack"
-            - "@security.token_storage"
+            - "@doctrine.orm.entity_manager"
         tags:
             - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: preRender }
 

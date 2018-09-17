@@ -2,10 +2,10 @@
 
 {% set title = "Gestion des news" %}
 
-{% set addChannelAction %}<button class='btn btn-primary' data-modal data-modal-url='{{ path('sauvabelin.news.modal_add_channel') }}'>
+{% set addChannelAction %}<button class='btn btn-primary' data-modal data-modal-url='{{ path('netbs.core.news.modal_add_channel') }}'>
     Ajouter une channel</button>{% endset %}
 
-{% set addNewsAction %}<button class='btn btn-success' data-modal data-modal-url='{{ path('sauvabelin.news.edit_news') }}'>
+{% set addNewsAction %}<button class='btn btn-success' data-modal data-modal-url='{{ path('netbs.core.news.edit_news') }}'>
         Nouvelle news</button>{% endset %}
 
 
@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="card-body">
-                        {{ render_list("sauvabelin.news", "netbs") }}
+                        {{ render_list("netbs.core.news", "netbs") }}
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="card-body">
-                        {{ render_list("sauvabelin.news_channels", "basic") }}
+                        {{ render_list("netbs.core.news_channels", "basic") }}
                     </div>
                 </div>
             </div>

@@ -51,8 +51,11 @@ class MainMenuListener
 
         $secureCat  = $menu->registerCategory('secure.admin', 'Administration', 500);
 
-        if($user->hasRole('ROLE_SG'))
-            $secureCat->addLink('secure.admin.changelog', 'Modifications', 'fas fa-history', 'netbs.core.changelog.list');
+        if(!$user->hasRole('ROLE_SG'))
+            return;
+
+        $secureCat->addLink("admin.news", "Gestion des news", "fas fa-newspaper", "netbs.core.news.manage");
+        $secureCat->addLink('secure.admin.changelog', 'Modifications', 'fas fa-history', 'netbs.core.changelog.list');
 
         if($user->hasRole("ROLE_ADMIN"))
             $secureCat->addLink('secure.admin.parameters', 'Paramètres', 'fas fa-cog', 'netbs.core.parameters.list');

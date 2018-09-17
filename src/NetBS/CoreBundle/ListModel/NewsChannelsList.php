@@ -1,13 +1,13 @@
 <?php
 
-namespace SauvabelinBundle\ListModel;
+namespace NetBS\CoreBundle\ListModel;
 
+use NetBS\CoreBundle\Entity\NewsChannel;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
 use NetBS\ListBundle\Column\ClosureColumn;
 use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
-use SauvabelinBundle\Entity\NewsChannel;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class NewsChannelsList extends BaseListModel
@@ -20,7 +20,7 @@ class NewsChannelsList extends BaseListModel
      */
     protected function buildItemsList()
     {
-        return $this->entityManager->getRepository('SauvabelinBundle:NewsChannel')->findAll();
+        return $this->entityManager->getRepository('NetBSCoreBundle:NewsChannel')->findAll();
     }
 
     /**
@@ -38,7 +38,7 @@ class NewsChannelsList extends BaseListModel
      */
     public function getAlias()
     {
-        return "sauvabelin.news_channels";
+        return "netbs.core.news_channels";
     }
 
     /**

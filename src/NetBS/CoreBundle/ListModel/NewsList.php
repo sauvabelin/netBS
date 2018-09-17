@@ -1,7 +1,9 @@
 <?php
 
-namespace SauvabelinBundle\ListModel;
+namespace NetBS\CoreBundle\ListModel;
 
+use NetBS\CoreBundle\Entity\News;
+use NetBS\CoreBundle\Entity\NewsChannel;
 use NetBS\CoreBundle\Form\Type\SwitchType;
 use NetBS\CoreBundle\ListModel\Action\LinkAction;
 use NetBS\CoreBundle\ListModel\Action\ModalAction;
@@ -16,8 +18,6 @@ use NetBS\ListBundle\Column\DateTimeColumn;
 use NetBS\ListBundle\Column\SimpleColumn;
 use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
-use SauvabelinBundle\Entity\News;
-use SauvabelinBundle\Entity\NewsChannel;
 
 class NewsList extends BaseListModel
 {
@@ -29,7 +29,7 @@ class NewsList extends BaseListModel
      */
     protected function buildItemsList()
     {
-        return $this->entityManager->getRepository('SauvabelinBundle:News')->createQueryBuilder('n')
+        return $this->entityManager->getRepository('NetBSCoreBundle:News')->createQueryBuilder('n')
             ->orderBy('n.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
@@ -50,7 +50,7 @@ class NewsList extends BaseListModel
      */
     public function getAlias()
     {
-        return "sauvabelin.news";
+        return "netbs.core.news";
     }
 
     /**
@@ -66,8 +66,8 @@ class NewsList extends BaseListModel
                     return "<span class='badge' style='background:{$channel->getColor()};color:white'>{$channel->getNom()}</span>";
                 }
             ])
-            ->addColumn("Importante", null, XEditableColumn::class, [
-                XEditableColumn::PROPERTY   => "importante",
+            ->addColumn("Epinglée", null, XEditableColumn::class, [
+                XEditableColumn::PROPERTY   => "pinned",
                 XEditableColumn::TYPE_CLASS => SwitchType::class
             ])
             ->addColumn("Date", "createdAt", DateTimeColumn::class)
@@ -76,7 +76,7 @@ class NewsList extends BaseListModel
                 ActionColumn::ACTIONS_KEY   => [
                     ModalAction::class  => [
                         LinkAction::ROUTE   => function(News $news) {
-                            return $this->router->generate('sauvabelin.news.edit_news', ['id' => $news->getId()]);
+                            return $this->router->generate('netbs.core.news.edit_news', ['id' => $news->getId()]);
                         }
                     ],
 

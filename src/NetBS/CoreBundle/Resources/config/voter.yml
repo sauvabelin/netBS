@@ -13,3 +13,8 @@ services:
         class: NetBS\CoreBundle\Voter\ExportConfigurationVoter
         tags:
             - { name: security.voter }
+
+    netbs.core.security.voter.news:
+        class: NetBS\CoreBundle\Voter\NewsVoter
+        tags:
+            - { name: security.voter }

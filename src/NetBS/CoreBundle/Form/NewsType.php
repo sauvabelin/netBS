@@ -1,11 +1,12 @@
 <?php
 
-namespace SauvabelinBundle\Form;
+namespace NetBS\CoreBundle\Form;
 
+use NetBS\CoreBundle\Entity\News;
+use NetBS\CoreBundle\Entity\NewsChannel;
 use NetBS\CoreBundle\Form\Type\SwitchType;
-use SauvabelinBundle\Entity\News;
-use SauvabelinBundle\Entity\NewsChannel;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,8 +24,14 @@ class NewsType extends AbstractType
                 'label'         => 'Channel',
                 'class'         => NewsChannel::class,
                 'choice_label'  => "nom"
-            ])
-            ->add('importante', SwitchType::class, ['label' => "Très importante"])
+            ]);
+
+        if($options['attr']['create'])
+            $builder
+            ->add('image', FileType::class, ['label' => "Image de bannière"]);
+
+        $builder
+            ->add('pinned', SwitchType::class, ['label' => "Epinglée"])
             ->add("titre", TextType::class, ['label' => "Titre"])
             ->add("contenu", TextareaType::class, ['label' => "Contenu"])
         ;

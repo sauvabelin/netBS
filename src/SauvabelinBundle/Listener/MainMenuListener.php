@@ -34,7 +34,6 @@ class MainMenuListener
         if(!$user->hasRole("ROLE_SG"))
             return;
 
-        $adminCategory->addLink("admin.news", "Gestion des news", "fas fa-newspaper", "sauvabelin.news.manage");
         $adminCategory->getLink('netbs.secure.admin.users')
             ->addSubLink('Derniers comptes', 'sauvabelin.user.latest_created');
 

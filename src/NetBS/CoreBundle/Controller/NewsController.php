@@ -1,14 +1,15 @@
 <?php
 
-namespace SauvabelinBundle\Controller;
+namespace NetBS\CoreBundle\Controller;
 
+use NetBS\CoreBundle\Entity\News;
+use NetBS\CoreBundle\Entity\NewsChannel;
+use NetBS\CoreBundle\Form\NewsChannelType;
+use NetBS\CoreBundle\Form\NewsType;
 use NetBS\CoreBundle\Utils\Modal;
-use SauvabelinBundle\Entity\News;
-use SauvabelinBundle\Entity\NewsChannel;
-use SauvabelinBundle\Form\NewsChannelType;
-use SauvabelinBundle\Form\NewsType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -20,12 +21,12 @@ class NewsController extends Controller
 {
     /**
      * @param Request $request
-     * @Route("/manage", name="sauvabelin.news.manage")
+     * @Route("/manage", name="netbs.core.news.manage")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function manageNewsAction(Request $request) {
 
-        return $this->render("@Sauvabelin/news/manage_news.html.twig", [
+        return $this->render("@NetBSCore/news/manage_news.html.twig", [
 
         ]);
     }
@@ -35,7 +36,7 @@ class NewsController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @route("/modal/add-channel", name="sauvabelin.news.modal_add_channel")
+     * @route("/modal/add-channel", name="netbs.core.news.modal_add_channel")
      */
     public function addNewsChannelModalAction(Request $request) {
 
@@ -63,7 +64,7 @@ class NewsController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("/modal/edit-news/{id}", defaults={"id"=null}, name="sauvabelin.news.edit_news")
+     * @Route("/add-edit-news/{id}", defaults={"id"=null}, name="netbs.core.news.edit_news")
      */
     public function editNewsModalAction(Request $request, $id) {
 
@@ -72,26 +73,39 @@ class NewsController extends Controller
         $news   = new News();
 
         if($id)
-            $news = $em->find('SauvabelinBundle:News', $id);
+            $news = $em->find('NetBSCoreBundle:News', $id);
         else
             $news->setUser($this->getUser());
 
-        $form   = $this->createForm(NewsType::class, $news);
+        $form   = $this->createForm(NewsType::class, $news, ['attr' => ['create' => !$id]]);
 
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $em->persist($form->getData());
+            /** @var News $news */
+            $news       = $form->getData();
+
+            if(!$id || !$news->getImage()) {
+
+                /** @var UploadedFile $banniere */
+                $banniere = $news->getImage();
+                $filename = md5(uniqid()) . '.' . $banniere->guessExtension();
+                $banniere->move($this->getParameter('netbs.core.news.image_upload_path'), $filename);
+
+                $news->setImage($filename);
+            }
+
+            $em->persist($news);
             $em->flush();
 
             $this->addFlash("success", "News publiée!");
             return Modal::refresh();
         }
 
-        return $this->render('@NetBSFichier/generic/add_generic.modal.twig', [
+        return $this->render('@NetBSCore/news/add_edit_news.html.twig', [
             'title' => $title . ' une news',
             'form'  => $form->createView()
-        ], Modal::renderModal($form));
+        ]);
     }
 }

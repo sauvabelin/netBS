@@ -1,14 +1,16 @@
 <?php
 
-namespace SauvabelinBundle\Entity;
+namespace NetBS\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use NetBS\SecureBundle\Mapping\BaseUser;
 
 /**
  * News
  *
- * @ORM\Table(name="sauvabelin_netbs_news")
+ * @ORM\Table(name="netbs_core_news")
  * @ORM\Entity()
  */
 class News
@@ -39,23 +41,29 @@ class News
     protected $contenu;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="importante", type="boolean")
-     */
-    protected $importante;
-
-    /**
-     * @var BSUser
-     *
-     * @ORM\ManyToOne(targetEntity="SauvabelinBundle\Entity\BSUser")
+     * @var BaseUser
      */
     protected $user;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="image_path", type="string", length=255, nullable=true)
+     * @Assert\File(mimeTypes={"image/jpeg", "image/jpg"})
+     */
+    protected $image;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="pinned", type="boolean")
+     */
+    protected $pinned;
+
+    /**
      * @var NewsChannel
      *
-     * @ORM\ManyToOne(targetEntity="SauvabelinBundle\Entity\NewsChannel", inversedBy="news")
+     * @ORM\ManyToOne(targetEntity="NewsChannel", inversedBy="news")
      */
     protected $channel;
 
@@ -120,11 +128,11 @@ class News
     /**
      * Set user.
      *
-     * @param \SauvabelinBundle\Entity\BSUser|null $user
+     * @param $user
      *
      * @return News
      */
-    public function setUser(BSUser $user = null)
+    public function setUser(BaseUser $user = null)
     {
         $this->user = $user;
 
@@ -134,7 +142,7 @@ class News
     /**
      * Get user.
      *
-     * @return \SauvabelinBundle\Entity\BSUser|null
+     * @return BaseUser
      */
     public function getUser()
     {
@@ -144,11 +152,11 @@ class News
     /**
      * Set channel.
      *
-     * @param \SauvabelinBundle\Entity\NewsChannel|null $channel
+     * @param NewsChannel $channel
      *
      * @return News
      */
-    public function setChannel(NewsChannel $channel = null)
+    public function setChannel(NewsChannel $channel)
     {
         $this->channel = $channel;
 
@@ -158,7 +166,7 @@ class News
     /**
      * Get channel.
      *
-     * @return \SauvabelinBundle\Entity\NewsChannel|null
+     * @return NewsChannel
      */
     public function getChannel()
     {
@@ -168,18 +176,38 @@ class News
     /**
      * @return bool
      */
-    public function isImportante()
+    public function isPinned()
     {
-        return $this->importante;
+        return $this->pinned;
     }
 
     /**
-     * @param bool $importante
+     * @param bool $pinned
      * @return News
      */
-    public function setImportante($importante)
+    public function setPinned($pinned)
     {
-        $this->importante = $importante;
+        $this->pinned = $pinned;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $image
+     * @return News
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
         return $this;
     }
 }

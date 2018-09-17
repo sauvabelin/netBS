@@ -32,6 +32,18 @@ services:
         tags:
             - {name: netbs.list_action }
 
+#listes
+
+    netbs.core.list.news:
+        class: NetBS\CoreBundle\ListModel\NewsList
+        tags:
+            - { name: netbs.list.model }
+
+    netbs.core.list.news_channels:
+        class: NetBS\CoreBundle\ListModel\NewsChannelsList
+        tags:
+            - { name: netbs.list.model }
+
     netbs.core.list.parameters:
         class: NetBS\CoreBundle\ListModel\ParametersList
         tags:

@@ -1,13 +1,13 @@
 <?php
 
-namespace SauvabelinBundle\Entity;
+namespace NetBS\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * NewsChannel
  *
- * @ORM\Table(name="sauvabelin_netbs_news_channel")
+ * @ORM\Table(name="netbs_core_news_channel")
  * @ORM\Entity()
  */
 class NewsChannel
@@ -45,7 +45,7 @@ class NewsChannel
     /**
      * @var News
      *
-     * @ORM\OneToMany(targetEntity="SauvabelinBundle\Entity\News", mappedBy="channel")
+     * @ORM\OneToMany(targetEntity="News", mappedBy="channel")
      */
     protected $news;
 
@@ -117,7 +117,7 @@ class NewsChannel
     /**
      * Add news.
      *
-     * @param \SauvabelinBundle\Entity\News $news
+     * @param News $news
      *
      * @return NewsChannel
      */
@@ -131,7 +131,7 @@ class NewsChannel
     /**
      * Remove news.
      *
-     * @param \SauvabelinBundle\Entity\News $news
+     * @param News $news
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
@@ -165,6 +165,7 @@ class NewsChannel
     public function setColor($color)
     {
         $this->color = $color;
+
         return $this;
     }
 }

@@ -22,6 +22,11 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->arrayNode('news')->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('image_upload_path')->defaultValue('%kernel.project_dir%/web/news/images')->end()
+                    ->end()
+                ->end()
                 ->arrayNode('mailer')
                     ->children()
                         ->scalarNode('subject_prefix')->defaultValue('')->end()

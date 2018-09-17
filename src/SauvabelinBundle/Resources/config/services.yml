@@ -103,11 +103,6 @@ services:
         tags:
             - { name: form.type }
 
-    sauvabelin.voter.news:
-        class: SauvabelinBundle\Voter\NewsVoter
-        tags:
-            - { name: security.voter }
-
     sauvabelin.serializer.news_normalizer:
         class: SauvabelinBundle\Serializer\NewsNormalizer
         tags:
