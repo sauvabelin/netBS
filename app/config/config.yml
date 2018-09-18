@@ -10,6 +10,8 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    ovesco.galerie_mapped_directory: "%kernel.project_dir%/web/galerie/pictos"
+    ovesco.galerie.cache_prefix: "/web/galerie/cache"
 
 framework:
     #esi: ~
@@ -102,29 +104,18 @@ oneup_flysystem:
 
 liip_imagine:
     loaders:
-        netbs_galerie:
-            flysystem:
-                filesystem_service: oneup_flysystem.nextcloud_webdav_filesystem
-    data_loader: netbs_galerie
+        ovesco_galerie:
+            filesystem:
+                data_root: "%ovesco.galerie_mapped_directory%"
 
     filter_sets:
-        news:
-            cache: ~
-
         thumbnail:
-            cache: netbs_cache_resolver
+            data_loader: ovesco_galerie
+            cache: ovesco.galerie_cache_resolver
             quality: 75
             filters:
                 thumbnail: { size: [200,200], mode: outbound }
                 auto_rotate: ~
-
-        bignail:
-            cache: netbs_cache_resolver
-            quality: 85
-            filters:
-                downscale:
-                    max: [1920, 1080]
-                    auto_rotate: ~
 
 nelmio_cors:
     defaults:
@@ -173,3 +164,7 @@ net_bs_fichier:
 net_bs_secure:
     entities:
         user_class: "%netbs_secure_user_class%"
+
+ovesco_galerie:
+    mapped_directory: "%ovesco.galerie_mapped_directory%"
+    image_extensions: ["jpg", "png"]

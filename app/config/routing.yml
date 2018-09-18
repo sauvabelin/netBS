@@ -1,12 +1,7 @@
-galerie:
-    resource: "@GalerieBundle/Controller/"
+ovesco_galerie:
+    resource: "@OvescoGalerieBundle/ApiController/"
     type:     annotation
-    prefix:   /
-
-galerie_api:
-    resource: "@GalerieBundle/ApiController/"
-    type:     annotation
-    prefix:   /
+    prefix:   /netBS/ovesco
 
 sauvabelin:
     resource: "@SauvabelinBundle/Controller/"
