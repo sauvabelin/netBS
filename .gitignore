@@ -20,3 +20,4 @@
 .idea
 /frontend/node_modules/
 **/Importator.php
+web/galerie

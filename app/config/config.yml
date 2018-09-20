@@ -151,6 +151,7 @@ net_bs_secure:
         user_class: "%netbs_secure_user_class%"
 
 ovesco_galerie:
-    mapped_directory: "/web/galerie/originals"
-    cache_directory:  "/web/galerie/cache"
+    prefix_directory: "/web"
+    mapped_directory: "/galerie/originals"
+    cache_directory:  "/galerie/cache"
     image_extensions: ["jpg", "png"]

@@ -29,6 +29,7 @@ class OvescoGalerieExtension extends Extension
 
         $container->setDefinition('ovesco.galerie.config', new Definition(GalerieConfig::class, [
             $container->getParameter("kernel.project_dir"),
+            $config['prefix_directory'],
             $config['mapped_directory'],
             $config['cache_directory'],
             $config['image_extensions'],

@@ -12,6 +12,11 @@ class GalerieConfig
     /**
      * @var string
      */
+    private $prefixDirectory;
+
+    /**
+     * @var string
+     */
     private $mappedDirectory;
 
     /**
@@ -29,9 +34,10 @@ class GalerieConfig
      */
     private $descriptionFilename;
 
-    public function __construct($rootDir, $mappedDirectory, $cacheDirectory, $extensions, $descriptionFilename)
+    public function __construct($rootDir, $prefixDirectory, $mappedDirectory, $cacheDirectory, $extensions, $descriptionFilename)
     {
         $this->rootDir              = $rootDir;
+        $this->prefixDirectory      = $prefixDirectory;
         $this->mappedDirectory      = $mappedDirectory;
         $this->cacheDirectory       = $cacheDirectory;
         $this->imageExtensions      = $extensions;
@@ -72,11 +78,19 @@ class GalerieConfig
 
     public function getFullMappedDirectory() {
 
-        return $this->rootDir . $this->mappedDirectory;
+        return $this->rootDir . $this->prefixDirectory . $this->mappedDirectory;
     }
 
     public function getFullCacheDirectory() {
 
-        return $this->rootDir . $this->cacheDirectory;
+        return $this->rootDir . $this->prefixDirectory . $this->cacheDirectory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrefixDirectory()
+    {
+        return $this->prefixDirectory;
     }
 }
