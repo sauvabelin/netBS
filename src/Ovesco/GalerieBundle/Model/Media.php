@@ -36,8 +36,8 @@ class Media
         return $this->path;
     }
 
-    public function getCachePath() {
+    public function getRelativePath() {
 
-        return "/" . trim(str_replace($this->config->getPath(), '', $this->path), '/');
+        return str_replace($this->config->getFullMappedDirectory(), '', $this->path);
     }
 }

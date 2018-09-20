@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('mapped_directory')->isRequired()->end()
+                ->scalarNode('cache_directory')->isRequired()->end()
                 ->arrayNode('image_extensions')
                     ->scalarPrototype()->end()
                 ->end()

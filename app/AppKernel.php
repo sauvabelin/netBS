@@ -18,7 +18,6 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
-            new Oneup\FlysystemBundle\OneupFlysystemBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
@@ -30,7 +29,6 @@ class AppKernel extends Kernel
             new NetBS\SecureBundle\NetBSSecureBundle(),
             new NetBS\ListBundle\NetBSListBundle(),
             new SauvabelinBundle\SauvabelinBundle(),
-            new GalerieBundle\GalerieBundle(),
             new Ovesco\GalerieBundle\OvescoGalerieBundle(),
         ];
 

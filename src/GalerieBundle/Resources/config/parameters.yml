@@ -1,9 +1,0 @@
-galerie:
-    description_filename: "readme.md"
-    description_mime_type: "text/markdown"
-    mime_types: "image/jpeg,image/png"
-    max_size: 1572864
-    root_directory: "galerie"
-    access_token: "galerieBS"
-    maintenance: false
-    thumbnail_quality: 60

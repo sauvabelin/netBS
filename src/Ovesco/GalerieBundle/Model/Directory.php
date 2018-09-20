@@ -12,7 +12,7 @@ class Directory
 
     public function __construct($path, GalerieConfig $config)
     {
-        $this->path     = trim($path, "/");
+        $this->path     = $path;
         $this->config   = $config;
     }
 
@@ -23,9 +23,9 @@ class Directory
 
         $dirnames   = array_filter(glob($this->path . '/*'), 'is_dir');
 
-        return array_map(function($name) {
+        return array_values(array_map(function($name) {
             return new Directory($name, $this->config);
-        }, $dirnames);
+        }, $dirnames));
     }
 
     /**
@@ -40,9 +40,9 @@ class Directory
         foreach($this->config->getImageExtensions() as $ext)
             $filenames = array_merge($filenames, array_filter(glob($this->path . '/*' . $ext), 'is_file'));
 
-        $this->medias = array_map(function($name) {
+        $this->medias = array_values(array_map(function($name) {
             return new Media($name, $this->config);
-        }, $filenames);
+        }, $filenames));
 
         return $this->medias;
     }
@@ -75,5 +75,18 @@ class Directory
 
         $descriptionFilePath    = $this->path . "/" . $this->config->getDescriptionFilename();
         return !is_file($descriptionFilePath) ? null : file_get_contents($descriptionFilePath);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    public function getRelativePath() {
+
+        return str_replace($this->config->getFullMappedDirectory(), "", $this->path);
     }
 }

@@ -7,7 +7,17 @@ class GalerieConfig
     /**
      * @var string
      */
-    private $path;
+    private $rootDir;
+
+    /**
+     * @var string
+     */
+    private $mappedDirectory;
+
+    /**
+     * @var string
+     */
+    private $cacheDirectory;
 
     /**
      * @var array
@@ -19,19 +29,13 @@ class GalerieConfig
      */
     private $descriptionFilename;
 
-    public function __construct($path, $extensions, $descriptionFilename)
+    public function __construct($rootDir, $mappedDirectory, $cacheDirectory, $extensions, $descriptionFilename)
     {
-        $this->path                 = $path;
+        $this->rootDir              = $rootDir;
+        $this->mappedDirectory      = $mappedDirectory;
+        $this->cacheDirectory       = $cacheDirectory;
         $this->imageExtensions      = $extensions;
         $this->descriptionFilename  = $descriptionFilename;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPath()
-    {
-        return trim($this->path, '/');
     }
 
     /**
@@ -48,5 +52,31 @@ class GalerieConfig
     public function getDescriptionFilename()
     {
         return $this->descriptionFilename;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMappedDirectory()
+    {
+        return $this->mappedDirectory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheDirectory()
+    {
+        return $this->cacheDirectory;
+    }
+
+    public function getFullMappedDirectory() {
+
+        return $this->rootDir . $this->mappedDirectory;
+    }
+
+    public function getFullCacheDirectory() {
+
+        return $this->rootDir . $this->cacheDirectory;
     }
 }

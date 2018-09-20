@@ -4,14 +4,11 @@ imports:
     - { resource: services.yml }
     - { resource: dql_functions.yml }
     - { resource: "@SauvabelinBundle/Resources/config/services.yml" }
-    - { resource: "@GalerieBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
-    ovesco.galerie_mapped_directory: "%kernel.project_dir%/web/galerie/pictos"
-    ovesco.galerie.cache_prefix: "/web/galerie/cache"
 
 framework:
     #esi: ~
@@ -90,23 +87,11 @@ stof_doctrine_extensions:
             timestampable: true
             softdeleteable: true
 
-
-oneup_flysystem:
-    adapters:
-        nextcloud_webdav:
-            webdav:
-                client: webdav.nextcloud_client
-
-    filesystems:
-        nextcloud_webdav:
-            adapter: nextcloud_webdav
-
-
 liip_imagine:
     loaders:
         ovesco_galerie:
             filesystem:
-                data_root: "%ovesco.galerie_mapped_directory%"
+                data_root: "%kernel.project_dir%/web/galerie/originals"
 
     filter_sets:
         thumbnail:
@@ -166,5 +151,6 @@ net_bs_secure:
         user_class: "%netbs_secure_user_class%"
 
 ovesco_galerie:
-    mapped_directory: "%ovesco.galerie_mapped_directory%"
+    mapped_directory: "/web/galerie/originals"
+    cache_directory:  "/web/galerie/cache"
     image_extensions: ["jpg", "png"]

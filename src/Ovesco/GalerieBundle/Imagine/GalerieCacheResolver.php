@@ -11,30 +11,24 @@ use Symfony\Component\Filesystem\Filesystem;
 class GalerieCacheResolver implements ResolverInterface
 {
     /**
+     * @var string
+     */
+    private $webPath;
+
+    /**
      * @var GalerieConfig
      */
     private $config;
-
-    /**
-     * @var string
-     */
-    private $root;
-
-    /**
-     * @var string
-     */
-    private $cacheDir;
 
     /**
      * @var Filesystem
      */
     private $filesystem;
 
-    public function __construct($root, $cacheDir, GalerieConfig $config, Filesystem $filesystem)
+    public function __construct($webPath, GalerieConfig $config, Filesystem $filesystem)
     {
+        $this->webPath      = $webPath;
         $this->config       = $config;
-        $this->root         = $root;
-        $this->cacheDir     = $cacheDir;
         $this->filesystem   = $filesystem;
     }
 
@@ -62,7 +56,7 @@ class GalerieCacheResolver implements ResolverInterface
      */
     public function resolve($fid, $filter)
     {
-        return $this->cacheDir . "/" . $this->getCachePath($fid, $filter);
+        return $this->webPath . $this->config->getCacheDirectory() . "/" . $this->getCachePath($fid, $filter);
     }
 
     /**
@@ -90,7 +84,7 @@ class GalerieCacheResolver implements ResolverInterface
 
     private function getFSPath($fid, $filter) {
 
-        return $this->root . $this->cacheDir . "/" . $this->getCachePath($fid, $filter);
+        return $this->config->getFullCacheDirectory() . "/" . $this->getCachePath($fid, $filter);
     }
 
     private function getCachePath($fid, $filter) {

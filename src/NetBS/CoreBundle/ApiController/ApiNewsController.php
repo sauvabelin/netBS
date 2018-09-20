@@ -15,20 +15,31 @@ class ApiNewsController extends Controller
      * @return Response
      * @Route("/news", name="netbs.core.api.get_news")
      */
-    public function getDirectoryAction(Request $request) {
+    public function getNewsAction(Request $request) {
 
-        $amount = $this->getValue($request, 'amount', 5);
-        $page   = $this->getValue($request, 'page', 0);
+        $em         = $this->get('doctrine.orm.entity_manager');
+        $amount     = $this->getValue($request, 'amount', 5);
+        $channel    = $this->getValue($request, 'channel', null);
+        $page       = $this->getValue($request, 'page', 0);
 
-        $news   = $this->get('doctrine.orm.entity_manager')->getRepository('NetBSCoreBundle:News')
-            ->createQueryBuilder('n')
-            ->setMaxResults($amount)
+        $news   = $em->getRepository('NetBSCoreBundle:News')->createQueryBuilder('n');
+
+        if($channel) {
+
+            $channel = $em->getRepository('NetBSCoreBundle:NewsChannel')->findOneBy(array('nom' => $channel));
+
+            if($channel)
+                $news->where('n.channel = :channel')->setParameter('channel', $channel);
+        }
+
+        $result = $news
             ->setFirstResult(intval($page)*intval($amount))
             ->orderBy('n.createdAt', 'DESC')
+            ->setMaxResults($amount)
             ->getQuery()
             ->getResult();
 
-        return new JsonResponse($this->get('serializer')->serialize($news, 'json'), 200, [], true);
+        return new JsonResponse($this->get('serializer')->serialize($result, 'json'), 200, [], true);
     }
 
     private function getValue(Request $request, $name, $default) {
