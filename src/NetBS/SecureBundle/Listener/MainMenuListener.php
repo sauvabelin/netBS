@@ -24,10 +24,11 @@ class MainMenuListener
         $user       = $this->token->getToken()->getUser();
         $menu       = $event->getMenu();
         $category   = $menu->getCategory('secure.admin');
+        $subMenu    = $category->addSubMenu('netbs.secure.admin.users', 'Utilisateurs', 'fas fa-key');
 
         if($user->hasRole("ROLE_ADMIN")) {
 
-            $category->addSubMenu('netbs.secure.admin.users', 'Utilisateurs', 'fas fa-key')
+            $subMenu
                 ->addSubLink('Gestion', 'netbs.secure.user.list_users')
                 ->addSubLink('Nouveau', 'netbs.secure.user.add_user');
         }

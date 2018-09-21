@@ -118,7 +118,7 @@ nelmio_cors:
             allow_origin: ['*']
             allow_headers: ['*']
             allow_methods: ['GET', 'POST']
-            max_age: 3600	
+            max_age: 3600
 
 
 lexik_jwt_authentication:
