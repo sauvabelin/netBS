@@ -114,11 +114,12 @@ nelmio_cors:
         origin_regex: false
         forced_allow_origin_value: ~
     paths:
-        '^/api/v1':
+        '^/api/v1/':
             allow_origin: ['*']
             allow_headers: ['*']
-            allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
-            max_age: 3600
+            allow_methods: ['GET', 'POST']
+            max_age: 3600	
+
 
 lexik_jwt_authentication:
     private_key_path: '%jwt_private_key_path%'
