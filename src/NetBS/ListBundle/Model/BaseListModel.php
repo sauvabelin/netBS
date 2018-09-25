@@ -36,6 +36,17 @@ abstract class BaseListModel implements ListModelInterface
     }
 
     /**
+     * @return string
+     */
+    public function getContainedItemsName()
+    {
+        $data   = explode("\\", $this->getManagedItemsClass());
+        $data   = end($data);
+
+        return implode(" ", preg_split('/(?=[A-Z])/',$data));
+    }
+
+    /**
      * Sets a parameter required by the list to work
      * @param string $key the parameter key
      * @param mixed $value

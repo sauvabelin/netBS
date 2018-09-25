@@ -15,6 +15,11 @@ class AttributionMassUpdater extends BaseMassUpdater
         $this->config   = $config;
     }
 
+    public function getTitle() {
+
+        return "Modifier les attributions sélectionnées";
+    }
+
     /**
      * Returns this updater name
      * @return string

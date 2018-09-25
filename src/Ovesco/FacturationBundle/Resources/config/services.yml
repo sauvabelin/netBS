@@ -1,0 +1,8 @@
+services:
+
+    ovesco.facturation.subscribers.doctrine_debiteur:
+        class: Ovesco\FacturationBundle\Subscriber\DoctrineDebiteurSubscriber
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: doctrine.event_subscriber }

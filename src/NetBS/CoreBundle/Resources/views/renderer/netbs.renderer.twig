@@ -53,15 +53,25 @@
 
     {% if toolbar.items|length > 0 %}
     <div class="netbs-toolbar dropup">
+
         <div class="row">
 
-            {% for position in ['left', 'right'] %}
             <div class="col-md-6">
-                {% for item in toolbar.items(position) %}
+                {% for item in toolbar.items('left') %}
+                    {{ item.render()|raw }}
+                {% endfor %}
+
+                {#
+                Nature des éléments : <b>{{ table.model.containedItemsName }}</b>
+                #}
+            </div>
+
+            <div class="col-md-6">
+                {% for item in toolbar.items('right') %}
                     {{ item.render()|raw }}
                 {% endfor %}
             </div>
-            {% endfor %}
+
         </div>
     </div>
     {% endif %}

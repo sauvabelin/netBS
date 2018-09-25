@@ -25,6 +25,15 @@ services:
         tags:
             - { name: netbs.mass_updater }
 
+
+    netbs.fichier.attribution.mass_membre:
+        class: NetBS\FichierBundle\MassUpdater\MembreMassUpdater
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.mass_updater }
+
+
     netbs.fichier.contact_manager:
         class: NetBS\FichierBundle\Service\ContactManager
         arguments:
@@ -33,6 +42,15 @@ services:
 
     netbs.fichier.search_binder.attribution:
         class: NetBS\FichierBundle\Searcher\ActiveAttributionBinder
+        tags:
+            - { name: netbs.searcher.binder }
+
+    netbs.fichier.search_binder.no_adabs:
+        class: NetBS\FichierBundle\Searcher\NoAdabsbinder
+        arguments:
+            - "@netbs.fichier.config"
+            - "@doctrine.orm.entity_manager"
+            - "@netbs.params"
         tags:
             - { name: netbs.searcher.binder }
 

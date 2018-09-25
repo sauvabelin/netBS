@@ -14,11 +14,17 @@ class EqualBinder implements BinderInterface
     public function bind($alias, Form $form, QueryBuilder $builder)
     {
         $config = $form->getConfig();
+        $data   = $form->getNormData();
         $field  = $alias . "." . $config->getName();
         $param  = '_param' . $this->count++;
 
-        $builder->andWhere($builder->expr()->eq($field, ':' . $param))
-            ->setParameter($param, $form->getNormData());
+        if(strpos("%", $data) !== false)
+            $builder->andWhere($builder->expr()->like($field, ':' . $param));
+        else
+            $builder->andWhere($builder->expr()->eq($field, ':' . $param));
+
+        $builder
+            ->setParameter($param, $data);
     }
 
     public function getType()

@@ -64,6 +64,7 @@ class LoadGroups extends BSFixture implements OrderedFixtureInterface
         $manager->flush();
 
         $updates    = [
+            'groupe.adabs_id'                   => "ADABS",
             'groupe.branche_eclaireurs_id'      => "branche éclaireurs",
             'groupe.branche_eclaireuses_id'     => "branche éclaireuses",
             'groupe.branche_louveteaux_id'      => "branche louveteaux",

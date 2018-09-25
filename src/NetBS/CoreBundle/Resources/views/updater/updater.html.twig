@@ -7,11 +7,11 @@
 {% block main %}
 
     {% set items        = form.children|first %}
-    {% set itemsForm    = (form.children|first).vars.prototype %}
     {% set allowAdd     = items.vars.allow_add %}
     {% set allowDelete  = items.vars.allow_delete %}
     {% set _updater_id  = increment() %}
     {% set tableClass   = '' %}
+    {% set itemsForm    = (form.children|first).vars.prototype %}
 
     <div class="d-flex flex-row">
 
@@ -28,6 +28,7 @@
                 </div>
 
                 {{ form(generic) }}
+
             </div>
 
         </aside>
@@ -49,9 +50,11 @@
                 {% include '@NetBSCore/updater/updater.partial.twig' %}
 
                 <div class="text-right" style="padding:20px;border-top:1px solid #ccc;">
+                    {#
                     {% if allowAdd %}
                         <button class="btn btn-secondary btn-space" type="button" data-mass-add-{{ _updater_id }}>Ajouter une ligne</button>
                     {% endif %}
+                    #}
                     <button class="btn btn-primary btn-space">Valider</button>
                 </div>
 

@@ -36,7 +36,7 @@ class SearchAttributionType extends AbstractType
             ))
             ->add('dateDebut', DatepickerType::class, array('label' => 'Commencée après', 'required' => false))
             ->add('dateFin', DatepickerType::class, array('label' => 'Terminée avant', 'required' => false))
-            ->add('actif', SearchActiveAttributionType::class, array('label' => 'Actif'))
+            ->add('actif', SearchActiveAttributionType::class, array('label' => 'Attribution active'))
         ;
     }
 

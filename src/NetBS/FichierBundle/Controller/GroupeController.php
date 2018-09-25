@@ -62,11 +62,18 @@ class GroupeController extends Controller
     public function pageGroupesHierarchyAction() {
 
         $em         = $this->get('doctrine.orm.default_entity_manager');
+        $config     = $this->get('netbs.fichier.config');
         $repo       = $em->getRepository($this->getGroupeClass());
-        $roots      = $repo->findBy(array('parent' => null));
+
+        /** @var BaseGroupe[] $groupes */
+        $groupes    = $repo->findAll();
+        $types      = $em->getRepository($config->getGroupeTypeClass())->findAll();
+        $categories = $em->getRepository($config->getGroupeCategorieClass())->findAll();
 
         return $this->render('@NetBSFichier/groupe/page_groupes_hierarchy.html.twig', array(
-            'roots' => $roots
+            'groupes'       => $groupes,
+            'types'         => $types,
+            'categories'    => $categories
         ));
     }
 

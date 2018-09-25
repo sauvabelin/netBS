@@ -106,8 +106,9 @@ class MassUpdaterController extends Controller
         }
 
         return $this->render('@NetBSCore/updater/updater.html.twig', array(
-            'form'      => $massForm->createView(),
-            'generic'   => $genericForm->createView()
+            'form'          => $massForm->createView(),
+            'showToString'  => $updater->showToString(),
+            'generic'       => $genericForm->createView()
         ));
     }
 

@@ -13,6 +13,11 @@ abstract class BaseMassUpdater
         return true;
     }
 
+    public function getTitle() {
+
+        return "Modifier la sélection";
+    }
+
     /**
      * Override this to allow or disallow removing editing updated items
      * @return bool
@@ -20,6 +25,15 @@ abstract class BaseMassUpdater
     public function allowDelete() {
 
         return true;
+    }
+
+    /**
+     * Call item __toString() on each line to give intel
+     * @return bool
+     */
+    public function showToString() {
+
+        return false;
     }
 
     /**

@@ -1,31 +1,10 @@
 {% extends '@NetBSCore/layout/backend.layout.twig' %}
 
-{% macro subGroup(groupe) %}
-
-    {% import _self as wallah %}
-
-    <li>
-        <p>
-            <i class="fas fa-angle-right"></i>
-            <a href="{{ path('netbs.fichier.groupe.page_groupe', {id: groupe.id}) }}">{{ groupe.nom }}</a> <span class="text-muted">{{ groupe.groupeType.nom }}</span>
-            {% for child in groupe.enfants %}
-            <ul class="fa-ul">
-                {{ wallah.subGroup(child) }}
-            </ul>
-            {% endfor %}
-        </p>
-    </li>
-
-{% endmacro %}
-
 {% block main %}
 
-    {% import _self as wallah %}
-
+    {{ registerJs('https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js') }}
     {{ registerJs(asset('bundles/netbscore/js/modal.js')) }}
-
     {% set newGroupeBtn %}<button data-modal data-modal-url="{{ path("netbs.fichier.groupe.modal_add") }}" class="btn btn-primary">Nouvelle unité</button>{% endset %}
-
 
     <div class="container-fluid">
 
@@ -37,16 +16,139 @@
             ]
         } %}
 
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="list">
-                    {% for root in roots %}
-                        {{ wallah.subGroup(root) }}
-                    {% endfor %}
-                </ul>
+        <div id="groupes-app">
+            {% verbatim %}
+            <div class="row">
+                <div class="col-sm-1 col-12">
+                    Par nom
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Rechercher par nom" v-model="searchNom" />
+                    </div>
+                </div>
+
             </div>
+
+            <div class="row">
+                <div class="col-sm-1 col-12">
+                    Categories
+                </div>
+
+                <div class="col-sm-11 col-12">
+                    <div class="btn-group" role="group">
+                        <button type="button" v-for="categorie in categories" class="btn btn-secondary" @click="toggleCategorie(categorie)" v-bind:class="{active: selectedCategories.indexOf(categorie) !== -1}">{{ categorie }}</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <br/>
+
+            <div class="row">
+                <div class="col-sm-1 col-12">
+                    Types
+                </div>
+                <div class="col-sm-11 col-12">
+                    <div class="btn-group" role="group">
+                        <button type="button" v-for="type in types" v-if="categories.indexOf(type) === -1" class="btn btn-secondary"  @click="toggleType(type)" v-bind:class="{active: selectedTypes.indexOf(type) !== -1}">{{ type }}</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr/>
+
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-4 col-6" v-for="groupe in filteredGroupes">
+                    <a class="card" v-bind:href="groupe.path">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ groupe.nom }}</h3>
+                            <h5 class="card-subtitle">{{ groupe.type }} <span v-if="categories.indexOf(groupe.type) === -1"> - {{ groupe.categorie }}</span></h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            {% endverbatim %}
         </div>
 
     </div>
 
+    {% set groupeJs %}
+        <script type="text/javascript">
+            new Vue({
+                el: '#groupes-app',
+                data: function() {
+                    return {
+
+                        selectedTypes: [],
+                        selectedCategories: [],
+                        searchNom: "",
+
+                        types: [{% for type in types %}"{{ type.nom }}"{% if not loop.last %},{% endif %}{% endfor %}],
+                        categories: [{% for categorie in categories %}"{{ categorie.nom }}"{% if not loop.last %},{% endif %}{% endfor %}],
+                        groupes: [
+                            {% for groupe in groupes %}
+                            {
+                                nom: "{{ groupe.nom }}",
+                                type: "{{ groupe.groupeType.nom }}",
+                                categorie: "{{ groupe.groupeType.groupeCategorie.nom }}",
+                                path: "{{ path('netbs.fichier.groupe.page_groupe', {id: groupe.id}) }}"
+                            }{% if not loop.last %},{% endif %}
+                            {% endfor %}
+                        ]
+                    }
+                },
+
+                methods: {
+                    toggleType(type) {
+
+                        var index = this.selectedTypes.indexOf(type);
+
+                        if(index === -1)
+                            this.selectedTypes.push(type);
+                        else
+                            this.selectedTypes.splice(index, 1);
+                    },
+
+                    toggleCategorie(categorie) {
+
+                        var index = this.selectedCategories.indexOf(categorie);
+
+                        if(index === -1)
+                            this.selectedCategories.push(categorie);
+                        else
+                            this.selectedCategories.splice(index, 1);
+                    }
+                },
+
+                computed: {
+
+                    filteredGroupes: function() {
+
+                        var result1 = [];
+                        var result2 = [];
+                        var result3 = [];
+
+                        for (var i = 0; i < this.groupes.length; i++)
+                            if (this.searchNom === "" || this.groupes[i].nom.indexOf(this.searchNom) !== -1)
+                                result1.push(this.groupes[i]);
+
+                        for(var i = 0; i < result1.length; i++)
+                            if(this.selectedCategories.length === 0 || this.selectedCategories.indexOf(result1[i].categorie) !== -1)
+                                result2.push(result1[i]);
+
+                        for(var i = 0; i < result2.length; i++)
+                            if(this.selectedTypes.length === 0 || this.selectedTypes.indexOf(result2[i].type) !== -1)
+                                result3.push(result2[i]);
+
+                        return result3;
+                    }
+                }
+            });
+        </script>
+    {% endset %}
+
+    {{ registerScript(groupeJs) }}
 {% endblock %}

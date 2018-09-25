@@ -36,6 +36,14 @@ services:
         tags:
             - { name: form.type }
 
+    netbs.fichier.form.membre_updater:
+        class: NetBS\FichierBundle\Form\MembreUpdaterType
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+
     netbs.fichier.form.attribution:
         class: NetBS\FichierBundle\Form\AttributionType
         arguments:

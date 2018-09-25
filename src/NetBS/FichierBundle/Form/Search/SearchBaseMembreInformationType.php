@@ -4,6 +4,7 @@ namespace NetBS\FichierBundle\Form\Search;
 
 use NetBS\CoreBundle\Form\Type\DaterangeType;
 use NetBS\CoreBundle\Form\Type\SexeType;
+use NetBS\CoreBundle\Form\Type\SwitchType;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Model\Search\SearchBaseMembreInformation;
 use NetBS\FichierBundle\Service\FichierConfig;
@@ -48,6 +49,7 @@ class SearchBaseMembreInformationType extends AbstractType
                 'lt_options'    => ['label' => "Désinscrit avant le"]
             ))
             ->add('attributions', SearchAttributionType::class)
+            ->add('noAdabs', SearchNoAdabsType::class, ['label' => "Pas à l'adabs", "data" => true])
             ->add('obtentionsDistinction', SearchObtentionDistinctionType::class)
         ;
     }

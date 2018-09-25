@@ -8,7 +8,7 @@
 
     <div role="menu" class="dropdown-menu dropdown-menu-right">
         {% if updatable %}
-            <a class="dropdown-item" style="cursor:pointer;" id="mass-update-{{ event.tableId }}">Modifier la sélection</a>
+            <a class="dropdown-item" style="cursor:pointer;" id="mass-update-{{ event.tableId }}">{{ updatable.title }}</a>
         {% endif %}
         {% if updatable and addable %}
         <div class="dropdown-divider"></div>

@@ -1,6 +1,9 @@
 <table class="table table-striped table-hover {{ tableClass }}" id="mass-items-table-{{ _updater_id }}">
     <thead>
         <tr>
+            {% if showToString %}
+            <th>Elément</th>
+            {% endif %}
             {% for header in itemsForm %}
                 <th>{{ header.vars.label }}</th>
             {% endfor %}
@@ -13,6 +16,9 @@
     <tbody>
     {% for item in items %}
         <tr>
+            {% if showToString %}
+                <td>{{ item.vars.value }}</td>
+            {% endif %}
             {% for field in item.children %}
                 <td>
                     {{ form_widget(field) }}

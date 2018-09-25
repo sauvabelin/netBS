@@ -12,6 +12,7 @@ bs:
     fonction.weight.mail_redirect:      500
     fonction.weight.mailbox:            1000
 
+    groupe.adabs_id:                    -1
     groupe.branche_eclaireurs_id:       -1
     groupe.branche_eclaireuses_id:      -1
     groupe.branche_louveteaux_id:       -1

@@ -50,6 +50,12 @@ interface ListModelInterface
     public function setParameter($key, $value);
 
     /**
+     * Returns a string representation of the contained items
+     * @return string
+     */
+    public function getContainedItemsName();
+
+    /**
      * Returns the parameter identified by the given key
      * @param string $key
      * @return mixed

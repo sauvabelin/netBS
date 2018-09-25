@@ -3,10 +3,10 @@
 namespace NetBS\FichierBundle\MassUpdater;
 
 use NetBS\CoreBundle\Model\BaseMassUpdater;
-use NetBS\FichierBundle\Form\ObtentionDistinctionType;
+use NetBS\FichierBundle\Form\MembreUpdaterType;
 use NetBS\FichierBundle\Service\FichierConfig;
 
-class ObtentionDistinctionMassUpdater extends BaseMassUpdater
+class MembreMassUpdater extends BaseMassUpdater
 {
     protected $config;
 
@@ -17,7 +17,7 @@ class ObtentionDistinctionMassUpdater extends BaseMassUpdater
 
     public function getTitle() {
 
-        return "Modifier les distinctions sélectionnées";
+        return "Modifier les membres sélectionnés";
     }
 
     /**
@@ -26,7 +26,15 @@ class ObtentionDistinctionMassUpdater extends BaseMassUpdater
      */
     public function getName()
     {
-        return 'netbs.mass_updater.obtention_distinction';
+        return 'netbs.mass_updater.membre';
+    }
+
+    /**
+     * @return bool
+     */
+    public function showToString()
+    {
+        return true;
     }
 
     /**
@@ -35,11 +43,11 @@ class ObtentionDistinctionMassUpdater extends BaseMassUpdater
      */
     public function getUpdatedItemClass()
     {
-        return $this->config->getObtentionDistinctionClass();
+        return $this->config->getMembreClass();
     }
 
     public function getItemForm()
     {
-        return ObtentionDistinctionType::class;
+        return MembreUpdaterType::class;
     }
 }

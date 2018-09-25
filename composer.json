@@ -12,7 +12,8 @@
             "NetBS\\ListBundle\\": "src/NetBS/ListBundle",
             "SauvabelinBundle\\": "src/SauvabelinBundle",
             "GalerieBundle\\": "src/GalerieBundle",
-            "Ovesco\\GalerieBundle\\": "src/Ovesco/GalerieBundle"
+            "Ovesco\\GalerieBundle\\": "src/Ovesco/GalerieBundle",
+            "Ovesco\\FacturationBundle\\": "src/Ovesco/FacturationBundle"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
