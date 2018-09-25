@@ -15,10 +15,21 @@ services:
             - "%nextcloud_username%"
             - "%nextcloud_password%"
 
-    pheanstalk:
-        class: Pheanstalk\Pheanstalk
+    netbs.fichier.search_binder.no_adabs:
+        class: SauvabelinBundle\Searcher\NoAdabsbinder
         arguments:
-            - "%pheanstalk_url%"
+            - "@netbs.fichier.config"
+            - "@doctrine.orm.entity_manager"
+            - "@netbs.params"
+        tags:
+            - { name: netbs.searcher.binder }
+
+    sauvabelin.form.search_base_membre_information:
+        class: SauvabelinBundle\Form\Search\SearchBaseMembreInformationType
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
 
     sauvabelin.exporter.liste_unite:
         class: SauvabelinBundle\Exporter\PDFUnite

@@ -49,7 +49,6 @@ class SearchBaseMembreInformationType extends AbstractType
                 'lt_options'    => ['label' => "Désinscrit avant le"]
             ))
             ->add('attributions', SearchAttributionType::class)
-            ->add('noAdabs', SearchNoAdabsType::class, ['label' => "Pas à l'adabs", "data" => true])
             ->add('obtentionsDistinction', SearchObtentionDistinctionType::class)
         ;
     }

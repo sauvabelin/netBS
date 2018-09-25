@@ -45,15 +45,6 @@ services:
         tags:
             - { name: netbs.searcher.binder }
 
-    netbs.fichier.search_binder.no_adabs:
-        class: NetBS\FichierBundle\Searcher\NoAdabsbinder
-        arguments:
-            - "@netbs.fichier.config"
-            - "@doctrine.orm.entity_manager"
-            - "@netbs.params"
-        tags:
-            - { name: netbs.searcher.binder }
-
 #dynamic stuff
     netbs.fichier.dynamic_bridge.attribution_to_membre:
         class: NetBS\FichierBundle\Bridge\AttributionToMembreBridge

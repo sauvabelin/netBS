@@ -1,6 +1,6 @@
 <?php
 
-namespace NetBS\FichierBundle\Form\Search;
+namespace SauvabelinBundle\Form\Search;
 
 use NetBS\CoreBundle\Form\Type\SwitchType;
 use Symfony\Component\Form\AbstractType;

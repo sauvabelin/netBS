@@ -62,7 +62,7 @@ class GroupeTypesList extends BaseListModel
                 XEditableColumn::TYPE_CLASS => AjaxSelect2DocumentType::class,
                 XEditableColumn::PROPERTY   => 'groupeCategorie',
                 XEditableColumn::PARAMS     => [
-                    'class' => $this->config->getGroupeCategorieClass()
+                    'class' => $this->fichierConfig->getGroupeCategorieClass()
                 ]
             ))
             ->addColumn('Remarques', null, XEditableColumn::class, array(

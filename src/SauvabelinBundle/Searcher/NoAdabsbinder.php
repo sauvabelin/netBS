@@ -1,13 +1,13 @@
 <?php
 
-namespace NetBS\FichierBundle\Searcher;
+namespace SauvabelinBundle\Searcher;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use NetBS\CoreBundle\Model\BinderInterface;
 use NetBS\CoreBundle\Service\ParameterManager;
-use NetBS\FichierBundle\Form\Search\SearchNoAdabsType;
 use NetBS\FichierBundle\Service\FichierConfig;
+use SauvabelinBundle\Form\Search\SearchNoAdabsType;
 use Symfony\Component\Form\Form;
 
 class NoAdabsbinder implements BinderInterface

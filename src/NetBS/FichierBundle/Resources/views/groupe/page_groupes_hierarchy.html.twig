@@ -91,7 +91,7 @@
                         groupes: [
                             {% for groupe in groupes %}
                             {
-                                nom: "{{ groupe.nom }}",
+                                nom: "{{ groupe.nom|raw }}{% if groupe.groupeType.affichageEffectifs and groupe.parent %} ({{ groupe.parent.nom|raw }}){% endif %}",
                                 type: "{{ groupe.groupeType.nom }}",
                                 categorie: "{{ groupe.groupeType.groupeCategorie.nom }}",
                                 path: "{{ path('netbs.fichier.groupe.page_groupe', {id: groupe.id}) }}"

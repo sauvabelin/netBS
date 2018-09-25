@@ -51,11 +51,6 @@ class SearchBaseMembreInformation
     protected $obtentionsDistinction;
 
     /**
-     * @var boolean
-     */
-    protected $noAdabs;
-
-    /**
      * @return string
      */
     public function getPrenom()
@@ -197,21 +192,5 @@ class SearchBaseMembreInformation
     public function setObtentionsDistinction($obtentionsDistinction)
     {
         $this->obtentionsDistinction = $obtentionsDistinction;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isNoAdabs()
-    {
-        return $this->noAdabs;
-    }
-
-    /**
-     * @param bool $noAdabs
-     */
-    public function setNoAdabs($noAdabs)
-    {
-        $this->noAdabs = $noAdabs;
     }
 }
