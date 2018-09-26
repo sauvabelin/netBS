@@ -9,12 +9,7 @@ DirectoryIndex app.php
     RewriteEngine On
 
     RewriteCond %{HTTPS} !=on
-
     RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
-
-    RewriteCond %{REQUEST_FILENAME} !-f
-
-    RewriteRule ^(.*)$ app.php [QSA,L]
 
     RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
     RewriteRule ^(.*) - [E=BASE:%1]
