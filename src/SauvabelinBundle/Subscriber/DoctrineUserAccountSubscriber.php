@@ -124,7 +124,8 @@ class DoctrineUserAccountSubscriber implements EventSubscriber
             $this->roleUser = $manager->getRepository('NetBSSecureBundle:Role')->findOneBy(array('role' => 'ROLE_USER'));
 
         $username   = StrUtil::slugify($membre->getPrenom()) . "." . StrUtil::slugify($membre->getFamille()->getNom());
-        $password   = StrUtil::randomString();
+        //$password   = StrUtil::randomString();
+        $password   = $username . "-" . $membre->getNaissance()->format("d-m-Y");
         $user       = new BSUser();
         $i          = 1;
 
@@ -136,7 +137,7 @@ class DoctrineUserAccountSubscriber implements EventSubscriber
         $user->setNewPasswordRequired(true);
         $user->setMembre($membre);
         $user->setUsername($username);
-        $user->setPassword($this->encoder->encodePassword($user, $username . "-" . $membre->getNaissance()->format("d-m-Y")));
+        $user->setPassword($this->encoder->encodePassword($user, $password));
         $user->addRole($this->roleUser);
 
         $latestAccount  = new LatestCreatedAccount();
