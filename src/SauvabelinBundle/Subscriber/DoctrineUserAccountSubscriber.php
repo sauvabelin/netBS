@@ -11,6 +11,7 @@ use NetBS\CoreBundle\Utils\StrUtil;
 use NetBS\FichierBundle\Mapping\BaseAttribution;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\SecureBundle\Mapping\BaseUser;
+use SauvabelinBundle\Entity\BSMembre;
 use SauvabelinBundle\Entity\BSUser;
 use SauvabelinBundle\Entity\LatestCreatedAccount;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -30,6 +31,8 @@ class DoctrineUserAccountSubscriber implements EventSubscriber
     private $fnWeight = null;
 
     private $roleUser = null;
+
+    private $adabsId  = null;
 
     public function __construct(UserPasswordEncoderInterface $encoder, Mailer $mailer)
     {
@@ -82,12 +85,17 @@ class DoctrineUserAccountSubscriber implements EventSubscriber
 
     private function handleCreation(BaseAttribution $attribution, ObjectManager $manager) {
 
+        /** @var BSMembre $membre */
         $membre     = $attribution->getMembre();
 
         if($membre->getStatut() !== BaseMembre::INSCRIT)
             return;
 
         $fonction   = $attribution->getFonction();
+
+        if($this->adabsId === null)
+            $this->adabsId = intval($manager->getRepository('NetBSCoreBundle:Parameter')
+                ->findOneBy(array('namespace' => 'bs', 'paramKey'  => 'groupe.adabs_id'))->getValue());
 
         if($this->fnWeight === null)
             $this->fnWeight = $manager->getRepository('NetBSCoreBundle:Parameter')
@@ -96,6 +104,10 @@ class DoctrineUserAccountSubscriber implements EventSubscriber
         //Fonction pas assez balèze pour créer un compte
         if($fonction->getPoids() < intval($this->fnWeight))
             return;
+
+        foreach($membre->getActivesAttributions() as $attribution)
+            if(intval($attribution->getGroupe()->getId()) === $this->adabsId)
+                return;
 
         $user       = $manager->getRepository('SauvabelinBundle:BSUser')->findOneBy(array('membre' => $membre));
 
@@ -124,7 +136,7 @@ class DoctrineUserAccountSubscriber implements EventSubscriber
         $user->setNewPasswordRequired(true);
         $user->setMembre($membre);
         $user->setUsername($username);
-        $user->setPassword($this->encoder->encodePassword($user, "yoloswag22"));
+        $user->setPassword($this->encoder->encodePassword($user, $username . "-" . $membre->getNaissance()->format("d-m-Y")));
         $user->addRole($this->roleUser);
 
         $latestAccount  = new LatestCreatedAccount();

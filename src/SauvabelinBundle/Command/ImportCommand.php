@@ -115,7 +115,6 @@ class ImportCommand extends ContainerAwareCommand
         $this->io->writeln("Flushing data");
 
         $this->manager->flush();
-
     }
 
     private function handlePool(ArrayCollection $collection) {
