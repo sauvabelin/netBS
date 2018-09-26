@@ -13,9 +13,9 @@ class Importator
 {
     private $pdo;
 
-    public function __construct()
+    public function __construct($host, $name, $user, $pass)
     {
-        $this->pdo = new \PDO("mysql:dbname=c0netbs;host=localhost", "c0netbs", "Eipf+Lb04");
+        $this->pdo = new \PDO("mysql:dbname=$name;host=$host", $user, $pass);
     }
 
     /**

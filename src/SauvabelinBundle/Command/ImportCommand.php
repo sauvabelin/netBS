@@ -48,7 +48,14 @@ class ImportCommand extends ContainerAwareCommand
         $this->manager      = $this->getContainer()->get('doctrine.orm.default_entity_manager');
         $this->io           = new SymfonyStyle($input, $output);
         $merger             = new MembresMerger();
-        $importator         = new Importator();
+
+
+        $importator         = new Importator(
+            $this->getContainer()->getParameter('database_host'),
+            $this->getContainer()->getParameter('database_name'),
+            $this->getContainer()->getParameter('database_user'),
+            $this->getContainer()->getParameter('database_password')
+        );
 
         $this->io->writeln("Loading remote data in memory");
         $WNGMembres         = $importator->loadMembres();
