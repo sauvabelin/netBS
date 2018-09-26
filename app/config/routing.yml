@@ -1,8 +1,3 @@
-ovesco_facturation:
-    resource: "@OvescoFacturationBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 ovesco_galerie:
     resource: "@OvescoGalerieBundle/ApiController/"
     type:     annotation
