@@ -2,6 +2,7 @@
 
 namespace NetBS\CoreBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,14 +24,14 @@ class NewsChannel
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="nom", type="string", length=255, unique=true)
      */
     protected $nom;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="color", type="string", length=255, unique=true)
      */
     protected $color;
