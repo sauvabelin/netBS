@@ -46,7 +46,7 @@ class InitNextcloudCommand extends ContainerAwareCommand
         $this->wrapper  = $this->getContainer()->get('nextcloud.wrapper');
         $io             = $this->io;
         $em             = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $this->client   = $this->getContainer()->get('webdav.nextcloud_client');
+        $this->client   = $this->getContainer()->get('nextcloud.webdav_client');
 
         $this->client->addCurlSetting(CURLOPT_SSL_VERIFYHOST, false);
         $this->client->addCurlSetting(CURLOPT_SSL_VERIFYPEER, false);
@@ -63,6 +63,8 @@ class InitNextcloudCommand extends ContainerAwareCommand
         ];
 
         foreach($types as $path => $name) {
+
+            $path = "stammbox/" . $path;
 
             if(!$this->mkdir($path)) {
                 $io->error("Failed creating main directory $path");

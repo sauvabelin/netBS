@@ -3,6 +3,11 @@ imports:
 
 services:
 
+    nextcloud.webdav_client:
+        class: Sabre\DAV\Client
+            - {baseUri: "%nextcloud_webdav_uri%", userName: "%nextcloud_username%", password: "%nextcloud_password%"}
+
+
     nextcloud.wrapper.factory:
         public: false
         class: SauvabelinBundle\DependencyInjection\NextcloudWrapperFactory
