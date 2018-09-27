@@ -5,6 +5,7 @@ services:
 
     nextcloud.webdav_client:
         class: Sabre\DAV\Client
+        arguments:
             - {baseUri: "%nextcloud_webdav_uri%", userName: "%nextcloud_username%", password: "%nextcloud_password%"}
 
 
