@@ -25,6 +25,13 @@ class BSUser extends BaseUser
      */
     protected $nextcloudAdmin   = false;
 
+    /**
+     * Stammbox quota per user, base 10MB
+     * @var int
+     * @ORM\Column(name="nextcloud_quota", type="integer")
+     */
+    protected $nextcloudQuota   = 10485760;
+
     //Wikimedia data
     /**
      * @var bool
@@ -172,6 +179,22 @@ class BSUser extends BaseUser
     public function setNewPasswordRequired($newPasswordRequired)
     {
         $this->newPasswordRequired = $newPasswordRequired;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNextcloudQuota()
+    {
+        return $this->nextcloudQuota;
+    }
+
+    /**
+     * @param int $nextcloudQuota
+     */
+    public function setNextcloudQuota($nextcloudQuota)
+    {
+        $this->nextcloudQuota = $nextcloudQuota;
     }
 }
 

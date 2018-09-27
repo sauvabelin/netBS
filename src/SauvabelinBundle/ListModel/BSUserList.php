@@ -9,6 +9,7 @@ use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use NetBS\SecureBundle\ListModel\UsersList;
 use SauvabelinBundle\Entity\BSUser;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class BSUserList extends UsersList
 {
@@ -30,6 +31,10 @@ class BSUserList extends UsersList
             ->addColumn('Accès nextcloud', null, XEditableColumn::class, [
             XEditableColumn::PROPERTY       => 'nextcloudAccount',
             XEditableColumn::TYPE_CLASS     => SwitchType::class
+            ])
+            ->addColumn('Quota nextcloud', null, XEditableColumn::class, [
+                XEditableColumn::PROPERTY       => 'nextcloudQuota',
+                XEditableColumn::TYPE_CLASS     => NumberType::class
             ])
             ->addColumn('Admin nextcloud', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY       => 'nextcloudAdmin',
