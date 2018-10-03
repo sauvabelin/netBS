@@ -107,6 +107,7 @@ services:
         arguments:
             - "@netbs.core.twig.helper_extension"
             - "@netbs.core.helper_manager"
+            - "@security.authorization_checker"
         tags:
             - { name: netbs.list.column }
 

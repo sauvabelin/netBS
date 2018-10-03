@@ -5,6 +5,8 @@ namespace NetBS\CoreBundle\ListModel\Column;
 use NetBS\CoreBundle\Service\HelperManager;
 use NetBS\CoreBundle\Twig\Extension\HelperExtension;
 use NetBS\ListBundle\Column\BaseColumn;
+use NetBS\SecureBundle\Voter\CRUD;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 
 class HelperColumn extends BaseColumn
 {
@@ -12,10 +14,13 @@ class HelperColumn extends BaseColumn
 
     protected $helperExtension;
 
-    public function __construct(HelperExtension $extension, HelperManager $manager)
+    protected $checker;
+
+    public function __construct(HelperExtension $extension, HelperManager $manager, AuthorizationChecker $checker)
     {
         $this->helperExtension  = $extension;
         $this->helperManager    = $manager;
+        $this->checker          = $checker;
     }
 
     /**
@@ -23,6 +28,7 @@ class HelperColumn extends BaseColumn
      * @param object $item
      * @param array $params
      * @return string
+     * @throws \Exception
      */
     public function getContent($item, array $params = [])
     {
@@ -34,6 +40,9 @@ class HelperColumn extends BaseColumn
         $label  = $helper->getRepresentation($item);
         $path   = $helper->getRoute($item);
         $attr   = $this->helperExtension->generateHelperAttribute($item);
+
+        if(!$this->checker->isGranted(CRUD::READ, $item))
+            return $label;
 
         if($path)
             return "<a href='$path' $attr>$label</a>";

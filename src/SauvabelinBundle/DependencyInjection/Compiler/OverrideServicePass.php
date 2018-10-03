@@ -5,8 +5,10 @@ namespace SauvabelinBundle\DependencyInjection\Compiler;
 use SauvabelinBundle\ListModel\BSUserList;
 use SauvabelinBundle\LogRepresenter\MembreRepresenter;
 use SauvabelinBundle\Searcher\BSMembreSearcher;
+use SauvabelinBundle\Select2\BSMembreSelect2Provider;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Reference;
 
 class OverrideServicePass implements CompilerPassInterface
 {
