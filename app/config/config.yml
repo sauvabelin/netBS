@@ -73,6 +73,14 @@ swiftmailer:
         type: file
         path: "%kernel.root_dir%/../spool"
 
+doctrine_migrations:
+    dir_name: '%kernel.project_dir%/var/migrations'
+    namespace: 'DoctrineMigrations'
+    table_name: 'migration_versions'
+    name: 'NetBS Migrations'
+    organize_migrations: false
+    custom_template: ~
+
 knp_snappy:
     pdf:
         enabled:    true
