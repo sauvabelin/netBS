@@ -17,6 +17,8 @@ EXPOSE 80
 
 WORKDIR /var/www
 RUN ls -la
+RUN ls -la app
+RUN ls -la app/config
 RUN ls -la ../
 
 
