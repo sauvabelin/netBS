@@ -34,8 +34,8 @@ WORKDIR /var/www
 RUN wget https://getcomposer.org/composer.phar
 RUN php composer.phar install
 
-RUN php bin/console assets:install
 RUN php bin/console cache:clear
+RUN php bin/console assets:install
 
 RUN a2ensite 000-* 001-*
 RUN service apache2 start
