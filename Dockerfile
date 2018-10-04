@@ -11,10 +11,14 @@ COPY ./web/favicon.ico /var/www/web/favicon.ico
 COPY ./web/robots.txt /var/www/web/robots.txt
 
 COPY ./docker/composer.json /var/www/composer.json
+COPY ./docker/conf/ /etc/apache2
 
 EXPOSE 80
 
-COPY docker/conf/ /etc/apache2
+WORKDIR /var/www
+RUN ls -la
+RUN ls -la ../
+
 
 RUN apt-get update && apt-get install -y \
 		libfreetype6-dev \
@@ -30,7 +34,6 @@ RUN docker-php-ext-install pdo pdo_mysql
 
 RUN apt-get update -y && apt-get install -y wget git zip unzip nano sudo
 
-WORKDIR /var/www
 RUN wget https://getcomposer.org/composer.phar
 RUN php composer.phar install
 
