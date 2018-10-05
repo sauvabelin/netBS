@@ -14,7 +14,7 @@
         <div class="row">
 
             {% for list in lists %}
-                <div class="col-2">
+                <div class="col-12 col-md-2">
                     <a class="card bg-primary text-white" href="{{ path('netbs.core.dynamics_list.manage_list', {id: list.id}) }}">
                         <div class="card-header">
                             <h5 class="card-title">{{ list.name }}</h5>
@@ -26,7 +26,7 @@
                 </div>
             {% endfor %}
 
-            <div class="col-2">
+            <div class="col-12 col-md-2">
                 <a class="card bg-success text-white" href="#" id="list_create">
                     <div class="card-header">
                         <h5 class="card-title">Nouvelle liste</h5>
