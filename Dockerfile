@@ -42,5 +42,7 @@ RUN php composer.phar install
 RUN a2ensite 000-* 001-*
 RUN service apache2 start
 
+RUN php bin/console cache:clear
+
 RUN HTTPDUSER=$(ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1)
 RUN chmod -R 777 var

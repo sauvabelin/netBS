@@ -1,0 +1,42 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    database_host: 127.0.0.1
+    database_port: ~
+    database_name: symfony
+    database_user: root
+    database_password: ~
+    # You should uncomment this if you want to use pdo_sqlite
+    #database_path: '%kernel.project_dir%/var/data/data.sqlite'
+
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: ~
+    mailer_password: ~
+
+    web_path: "http://localhost/netBS"
+
+    # A secret key that's used to generate certain security-related tokens
+    secret: ThisTokenIsNotSoSecretChangeIt
+    netbs_secure_user_class: NetBS\SecureBundle\Entity\User
+
+    ispconfig_host: null
+    ispconfig_user: null
+    ispconfig_password: null
+    ispconfig_server_id: null
+    ispconfig_client_id: null
+    ispconfig_maildir: null
+    ispconfig_homedir: null
+    ispconfig_uid: null
+    ispconfig_gid: null
+
+    nextcloud_webdav_uri: http://localhost/nextcloud/remote.php/webdav/
+    nextcloud_ocs_uri: http://localhost/nextcloud/ocs/
+    nextcloud_username: null
+    nextcloud_password: null
+
+    jwt_private_key_path: '%kernel.root_dir%/../config/jwt/private.pem'
+    jwt_public_key_path:  '%kernel.root_dir%/../config/jwt/public.pem'
+    jwt_key_pass_phrase:  'your_secret_passphrase'
+    jwt_token_ttl:        3600
