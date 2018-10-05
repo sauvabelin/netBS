@@ -1,5 +1,4 @@
 imports:
-    - { resource: ReadEnvParams.php }
     - { resource: config.yml }
 
 #doctrine:

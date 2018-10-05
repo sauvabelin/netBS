@@ -1,4 +1,5 @@
 imports:
+    - { resource: ReadEnvParams.php }
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: dql_functions.yml }

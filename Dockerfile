@@ -39,9 +39,6 @@ RUN apt-get update -y && apt-get install -y wget git zip unzip nano sudo
 RUN wget https://getcomposer.org/composer.phar
 RUN php composer.phar install
 
-RUN php bin/console cache:clear -vvv
-RUN php bin/console assets:install -vvv
-
 RUN a2ensite 000-* 001-*
 RUN service apache2 start
 

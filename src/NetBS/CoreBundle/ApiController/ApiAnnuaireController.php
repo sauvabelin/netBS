@@ -2,6 +2,7 @@
 
 namespace NetBS\CoreBundle\ApiController;
 
+use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\SecureBundle\Mapping\BaseUser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,6 +26,9 @@ class ApiAnnuaireController extends Controller
             ->where($query->expr()->isNotNull('u.membre'))
             ->join("u.membre", "m")
             ->orderBy('m.nom')
+            ->andWhere('m.statut = :inscrit')
+            ->setParameter('inscrit', BaseMembre::INSCRIT)
+            ->orderBy('m.nom', 'ASC')
             ->getQuery()
             ->getResult();
 
@@ -43,6 +47,14 @@ class ApiAnnuaireController extends Controller
 
             if($membre->getSendableTelephone())
                 $data['telephone']  = $membre->getSendableTelephone()->getTelephone();
+
+            if($adresse = $membre->getSendableAdresse()) {
+                $data['adresse']    = [
+                    'rue'       => $adresse->getRue(),
+                    'npa'       => $adresse->getNpa(),
+                    'localite'  => $adresse->getLocalite()
+                ];
+            }
 
             if($attribution) {
                 $data['groupe']     = $attribution->getGroupe()->getNom();
