@@ -20,7 +20,6 @@ framework:
         resource: '%kernel.project_dir%/app/config/routing.yml'
         strict_requirements: ~
     form: ~
-    assets_base_url:  "%web_path%"
     csrf_protection: ~
     validation: { enable_annotations: true }
     serializer: { enable_annotations: true }
@@ -164,6 +163,6 @@ net_bs_secure:
 
 ovesco_galerie:
     prefix_directory: "/web"
-    mapped_directory: "/galerie/originals"
-    cache_directory:  "/galerie/cache"
+    mapped_directory: "/galerieMount/originals"
+    cache_directory:  "/galerieMount/cache"
     image_extensions: ["jpg", "png"]
