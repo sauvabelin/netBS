@@ -1,6 +1,7 @@
 imports:
-    - { resource: parameters.base.yml }
-    - { resource: ReadEnvParams.php }
+#    - { resource: parameters.base.yml }
+#    - { resource: ReadEnvParams.php }
+    - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: dql_functions.yml }

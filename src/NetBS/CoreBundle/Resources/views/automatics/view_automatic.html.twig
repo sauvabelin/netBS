@@ -4,7 +4,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-3">
+            <div class="col-12 col-sm-6 col-md-3">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">{{ model.name }}</h5>
@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <div class="col-9">
+            <div class="col-12 col-sm-6 col-md-9">
                 <div class="card {% if form and form.vars.submitted and form.vars.valid %}card-table{% endif %}">
                     <div class="card-header">
                         <h5 class="card-title">Résultats</h5>

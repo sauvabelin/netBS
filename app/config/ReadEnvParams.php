@@ -5,15 +5,7 @@ $vcapServices = $vcapServices ? json_decode($vcapServices) : null;
 
 $container->setParameter('database_driver', 'pdo_mysql');
 
-if($vcapServices) {
-
-    $db = $vcapServices->{getenv('FOUNDRY_DB_NAME')}[0]->credentials;
-
-    $container->setParameter('database_host', $db->host);
-    $container->setParameter('database_port', $db->port);
-    $container->setParameter('database_name', $db->name);
-    $container->setParameter('database_user', $db->username);
-    $container->setParameter('database_password', $db->password);
+if(getenv('DB_HOST')) {
 
     $container->setParameter('database_host', getenv('DB_HOST'));
     $container->setParameter('database_port', getenv('DB_PORT'));
@@ -44,4 +36,15 @@ if($vcapServices) {
     $container->setParameter('jwt_public_key_path', getenv('JWT_PUBLIC_KEY_PATH'));
     $container->setParameter('jwt_key_pass_phrase', getenv('JWT_KEY_PASS_PHRASE'));
     $container->setParameter('jwt_token_ttl', getenv('JWT_TOKEN_TTL'));
+}
+
+if($vcapServices) {
+
+    $db = $vcapServices->{getenv('FOUNDRY_DB_NAME')}[0]->credentials;
+
+    $container->setParameter('database_host', $db->host);
+    $container->setParameter('database_port', $db->port);
+    $container->setParameter('database_name', $db->name);
+    $container->setParameter('database_user', $db->username);
+    $container->setParameter('database_password', $db->password);
 }

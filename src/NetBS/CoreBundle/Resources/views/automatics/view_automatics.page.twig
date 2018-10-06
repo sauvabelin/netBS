@@ -14,7 +14,7 @@
         <div class="row">
 
             {% for model in models %}
-                <div class="col-3">
+                <div class="col-12 col-sm-6 col-md-3">
                     <a href="{{ path('netbs.core.automatic_list.view_list', {alias: model.alias}) }}" class="card text-white bg-info mb-3">
                         <div class="card-header">
                             <h5 class="card-title">{{ model.name }}</h5>
