@@ -24,7 +24,7 @@ class BSEmailType extends AbstractType
     {
         $builder
             ->add('email', SE::class, array('label' => 'Adresse e-mail'))
-            ->add('expediable', SwitchType::class, array('label' => 'Contactable', 'required' => false))
+            ->add('expediable', SwitchType::class, array('label' => 'Prioritaire', 'required' => false))
         ;
 
         RemarquesUtils::addRemarquesField($builder);
