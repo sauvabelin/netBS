@@ -24,7 +24,7 @@ class ApiGalerieController extends Controller
 
         $token          = $request->headers->get('x-authorization');
         $token          = str_replace("Bearer ", "", $token);
-        $actualToken    = $this->get('netbs.params')->getValue('galerie', 'parent_token');
+        $actualToken    = $this->get('netbs.params')->getValue('galerie', 'parent_token', false);
 
         if($token !== $actualToken)
             return new JsonResponse("access denied", 401);
