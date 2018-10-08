@@ -7,6 +7,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use NetBS\CoreBundle\Validator\Constraints as BSAssert;
 
 /**
  * Attribution
@@ -30,6 +31,7 @@ abstract class BaseAttribution
      * @var \DateTime
      *
      * @ORM\Column(name="dateDebut", type="datetime")
+     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      * @Groups({"default"})
      * @Assert\NotBlank()
      */
@@ -39,6 +41,7 @@ abstract class BaseAttribution
      * @var \DateTime
      *
      * @ORM\Column(name="dateFin", type="datetime", nullable=true)
+     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      * @Groups({"default"})
      */
     protected $dateFin;
@@ -53,6 +56,7 @@ abstract class BaseAttribution
     /**
      * @var BaseFonction
      * @Assert\NotBlank()
+     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      * @Groups({"attributionWithFonction"})
      */
     protected $fonction;
@@ -60,6 +64,7 @@ abstract class BaseAttribution
     /**
      * @var BaseMembre
      * @Assert\NotBlank()
+     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      * @Groups({"attributionWithMembre"})
      */
     protected $membre;
@@ -226,7 +231,7 @@ abstract class BaseAttribution
         return function(BaseAttribution $a, BaseAttribution $b) {
 
             if($a->getFonction()->getPoids() == $b->getFonction()->getPoids())
-                return $a->getMembre()->getInscription() < $b->getMembre()->getInscription() ? -1 : 1;
+                return $a->getDateDebut() < $b->getDateDebut() ? -1 : 1;
 
             return $a->getFonction()->getPoids() > $b->getFonction()->getPoids() ? -1 : 1;
 

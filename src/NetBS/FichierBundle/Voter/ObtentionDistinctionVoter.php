@@ -3,10 +3,11 @@
 namespace NetBS\FichierBundle\Voter;
 
 use NetBS\FichierBundle\Entity\ObtentionDistinction;
+use NetBS\FichierBundle\Utils\FichierHelper;
 use NetBS\SecureBundle\Mapping\BaseUser;
 use NetBS\SecureBundle\Voter\CRUD;
 
-class ObtentionDistinctionVoter extends GroupeVoter
+class ObtentionDistinctionVoter extends FichierVoter
 {
 
     /**
@@ -26,6 +27,12 @@ class ObtentionDistinctionVoter extends GroupeVoter
      */
     protected function accept($operation, $subject, BaseUser $user)
     {
+        if($operation === CRUD::READ)
+            return true;
+
+        return $user->hasRole('ROLE_SG');
+
+        /*
         if($operation === CRUD::READ && $subject->getMembre()->getId() === $user->getMembreId())
             return true;
 
@@ -34,5 +41,6 @@ class ObtentionDistinctionVoter extends GroupeVoter
                 return true;
 
         return false;
+        */
     }
 }

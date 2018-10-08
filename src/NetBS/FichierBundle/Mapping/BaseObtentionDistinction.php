@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
 use Symfony\Component\Validator\Constraints as Assert;
+use NetBS\CoreBundle\Validator\Constraints as BSAssert;
 
 /**
  * ObtentionDistinction
@@ -29,12 +30,14 @@ abstract class BaseObtentionDistinction
      * @Assert\NotBlank()
      * @Assert\DateTime()
      * @ORM\Column(name="date", type="datetime")
+     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      */
     protected $date;
 
     /**
      * @var BaseDistinction
      * @Assert\NotBlank()
+     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      */
     protected $distinction;
 

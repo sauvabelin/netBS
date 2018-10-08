@@ -10,6 +10,7 @@ use NetBS\FichierBundle\Model\OwnableEmail;
 use NetBS\FichierBundle\Model\OwnableTelephone;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use NetBS\CoreBundle\Validator\Constraints as BSAssert;
 
 /**
  * Membre
@@ -71,6 +72,7 @@ abstract class BaseMembre extends Personne implements EqualInterface
     /**
      * @var string
      * @Assert\NotBlank()
+     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      * @ORM\Column(name="statut", type="string", length=255)
      * @Groups({"default"})
      */

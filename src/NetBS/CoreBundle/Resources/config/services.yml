@@ -8,6 +8,14 @@ imports:
 
 services:
 
+#validator
+    netbs.core.validator.user:
+        class: NetBS\CoreBundle\Validator\Validators\UserValidator
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - { name: validator.constraint_validator }
+
     netbs.mailer:
         class: NetBS\CoreBundle\Service\Mailer
         arguments:
@@ -15,7 +23,7 @@ services:
             - "@twig"
             - "@swiftmailer.mailer"
 
-    sauvabelin.serializer.news_normalizer:
+    netbs.serializer.news_normalizer:
         class: NetBS\CoreBundle\Serializer\NewsNormalizer
         tags:
             - { name: serializer.normalizer }
