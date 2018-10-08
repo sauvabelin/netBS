@@ -51,6 +51,9 @@ class UserController extends Controller
 
             $user->setPassword($encoder->encodePassword($user, $data->getPassword()));
             $manager->updateUser($user);
+
+            $this->addFlash("success", "Mot de passe changé");
+            return Modal::refresh();
         }
 
         return $this->render('@Sauvabelin/user/change_password.modal.twig', [

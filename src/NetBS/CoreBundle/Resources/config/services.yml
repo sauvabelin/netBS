@@ -89,6 +89,7 @@ services:
             - "@netbs.core.mass_updater_manager"
             - "@twig"
             - "@netbs.fichier.config"
+            - "@security.token_storage"
         tags:
             - { name: kernel.event_listener, event: netbs.list_model.renderer.toolbar, method: extend }
 

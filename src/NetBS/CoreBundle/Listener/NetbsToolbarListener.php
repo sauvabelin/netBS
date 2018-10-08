@@ -10,6 +10,7 @@ use NetBS\CoreBundle\Service\ExporterManager;
 use NetBS\CoreBundle\Service\ListBridgeManager;
 use NetBS\CoreBundle\Service\MassUpdaterManager;
 use NetBS\FichierBundle\Service\FichierConfig;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class NetbsToolbarListener
 {
@@ -29,6 +30,11 @@ class NetbsToolbarListener
     private $exporterManager;
 
     /**
+     * @var TokenStorage
+     */
+    private $storage;
+
+    /**
      * @var MassUpdaterManager
      */
     private $massUpdaterManager;
@@ -43,7 +49,7 @@ class NetbsToolbarListener
      */
     private $config;
 
-    public function __construct(DynamicListManager $dynamicManager, ListBridgeManager $bridgeManager, ExporterManager $exporterManager, MassUpdaterManager $updater, \Twig_Environment $twig, FichierConfig $config)
+    public function __construct(DynamicListManager $dynamicManager, ListBridgeManager $bridgeManager, ExporterManager $exporterManager, MassUpdaterManager $updater, \Twig_Environment $twig, FichierConfig $config, TokenStorage $storage)
     {
         $this->dynamicManager       = $dynamicManager;
         $this->bridgeManager        = $bridgeManager;
@@ -51,6 +57,7 @@ class NetbsToolbarListener
         $this->massUpdaterManager   = $updater;
         $this->twig                 = $twig;
         $this->config               = $config;
+        $this->storage              = $storage;
     }
 
     /**
@@ -103,6 +110,11 @@ class NetbsToolbarListener
      * @param NetbsRendererToolbarEvent $event
      */
     protected function extendWithMassUpdaters(NetbsRendererToolbarEvent $event) {
+
+        $user       = $this->storage->getToken()->getUser();
+
+        if(!$user || !$user->hasRole('ROLE_UPDATE_EVERYWHERE'))
+            return;
 
         $addable    = $this->bridgeManager->isValidTransformation($event->getTable()->getItemClass(), $this->config->getMembreClass());
         $updatable  = $this->massUpdaterManager->getUpdaterForClass($event->getTable()->getItemClass());
