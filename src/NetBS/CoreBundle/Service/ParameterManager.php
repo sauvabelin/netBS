@@ -50,7 +50,10 @@ class ParameterManager
         $this->cacheParameter($param);
     }
 
-    public function getValue($namespace, $key) {
+    public function getValue($namespace, $key, $cache = true) {
+
+        if(!$cache)
+            return $this->getParameter($namespace, $key)->getValue();
 
         $path       = $this->getCachePath($namespace, $key);
         $item       = $this->cache->getItem($path);
