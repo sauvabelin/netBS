@@ -27,7 +27,7 @@ class AdresseType extends AbstractType
             ->add('rue', TextType::class, array('label' => 'Rue', 'required' => false))
             ->add('npa', NumberType::class, array('label' => 'NPA', 'required' => false))
             ->add('localite', TextType::class, array('label' => 'Localité', 'required' => false))
-            ->add('expediable', SwitchType::class, array('label' => 'Expediable', 'required' => false))
+            ->add('expediable', SwitchType::class, array('label' => 'Prioritaire', 'required' => false))
         ;
 
         RemarquesUtils::addRemarquesField($builder);

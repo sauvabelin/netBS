@@ -24,7 +24,7 @@ class TelephoneType extends AbstractType
     {
         $builder
             ->add('telephone', TextType::class, array('label' => 'Numéro'))
-            ->add('expediable', SwitchType::class, array('label' => 'Appelable', 'required' => false))
+            ->add('expediable', SwitchType::class, array('label' => 'Prioritaire', 'required' => false))
         ;
 
         RemarquesUtils::addRemarquesField($builder);

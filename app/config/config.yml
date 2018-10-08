@@ -163,6 +163,6 @@ net_bs_secure:
 
 ovesco_galerie:
     prefix_directory: "/web"
-    mapped_directory: "/galerie/originals"
-    cache_directory:  "/galerie/cache"
+    mapped_directory: "/galerieMount/originals"
+    cache_directory:  "/galerieMount/cache"
     image_extensions: ["jpg", "png"]
