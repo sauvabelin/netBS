@@ -6,9 +6,5 @@
     {{ form_row(form.numeroBS) }}
     {{ form_row(form.naissance) }}
     {{ form_row(form.inscription) }}
-    {% if app.user and app.user.hasRole('ROLE_SG') %}
-        {{ form_row(form.statut) }}
-    {% else %}
-        {{ fake_row("statut", form.statut.vars.value) }}
-    {% endif %}
+    {{ form_row(form.statut) }}
 </form>

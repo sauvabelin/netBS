@@ -11,6 +11,7 @@ use NetBS\CoreBundle\Validator\Constraints as BSAssert;
 /**
  * ObtentionDistinction
  * @ORM\MappedSuperclass()
+ * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
  */
 abstract class BaseObtentionDistinction
 {
@@ -30,14 +31,12 @@ abstract class BaseObtentionDistinction
      * @Assert\NotBlank()
      * @Assert\DateTime()
      * @ORM\Column(name="date", type="datetime")
-     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      */
     protected $date;
 
     /**
      * @var BaseDistinction
      * @Assert\NotBlank()
-     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      */
     protected $distinction;
 

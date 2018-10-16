@@ -12,6 +12,7 @@ use NetBS\CoreBundle\Validator\Constraints as BSAssert;
 /**
  * Attribution
  * @ORM\MappedSuperclass()
+ * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
  */
 abstract class BaseAttribution
 {
@@ -31,7 +32,6 @@ abstract class BaseAttribution
      * @var \DateTime
      *
      * @ORM\Column(name="dateDebut", type="datetime")
-     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      * @Groups({"default"})
      * @Assert\NotBlank()
      */
@@ -41,7 +41,6 @@ abstract class BaseAttribution
      * @var \DateTime
      *
      * @ORM\Column(name="dateFin", type="datetime", nullable=true)
-     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      * @Groups({"default"})
      */
     protected $dateFin;
@@ -56,7 +55,6 @@ abstract class BaseAttribution
     /**
      * @var BaseFonction
      * @Assert\NotBlank()
-     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      * @Groups({"attributionWithFonction"})
      */
     protected $fonction;
@@ -64,7 +62,6 @@ abstract class BaseAttribution
     /**
      * @var BaseMembre
      * @Assert\NotBlank()
-     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      * @Groups({"attributionWithMembre"})
      */
     protected $membre;

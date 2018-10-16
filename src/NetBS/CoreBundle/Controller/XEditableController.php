@@ -3,6 +3,7 @@
 namespace NetBS\CoreBundle\Controller;
 
 use Doctrine\Common\Collections\Collection;
+use NetBS\CoreBundle\Exceptions\UserConstraintException;
 use NetBS\CoreBundle\Model\XEditable;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,8 +39,12 @@ class XEditableController extends Controller
 
             $item   = $form->getData();
 
-            $em->persist($item);
-            $em->flush();
+            try {
+                $em->persist($item);
+                $em->flush();
+            } catch(UserConstraintException $exception) {
+                return new JsonResponse(['message' => $exception->getMessage()], 400);
+            }
 
             $value  = $accessor->getValue($item, $xeditable->getField());
 
@@ -67,7 +72,7 @@ class XEditableController extends Controller
             foreach($this->getErrorMessages($form) as $message)
                 $str .= $message[0];
 
-            return new JsonResponse($str, 400);
+            return new JsonResponse(['message' => $str], 400);
         }
 
     }

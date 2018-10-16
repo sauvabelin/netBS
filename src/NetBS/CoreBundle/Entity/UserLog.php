@@ -9,7 +9,7 @@ use NetBS\SecureBundle\Mapping\BaseUser;
  * UserLog
  *
  * @ORM\Table(name="netbs_core_user_logs")
- * @ORM\Entity(repositoryClass="NetBS\CoreBundle\Repository\UserLogRepository")
+ * @ORM\Entity()
  */
 class UserLog
 {

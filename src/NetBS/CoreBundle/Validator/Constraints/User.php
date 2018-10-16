@@ -2,7 +2,6 @@
 
 namespace NetBS\CoreBundle\Validator\Constraints;
 
-use NetBS\CoreBundle\Validator\Validators\UserValidator;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -10,12 +9,12 @@ use Symfony\Component\Validator\Constraint;
  */
 class User extends Constraint
 {
-    public $rule    = "";
+    public $rule    = null;
+    public $rules   = [];
     public $key     = "user";
-    public $message = "You're not allowed to change this value";
 
-    public function validatedBy()
+    public function getTargets()
     {
-        return UserValidator::class;
+        return self::CLASS_CONSTRAINT;
     }
 }

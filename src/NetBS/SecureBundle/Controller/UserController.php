@@ -2,6 +2,7 @@
 
 namespace NetBS\SecureBundle\Controller;
 
+use NetBS\CoreBundle\Entity\LoggedChange;
 use NetBS\SecureBundle\Event\UserPasswordChangeEvent;
 use NetBS\SecureBundle\Form\AdminChangePasswordType;
 use NetBS\SecureBundle\Form\ChangePasswordType;
@@ -52,6 +53,30 @@ class UserController extends Controller
             'header'    => "Modifier {$user->getUsername()}",
             'form'      => $form->createView()
         ));
+    }
+
+    /**
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @Route("/user/delete/{id}", name="netbs.secure.user.delete_user")
+     */
+    public function deleteUserAction($id) {
+
+        $em             = $this->get('doctrine.orm.entity_manager');
+        $secureConfig   = $this->get('netbs.secure.config');
+        $user           = $em->find($secureConfig->getUserClass(), $id);
+        $manager        = $this->get('netbs.secure.user_manager');
+
+        try {
+            $manager->deleteUser($user);
+        } catch (\ErrorException $e) {
+            $this->addFlash('danger', $e->getMessage());
+        }
+
+        return $this->get('netbs.core.history')->getPreviousRoute();
     }
 
     /**

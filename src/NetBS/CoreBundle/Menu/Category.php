@@ -39,6 +39,15 @@ class Category
         return $this->links[$key];
     }
 
+    public function isEmpty() {
+
+        foreach($this->links as $link)
+            if(!$link->isEmpty())
+                return false;
+
+        return true;
+    }
+
     /**
      * @param string $name
      * @return Category

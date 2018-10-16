@@ -95,6 +95,26 @@
                             return JSON.parse(source);
                         },
 
+                        error: function(response) {
+
+                            if(response.status === 500) {
+                                toastr.error('Erreur interne, veuillez contacter le chef comm');
+
+                            } else {
+
+                                var txt = response.responseText;
+                                if(response.responseJSON.hasOwnProperty('message'))
+                                    txt = response.responseJSON.message;
+                                toastr.warning(txt);
+                            }
+                        },
+
+                        success: function() {
+                            var t = toastr.success('Valeur modifiée avec succès, cliquez ici pour actualiser');
+                            $(t).click(function() {
+                                location.reload();
+                            });
+                        },
 
                         select2: {
                             multiple: multiple,
@@ -193,9 +213,14 @@
     {# formulaire non final, gros bug sa mère la tchoin #}
     {% if form.children|length == 0 %}
 
-        {% if is_granted('update', form.parent.vars.data) %}
+        {% set item = form.parent.vars.value %}
+        {% set key = form.vars.name %}
+
+        {% if is_granted('update', form.parent.vars.data) and editProperty(item, key) %}
+
             {{ block('webAssets') }}
             <a href="#" {{ block('xeditable') }}></a>
+
         {% elseif is_granted('read', form.parent.vars.data) %}
             {{ block('webAssets') }}
             <a href="#" data-disabled style="color:#686868;border-bottom:none;cursor:default" {{ block('xeditable') }}></a>
@@ -275,7 +300,23 @@
             $.fn.editableform.buttons  = '{% include '@NetBSCore/xeditable/buttons.xeditable.twig' %}';
 
             $('.editable').editable({
-                select2: {width: 250}
+                select2: {width: 250},
+                error: function(response) {
+
+                    if(response.status === 500) {
+                        toastr['error']('Erreur interne, veuillez contacter le chef comm');
+
+                    } else {
+
+                        var txt = response.responseText;
+                        if(response.responseJSON.hasOwnProperty('message'))
+                            txt = response.responseJSON.message;
+                        toastr["warning"](txt);
+                    }
+                },
+                success: function() {
+                    toastr['success']('Valeur modifiée avec succès');
+                }
             });
         </script>
     {% endset %}

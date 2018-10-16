@@ -4,12 +4,16 @@ namespace SauvabelinBundle\Entity;
 
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use Doctrine\ORM\Mapping as ORM;
+use NetBS\CoreBundle\Validator\Constraints as BSAssert;
 
 /**
  * Class Membre
  * @package SauvabelinBundle\Entity
  * @ORM\Entity()
  * @ORM\Table(name="sauvabelin_netbs_membres")
+ * @BSAssert\User(rules={
+ *     "numeroBS":"user.hasRole('ROLE_SG')"
+ * })
  */
 class BSMembre extends BaseMembre
 {

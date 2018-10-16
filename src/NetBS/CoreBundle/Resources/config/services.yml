@@ -10,9 +10,12 @@ services:
 
 #validator
     netbs.core.validator.user:
-        class: NetBS\CoreBundle\Validator\Validators\UserValidator
+        class: NetBS\CoreBundle\Validator\Constraints\UserValidator
         arguments:
             - "@security.token_storage"
+            - "@cache.app"
+            - "@doctrine.orm.entity_manager"
+            - "@annotations.reader"
         tags:
             - { name: validator.constraint_validator }
 
@@ -167,6 +170,7 @@ services:
         arguments:
             - "@form.factory"
             - "@twig"
+            - "@netbs.core.validator.user"
         tags:
             - { name: twig.extension }
 
@@ -215,6 +219,14 @@ services:
         class: NetBS\CoreBundle\Subscriber\DoctrineMapperSubscriber
         arguments:
             - "@netbs.secure.config"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    netbs.core.subscriber.user_constraint:
+        class: NetBS\CoreBundle\Subscriber\DoctrineUserConstraintSubscriber
+        arguments:
+            - "@netbs.core.validator.user"
+            - "@security.token_storage"
         tags:
             - { name: doctrine.event_subscriber }
 

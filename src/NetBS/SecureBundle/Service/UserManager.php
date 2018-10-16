@@ -3,6 +3,7 @@
 namespace NetBS\SecureBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use NetBS\CoreBundle\Entity\LoggedChange;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\SecureBundle\Mapping\BaseUser;
 use NetBS\SecureBundle\Exceptions\UserCreationException;
@@ -73,8 +74,43 @@ class UserManager
 
     public function deleteUser(BaseUser $user) {
 
-        $this->em->remove($user);
-        $this->em->flush();
+        $em             = $this->em;
+
+        // Check user logged changes
+        $changes = $em->getRepository('NetBSCoreBundle:LoggedChange')->findBy(['user' => $user]);
+        $waitingChanges = array_filter($changes, function(LoggedChange $change) {
+            return $change->getStatus() === LoggedChange::WAITING;
+        });
+
+        if(count($waitingChanges) > 0)
+            throw new \ErrorException("Impossible de supprimer {$user->getUsername()} actuellement, des " .
+                "modifications qu'il a réalisé sont en attente, veuillez les valider ou rejeter avant.");
+
+        foreach($changes as $change) $em->remove($change);
+
+        // Remove dynamics
+        $dynamics = $em->getRepository('NetBSCoreBundle:DynamicList')->findBy(['owner' => $user]);
+        foreach($dynamics as $dynamic) $em->remove($dynamic);
+
+        // Remove published news
+        $news = $em->getRepository('NetBSCoreBundle:News')->findBy(['user' => $user]);
+        foreach($news as $n) $em->remove($n);
+
+        // Remove user export configurations
+        $exportConfigs = $em->getRepository('NetBSCoreBundle:ExportConfiguration')->findBy(['user' => $user]);
+        foreach($exportConfigs as $e) $em->remove($e);
+
+        // Remove notifications
+        $notifications = $em->getRepository('NetBSCoreBundle:Notification')->findBy(['user' => $user]);
+        foreach($notifications as $n) $em->remove($n);
+
+        // Remove user logs
+        $logs = $em->getRepository('NetBSCoreBundle:UserLog')->findBy(['user' => $user]);
+        foreach($logs as $log) $em->remove($log);
+
+        $em->flush();
+        $em->remove($user);
+        $em->flush();
     }
 
     public function buildUsername($username) {

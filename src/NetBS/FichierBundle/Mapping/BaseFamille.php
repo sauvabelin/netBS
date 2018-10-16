@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\CoreBundle\Model\EqualInterface;
-use NetBS\FichierBundle\Entity\ContactInformation;
 use NetBS\FichierBundle\Model\AdressableInterface;
 use NetBS\FichierBundle\Model\EmailableInterface;
 use NetBS\FichierBundle\Model\OwnableAdresse;
@@ -17,14 +16,14 @@ use NetBS\FichierBundle\Model\ValidableInterface;
 use NetBS\FichierBundle\Utils\Entity\ContactTrait;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
 use NetBS\FichierBundle\Utils\Entity\ValidityTrait;
-use Symfony\Component\Security\Core\User\EquatableInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use NetBS\CoreBundle\Validator\Constraints as BSAssert;
 
 /**
  * Famille
  * @ORM\MappedSuperclass
+ * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
  */
 abstract class BaseFamille implements AdressableInterface, TelephonableInterface, EmailableInterface, ValidableInterface, EqualInterface
 {

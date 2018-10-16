@@ -42,8 +42,10 @@ class MainMenuListener
         $categorie  = $menu->registerCategory('app', 'NetBS', 1000);
         $submenu    = $categorie->addSubMenu('app.lists', 'Listes', 'fas fa-list');
         $submenu
-            ->addSubLink('Listes automatiques', 'netbs.core.automatic_list.view_lists')
             ->addSubLink('Gérer mes listes', 'netbs.core.dynamics_list.manage_lists');
+
+        if($user->hasRole('ROLE_READ_EVERYWHERE'))
+            $submenu->addSubLink('Listes automatiques', 'netbs.core.automatic_list.view_lists');
 
         if(count($lists) > 0)
             foreach ($repo->findForUser($user) as $list)

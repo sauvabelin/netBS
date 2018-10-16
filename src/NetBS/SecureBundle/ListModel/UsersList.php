@@ -6,6 +6,7 @@ use NetBS\CoreBundle\Form\Type\SwitchType;
 use NetBS\CoreBundle\ListModel\Action\IconAction;
 use NetBS\CoreBundle\ListModel\Action\LinkAction;
 use NetBS\CoreBundle\ListModel\Action\RemoveAction;
+use NetBS\CoreBundle\ListModel\ActionItem;
 use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\ListModel\Column\HelperColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
@@ -75,13 +76,17 @@ class UsersList extends BaseListModel
             ))
             ->addColumn("Actions", null,ActionColumn::class, array(
                 ActionColumn::ACTIONS_KEY   => [
-                    IconAction::class   => [
+                    new ActionItem(LinkAction::class, [
                         LinkAction::ROUTE   => function(BaseUser $user) {
                             return $this->router->generate('netbs.secure.user.edit_user', array('id' => $user->getId()));
                         }
-                    ],
-
-                    RemoveAction::class
+                    ]),
+                    new ActionItem(LinkAction::class, [
+                        LinkAction::ROUTE   => function(BaseUser $user) {
+                            return $this->router->generate('netbs.secure.user.delete_user', array('id' => $user->getId()));
+                        },
+                        LinkAction::ATTRS   => 'onclick="return confirm(\'Etes-vous sûr? Tout ce qui est lié à cet utilisateur (listes, export...) sera perdu!\')"'
+                    ])
                 ]
             ))
         ;

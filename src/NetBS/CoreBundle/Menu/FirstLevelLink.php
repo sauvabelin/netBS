@@ -22,7 +22,7 @@ class FirstLevelLink
     /**
      * @var string
      */
-    protected $route;
+    protected $route = null;
 
     /**
      * @var array
@@ -54,6 +54,11 @@ class FirstLevelLink
         $this->key      = $key;
         $this->label    = $label;
         $this->icon     = $icon;
+    }
+
+    public function isEmpty() {
+
+        return count($this->subLinks) === 0 || $this->route !== null;
     }
 
     /**

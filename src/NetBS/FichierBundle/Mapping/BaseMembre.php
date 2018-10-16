@@ -15,6 +15,7 @@ use NetBS\CoreBundle\Validator\Constraints as BSAssert;
 /**
  * Membre
  * @ORM\MappedSuperclass()
+ * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
  */
 abstract class BaseMembre extends Personne implements EqualInterface
 {
@@ -72,7 +73,6 @@ abstract class BaseMembre extends Personne implements EqualInterface
     /**
      * @var string
      * @Assert\NotBlank()
-     * @BSAssert\User(rule="user.hasRole('ROLE_SG')")
      * @ORM\Column(name="statut", type="string", length=255)
      * @Groups({"default"})
      */

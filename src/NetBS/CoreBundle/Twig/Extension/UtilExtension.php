@@ -17,7 +17,7 @@ class UtilExtension extends \Twig_Extension
 
             new \Twig_SimpleFunction('random_number', [$this, 'randomNumber']),
             new \Twig_SimpleFunction('increment', [$this, 'increment']),
-            new \Twig_SimpleFunction('uniqid', [$this, 'uniqid'])
+            new \Twig_SimpleFunction('uniqid', [$this, 'uniqid']),
         ];
     }
 

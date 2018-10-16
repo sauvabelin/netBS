@@ -3,6 +3,7 @@
 namespace NetBS\CoreBundle\ListModel\Column;
 
 use NetBS\CoreBundle\ListModel\Action\ActionInterface;
+use NetBS\CoreBundle\ListModel\ActionItem;
 use NetBS\CoreBundle\Service\ListActionsManager;
 use NetBS\ListBundle\Column\BaseColumn;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,14 +36,22 @@ class ActionColumn extends BaseColumn
      */
     public function getContent($item, array $params = [])
     {
-        /** @var ActionInterface[] $actions */
-        $actions    = $params[self::ACTIONS_KEY];
         $html       = '';
 
-        foreach($params[self::ACTIONS_KEY] as $key  => $params) {
+        foreach($params[self::ACTIONS_KEY] as $key  => $value) {
 
-            $class      = is_array($params) ? $key : $params;
-            $params     = is_array($params) ? $params : [];
+            $class      = null;
+            $params     = null;
+            if($value instanceof ActionItem) {
+                $class  = $value->getActionClass();
+                $params = $value->getActionParams();
+            }
+
+            else {
+                $class = is_array($value) ? $key : $value;
+                $params = is_array($value) ? $value : [];
+            }
+
             $action     = $this->manager->getAction($class);
             $options    = new OptionsResolver();
 

@@ -3,7 +3,8 @@
 namespace NetBS\CoreBundle\Controller;
 
 use NetBS\CoreBundle\Model\ConfigurableAutomaticInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,6 +16,7 @@ class AutomaticListController extends Controller
 {
     /**
      * @Route("/view/lists", name="netbs.core.automatic_list.view_lists")
+     * @Security("is_granted('ROLE_READ_EVERYWHERE')")
      */
     public function viewListsAction() {
 
@@ -29,6 +31,7 @@ class AutomaticListController extends Controller
      * @Route("/view/{alias}", name="netbs.core.automatic_list.view_list")
      * @param Request $request
      * @param $alias
+     * @Security("is_granted('ROLE_READ_EVERYWHERE')")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewListAction(Request $request, $alias) {

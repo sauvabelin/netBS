@@ -3,6 +3,7 @@
 namespace NetBS\CoreBundle\Twig\Extension;
 
 use Doctrine\Common\Util\ClassUtils;
+use NetBS\CoreBundle\Validator\Constraints\UserValidator;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactory;
@@ -10,6 +11,11 @@ use Symfony\Component\Form\FormView;
 
 class XEditableExtension extends \Twig_Extension
 {
+    /**
+     * @var UserValidator
+     */
+    protected $validator;
+
     /**
      * @var FormFactory
      */
@@ -20,10 +26,11 @@ class XEditableExtension extends \Twig_Extension
      */
     protected $twig;
 
-    public function __construct(FormFactory $factory, \Twig_Environment $twig)
+    public function __construct(FormFactory $factory, \Twig_Environment $twig, UserValidator $validator)
     {
         $this->form = $factory;
         $this->twig = $twig;
+        $this->validator = $validator;
     }
 
     /**
@@ -38,7 +45,8 @@ class XEditableExtension extends \Twig_Extension
 
         return [
             new \Twig_SimpleFunction('xeditable', array($this, 'toXeditable')),
-            new \Twig_SimpleFunction('get_class', array($this, 'getClass'))
+            new \Twig_SimpleFunction('get_class', array($this, 'getClass')),
+            new \Twig_SimpleFunction('editProperty', [$this, 'editProperty'])
         ];
     }
 
@@ -50,6 +58,16 @@ class XEditableExtension extends \Twig_Extension
         ];
     }
 
+    /**
+     * @param $item
+     * @param $property
+     * @return bool
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function editProperty($item, $property) {
+
+        return $this->validator->canUpdate($item, $property);
+    }
 
     public function toXeditable($object, $field, $type, $typeParams = []) {
 
