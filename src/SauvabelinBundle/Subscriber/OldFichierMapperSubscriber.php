@@ -5,8 +5,13 @@ namespace SauvabelinBundle\Subscriber;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
+use NetBS\FichierBundle\Mapping\BaseAdresse;
+use NetBS\FichierBundle\Mapping\BaseEmail;
+use NetBS\FichierBundle\Mapping\BaseGeniteur;
 use NetBS\FichierBundle\Mapping\BaseMembre;
+use NetBS\FichierBundle\Mapping\BaseTelephone;
 use NetBS\FichierBundle\Mapping\Personne;
 use NetBS\SecureBundle\Voter\CRUD;
 use SauvabelinBundle\Entity\BSMembre;
@@ -21,6 +26,8 @@ class OldFichierMapperSubscriber implements EventSubscriber
 {
     private $adabsId = null;
 
+    private $changeSet = [];
+
     /**
      * Returns an array of events this subscriber wants to listen to.
      *
@@ -30,7 +37,8 @@ class OldFichierMapperSubscriber implements EventSubscriber
     {
         return [
             Events::postPersist,
-            Events::postUpdate
+            Events::preUpdate,
+            Events::postUpdate,
         ];
     }
 
@@ -39,18 +47,39 @@ class OldFichierMapperSubscriber implements EventSubscriber
         $item = $args->getEntity();
 
         if ($item instanceof BaseMembre)
-            $this->mapMembre($item, $args->getEntityManager(), CRUD::CREATE);
+            $this->mapMembre($item, $args->getEntityManager());
+    }
+
+    public function preUpdate(PreUpdateEventArgs $args) {
+
+        $entity = $args->getEntity();
+
+        if($entity instanceof BaseMembre
+        || $entity instanceof BaseAdresse
+        || $entity instanceof BaseTelephone
+        || $entity instanceof BaseEmail
+        || $entity instanceof BaseGeniteur)
+            $this->changeSet[] = [
+                'entity'    => $entity,
+                'changeset' => $args->getEntityChangeSet()
+            ];
     }
 
     public function postUpdate(LifecycleEventArgs $args) {
 
-        $item = $args->getEntity();
+        foreach($this->changeSet as $item) {
 
-        if ($item instanceof BaseMembre)
-            $this->mapMembre($item, $args->getEntityManager(), CRUD::UPDATE);
+            $entity = $item['entity'];
+            $changeSet = $item['changeset'];
+
+            //Start listing
+            if($entity instanceof BaseMembre) {
+
+            }
+        }
     }
 
-    private function mapMembre(BSMembre $membre, EntityManager $manager, $type) {
+    private function mapMembre(BSMembre $membre, EntityManager $manager) {
 
         if($this->adabsId === null)
             $this->adabsId = $manager->getRepository('NetBSCoreBundle:Parameter')->findOneBy(array(
@@ -71,8 +100,7 @@ class OldFichierMapperSubscriber implements EventSubscriber
             'date_naissance'    => $membre->getNaissance()->format('d-m-Y')
         ];
 
-        if($type === CRUD::CREATE)
-            $data['id_fichier'] = 1;
+        $data['id_fichier'] = 1;
 
         if($adresse)
             $data = array_merge($data, [
@@ -107,5 +135,9 @@ class OldFichierMapperSubscriber implements EventSubscriber
 
         if($membre->getStatut() === BaseMembre::DESINSCRIT)
             $data['id_fichier'] = 4;
+    }
+
+    private function performChange($table, $data) {
+
     }
 }

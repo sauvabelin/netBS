@@ -63,6 +63,12 @@ services:
             - { name: console.command }
             - { name: netbs.post_install_script }
 
+    sauvabelin.subscriber.old_fichier:
+        class: SauvabelinBundle\Subscriber\OldFichierMapperSubscriber
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+
     sauvabelin.subscriber.doctrine_user:
         class: SauvabelinBundle\Subscriber\DoctrineUserAccountSubscriber
         arguments:

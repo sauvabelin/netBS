@@ -40,8 +40,8 @@ class AssetsExtension extends \Twig_Extension
 
     public function registerStyle($style, $weight = 0) {
 
-        foreach ($this->styles as $style)
-            if($style['style'] == $style)
+        foreach ($this->styles as $item)
+            if($item['style'] === $style)
                 return;
 
         $this->styles[] = ['style' => $style, 'weight' => $weight];
@@ -50,7 +50,7 @@ class AssetsExtension extends \Twig_Extension
     public function registerCss($css, $weight = 0) {
 
         foreach ($this->css as $style)
-            if($style['css'] == $css)
+            if($style['css'] === $css)
                 return;
 
         $this->css[] = ['css' => $css, 'weight' => $weight];
@@ -59,7 +59,7 @@ class AssetsExtension extends \Twig_Extension
     public function registerJs($js, $weight = 0) {
 
         foreach($this->js as $script)
-            if($script['js'] == $js)
+            if($script['js'] === $js)
                 return;
 
         $this->js[] = ['js' => $js, 'weight' => $weight];
@@ -68,7 +68,7 @@ class AssetsExtension extends \Twig_Extension
     public function registerScript($script, $weight = 0) {
 
         foreach($this->scripts as $scr)
-            if($scr['script'] == $script)
+            if($scr['script'] === $script)
                 return;
 
         $this->scripts[]    = ['script' => $script, 'weight' => $weight];

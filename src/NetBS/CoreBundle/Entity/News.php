@@ -11,7 +11,7 @@ use NetBS\SecureBundle\Mapping\BaseUser;
  * News
  *
  * @ORM\Table(name="netbs_core_news")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="NetBS\CoreBundle\Repository\NewsRepository")
  */
 class News
 {

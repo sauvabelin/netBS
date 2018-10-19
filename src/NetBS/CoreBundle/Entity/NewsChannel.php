@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * NewsChannel
  *
  * @ORM\Table(name="netbs_core_news_channel")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="NetBS\CoreBundle\Repository\NewsChannelRepository")
  */
 class NewsChannel
 {
@@ -42,6 +42,13 @@ class NewsChannel
      * @ORM\Column(name="postRule", type="text", nullable=true)
      */
     protected $postRule;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="read_rule", type="text", nullable=true)
+     */
+    protected $readRule;
 
     /**
      * @var News
@@ -148,7 +155,16 @@ class NewsChannel
      */
     public function getNews()
     {
-        return $this->news;
+        $news = $this->news->toArray();
+        usort($news, function(News $a, News $b) {
+            if($a->isPinned() && !$b->isPinned())
+                return 1;
+            if($b->isPinned() && !$a->isPinned())
+                return -1;
+
+            return $a->getCreatedAt() <  $b->getCreatedAt();
+        });
+        return $news;
     }
 
     /**
@@ -167,6 +183,24 @@ class NewsChannel
     {
         $this->color = $color;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReadRule()
+    {
+        return $this->readRule;
+    }
+
+    /**
+     * @param string $readRule
+     * @return NewsChannel
+     */
+    public function setReadRule($readRule)
+    {
+        $this->readRule = $readRule;
         return $this;
     }
 }

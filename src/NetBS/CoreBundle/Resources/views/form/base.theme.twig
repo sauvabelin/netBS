@@ -47,6 +47,27 @@
 
 {% endblock %}
 
+{% block trumbowyg_widget %}
+
+    {{ registerCss(asset('bundles/netbscore/lib/jquery/jquery.min.js')) }}
+    {{ registerCss(asset('bundles/netbscore/lib/trumbowyg/ui/trumbowyg.min.css')) }}
+    {{ registerJs(asset('bundles/netbscore/lib/trumbowyg/trumbowyg.min.js')) }}
+
+    {% set script %}
+        <script type="text/javascript">
+            $('#{{ form.vars.id }}').trumbowyg({
+                btns: [['bold', 'italic'], ['link'], ['viewHTML']]
+            });
+        </script>
+    {% endset %}
+
+    {{ registerScript(script) }}
+
+    {{ block('textarea_widget') }}
+
+{% endblock %}
+
+
 {# select 2 stuff #}
 {% block ajax_select2_document_widget %}
 

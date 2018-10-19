@@ -65,7 +65,7 @@
                 <div class="news-contenu">
                     <h4>{{ item.titre }}</h4>
 
-                    <p>{{ item.contenu }}</p>
+                    <p>{{ item.contenu | raw }}</p>
                 </div>
             </div>
         </div>
@@ -85,7 +85,7 @@
                 <div class="news-contenu">
                     <h4>{{ item.titre }}</h4>
 
-                    <p>{{ item.contenu }}</p>
+                    <p>{{ item.contenu | raw }}</p>
                 </div>
             </div>
         </div>
@@ -94,5 +94,8 @@
 
 <hr/>
 <div class="d-flex justify-content-end">
+    <a class="btn btn-secondary mr-2" href="{{ path('netbs.core.news.read_news') }}">Lire toutes les news</a>
+    {% if channels|length > 0 %}
     <button class="btn btn-primary" data-modal data-modal-url="{{ path('netbs.core.news.modal_edit_news') }}">Ajouter une news</button>
+    {% endif %}
 </div>

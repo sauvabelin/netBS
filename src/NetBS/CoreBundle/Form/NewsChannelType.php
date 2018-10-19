@@ -18,6 +18,7 @@ class NewsChannelType extends AbstractType
             ->add("nom", TextType::class, ['label' => "Nom du channel"])
             ->add('color', ColorType::class, ['label' => 'Couleur'])
             ->add("postRule", TextareaType::class, ['label' => "Règle d'écriture (expression language)"])
+            ->add("readRule", TextareaType::class, ['label' => "Règle de lecture (expression language)"])
         ;
     }
 

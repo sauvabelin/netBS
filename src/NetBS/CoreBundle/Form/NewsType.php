@@ -4,7 +4,9 @@ namespace NetBS\CoreBundle\Form;
 
 use NetBS\CoreBundle\Entity\News;
 use NetBS\CoreBundle\Entity\NewsChannel;
+use NetBS\CoreBundle\Form\Type\QuillType;
 use NetBS\CoreBundle\Form\Type\SwitchType;
+use NetBS\CoreBundle\Form\Type\TrumbowygType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -27,7 +29,7 @@ class NewsType extends AbstractType
             ])
             ->add('pinned', SwitchType::class, ['label' => "Epinglée"])
             ->add("titre", TextType::class, ['label' => "Titre"])
-            ->add("contenu", TextareaType::class, ['label' => "Contenu"])
+            ->add("contenu",TrumbowygType::class, ['label' => "Contenu"])
         ;
     }
 

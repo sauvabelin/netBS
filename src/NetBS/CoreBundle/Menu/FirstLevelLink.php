@@ -58,7 +58,7 @@ class FirstLevelLink
 
     public function isEmpty() {
 
-        return count($this->subLinks) === 0 || $this->route !== null;
+        return count($this->subLinks) === 0 && $this->route === null;
     }
 
     /**

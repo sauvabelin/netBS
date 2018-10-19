@@ -37,6 +37,7 @@ security:
 
         netbs:
             anonymous:  true
+            switch_user: true
             pattern:    ^/netBS
             form_login:
                 login_path:   netbs.secure.login.login

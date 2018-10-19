@@ -241,10 +241,11 @@ services:
     netbs.core.listener.pre_render_layout:
         class: NetBS\CoreBundle\Listener\DashboardListener
         arguments:
+            - "@security.token_storage"
             - "@request_stack"
             - "@doctrine.orm.entity_manager"
         tags:
-            - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: preRender }
+            - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: preRender, priority: 1000 }
 
     netbs.core.netbs_collector:
         class: NetBS\CoreBundle\Profiler\NetBSCollector

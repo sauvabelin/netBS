@@ -38,7 +38,6 @@ class UserValidator extends ConstraintValidator
 
     public function validate($item, Constraint $constraint)
     {
-        $this->canUpdate(null, null);
         $this->constraints[] = [
             'item'          => $item,
             'constraint'    => $constraint

@@ -5,17 +5,23 @@ namespace NetBS\CoreBundle\Listener;
 use Doctrine\ORM\EntityManager;
 use NetBS\CoreBundle\Block\CardBlock;
 use NetBS\CoreBundle\Block\Row;
+use NetBS\CoreBundle\Entity\News;
 use NetBS\CoreBundle\Event\PreRenderLayoutEvent;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class DashboardListener
 {
+    protected $storage;
+
     protected $stack;
 
     protected $manager;
 
-    public function __construct(RequestStack $stack, EntityManager $manager)
+    public function __construct(TokenStorage $tokenStorage, RequestStack $stack, EntityManager $manager)
     {
+        $this->storage  = $tokenStorage;
         $this->stack    = $stack;
         $this->manager  = $manager;
     }
@@ -25,26 +31,17 @@ class DashboardListener
         if($this->stack->getCurrentRequest()->get('_route') !== "netbs.core.home.dashboard")
             return;
 
-        $row    = $event->getConfigurator()->getRow(0);
+        $row        = $event->getConfigurator()->getRow(0);
+        $user       = $this->storage->getToken()->getUser();
+        $news       = $this->manager->getRepository('NetBSCoreBundle:News')->findForUser($user);
+        $channels   = $this->manager->getRepository('NetBSCoreBundle:NewsChannel')->findWritableChannels($user);
 
-        if(strtolower(php_uname('s')) === 'linux')
-            $this->generateSysInfoBlock($row);
-
-
-        $news   = $this->manager->getRepository('NetBSCoreBundle:News')->createQueryBuilder('n')
-            ->orderBy('n.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
-
-        $row->addColumn(0, 4, 5, 12)->setBlock(CardBlock::class, array(
-            'title'     => 'News',
-            'subtitle'  => 'Dernières news publiées',
-            'template'  => '@NetBSCore/news/news.block.twig',
-            'params'    => ['news' => $news]
-        ));
-    }
-
-    protected function generateSysInfoBlock(Row $row) {
-
+        $row->addColumn(0, 4, 5, 12)->addRow()
+            ->addColumn(0, 12)->setBlock(CardBlock::class, array(
+                'title' => 'News',
+                'subtitle' => 'Dernières news publiées',
+                'template' => '@NetBSCore/news/news.block.twig',
+                'params' => ['news' => $news, 'channels' => $channels]
+            ));
     }
 }

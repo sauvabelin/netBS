@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class NewsController
@@ -20,14 +21,27 @@ use Symfony\Component\HttpFoundation\Request;
 class NewsController extends Controller
 {
     /**
-     * @param Request $request
      * @Route("/manage", name="netbs.core.news.manage")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function manageNewsAction(Request $request) {
+    public function manageNewsAction() {
 
         return $this->render("@NetBSCore/news/manage_news.html.twig", [
 
+        ]);
+    }
+
+    /**
+     * @return Response
+     * @Route("/read", name="netbs.core.news.read_news")
+     */
+    public function readNewsAction() {
+
+        $em = $this->get('doctrine.orm.entity_manager');
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $channels = $em->getRepository('NetBSCoreBundle:NewsChannel')->findReadableChannels($user);
+        return $this->render('@NetBSCore/news/read_news.html.twig', [
+            'channels' => $channels
         ]);
     }
 
