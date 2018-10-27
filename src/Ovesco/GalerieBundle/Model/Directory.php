@@ -37,7 +37,11 @@ class Directory
             return $this->medias;
 
         $filenames  = [];
+        $extensions = $this->config->getImageExtensions();
         foreach($this->config->getImageExtensions() as $ext)
+            $extensions[] = strtoupper($ext);
+
+        foreach($extensions as $ext)
             $filenames = array_merge($filenames, array_filter(glob($this->path . '/*' . $ext), 'is_file'));
 
         $this->medias = array_values(array_map(function($name) {
