@@ -49,7 +49,7 @@ class ApiGalerieController extends Controller
     private function generateDirectoryResponse(Request $request) {
 
         $config         = $this->get('ovesco.galerie.config');
-        $path           = urldecode($request->get('path'));
+        $path           = Directory::unhashPath($request->get('path'));
         $realPath       = $config->getFullMappedDirectory() . (empty($path) ? "" : "/" . trim($path, "/"));
 
         if(!is_dir($realPath))
@@ -60,6 +60,7 @@ class ApiGalerieController extends Controller
         $data = [
             'name'          => $directory->getName(),
             'path'          => $directory->getRelativePath(),
+            'hashPath'      => $directory->getHashPath(),
             'description'   => $directory->getDescription(),
             'thumbnail'     => $directory->getThumbnail(),
             'children'      => $directory->getChildren(),

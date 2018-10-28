@@ -39,7 +39,7 @@ class MediaNormalizer implements NormalizerInterface
             'filename'  => $media->getName(),
             'size'      => $media->getSize(),
             'timestamp' => $media->getTimestamp(),
-            'thumbnail' => $this->assets->getAssetUrl($this->cacheManager->getBrowserPath($media->getRelativePath(), 'thumbnail')),
+            'thumbnail' => $this->assets->getAssetUrl($this->cacheManager->getBrowserPath(base64_encode($media->getRelativePath()), 'thumbnail')),
             'bignail'   => $this->webPath . $this->assets->getAssetUrl($this->config->getMappedDirectory() . $media->getRelativePath())
         ];
     }

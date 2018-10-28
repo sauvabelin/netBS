@@ -89,6 +89,7 @@ class GalerieCacheResolver implements ResolverInterface
 
     private function getCachePath($fid, $filter) {
 
+        $fid    = base64_decode($fid);
         $hash   = md5(trim($fid, "/"));
 
         return $filter . "/". preg_replace('/[^0-9.]+/', '', $hash)

@@ -93,4 +93,20 @@ class Directory
 
         return str_replace($this->config->getFullMappedDirectory(), "", $this->path);
     }
+
+
+    public function getHashPath() {
+
+        $data = explode('/', $this->getRelativePath());
+        $data = array_map(function($item) {return base64_encode($item);}, $data);
+
+        return implode("/", $data);
+    }
+
+    public static function unhashPath($path) {
+        $data = explode('/', $path);
+        $data = array_map(function($item) {return base64_decode($item);}, $data);
+
+        return implode("/", $data);
+    }
 }

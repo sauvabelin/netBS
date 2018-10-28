@@ -28,7 +28,8 @@ class DirectoryNormalizer implements NormalizerInterface
 
             'name'      => $directory->getName(),
             'thumbnail' => $thumb ? $this->normalizer->normalize($thumb) : null,
-            'path'      => $directory->getRelativePath()
+            'path'      => $directory->getRelativePath(),
+            'hashPath'  => $directory->getHashPath()
         ];
     }
 
