@@ -38,6 +38,7 @@
         "lexik/jwt-authentication-bundle": "^2.4",
         "liip/imagine-bundle": "^2.0",
         "nelmio/cors-bundle": "^1.5",
+        "pagerfanta/pagerfanta": "^2.0",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^5.0.0",
         "setasign/fpdf": "^1.8",

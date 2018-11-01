@@ -3,18 +3,18 @@
 namespace Ovesco\FacturationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Rappel
  *
- * @ORM\Table(name="rappel")
+ * @ORM\Table(name="ovesco_facturation_rappels")
  * @ORM\Entity(repositoryClass="Ovesco\FacturationBundle\Repository\RappelRepository")
  */
 class Rappel
 {
-    use TimestampableEntity, RemarqueTrait;
+    use RemarqueTrait;
 
     /**
      * @var int
@@ -29,8 +29,17 @@ class Rappel
      * @var Facture
      *
      * @ORM\ManyToOne(targetEntity="Ovesco\FacturationBundle\Entity\Facture", inversedBy="rappels")
+     * @Groups({"rappel_with_facture"})
      */
     protected $facture;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="date")
+     * @Groups({"default"})
+     */
+    protected $date;
 
     /**
      * Get id.
@@ -49,7 +58,7 @@ class Rappel
      *
      * @return Rappel
      */
-    public function setFacture(\Ovesco\FacturationBundle\Entity\Facture $facture = null)
+    public function setFacture(Facture $facture = null)
     {
         $this->facture = $facture;
 
@@ -64,5 +73,21 @@ class Rappel
     public function getFacture()
     {
         return $this->facture;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
     }
 }

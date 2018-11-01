@@ -6,11 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
 use Ovesco\FacturationBundle\Util\DebiteurTrait;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Creance
  *
- * @ORM\Table(name="creance")
+ * @ORM\Table(name="ovesco_facturation_creances")
  * @ORM\Entity(repositoryClass="Ovesco\FacturationBundle\Repository\CreanceRepository")
  */
 class Creance
@@ -23,27 +24,46 @@ class Creance
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"default"})
      */
     protected $id;
 
     /**
      * @var string
-     *
+     * @Groups({"default"})
      * @ORM\Column(name="titre", type="string", length=255)
      */
     protected $titre;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     * @Groups({"default"})
+     */
+    protected $date;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="montant", type="float")
+     * @Groups({"default"})
      */
     protected $montant;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="rabais", type="float")
+     * @Groups({"default"})
+     */
+    protected $rabais;
 
     /**
      * @var Facture
      *
      * @ORM\ManyToOne(targetEntity="Ovesco\FacturationBundle\Entity\Facture", inversedBy="creances")
+     * @Groups({"creance_with_facture"})
      */
     protected $facture;
 
@@ -127,5 +147,37 @@ class Creance
     public function getFacture()
     {
         return $this->facture;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRabais()
+    {
+        return $this->rabais;
+    }
+
+    /**
+     * @param float $rabais
+     */
+    public function setRabais($rabais)
+    {
+        $this->rabais = $rabais;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
     }
 }

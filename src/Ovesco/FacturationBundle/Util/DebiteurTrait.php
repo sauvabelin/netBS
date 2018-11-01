@@ -5,6 +5,7 @@ namespace Ovesco\FacturationBundle\Util;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use Ovesco\FacturationBundle\Subscriber\DoctrineDebiteurSubscriber;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 trait DebiteurTrait
 {
@@ -12,11 +13,13 @@ trait DebiteurTrait
      * @var string
      *
      * @ORM\Column(name="debiteur_id", type="string")
+     * @Groups({"debiteur_id"})
      */
     protected $debiteurId;
 
     /**
      * @var BaseMembre|BaseFamille
+     * @Groups({"with_debiteur"})
      */
     private $debiteur;
 
@@ -26,6 +29,13 @@ trait DebiteurTrait
     public function getDebiteur()
     {
         return $this->debiteur;
+    }
+
+    /**
+     * @return string
+     */
+    public function _getDebiteurId() {
+        return $this->debiteurId;
     }
 
     /**

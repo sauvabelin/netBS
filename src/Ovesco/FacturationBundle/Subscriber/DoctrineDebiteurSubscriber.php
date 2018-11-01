@@ -37,7 +37,7 @@ class DoctrineDebiteurSubscriber implements EventSubscriber
         if(!$item instanceof Facture && !$item instanceof Creance)
             return;
 
-        $data       = explode(':', $item->getDebiteur());
+        $data       = explode(':', $item->_getDebiteurId());
         $class      = $data[0] === self::MEMBRE
             ? $this->config->getMembreClass()
             : $this->config->getFamilleClass();

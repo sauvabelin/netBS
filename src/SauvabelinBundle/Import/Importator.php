@@ -4,6 +4,7 @@ namespace SauvabelinBundle\Import;
 
 use SauvabelinBundle\Import\Model\WNGAttribution;
 use SauvabelinBundle\Import\Model\WNGDistinction;
+use SauvabelinBundle\Import\Model\WNGFacture;
 use SauvabelinBundle\Import\Model\WNGFonction;
 use SauvabelinBundle\Import\Model\WNGMembre;
 use SauvabelinBundle\Import\Model\WNGObtentionDistinction;
@@ -29,6 +30,16 @@ class Importator
             $membres[$membre['id_membre']] = new WNGMembre($membre);
 
         return $membres;
+    }
+
+    public function loadFamilles() {
+
+        $familles   = [];
+
+        foreach($this->request("SELECT * FROM familles") as $famille)
+            $familles[$famille['id_famille']] = $famille;
+
+        return $familles;
     }
 
     /**
@@ -92,6 +103,19 @@ class Importator
 
         foreach($this->request("SELECT * FROM unites") as $item)
             $data[$item['id_unite']] = new WNGUnite($item);
+
+        return $data;
+    }
+
+    /**
+     * @return WNGFacture[]
+     */
+    public function loadFactures() {
+
+        $data   = [];
+
+        foreach($this->request("SELECT * FROM factures") as $item)
+            $data[] = new WNGFacture($item);
 
         return $data;
     }

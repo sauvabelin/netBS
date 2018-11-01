@@ -2,16 +2,18 @@
 
 namespace Ovesco\FacturationBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
 use Ovesco\FacturationBundle\Util\DebiteurTrait;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Facture
  *
- * @ORM\Table(name="facture")
- * @ORM\Entity(repositoryClass="Ovesco\FacturationBundle\Repository\FactureRepository")
+ * @ORM\Table(name="ovesco_facturation_factures")
+ * @ORM\Entity
  */
 class Facture
 {
@@ -27,6 +29,7 @@ class Facture
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"default"})
      */
     protected $id;
 
@@ -34,38 +37,58 @@ class Facture
      * @var string
      *
      * @ORM\Column(name="statut", type="string", length=255)
+     * @Groups({"default"})
      */
     protected $statut;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     * @Groups({"default"})
+     */
+    protected $date;
+
+    /**
      * @var Creance[]
      *
-     * @ORM\OneToMany(targetEntity="Ovesco\FacturationBundle\Entity\Creance", mappedBy="facture")
+     * @ORM\OneToMany(targetEntity="Creance", mappedBy="facture", fetch="EAGER")
+     * @Groups({"facture_with_creances"})
      */
     protected $creances;
 
     /**
      * @var Rappel[]
      *
-     * @ORM\OneToMany(targetEntity="Ovesco\FacturationBundle\Entity\Rappel", mappedBy="facture")
+     * @ORM\OneToMany(targetEntity="Rappel", mappedBy="facture", cascade={"persist", "remove"}, fetch="EAGER")
+     * @Groups({"default"})
      */
     protected $rappels;
 
     /**
      * @var Paiement[]
      *
-     * @ORM\OneToMany(targetEntity="Ovesco\FacturationBundle\Entity\Paiement", mappedBy="facture")
+     * @ORM\OneToMany(targetEntity="Paiement", mappedBy="facture", cascade={"persist", "remove"}, fetch="EAGER")
+     * @Groups({"facture_with_paiements"})
      */
     protected $paiements;
+
+    /**
+     * @var Compte
+     *
+     * @ORM\ManyToOne(targetEntity="Ovesco\FacturationBundle\Entity\Compte")
+     * @Groups({"default"})
+     */
+    protected $compteToUse;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->creances = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->rappels = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->paiements = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->creances = new ArrayCollection();
+        $this->rappels = new ArrayCollection();
+        $this->paiements = new ArrayCollection();
     }
 
     /**
@@ -109,10 +132,10 @@ class Facture
      *
      * @return Facture
      */
-    public function addCreance(\Ovesco\FacturationBundle\Entity\Creance $creance)
+    public function addCreance(Creance $creance)
     {
         $this->creances[] = $creance;
-
+        $creance->setFacture($this);
         return $this;
     }
 
@@ -123,7 +146,7 @@ class Facture
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeCreance(\Ovesco\FacturationBundle\Entity\Creance $creance)
+    public function removeCreance(Creance $creance)
     {
         return $this->creances->removeElement($creance);
     }
@@ -145,10 +168,10 @@ class Facture
      *
      * @return Facture
      */
-    public function addRappel(\Ovesco\FacturationBundle\Entity\Rappel $rappel)
+    public function addRappel(Rappel $rappel)
     {
         $this->rappels[] = $rappel;
-
+        $rappel->setFacture($this);
         return $this;
     }
 
@@ -159,7 +182,7 @@ class Facture
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeRappel(\Ovesco\FacturationBundle\Entity\Rappel $rappel)
+    public function removeRappel(Rappel $rappel)
     {
         return $this->rappels->removeElement($rappel);
     }
@@ -181,10 +204,10 @@ class Facture
      *
      * @return Facture
      */
-    public function addPaiement(\Ovesco\FacturationBundle\Entity\Paiement $paiement)
+    public function addPaiement(Paiement $paiement)
     {
         $this->paiements[] = $paiement;
-
+        $paiement->setFacture($this);
         return $this;
     }
 
@@ -195,7 +218,7 @@ class Facture
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removePaiement(\Ovesco\FacturationBundle\Entity\Paiement $paiement)
+    public function removePaiement(Paiement $paiement)
     {
         return $this->paiements->removeElement($paiement);
     }
@@ -208,5 +231,37 @@ class Facture
     public function getPaiements()
     {
         return $this->paiements;
+    }
+
+    /**
+     * @return Compte
+     */
+    public function getCompteToUse()
+    {
+        return $this->compteToUse;
+    }
+
+    /**
+     * @param Compte $compteToUse
+     */
+    public function setCompteToUse($compteToUse)
+    {
+        $this->compteToUse = $compteToUse;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
     }
 }
