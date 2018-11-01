@@ -26,6 +26,8 @@ class EtiquettesConfig
 
     public $title                       = "Aux parents de";
 
+    public $mergeFamilles               = true;
+
     public function __construct()
     {
         $this->FPDFConfig   = new FPDFConfig();

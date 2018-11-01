@@ -3,8 +3,12 @@
 namespace NetBS\CoreBundle\ListModel;
 
 use NetBS\CoreBundle\Entity\NewsChannel;
+use NetBS\CoreBundle\ListModel\Action\LinkAction;
+use NetBS\CoreBundle\ListModel\Action\ModalAction;
+use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
+use NetBS\CoreBundle\Utils\Traits\RouterTrait;
 use NetBS\ListBundle\Column\ClosureColumn;
 use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
@@ -12,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class NewsChannelsList extends BaseListModel
 {
-    use EntityManagerTrait;
+    use EntityManagerTrait, RouterTrait;
 
     /**
      * Retrieves all elements managed by this list
@@ -61,6 +65,15 @@ class NewsChannelsList extends BaseListModel
                 XEditableColumn::PROPERTY   => "color",
                 XEditableColumn::TYPE_CLASS => TextType::class
             ])
+            ->addColumn("Options", null, ActionColumn::class, [
+                ActionColumn::ACTIONS_KEY   => [
+                    ModalAction::class  => [
+                        LinkAction::ROUTE   => function(NewsChannel $channel) {
+                            return $this->router->generate('netbs.core.news.modal_add_channel', ['id' => $channel->getId()]);
+                        }
+                    ]
+                ]
+            ]);
         ;
     }
 }

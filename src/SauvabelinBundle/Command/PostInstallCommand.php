@@ -112,7 +112,8 @@ WHERE gt.id IN (
         "groupe_type.clan_id",
         "groupe_type.association_id",
         "groupe_type.edc_id",
-        "groupe_type.equipe_interne_id"
+        "groupe_type.equipe_interne_id",
+        "groupe_type.branche_id"
 	)
 );
 EOT;

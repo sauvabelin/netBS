@@ -27,3 +27,4 @@ bs:
     groupe_type.association_id:         -1
     groupe_type.edc_id:                 -1
     groupe_type.equipe_interne_id:      -1
+    groupe_type.branche_id:             -1
