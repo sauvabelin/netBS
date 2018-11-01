@@ -9,7 +9,10 @@ use NetBS\CoreBundle\Utils\Traits\ConfigurableExporterTrait;
 use NetBS\FichierBundle\Exporter\Config\EtiquettesConfig;
 use NetBS\FichierBundle\Exporter\Model\EtiquettesBuilder;
 use NetBS\FichierBundle\Form\Export\EtiquettesType;
+use NetBS\FichierBundle\Mapping\BaseFamille;
+use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Model\AdressableInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PDFEtiquettes implements ExporterInterface, ConfigurableExporterInterface
@@ -52,15 +55,26 @@ class PDFEtiquettes implements ExporterInterface, ConfigurableExporterInterface
         /** @var EtiquettesConfig $config */
         $config = $this->configuration;
         $fpdf   = new EtiquettesBuilder($this->configuration);
+        $infos  = [
+            "Informations d'exportation",
+            "Nombre d'éléments fournis: " . count($adressables),
+        ];
 
-        $fpdf->AddPage();
+        if($config->mergeFamilles) {
+            $adressables = $this->mergeMembres($adressables);
+            $infos[] = "Nombre d'éléments après fusion des familles: " . count($adressables);
+        }
 
+        $etiquettes = [];
+        $noAddress  = 0;
+
+        // Building etiquettes
         foreach ($adressables as $adressable) {
 
             $adresse    = $adressable->getSendableAdresse();
             $lines      = [];
 
-            if(!empty($config->title))
+            if(!empty($config->title) && $adressable instanceof BaseMembre)
                 $lines[] = $config->title;
 
             $lines[]    = $adressable->__toString();
@@ -70,13 +84,60 @@ class PDFEtiquettes implements ExporterInterface, ConfigurableExporterInterface
                 $lines[]    = $adresse->getRue();
                 $lines[]    = $adresse->getNpa() . " " . $adresse->getLocalite();
             }
+            else {
+                $noAddress++;
+            }
 
-            $fpdf->addEtiquette($lines);
+            if($adresse || $config->displayNotAdressable)
+                $etiquettes[] = $lines;
         }
+
+        $infos[] = "Nombre d'éléments sans adresses trouvés: " . $noAddress;
+
+        //Print infos
+        $fpdf->AddPage();
+        for($i = 0; $i < count($infos); $i++) {
+            $fpdf->SetXY(20, 20 + (10*$i));
+            $fpdf->MultiCell(200, 6, utf8_decode($infos[$i]), 0, 'L');
+        }
+
+        //Output etiquettes
+        $fpdf->AddPage();
+        foreach($etiquettes as $etiquette)
+            $fpdf->addEtiquette($etiquette);
 
         return  new StreamedResponse(function() use ($fpdf) {
             $fpdf->Output();
         });
+    }
+
+    private function mergeMembres($adressables) {
+
+        $result = [];
+
+        foreach($adressables as $adressable) {
+            if($adressable instanceof BaseFamille)
+                $result[$adressable->getId()] = $adressable;
+
+            else {
+
+                /** @var BaseMembre $adressable */
+                $id = $adressable->getFamille()->getId();
+                if(!isset($result[$id]))
+                    $result[$id] = [];
+
+                $result[$id][] = $adressable;
+            }
+        }
+
+        return array_map(function($item) {
+            if($item instanceof BaseFamille)
+                return $item;
+            elseif(count($item) > 1)
+                return $item[0]->getFamille();
+            elseif(count($item) === 1)
+                return $item[0];
+        }, $result);
     }
 
     /**

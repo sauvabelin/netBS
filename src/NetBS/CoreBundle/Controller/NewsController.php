@@ -8,6 +8,7 @@ use NetBS\CoreBundle\Form\NewsChannelType;
 use NetBS\CoreBundle\Form\NewsType;
 use NetBS\CoreBundle\Utils\Modal;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,12 +24,10 @@ class NewsController extends Controller
     /**
      * @Route("/manage", name="netbs.core.news.manage")
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Security("is_granted('ROLE_SG')")
      */
     public function manageNewsAction() {
-
-        return $this->render("@NetBSCore/news/manage_news.html.twig", [
-
-        ]);
+        return $this->render("@NetBSCore/news/manage_news.html.twig");
     }
 
     /**
@@ -50,25 +49,29 @@ class NewsController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @route("/modal/add-channel", name="netbs.core.news.modal_add_channel")
+     * @route("/modal/add-channel/{id}", defaults={"id"=null}, name="netbs.core.news.modal_add_channel")
+     * @Security("is_granted('ROLE_SG')")
      */
-    public function addNewsChannelModalAction(Request $request) {
+    public function addNewsChannelModalAction(Request $request, $id) {
 
-        $form   = $this->createForm(NewsChannelType::class, new NewsChannel());
+        $em         = $this->get('doctrine.orm.entity_manager');
+        $title      = $id ? "Modifier" : "Créer";
+        $channel    = $id ? $em->find('NetBSCoreBundle:NewsChannel', $id) : new NewsChannel();
+
+        $form   = $this->createForm(NewsChannelType::class, $channel);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
 
-            $em = $this->get('doctrine.orm.entity_manager');
             $em->persist($form->getData());
             $em->flush();
 
-            $this->addFlash("success", "Channel ajoutée");
+            $this->addFlash("success", "Opération sur channel réussie");
             return Modal::refresh();
         }
 
         return $this->render('@NetBSFichier/generic/add_generic.modal.twig', [
-            'title' => 'Ajouter une channel de news',
+            'title' => $title . " une channel",
             'form'  => $form->createView()
         ], Modal::renderModal($form));
     }
