@@ -18,7 +18,7 @@ class EqualBinder implements BinderInterface
         $field  = $alias . "." . $config->getName();
         $param  = '_param' . $this->count++;
 
-        if(strpos("%", $data) !== false)
+        if(strpos($data, "%") !== false)
             $builder->andWhere($builder->expr()->like($field, ':' . $param));
         else
             $builder->andWhere($builder->expr()->eq($field, ':' . $param));
