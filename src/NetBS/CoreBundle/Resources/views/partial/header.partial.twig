@@ -42,37 +42,50 @@
         {% if is_granted("ROLE_READ_EVERYWHERE") %}
         $(function() {
 
-            var popover         = null;
+            let popover = null,
+                elem = $('#_quick_search_input'),
+                timeout = null;
 
-            $('#_quick_search_input').on('input', function() {
+            elem.focus(function() {
+                if(elem.val() !== null && elem.val() !== "")
+                    request(elem.val());
+            });
 
-                var elem    = $(this),
-                    value   = elem.val();
+            function request(value) {
+                $.get("{{ path('netbs.core.ui.global_search') }}", {query: value}).done(function(response) {
 
-                $.data(this, "_search_timer", setTimeout($.proxy(function() {
-                    $.get("{{ path('netbs.core.ui.global_search') }}", {query: value}).done(function(response) {
+                    let content = "<div class='qs-content'>";
+                    for(let i = 0; i < response.length; i++) {
+                        content += "<a class='qs-entry' href='" + response[i].path + "'>" +
+                            "<p class='qs-name'>" + response[i].name + "</p>" +
+                            "<p class='qs-description'>" + response[i].description + "</p></a>";
+                    }
 
-                        var content = "<div class='qs-content'>";
+                    if(response.length === 0) {
+                        content += "<p class='m-0 p-3'>Aucun résultat</p>";
+                    }
 
-                        for(var i = 0; i < response.length; i++) {
+                    content += "</div>";
 
-                            content += "<a class='qs-entry' href='" + response[i].path + "'>" +
-                                "<p class='qs-name'>" + response[i].name + "</p>" +
-                                "<p class='qs-description'>" + response[i].description + "</p></a>";
-                        }
-
-                        content += "</div>";
-
-                        popover = $(elem).popover({
-                            html: true,
-                            placement: 'bottom',
-                            template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body qs-popover"></div></div>'
-                        });
-
-                        elem.attr("data-content", content);
-                        elem.popover("show");
+                    popover = $(elem).popover({
+                        html: true,
+                        placement: 'bottom',
+                        template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body qs-popover"></div></div>'
                     });
-                }, this), 300));
+
+                    elem.attr("data-content", content);
+                    elem.popover("show");
+                    timeout = null;
+                });
+            }
+
+            elem.on('input', function() {
+                if(timeout !== null)
+                    clearTimeout(timeout);
+
+                timeout = setTimeout(function() {
+                    request(elem.val());
+                }, 300);
             });
 
             $(document).on('click', function(event) {
@@ -84,6 +97,7 @@
                     return;
 
                 popover.popover('dispose');
+                timeout = null;
             });
         });
         {% endif %}
