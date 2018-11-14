@@ -80,12 +80,16 @@
             }
 
             elem.on('input', function() {
-                if(timeout !== null)
+                if(timeout !== null) {
                     clearTimeout(timeout);
+                    timeout = null;
+                }
 
-                timeout = setTimeout(function() {
-                    request(elem.val());
-                }, 300);
+                if(elem.val() !== "") {
+                    timeout = setTimeout(function() {
+                        request(elem.val());
+                    }, 300);
+                }
             });
 
             $(document).on('click', function(event) {

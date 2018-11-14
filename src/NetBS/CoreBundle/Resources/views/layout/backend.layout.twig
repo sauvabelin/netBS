@@ -3,6 +3,8 @@
 {% block body %}
 
     {{ registerCss(asset('bundles/netbscore/css/quickfix.css')) }}
+    {{ registerCss('https://unpkg.com/nprogress@0.2.0/nprogress.css') }}
+    {{ registerJs('https://unpkg.com/nprogress@0.2.0/nprogress.js') }}
 
     <div class="app">
 
@@ -45,6 +47,18 @@
     {% endset %}
 
     {{ registerScript(_flash_script) }}
+
+    {% set _ajax_loader_script %}
+    <script>
+        $(document).bind("ajaxSend", function(){
+            NProgress.start();
+        }).bind("ajaxComplete", function(){
+            NProgress.done();
+        });
+    </script>
+    {% endset %}
+
+    {{ registerScript(_ajax_loader_script) }}
 
     {% include '@NetBSCore/helper/init.javascript.twig' %}
 {% endblock %}
