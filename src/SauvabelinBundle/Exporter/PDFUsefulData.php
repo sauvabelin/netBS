@@ -67,16 +67,22 @@ class PDFUsefulData extends PDFExporter implements ConfigurableExporterInterface
             $headers[] = "Obtention cravate";
 
         $data       = array_map(function(BaseMembre $membre) {
+
+            $row = [];
             if($this->configuration->cravateBleue) {
 
                 $cravateId  = $this->params->getValue('bs', 'distinction.cravate_bleue_id');
+                $found = false;
 
                 foreach($membre->getObtentionsDistinction() as $obtentionDistinction) {
-                    if ($obtentionDistinction->getDistinction()->getId() === intval($cravateId))
-                        return $obtentionDistinction->getDate()->format($this->params->getValue('format', 'php_date'));
+                    if ($obtentionDistinction->getDistinction()->getId() === intval($cravateId)) {
+                        $row[] = $obtentionDistinction->getDate()->format($this->params->getValue('format', 'php_date'));
+                        $found = true;
+                        break;
+                    }
                 }
 
-                return "Pas de cravate";
+                if(!$found) $row[] = "Pas de cravate";
             }
         }, $membres);
 
