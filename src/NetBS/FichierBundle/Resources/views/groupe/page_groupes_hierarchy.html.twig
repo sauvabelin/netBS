@@ -132,7 +132,7 @@
                         var result3 = [];
 
                         for (var i = 0; i < this.groupes.length; i++)
-                            if (this.searchNom === "" || this.groupes[i].nom.indexOf(this.searchNom) !== -1)
+                            if (this.searchNom === "" || this.groupes[i].nom.toLowerCase().indexOf(this.searchNom.toLowerCase()) !== -1)
                                 result1.push(this.groupes[i]);
 
                         for(var i = 0; i < result1.length; i++)

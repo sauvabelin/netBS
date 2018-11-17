@@ -1,6 +1,7 @@
 bs:
     fonction.commandant_id:             -1
     fonction.secretaire_general_id:     -1
+    distinction.cravate_bleue_id:       -1
 
     fonction.louveteau_id:              -1
     fonction.eclaireur_id:              -1

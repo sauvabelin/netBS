@@ -44,6 +44,13 @@ services:
         tags:
             - { name: netbs.exporter }
 
+    sauvabelin.exporter.useful_data:
+        class: SauvabelinBundle\Exporter\PDFUsefulData
+        arguments:
+        - "@netbs.fichier.config"
+        tags:
+        - { name: netbs.exporter }
+
     sauvabelin.isp_config_manager:
         class: SauvabelinBundle\Service\ISPConfigManager
         arguments:

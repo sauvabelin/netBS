@@ -16,6 +16,14 @@ class LoadDistinctions extends BSFixture implements OrderedFixtureInterface
             $manager->persist(new Distinction($name));
 
         $manager->flush();
+
+        $updates    = [
+            'distinction.cravate_bleue_id'  => 'Cravate Bleue (EMBS)',
+        ];
+
+        foreach($updates as $key => $fn)
+            $this->loadParameterWithId($manager, 'bs', $key,
+                $manager->getRepository('NetBSFichierBundle:Distinction')->findOneBy(array('nom' => $fn)));
     }
 
     /**
