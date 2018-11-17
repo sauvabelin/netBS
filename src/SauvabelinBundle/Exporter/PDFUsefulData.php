@@ -85,6 +85,9 @@ class PDFUsefulData extends PDFExporter implements ConfigurableExporterInterface
 
                 if(!$found) $row[] = "Pas de cravate";
             }
+
+            return $row;
+
         }, $membres);
 
         return $this->twig->render('@Sauvabelin/pdf/useful_data.pdf.twig', array(
