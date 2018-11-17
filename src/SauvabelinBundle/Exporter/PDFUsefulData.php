@@ -7,9 +7,9 @@ use NetBS\CoreBundle\Exporter\PDFPreviewer;
 use NetBS\CoreBundle\Model\ConfigurableExporterInterface;
 use NetBS\CoreBundle\Service\ParameterManager;
 use NetBS\CoreBundle\Utils\Traits\ConfigurableExporterTrait;
-use NetBS\FichierBundle\Form\Export\PDFUsefulDataType;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Service\FichierConfig;
+use SauvabelinBundle\Form\PDFUsefulDataType;
 use SauvabelinBundle\Model\UsefulDataConfig;
 
 class PDFUsefulData extends PDFExporter implements ConfigurableExporterInterface

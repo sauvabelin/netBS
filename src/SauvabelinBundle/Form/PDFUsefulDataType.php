@@ -1,9 +1,9 @@
 <?php
 
-namespace NetBS\FichierBundle\Form\Export;
+namespace SauvabelinBundle\Form;
 
 use NetBS\CoreBundle\Form\Type\SwitchType;
-use NetBS\FichierBundle\Exporter\Config\PDFListMembresConfig;
+use SauvabelinBundle\Model\UsefulDataConfig;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,6 +19,6 @@ class PDFUsefulDataType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class', PDFListMembresConfig::class);
+        $resolver->setDefault('data_class', UsefulDataConfig::class);
     }
 }
