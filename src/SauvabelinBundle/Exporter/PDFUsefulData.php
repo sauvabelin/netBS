@@ -62,13 +62,14 @@ class PDFUsefulData extends PDFExporter implements ConfigurableExporterInterface
      */
     public function renderView($membres)
     {
-        $headers    = [];
+        $headers    = ['Membre'];
         if($this->configuration->cravateBleue)
             $headers[] = "Obtention cravate";
 
-        $data       = array_map(function(BaseMembre $membre) {
+        $data = array_map(function(BaseMembre $membre) {
 
-            $row = [];
+            $row = [$membre->__toString()];
+
             if($this->configuration->cravateBleue) {
 
                 $cravateId  = $this->params->getValue('bs', 'distinction.cravate_bleue_id');
