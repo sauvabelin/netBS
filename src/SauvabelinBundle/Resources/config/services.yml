@@ -48,6 +48,7 @@ services:
         class: SauvabelinBundle\Exporter\PDFUsefulData
         arguments:
         - "@netbs.fichier.config"
+        - "@netbs.params"
         tags:
         - { name: netbs.exporter }
 
