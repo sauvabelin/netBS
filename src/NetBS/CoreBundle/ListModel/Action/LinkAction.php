@@ -14,6 +14,7 @@ class LinkAction implements ActionInterface
     const CLASSE    = 'class';
     const ATTRS     = 'attrs';
     const TAG       = 'tag';
+    const TITLE     = 'title';
 
     protected $router;
 
@@ -30,6 +31,7 @@ class LinkAction implements ActionInterface
             ->setDefault(self::CLASSE, '')
             ->setDefault(self::TAG, 'a')
             ->setDefault(self::ATTRS, '')
+            ->setDefault(self::TITLE, null)
             ->setRequired(self::ROUTE);
     }
 
@@ -37,8 +39,9 @@ class LinkAction implements ActionInterface
     {
         $route  = is_string($params[self::ROUTE]) ? $params[self::ROUTE] : ($params[self::ROUTE])($item);
         $href   = $params[self::TAG] === 'a' ? "href='$route'" : "";
+        $title  = $params[self::TITLE] === null ? '' : "title='{$params[self::TITLE]}'";
 
-        return "<{$params[self::TAG]} $href {$params[self::ATTRS]} class='btn {$params[self::SIZE]}"
+        return "<{$params[self::TAG]} $href {$params[self::ATTRS]} $title class='btn {$params[self::SIZE]}"
             . " btn-{$params[self::THEME]} {$params[self::CLASSE]}'>{$params[self::TEXT]}</{$params[self::TAG]}>";
     }
 }

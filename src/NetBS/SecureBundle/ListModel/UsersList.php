@@ -5,10 +5,8 @@ namespace NetBS\SecureBundle\ListModel;
 use NetBS\CoreBundle\Form\Type\SwitchType;
 use NetBS\CoreBundle\ListModel\Action\IconAction;
 use NetBS\CoreBundle\ListModel\Action\LinkAction;
-use NetBS\CoreBundle\ListModel\Action\RemoveAction;
 use NetBS\CoreBundle\ListModel\ActionItem;
 use NetBS\CoreBundle\ListModel\Column\ActionColumn;
-use NetBS\CoreBundle\ListModel\Column\HelperColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\FichierBundle\Utils\Traits\FichierConfigTrait;
 use NetBS\FichierBundle\Utils\Traits\SecureConfigTrait;
@@ -18,6 +16,7 @@ use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
 use NetBS\CoreBundle\Utils\Traits\RouterTrait;
 use NetBS\SecureBundle\Mapping\BaseUser;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UsersList extends BaseListModel
 {
@@ -29,12 +28,28 @@ class UsersList extends BaseListModel
      */
     protected function buildItemsList()
     {
-        return $this->entityManager->getRepository($this->getManagedItemsClass())->createQueryBuilder('u')
+        $username   = $this->getParameter('username');
+        $query      = $this->entityManager->getRepository($this->getManagedItemsClass())->createQueryBuilder('u');
+
+        if(empty($username)) return [];
+
+        if(strpos($username, "%") !== false)
+            $query->andWhere($query->expr()->like('u.username', ':username'));
+        else
+            $query->andWhere($query->expr()->eq('u.username', ':username'));
+
+        return $query
+            ->setParameter('username', $username)
             ->innerJoin('u.membre', 'm')
             ->join('u.roles', 'r')
             ->orderBy('m.nom', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired('username');
     }
 
     /**
@@ -76,12 +91,16 @@ class UsersList extends BaseListModel
             ))
             ->addColumn("Actions", null,ActionColumn::class, array(
                 ActionColumn::ACTIONS_KEY   => [
-                    new ActionItem(LinkAction::class, [
+                    new ActionItem(IconAction::class, [
+                        LinkAction::TITLE   => "Editer l'utilisateur",
                         LinkAction::ROUTE   => function(BaseUser $user) {
                             return $this->router->generate('netbs.secure.user.edit_user', array('id' => $user->getId()));
                         }
                     ]),
-                    new ActionItem(LinkAction::class, [
+                    new ActionItem(IconAction::class, [
+                        LinkAction::THEME   => "danger",
+                        IconAction::ICON    => "fas fa-times",
+                        LinkAction::TITLE   => "Supprimer l'utilisateur",
                         LinkAction::ROUTE   => function(BaseUser $user) {
                             return $this->router->generate('netbs.secure.user.delete_user', array('id' => $user->getId()));
                         },

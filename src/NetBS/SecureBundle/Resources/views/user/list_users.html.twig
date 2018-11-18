@@ -8,16 +8,30 @@
 
         {% include '@NetBSCore/includes/header.include.twig' with {
         header: "Utilisateurs",
-        subHeader: "Tous les utilisateurs enregistrés",
+        subHeader: "Rechercher un utilisateur enregistré",
         actions: [addUserBtn]
         } %}
+
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 col-12">
+                <form method="get">
+                    <div class="form-group d-flex">
+                        <div class="input-group">
+                            <input id="username" name="username" value="{{ username }}" type="text" placeholder="Nom d'utilisateur" class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary ml-2">Rechercher</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-12">
 
                 <div class="card card-table">
                     <div class="card-body">
-                        {{ render_list('netbs.secure.users', 'netbs') }}
+                        {{ render_list('netbs.secure.users', 'basic', {username: username}) }}
                     </div>
                 </div>
 

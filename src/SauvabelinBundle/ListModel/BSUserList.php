@@ -3,6 +3,7 @@
 namespace SauvabelinBundle\ListModel;
 
 use NetBS\CoreBundle\Form\Type\SwitchType;
+use NetBS\CoreBundle\ListModel\Action\LinkAction;
 use NetBS\CoreBundle\ListModel\Action\ModalAction;
 use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
@@ -21,6 +22,7 @@ class BSUserList extends UsersList
         $params     = $actions->getParams();
         $params[ActionColumn::ACTIONS_KEY][ModalAction::class] = [
             ModalAction::ICON   => 'fas fa-key',
+            LinkAction::TITLE   => "Modifier le mot de passe",
             ModalAction::ROUTE  => function(BSUser $user) {
                 return $this->router->generate('sauvabelin.user.admin_change_password_modal', ['id' => $user->getId()]);
             }
@@ -35,10 +37,6 @@ class BSUserList extends UsersList
             ->addColumn('Quota nextcloud', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY       => 'nextcloudQuota',
                 XEditableColumn::TYPE_CLASS     => NumberType::class
-            ])
-            ->addColumn('Admin nextcloud', null, XEditableColumn::class, [
-                XEditableColumn::PROPERTY       => 'nextcloudAdmin',
-                XEditableColumn::TYPE_CLASS     => SwitchType::class
             ])
             ->addColumn('Accès au wiki', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY   => 'wikiAccount',

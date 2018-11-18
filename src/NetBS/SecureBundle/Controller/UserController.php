@@ -23,9 +23,12 @@ class UserController extends Controller
     /**
      * @Route("/user/list", name="netbs.secure.user.list_users")
      */
-    public function listUsersAction() {
+    public function listUsersAction(Request $request) {
 
-        return $this->render('@NetBSSecure/user/list_users.html.twig');
+        $username = empty($request->get('username')) ? null : $request->get('username');
+        return $this->render('@NetBSSecure/user/list_users.html.twig', [
+            'username' => $username
+        ]);
     }
 
     /**
