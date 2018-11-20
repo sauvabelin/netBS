@@ -37,7 +37,7 @@ class UserProvider implements Select2ProviderInterface
      */
     public function toString($item)
     {
-        return $item->getMembre()->__toString();
+        return $item->getUsername();
     }
 
     /**
