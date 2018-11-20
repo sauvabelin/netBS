@@ -33,11 +33,12 @@ class GroupeVoter extends FichierVoter
         while($subject !== null) {
 
             // Check attributions
-            foreach ($user->getMembre()->getActivesAttributions() as $attribution)
-                if ($attribution->getGroupe()->getId() === $subject->getId())
-                    foreach ($attribution->getFonction()->getRoles() as $role)
-                        if(strpos(strtoupper($role->getRole()), strtoupper($operation)) !== false)
-                            return true;
+            if($user->getMembre())
+                foreach ($user->getMembre()->getActivesAttributions() as $attribution)
+                    if ($attribution->getGroupe()->getId() === $subject->getId())
+                        foreach ($attribution->getFonction()->getRoles() as $role)
+                            if(strpos(strtoupper($role->getRole()), strtoupper($operation)) !== false)
+                                return true;
 
             // Check autorisations
             foreach ($user->getAutorisations() as $autorisation)

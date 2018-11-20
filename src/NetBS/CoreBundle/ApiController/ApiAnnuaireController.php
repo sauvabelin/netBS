@@ -36,32 +36,34 @@ class ApiAnnuaireController extends Controller
 
         /** @var BaseUser $user */
         foreach($users as $user) {
+            if($user->getMembre()) {
 
-            $membre         = $user->getMembre();
-            $attribution    = $membre->getActiveAttribution();
-            $data           = [];
-            $data["nom"]    = $membre->getFullName();
+                $membre = $user->getMembre();
+                $attribution = $membre->getActiveAttribution();
+                $data = [];
+                $data["nom"] = $membre->getFullName();
 
-            if($membre->getSendableEmail())
-                $data['email']      = $membre->getSendableEmail()->getEmail();
+                if ($membre->getSendableEmail())
+                    $data['email'] = $membre->getSendableEmail()->getEmail();
 
-            if($membre->getSendableTelephone())
-                $data['telephone']  = $membre->getSendableTelephone()->getTelephone();
+                if ($membre->getSendableTelephone())
+                    $data['telephone'] = $membre->getSendableTelephone()->getTelephone();
 
-            if($adresse = $membre->getSendableAdresse()) {
-                $data['adresse']    = [
-                    'rue'       => $adresse->getRue(),
-                    'npa'       => $adresse->getNpa(),
-                    'localite'  => $adresse->getLocalite()
-                ];
+                if ($adresse = $membre->getSendableAdresse()) {
+                    $data['adresse'] = [
+                        'rue' => $adresse->getRue(),
+                        'npa' => $adresse->getNpa(),
+                        'localite' => $adresse->getLocalite()
+                    ];
+                }
+
+                if ($attribution) {
+                    $data['groupe'] = $attribution->getGroupe()->getNom();
+                    $data['fonction'] = $attribution->getFonction()->getNom();
+                }
+
+                $result[] = $data;
             }
-
-            if($attribution) {
-                $data['groupe']     = $attribution->getGroupe()->getNom();
-                $data['fonction']   = $attribution->getFonction()->getNom();
-            }
-
-            $result[] = $data;
         }
 
         return new JsonResponse($this->get('serializer')->serialize($result, 'json'), 200, [], true);
