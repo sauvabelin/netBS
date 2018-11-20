@@ -56,4 +56,5 @@ security:
         - { path: ^/api/v1/netBS/gettoken,  roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/v1/netBS,           roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/netBS/secure/login,     roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+        - { path: ^/netBS/secure,           roles: [ ROLE_ADMIN ] }
         - { path: ^/netBS,                  roles: [ IS_AUTHENTICATED_FULLY, ROLE_USER ] }

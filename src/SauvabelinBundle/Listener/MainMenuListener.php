@@ -15,7 +15,7 @@ class MainMenuListener
 
     public function __construct(TokenStorage $storage)
     {
-        $this->storage  = $storage;
+        $this->storage      = $storage;
     }
 
     public function onMenuConfigure(ExtendMainMenuEvent $event)

@@ -19,10 +19,17 @@ services:
         tags:
             - { name: netbs.list.model }
 
+    netbs.secure.list.autorisations:
+        class: NetBS\SecureBundle\ListModel\AutorisationsList
+        tags:
+        - { name: netbs.list.model }
+
     netbs.secure.extend_main_menu_listener:
         class: NetBS\SecureBundle\Listener\MainMenuListener
         arguments:
             - "@security.token_storage"
+            - "@doctrine.orm.entity_manager"
+            - "@netbs.secure.config"
         tags:
             - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure, priority: 60 }
 
@@ -51,6 +58,14 @@ services:
             - "@netbs.secure.config"
         tags:
             - { name: form.type }
+
+    netbs.secure.form.autorisation:
+        class: NetBS\SecureBundle\Form\AutorisationType
+        arguments:
+        - "@netbs.fichier.config"
+        - "@netbs.secure.config"
+        tags:
+        - { name: form.type }
 
     netbs.secure.helper.user:
         class: NetBS\SecureBundle\Helper\UserHelper

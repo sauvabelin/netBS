@@ -2,6 +2,7 @@
 
 namespace NetBS\SecureBundle\Service;
 
+use NetBS\SecureBundle\Mapping\BaseAutorisation;
 use NetBS\SecureBundle\Mapping\BaseUser;
 use NetBS\SecureBundle\Mapping\BaseRole;
 
@@ -20,6 +21,9 @@ class SecureConfig
         if(!is_subclass_of($config['entities']['role_class'], BaseRole::class))
             throw new \Exception("redefined role class must extend " . BaseRole::class);
 
+        if(!is_subclass_of($config['entities']['autorisation_class'], BaseAutorisation::class))
+            throw new \Exception("redefined autorisation class must extend " . BaseAutorisation::class);
+
         $this->config   = $config;
     }
 
@@ -29,6 +33,19 @@ class SecureConfig
 
     public function getRoleClass() {
         return $this->config['entities']['role_class'];
+    }
+
+    public function getAutorisationClass() {
+        return $this->config['entities']['autorisation_class'];
+    }
+
+    /**
+     * @return BaseAutorisation
+     */
+    public function createAutorisation() {
+
+        $class  = $this->getAutorisationClass();
+        return new $class();
     }
 
     /**

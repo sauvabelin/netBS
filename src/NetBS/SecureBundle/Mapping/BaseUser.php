@@ -82,11 +82,17 @@ class BaseUser implements
      */
     protected $roles;
 
+    /**
+     * @var BaseAutorisation[]
+     */
+    protected $autorisations;
+
     public function __construct()
     {
         $this->isActive         = true;
         $this->dateAdded        = new \DateTime();
         $this->roles            = new ArrayCollection();
+        $this->autorisations    = new ArrayCollection();
         $this->salt             = sha1(StrUtil::randomString() . uniqid());
     }
 
@@ -385,6 +391,22 @@ class BaseUser implements
     public function isEnabled()
     {
         return $this->isActive;
+    }
+
+    /**
+     * @return BaseAutorisation[]
+     */
+    public function getAutorisations()
+    {
+        return $this->autorisations;
+    }
+
+    public function addAutorisation(BaseAutorisation $autorisation) {
+        $this->autorisations->add($autorisation);
+    }
+
+    public function removeAutorisation(BaseAutorisation $autorisation) {
+        $this->autorisations->removeElement($autorisation);
     }
 }
 

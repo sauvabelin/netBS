@@ -7,6 +7,8 @@ use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use NetBS\FichierBundle\Service\FichierConfig;
 use NetBS\SecureBundle\Service\SecureConfig;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
 
 class DoctrineMapperSubscriber implements EventSubscriber
 {
@@ -38,9 +40,28 @@ class DoctrineMapperSubscriber implements EventSubscriber
             case $this->secureConfig->getUserClass():
                 $this->mapUser($eventArgs);
                 break;
+            case $this->secureConfig->getAutorisationClass():
+                $this->mapAutorisation($eventArgs);
             default:
                 return;
         }
+    }
+
+    protected function mapAutorisation(LoadClassMetadataEventArgs $eventArgs) {
+        $eventArgs->getClassMetadata()->mapManyToOne([
+            'fieldName'     => 'user',
+            'targetEntity'  => $this->secureConfig->getUserClass()
+        ]);
+
+        $eventArgs->getClassMetadata()->mapManyToOne([
+            'fieldName'     => 'groupe',
+            'targetEntity'  => $this->fichierConfig->getGroupeClass()
+        ]);
+
+        $eventArgs->getClassMetadata()->mapManyToMany([
+            'fieldName'     => 'roles',
+            'targetEntity'  => $this->secureConfig->getRoleClass()
+        ]);
     }
 
     protected function mapUser(LoadClassMetadataEventArgs $eventArgs) {
@@ -61,6 +82,12 @@ class DoctrineMapperSubscriber implements EventSubscriber
             'name'      => 'unique_target_member',
             'columns'   => ['membre_id']
         ];
+
+        $eventArgs->getClassMetadata()->mapOneToMany([
+            'fieldName'     => 'autorisations',
+            'targetEntity'  => $this->secureConfig->getAutorisationClass(),
+            'mappedBy'      => 'user'
+        ]);
     }
 
     protected function mapRole(LoadClassMetadataEventArgs $eventArgs) {

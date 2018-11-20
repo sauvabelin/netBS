@@ -2,6 +2,7 @@
 
 namespace NetBS\SecureBundle\DependencyInjection;
 
+use NetBS\SecureBundle\Entity\Autorisation;
 use NetBS\SecureBundle\Entity\Role;
 use NetBS\SecureBundle\Entity\User;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -29,6 +30,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('role_class')->defaultValue(Role::class)->end()
                         ->scalarNode('user_class')->defaultValue(User::class)->end()
+                        ->scalarNode('autorisation_class')->defaultValue(Autorisation::class)->end()
                     ->end()
                 ->end()
             ->end()
