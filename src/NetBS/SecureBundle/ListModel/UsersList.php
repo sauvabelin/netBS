@@ -42,7 +42,6 @@ class UsersList extends BaseListModel
             ->setParameter('username', $username)
             ->innerJoin('u.membre', 'm')
             ->join('u.roles', 'r')
-            ->orderBy('m.nom', 'ASC')
             ->getQuery()
             ->getResult();
     }

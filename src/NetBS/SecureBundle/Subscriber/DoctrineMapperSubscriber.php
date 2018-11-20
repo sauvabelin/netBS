@@ -50,6 +50,7 @@ class DoctrineMapperSubscriber implements EventSubscriber
     protected function mapAutorisation(LoadClassMetadataEventArgs $eventArgs) {
         $eventArgs->getClassMetadata()->mapManyToOne([
             'fieldName'     => 'user',
+            'inversedBy'    => 'autorisations',
             'targetEntity'  => $this->secureConfig->getUserClass()
         ]);
 
