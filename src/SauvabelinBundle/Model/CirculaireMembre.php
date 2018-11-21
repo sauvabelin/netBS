@@ -301,6 +301,7 @@ class CirculaireMembre implements GroupSequenceProviderInterface
             $famille->addGeniteur($geniteur);
         }
 
+        $this->famille = $famille;
         return $famille;
     }
 
