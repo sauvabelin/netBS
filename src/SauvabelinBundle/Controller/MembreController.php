@@ -38,6 +38,8 @@ class MembreController extends Controller
         $selectedFamilyId   = $request->request->get('circulaire_membre')['familleId'];
         $selectedFamily     = null;
 
+        $infos->generateFamille();
+
         if($selectedFamilyId) {
 
             $selectedFamily = $em->find($config->getFamilleClass(), intval($selectedFamilyId));
