@@ -19,8 +19,10 @@ services:
         tags:
             - { name: form.type }
 
-    form.type.text_mask:
-        class: NetBS\CoreBundle\Form\Type\TextMaskType
+    form.type.date_mask:
+        class: NetBS\CoreBundle\Form\Type\DateMaskType
+        arguments:
+            - "@netbs.params"
         tags:
             - { name: form.type }
 

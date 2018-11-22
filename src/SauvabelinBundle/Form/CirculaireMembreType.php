@@ -3,9 +3,12 @@
 namespace SauvabelinBundle\Form;
 
 use NetBS\CoreBundle\Form\Type\AjaxSelect2DocumentType;
+use NetBS\CoreBundle\Form\Type\DateMaskType;
 use NetBS\CoreBundle\Form\Type\DatepickerType;
+use NetBS\CoreBundle\Form\Type\MaskType;
 use NetBS\CoreBundle\Form\Type\Select2DocumentType;
 use NetBS\CoreBundle\Form\Type\SexeType;
+use NetBS\CoreBundle\Form\Type\TelephoneMaskType;
 use NetBS\FichierBundle\Entity\Fonction;
 use NetBS\FichierBundle\Entity\Geniteur;
 use NetBS\FichierBundle\Entity\Groupe;
@@ -30,13 +33,13 @@ class CirculaireMembreType extends AbstractType
             ->add('prenom', TextType::class, array('label' => 'Prénom'))
             ->add('nom', TextType::class, array('label' => 'Nom de famille'))
             ->add('sexe', SexeType::class, array('label' => 'Sexe'))
-            ->add('naissance', DatepickerType::class, array('label' => 'Date de naissance'))
+            ->add('naissance', DateMaskType::class, array('label' => 'Date de naissance'))
             ->add('adresse', TextType::class, array('label' => "Adresse", 'required' => false))
             ->add('npa', NumberType::class, array('label' => "NPA", 'required' => false))
             ->add('localite', TextType::class, array('label' => 'Localité', 'required' => false))
             ->add('email', EmailType::class, array('label' => 'Email', 'required' => false))
-            ->add('telephone', TextType::class, array('label' => 'Téléphone', 'required' => false))
-            ->add('natel', TextType::class, array('label' => 'Natel', 'required' => false))
+            ->add('telephone', TelephoneMaskType::class, array('label' => 'Téléphone', 'required' => false))
+            ->add('natel', TelephoneMaskType::class, array('label' => 'Natel', 'required' => false))
             ->add('fonction', Select2DocumentType::class, array(
                 'class'         => Fonction::class,
                 'choice_label'  => 'nom',
@@ -56,7 +59,7 @@ class CirculaireMembreType extends AbstractType
             ->add('r1adresse', TextType::class, array('label' => 'Adresse', 'required' => false))
             ->add('r1npa', NumberType::class, array('label' => 'NPA', 'required' => false))
             ->add('r1localite', TextType::class, array('label' => 'Localité', 'required' => false))
-            ->add('r1telephone', TextType::class, array('label' => 'Téléphone', 'required' => false))
+            ->add('r1telephone', TelephoneMaskType::class, array('label' => 'Téléphone', 'required' => false))
             ->add('r1email', EmailType::class, array('label' => 'Email', 'required' => false))
             ->add('r1profession', TextType::class, array('label' => 'Profession', 'required' => false))
 
@@ -70,7 +73,7 @@ class CirculaireMembreType extends AbstractType
             ->add('r2adresse', TextType::class, array('label' => 'Adresse', 'required' => false))
             ->add('r2npa', NumberType::class, array('label' => 'NPA', 'required' => false))
             ->add('r2localite', TextType::class, array('label' => 'Localité', 'required' => false))
-            ->add('r2telephone', TextType::class, array('label' => 'Téléphone', 'required' => false))
+            ->add('r2telephone', TelephoneMaskType::class, array('label' => 'Téléphone', 'required' => false))
             ->add('r2email', EmailType::class, array('label' => 'Email', 'required' => false))
             ->add('r2profession', TextType::class, array('label' => 'Profession', 'required' => false))
         ;
