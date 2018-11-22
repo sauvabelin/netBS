@@ -212,7 +212,7 @@ class CirculaireMembre implements GroupSequenceProviderInterface
      */
     public $r2profession;
 
-    protected $famille = null;
+    public $famille = null;
 
     public function setFamille(Famille $famille) {
 
@@ -279,9 +279,7 @@ class CirculaireMembre implements GroupSequenceProviderInterface
         if($this->r2prenom) {
 
             $geniteur   = new Geniteur();
-
             $geniteur->setContactInformation(new ContactInformation());
-            $geniteur   = new Geniteur();
             $geniteur->setProfession($this->r2profession)
                 ->setSexe($this->r2sexe)
                 ->setPrenom($this->r2prenom)
@@ -327,3 +325,4 @@ class CirculaireMembre implements GroupSequenceProviderInterface
         return $membre;
     }
 }
+

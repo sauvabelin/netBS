@@ -31,15 +31,17 @@ class UsersList extends BaseListModel
         $username   = $this->getParameter('username');
         $query      = $this->entityManager->getRepository($this->getManagedItemsClass())->createQueryBuilder('u');
 
+       /*
         if(empty($username)) return [];
 
         if(strpos($username, "%") !== false)
             $query->andWhere($query->expr()->like('u.username', ':username'));
         else
             $query->andWhere($query->expr()->eq('u.username', ':username'));
+        */
 
         return $query
-            ->setParameter('username', $username)
+            //->setParameter('username', $username)
             ->getQuery()
             ->getResult();
     }
