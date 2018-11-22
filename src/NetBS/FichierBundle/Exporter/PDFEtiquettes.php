@@ -74,7 +74,7 @@ class PDFEtiquettes implements ExporterInterface, ConfigurableExporterInterface
             $adresse    = $adressable->getSendableAdresse();
             $lines      = [];
 
-            if(!empty($config->title) && $adressable instanceof BaseMembre)
+            if(!empty($config->title) && $adressable instanceof BaseMembre && $adressable->getAge() < 18)
                 $lines[] = $config->title;
 
             if($adresse) {

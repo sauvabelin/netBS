@@ -26,7 +26,7 @@ class EtiquettesType extends AbstractType
             ->add('FPDFConfig', FPDFType::class, array('label' => 'Configuration générale'))
             ->add('showInfoPage', SwitchType::class, array('label' => "Afficher la page d'info"))
             ->add('mergeFamilles', SwitchType::class, array('label' => 'Fusionner les familles'))
-            ->add('title', TextType::class, array('label' => 'Titre', 'required' => false))
+            ->add('title', TextType::class, array('label' => 'Titre étiquette enfant', 'required' => false))
         ;
     }
 
