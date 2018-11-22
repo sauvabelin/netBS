@@ -53,8 +53,9 @@ security:
             logout_on_user_change: true
 
     access_control:
-        - { path: ^/api/v1/netBS/gettoken,  roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/v1/netBS,           roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/netBS/secure/login,     roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
-        - { path: ^/netBS/secure,           roles: [ ROLE_ADMIN ] }
-        - { path: ^/netBS,                  roles: [ IS_AUTHENTICATED_FULLY, ROLE_USER ] }
+        - { path: ^/api/v1/netBS/gettoken,          roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/netBS,                   roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/netBS/secure/login,             roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+        - { path: ^/netBS/secure/user/my-account,   roles: [ ROLE_USER ] }
+        - { path: ^/netBS/secure,                   roles: [ ROLE_ADMIN ] }
+        - { path: ^/netBS,                          roles: [ IS_AUTHENTICATED_FULLY, ROLE_USER ] }
