@@ -66,7 +66,7 @@ class PDFEtiquettes implements ExporterInterface, ConfigurableExporterInterface
         }
 
         $etiquettes = [];
-        $noAddress  = 0;
+        $noAddress  = [];
 
         // Building etiquettes
         foreach ($adressables as $adressable) {
@@ -77,31 +77,45 @@ class PDFEtiquettes implements ExporterInterface, ConfigurableExporterInterface
             if(!empty($config->title) && $adressable instanceof BaseMembre)
                 $lines[] = $config->title;
 
-            $lines[]    = $adressable->__toString();
-
             if($adresse) {
 
-                $lines[]    = $adresse->getRue();
-                $lines[]    = $adresse->getNpa() . " " . $adresse->getLocalite();
+                $lines[]        = $adressable->__toString();
+                $lines[]        = $adresse->getRue();
+                $lines[]        = $adresse->getNpa() . " " . $adresse->getLocalite();
+                $etiquettes[]   = $lines;
             }
-            else {
-                $noAddress++;
-            }
-
-            if($adresse || $config->displayNotAdressable)
-                $etiquettes[] = $lines;
+            else
+                $noAddress[] = $adressable;
         }
 
-        $infos[] = "Nombre d'éléments sans adresses trouvés: " . $noAddress;
+        $infos[] = "Nombre d'éléments sans adresses trouvés: " . count($noAddress);
 
         //Print infos
-        $fpdf->AddPage();
-        for($i = 0; $i < count($infos); $i++) {
-            $fpdf->SetXY(20, 20 + (10*$i));
-            $fpdf->MultiCell(200, 6, utf8_decode($infos[$i]), 0, 'L');
+        if($config->showInfoPage || count($noAddress) > 0) {
+            $fpdf->AddPage();
+            for ($i = 0; $i < count($infos); $i++) {
+                $fpdf->SetXY(20, 20 + (7 * $i));
+                $fpdf->MultiCell(200, 6, utf8_decode($infos[$i]), 0, 'L');
+            }
+
+            if(count($noAddress) > 0) {
+                $fpdf->SetXY(19.8, 50);
+                $fpdf->SetFontSize(15);
+                $fpdf->SetTextColor(204, 0, 0);
+                $fpdf->Cell(200, 15, utf8_decode("Elements sans adresses trouvés:"));
+
+                $fpdf->SetFontSize($config->taillePolice);
+                for($i = 0; $i < count($noAddress); $i++) {
+                    $nom = $noAddress[$i]->__toString();
+                    $fpdf->SetXY(20, 60 + $i*$config->taillePolice);
+                    $fpdf->Cell(20, $config->taillePolice + 1, utf8_decode($nom));
+                }
+            }
         }
 
         //Output etiquettes
+        $fpdf->SetFontSize($config->taillePolice);
+        $fpdf->SetTextColor(0,0,0);
         $fpdf->AddPage();
         foreach($etiquettes as $etiquette)
             $fpdf->addEtiquette($etiquette);

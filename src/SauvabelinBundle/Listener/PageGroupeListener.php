@@ -35,19 +35,31 @@ class PageGroupeListener
             return;
 
         /** @var BaseGroupe $groupe */
-        $groupe = $event->getParameters()['item'];
+        $groupe         = $event->getParameters()['item'];
+        $categorieId    = $groupe->getGroupeType()->getGroupeCategorie()->getId();
+        $typeId         = $groupe->getGroupeType()->getId();
+        $uniteId        = $this->params->getValue('bs', 'groupe_categorie.unite_id');
+        $brancheId      = $this->params->getValue('bs', 'groupe_type.branche_id');
+        $config         = $event->getConfigurator();
+        $column         = $config->getRow(0)->getColumns()[0];
 
-        if($groupe->getGroupeType()->getGroupeCategorie()->getId() !== intval($this->params->getValue('bs', 'groupe_categorie.unite_id')))
-            return;
+        if($categorieId === intval($uniteId) || $typeId === intval($brancheId)) {
 
-        $config = $event->getConfigurator();
-        $row    = $config->getRow(0)->getColumns()[0]->addRow();
+            $column->addRow()->addColumn(0, 12)->setBlock(TemplateBlock::class, [
+                'template' => '@Sauvabelin/block/etiquettes_groupe.block.twig',
+                'params' => [
+                    'groupe' => $groupe
+                ]
+            ]);
 
-        $row->addColumn(0, 12)->setBlock(TemplateBlock::class, [
-            'template'  => '@Sauvabelin/block/liste_unite.block.twig',
-            'params'    => [
-                'groupe'    => $groupe
-            ]
-        ]);
+            if($categorieId === intval($uniteId)) {
+                $column->addRow()->addColumn(0, 12)->setBlock(TemplateBlock::class, [
+                    'template' => '@Sauvabelin/block/liste_unite.block.twig',
+                    'params' => [
+                        'groupe' => $groupe
+                    ]
+                ]);
+            }
+        }
     }
 }

@@ -24,7 +24,7 @@ class EtiquettesType extends AbstractType
             ->add('margeInferieure', NumberType::class, array('label' => "Marge en bas"))
             ->add('margeDroite', NumberType::class, array('label' => "Marge à droite"))
             ->add('FPDFConfig', FPDFType::class, array('label' => 'Configuration générale'))
-            ->add('displayNotAdressable', SwitchType::class, array('label' => "Inclure les sans adresses"))
+            ->add('showInfoPage', SwitchType::class, array('label' => "Afficher la page d'info"))
             ->add('mergeFamilles', SwitchType::class, array('label' => 'Fusionner les familles'))
             ->add('title', TextType::class, array('label' => 'Titre', 'required' => false))
         ;
