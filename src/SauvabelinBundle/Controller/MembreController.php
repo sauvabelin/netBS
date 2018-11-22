@@ -36,7 +36,6 @@ class MembreController extends Controller
         $infos->numero      = $previousNumber + 1;
         $form               = $this->createForm(CirculaireMembreType::class, $infos);
         $selectedFamilyId   = $request->request->get('circulaire_membre')['familleId'];
-      
         $form->handleRequest($request);
       
         if(!empty($selectedFamilyId)) {
@@ -85,4 +84,5 @@ class MembreController extends Controller
         return $response;
     }
 }
+
 
