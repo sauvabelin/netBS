@@ -22,7 +22,7 @@ class EtiquettesConfig
 
     public $margeInterieureHorizontale  = 10;
 
-    public $displayNotAdressable        = true;
+    public $showInfoPage                = false;
 
     public $title                       = "Aux parents de";
 

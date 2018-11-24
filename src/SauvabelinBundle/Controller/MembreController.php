@@ -36,15 +36,13 @@ class MembreController extends Controller
         $infos->numero      = $previousNumber + 1;
         $form               = $this->createForm(CirculaireMembreType::class, $infos);
         $selectedFamilyId   = $request->request->get('circulaire_membre')['familleId'];
-        $selectedFamily     = null;
-
-        if($selectedFamilyId) {
-
-            $selectedFamily = $em->find($config->getFamilleClass(), intval($selectedFamilyId));
-            $infos->setFamille($selectedFamily);
-        }
-
         $form->handleRequest($request);
+      
+        if(!empty($selectedFamilyId)) {
+            $infos->famille = $em->find($config->getFamilleClass(), intval($selectedFamilyId));
+        }
+        else $infos->generateFamille();
+      
         if($form->isSubmitted() && $form->isValid()) {
 
             $membre     = $infos->getMembre();
@@ -86,3 +84,5 @@ class MembreController extends Controller
         return $response;
     }
 }
+
+

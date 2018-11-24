@@ -28,6 +28,19 @@
 
 {% endblock %}
 
+{% block mask_widget %}
+    {{ registerJs(asset('bundles/netbscore/js/jquery.inputmask.min.js')) }}
+    {% set maskJs %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(":input").inputmask();
+        });
+    </script>
+    {% endset %}
+    {{ registerScript(maskJs) }}
+    {{ block('form_widget_simple') }}
+{% endblock %}
+
 {% block quill_widget %}
 
     {{ registerCss(asset('bundles/netbscore/lib/quill/quill.snow.css')) }}

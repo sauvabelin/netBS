@@ -8,16 +8,18 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TextMaskType extends AbstractType
+class MaskType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired('mask');
+        $resolver
+            ->setDefault('clearOnLostFocus', false)
+            ->setRequired('mask');
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['mask'] = $options['mask'];
+        $view->vars['attr']['data-inputmask'] = $options['mask'];
     }
 
     public function getParent()
