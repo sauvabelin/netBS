@@ -6,7 +6,7 @@ ovesco_galerie:
 ovesco_facturation_api:
     resource: "@OvescoFacturationBundle/ApiController/"
     type:     annotation
-    prefix:   /facturation
+    prefix:   /netBS/facturation
 
 sauvabelin:
     resource: "@SauvabelinBundle/Controller/"

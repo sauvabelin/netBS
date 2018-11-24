@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Rappel
  *
  * @ORM\Table(name="ovesco_facturation_rappels")
- * @ORM\Entity(repositoryClass="Ovesco\FacturationBundle\Repository\RappelRepository")
+ * @ORM\Entity
  */
 class Rappel
 {

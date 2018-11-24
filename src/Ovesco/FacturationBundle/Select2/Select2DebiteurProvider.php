@@ -8,6 +8,7 @@ use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Select2\FamilleProvider;
 use NetBS\FichierBundle\Select2\MembreProvider;
+use Ovesco\FacturationBundle\Form\Type\DebiteurType;
 
 class Select2DebiteurProvider implements Select2ProviderInterface
 {
@@ -27,7 +28,7 @@ class Select2DebiteurProvider implements Select2ProviderInterface
      */
     public function getManagedClass()
     {
-        return "facturation_debiteur";
+        return "ovesco.facturation.debiteur";
     }
 
     /**
@@ -47,7 +48,7 @@ class Select2DebiteurProvider implements Select2ProviderInterface
      */
     public function toId($item)
     {
-        return ($item instanceof BaseMembre ? 'membre:' : 'famille:') . $item->getId();
+        return DebiteurType::encodeTo($item);
     }
 
     /**
@@ -58,11 +59,8 @@ class Select2DebiteurProvider implements Select2ProviderInterface
      */
     public function search($needle, $limit = 5)
     {
-        $membres = $this->membreProvider->search($needle, $limit);
-        $familles = $this->familleProvider->search($needle, $limit);
-        $membres = is_array($membres) ? $membres : $membres->toArray();
-        $familles = is_array($familles) ? $familles : $familles->toArray();
-
-        $result = array_merge($membres, $familles);
+        $membres    = $this->membreProvider->search($term, $limit);
+        $familles   = $this->familleProvider->search($term, $limit);
+        return array_merge($membres, $familles);
     }
 }

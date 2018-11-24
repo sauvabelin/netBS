@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Creance
  *
  * @ORM\Table(name="ovesco_facturation_creances")
- * @ORM\Entity(repositoryClass="Ovesco\FacturationBundle\Repository\CreanceRepository")
+ * @ORM\Entity
  */
 class Creance
 {

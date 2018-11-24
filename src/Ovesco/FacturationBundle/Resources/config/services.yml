@@ -6,3 +6,8 @@ services:
             - "@netbs.fichier.config"
         tags:
             - { name: doctrine.event_subscriber }
+
+    ovesco.facturation.exporter.pdf_factures:
+        class: Ovesco\FacturationBundle\Exporter\PDFFacture
+        tags:
+            - { name: netbs.exporter }

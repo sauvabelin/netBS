@@ -2,6 +2,8 @@
 
 namespace Ovesco\FacturationBundle\ApiController;
 
+use Ovesco\FacturationBundle\Entity\Creance;
+use Ovesco\FacturationBundle\Form\CreanceType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -12,6 +14,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CreanceApiController extends BaseApiController
 {
+    /**
+     * @Route("/test")
+     */
+    public function test() {
+        $facture = $this->get('doctrine.orm.entity_manager')->find('OvescoFacturationBundle:Facture', 1);
+        $exporter = $this->get('ovesco.facturation.exporter.pdf_factures');
+
+        return $exporter->export([$facture, $facture]);
+    }
+
     /**
      * @param Request $request
      * @return bool|float|int|string
@@ -42,6 +54,9 @@ class CreanceApiController extends BaseApiController
      */
     public function postCreance(Request $request) {
 
+        $creance    = new Creance();
+        $form       = $this->createForm(CreanceType::class, $creance);
+        $form->handleRequest($request);
 
     }
 

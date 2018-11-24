@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Paiement
  *
  * @ORM\Table(name="ovesco_facturation_paiements")
- * @ORM\Entity(repositoryClass="Ovesco\FacturationBundle\Repository\PaiementRepository")
+ * @ORM\Entity
  */
 class Paiement
 {
