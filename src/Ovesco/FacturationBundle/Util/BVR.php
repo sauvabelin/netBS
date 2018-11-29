@@ -22,7 +22,7 @@ class BVR
         $chaine    .= self::getControlNumber($chaine);
         $tab[0]     = $chaine;
 
-        $chaine     = sprintf("%026s", $facture->getId());
+        $chaine     = sprintf("%026s", $facture->getFactureId());
         $chaine    .= self::getControlNumber($chaine);
         $tab[1]     = $chaine;
 

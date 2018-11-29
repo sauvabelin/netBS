@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Facture
  *
  * @ORM\Table(name="ovesco_facturation_factures")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Ovesco\FacturationBundle\Repository\FactureRepository")
  */
 class Facture
 {
@@ -32,6 +32,13 @@ class Facture
      * @Groups({"default"})
      */
     protected $id;
+
+    /**
+     * @var int
+     * @ORM\Column(name="old_fichier_id", type="integer")
+     * @Groups({"default"})
+     */
+    protected $oldFichierId;
 
     /**
      * @var string
@@ -99,6 +106,26 @@ class Facture
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getFactureId() {
+        return empty($this->oldFichierId) ? $this->id : $this->oldFichierId;
+    }
+
+    /**
+     * @return int
+     */
+    public function _getOldFichierId()
+    {
+        return $this->oldFichierId;
+    }
+
+    /**
+     * @param int $oldFichierId
+     */
+    public function _setOldFichierId($oldFichierId)
+    {
+        $this->oldFichierId = $oldFichierId;
     }
 
     /**
@@ -263,5 +290,21 @@ class Facture
     public function setDate($date)
     {
         $this->date = $date;
+    }
+
+    public function getMontant() {
+        return array_reduce($this->creances->toArray(), function($montant, Creance $creance) {
+            return $montant + $creance->getMontant();
+        }, 0);
+    }
+
+    public function getMontantPaye() {
+        return array_reduce($this->paiements->toArray(), function($montant, Paiement $paiement) {
+            return $montant + $paiement->getMontant();
+        }, 0);
+    }
+
+    public function getMontantEncoreDu() {
+        return $this->getMontant() - $this->getMontantPaye();
     }
 }

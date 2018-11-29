@@ -101,6 +101,7 @@ class ImportFacturesCommand extends ContainerAwareCommand
     private function toFacture(WNGFacture $WNGFacture) {
 
         $facture    = new Facture();
+        $facture->_setOldFichierId($WNGFacture->idFacture);
         $facture->setStatut(Facture::OUVERTE);
         $facture->setDate($WNGFacture->dateFacture);
         $facture->setCompteToUse($this->compte);

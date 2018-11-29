@@ -40,4 +40,13 @@ class BSMembre extends BaseMembre
         $this->numeroBS = $numeroBS;
         return $this;
     }
+
+    public function setStatut($statut)
+    {
+        parent::setStatut($statut);
+
+        if($statut !== BaseMembre::INSCRIT)
+            foreach($this->getActivesAttributions() as $attribution)
+                $attribution->setDateFin(new \DateTime());
+    }
 }

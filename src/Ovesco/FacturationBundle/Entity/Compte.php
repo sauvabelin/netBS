@@ -33,6 +33,12 @@ class Compte
 
     /**
      * @var string
+     * @ORM\Column(name="iban", type="string", length=255, nullable=false, unique=true)
+     */
+    protected $iban;
+
+    /**
+     * @var string
      * @ORM\Column(name="addresse1", type="string", length=255, nullable=true, unique=false)
      * @Groups({"default"})
      */
@@ -145,5 +151,21 @@ class Compte
     public function setCcp($ccp)
     {
         $this->ccp = $ccp;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIban()
+    {
+        return $this->iban;
+    }
+
+    /**
+     * @param string $iban
+     */
+    public function setIban($iban)
+    {
+        $this->iban = $iban;
     }
 }

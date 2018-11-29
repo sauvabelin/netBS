@@ -18,7 +18,7 @@ class CreanceApiController extends BaseApiController
      * @Route("/test")
      */
     public function test() {
-        $facture = $this->get('doctrine.orm.entity_manager')->find('OvescoFacturationBundle:Facture', 1);
+        $facture = $this->get('doctrine.orm.entity_manager')->find('OvescoFacturationBundle:Facture', 2533);
         $exporter = $this->get('ovesco.facturation.exporter.pdf_factures');
 
         return $exporter->export([$facture, $facture]);

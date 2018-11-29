@@ -9,6 +9,9 @@ use NetBS\CoreBundle\Model\ConfigurableExporterInterface;
 use NetBS\CoreBundle\Model\ExporterInterface;
 use NetBS\CoreBundle\Utils\Traits\ConfigurableExporterTrait;
 use NetBS\FichierBundle\Mapping\BaseFamille;
+use NetBS\FichierBundle\Mapping\BaseMembre;
+use NetBS\FichierBundle\Model\AdressableInterface;
+use Ovesco\FacturationBundle\Entity\Compte;
 use Ovesco\FacturationBundle\Entity\Creance;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Util\BVR;
@@ -129,7 +132,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         $fpdf->SetXY(15.2, 73);
         $fpdf->SetFont('OpenSans', '', 7);
-        $fpdf->Cell(20, 10, 'N/Ref : ' . $facture->getId());
+        $fpdf->Cell(20, 10, 'N/Ref : ' . $facture->getFactureId());
 
         $fpdf->SetXY(15, 90);
         $fpdf->SetFontSize(10);
@@ -137,24 +140,23 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         $fpdf->SetFontSize(9);
 
+        $i = 0;
         /** @var Creance[] $creances */
         $creances = array_merge($facture->getCreances()->toArray(), $facture->getCreances()->toArray());
-        for($i = 0; $i < count($creances); $i++) {
+        for(; $i < count($creances); $i++)
+            $this->printCreanceLine($fpdf, $i, $creances[$i]->getTitre(), $creances[$i]->getMontant());
 
-            $fpdf->SetXY(15, 125 + ($i*6));
-            $fpdf->Cell(0, 6, $creances[$i]->getTitre(), 1);
+        if(count($facture->getPaiements()) > 0)
+            $this->printCreanceLine($fpdf, $i++, "Montant déjà payé", -($facture->getMontantPaye()));
 
-            $fpdf->SetXY(170, 125 + ($i*6));
-            $montant = number_format($creances[$i]->getMontant(), 2, '.', "'");
-            $fpdf->Cell(0, 6, 'CHF ' . $montant, 'L', 'ln', 'R');
-        }
+        if(count($creances) > 1 || count($facture->getPaiements()) > 0)
+            $this->printCreanceLine($fpdf, $i++, "Total", $facture->getMontantEncoreDu(), true);
 
-        $fpdf->SetXY(15, 130 + count($creances)*7);
+        $fpdf->SetXY(15, 130 + $i*7);
         $fpdf->Cell(0, 30, '', 1);
 
 
         // Print BVR stuff
-        $nom    = $debiteur instanceof BaseFamille ? $debiteur->__toString() : $debiteur->getFamille()->getNom() . " " . $debiteur->getPrenom();
         $ref    = BVR::getReferenceNumber($facture);
         $ms     = 10;
         $mg     = 12.3;
@@ -169,21 +171,12 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         $il     = 4;
         $compte = $facture->getCompteToUse();
 
+        //Adresse haut gauche
         $fpdf->SetFont('Arial', '', 9);
-        $fpdf->SetXY($wg , $haddr);
-        $fpdf->Cell(50, $il, $compte->getLine1());
-        $fpdf->SetXY($wg , $haddr + $il);
-        $fpdf->Cell(50, $il, $compte->getLine2());
-        $fpdf->SetXY($wg , $haddr + 2*$il);
-        $fpdf->Cell(50, $il, $compte->getLine3());
+        $this->printBvrBsAdresse($fpdf, $wg, $haddr, $il, $compte);
 
         //Adresse haut droite
-        $fpdf->SetXY($waddr , $haddr);
-        $fpdf->Cell(50, $il, $compte->getLine1());
-        $fpdf->SetXY($waddr , $haddr + $il);
-        $fpdf->Cell(50, $il, $compte->getLine2());
-        $fpdf->SetXY($waddr , $haddr + $il*2);
-        $fpdf->Cell(50, $il, $compte->getLine3());
+        $this->printBvrBsAdresse($fpdf, $waddr, $haddr, $il, $compte);
 
         //CCP
         $fpdf->SetFontSize(11);
@@ -197,17 +190,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         $fpdf->SetFont('Arial', '', 9);
         $fpdf->SetXY($wg , $hg);
         $fpdf->Cell(10, $il, $refNumber);
-
-        $fpdf->SetXY($wg , $hg + $il);
-        $fpdf->Cell(10, $il, $nom);
-
-        if($adresse) {
-            $fpdf->SetXY($wg, $hg + $il * 2);
-            $fpdf->Cell(10, $il, $adresse->getRue());
-            $fpdf->SetXY($wg, $hg + $il * 3);
-            $fpdf->Cell(10, $il, $adresse->getNpa(). ' ' . $adresse->getLocalite());
-        }
-
+        $this->printBvrDebiteurAdresse($fpdf, $wg, $hg + $il, $il, $debiteur);
 
         //ligne codage droite
         $fpdf->SetFont('BVR', '', 11);
@@ -217,15 +200,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         //adresse bas droite
         $fpdf->SetFont('Arial', '', 9);
-        $fpdf->SetXY($wd , $hd + $il*6);
-        $fpdf->Cell(10, $il, $nom);
-
-        if($adresse) {
-            $fpdf->SetXY($wd, $hd + $il * 7);
-            $fpdf->Cell(10, $il, $adresse->getRue());
-            $fpdf->SetXY($wd, $hd + $il * 8);
-            $fpdf->Cell(10, $il, $adresse->getNpa() . ' ' . $adresse->getLocalite());
-        }
+        $this->printBvrDebiteurAdresse($fpdf, $wd, $hd + $il*6, $il, $debiteur);
 
         //ligne codage bas
         $fpdf->SetFont('BVR', '', 12.8);
@@ -236,6 +211,61 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         $fpdf->Line($wd+49,$hb-4.5,$wd+52,$hb-4.5);
         $fpdf->Line($wd-1.5,$hg+9,$wd-1.5,$hg+11);
 
+    }
+
+    private function printCreanceLine(\FPDF $fpdf, $i, $titre, $montant, $bold = false) {
+
+        if($bold) {
+            $fpdf->SetFont('OpenSans', 'B');
+        }
+
+        $fpdf->SetXY(15, 125 + ($i*6));
+        $fpdf->Cell(0, 6, utf8_decode($titre), 1);
+
+        $fpdf->SetXY(170, 125 + ($i*6));
+        $montant = number_format($montant, 2, '.', "'");
+        $fpdf->Cell(0, 6, 'CHF ' . $montant, 'L', 'ln', 'R');
+
+        if($bold) {
+            $fpdf->SetFont('OpenSans', '');
+        }
+    }
+
+    /**
+     * @param \FPDF $fpdf
+     * @param $x
+     * @param $y
+     * @param $interligne
+     * @param BaseFamille|BaseMembre $debiteur
+     */
+    private function printBvrDebiteurAdresse(\FPDF $fpdf, $x, $y, $interligne, $debiteur) {
+
+        $nom = $debiteur instanceof BaseFamille
+            ? $debiteur->__toString()
+            : $debiteur->getFamille()->getNom() . " " . $debiteur->getPrenom();
+
+        $adresse = $debiteur->getSendableAdresse();
+
+        $fpdf->SetXY($x , $y);
+        $fpdf->Cell(10, $interligne, $nom);
+
+        if($adresse) {
+            $fpdf->SetXY($x, $y + $interligne);
+            $fpdf->Cell(10, $interligne, $adresse->getRue());
+            $fpdf->SetXY($x, $y + $interligne * 2);
+            $fpdf->Cell(10, $interligne, $adresse->getNpa(). ' ' . $adresse->getLocalite());
+        }
+    }
+
+    private function printBvrBsAdresse(\FPDF $fpdf, $x, $y, $interligne, Compte $compte) {
+        $fpdf->SetXY($x, $y);
+        $fpdf->Cell(50, $interligne, $compte->getLine1());
+        $fpdf->SetXY($x , $y + $interligne);
+        $fpdf->Cell(50, $interligne, $compte->getLine2());
+        $fpdf->SetXY($x , $y + 2*$interligne);
+        $fpdf->Cell(50, $interligne, $compte->getLine3());
+        $fpdf->SetXY($x , $y + 3*$interligne);
+        $fpdf->Cell(50, $interligne, $compte->getLine4());
     }
 
     /**
