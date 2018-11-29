@@ -4,7 +4,7 @@ namespace NetBS\CoreBundle\Exporter\Config;
 
 class FPDFConfig
 {
-    public $margeGauche = 12.3;
+    public $margeGauche = 30;
 
     public $margeHaut = 10;
 
