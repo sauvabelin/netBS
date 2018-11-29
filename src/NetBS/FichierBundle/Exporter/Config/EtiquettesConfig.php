@@ -8,19 +8,19 @@ class EtiquettesConfig
 {
     public $FPDFConfig;
 
-    public $margeInferieure             = 10;
+    public $margeInferieure             = 5;
 
-    public $margeDroite                 = 10.9;
+    public $margeDroite                 = 0;
 
-    public $colonnes                    = 4;
+    public $colonnes                    = 3;
 
     public $lignes                      = 8;
 
-    public $taillePolice                = 8;
+    public $taillePolice                = 10;
 
-    public $margeInterieureVerticale    = 10;
+    public $margeInterieureVerticale    = 5;
 
-    public $margeInterieureHorizontale  = 10;
+    public $margeInterieureHorizontale  = 5;
 
     public $showInfoPage                = false;
 
