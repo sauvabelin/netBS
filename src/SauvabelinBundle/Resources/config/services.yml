@@ -8,7 +8,6 @@ services:
         arguments:
             - {baseUri: "%nextcloud_webdav_uri%", userName: "%nextcloud_username%", password: "%nextcloud_password%"}
 
-
     nextcloud.wrapper.factory:
         public: false
         class: SauvabelinBundle\DependencyInjection\NextcloudWrapperFactory
@@ -34,6 +33,13 @@ services:
         class: SauvabelinBundle\Form\Search\SearchBaseMembreInformationType
         arguments:
             - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    sauvabelin.form.circuaire_membre:
+        class: SauvabelinBundle\Form\CirculaireMembreType
+        arguments:
+            - "@netbs.params"
         tags:
             - { name: form.type }
 

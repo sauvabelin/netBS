@@ -21,8 +21,8 @@
                     <div class="card-body">
                         {{ form_start(form) }}
                         <div class="row">
-                            <div class="col-12 col-md-6">{{ form_row(form.prenom) }}</div>
                             <div class="col-12 col-md-6">{{ form_row(form.nom, {attr: {"v-model": "nom", "autocomplete": "off"}}) }}</div>
+                            <div class="col-12 col-md-6">{{ form_row(form.prenom) }}</div>
                         </div>
 
                         <div class="row">

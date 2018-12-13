@@ -2,16 +2,14 @@
 
 namespace SauvabelinBundle\Form;
 
-use NetBS\CoreBundle\Form\Type\AjaxSelect2DocumentType;
+use Doctrine\ORM\EntityRepository;
 use NetBS\CoreBundle\Form\Type\DateMaskType;
-use NetBS\CoreBundle\Form\Type\DatepickerType;
-use NetBS\CoreBundle\Form\Type\MaskType;
 use NetBS\CoreBundle\Form\Type\Select2DocumentType;
 use NetBS\CoreBundle\Form\Type\SexeType;
 use NetBS\CoreBundle\Form\Type\TelephoneMaskType;
+use NetBS\CoreBundle\Service\ParameterManager;
 use NetBS\FichierBundle\Entity\Fonction;
 use NetBS\FichierBundle\Entity\Geniteur;
-use NetBS\FichierBundle\Entity\Groupe;
 use SauvabelinBundle\Entity\BSGroupe;
 use SauvabelinBundle\Model\CirculaireMembre;
 use Symfony\Component\Form\AbstractType;
@@ -25,8 +23,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CirculaireMembreType extends AbstractType
 {
+    private $params;
+
+    public function __construct(ParameterManager $params)
+    {
+        $this->params = $params;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $louveteauxId = $this->params->getValue('bs', 'fonction.louveteau_id');
+        $eclaireurId = $this->params->getValue('bs', 'fonction.eclaireur_id');
+
         $builder
             ->add('familleId', HiddenType::class)
             ->add('numero', NumberType::class, array('label' => "Numéro BS", 'required' => false))
@@ -43,9 +51,13 @@ class CirculaireMembreType extends AbstractType
             ->add('fonction', Select2DocumentType::class, array(
                 'class'         => Fonction::class,
                 'choice_label'  => 'nom',
-                'label'         => 'Fonction'
+                'label'         => 'Fonction',
+                'query_builder' => function(EntityRepository $repository) use ($louveteauxId, $eclaireurId) {
+                    $query = $repository->createQueryBuilder('f');
+                    return $query->where($query->expr()->in('f.id', [$louveteauxId, $eclaireurId]));
+                }
             ))
-            ->add('groupe', AjaxSelect2DocumentType::class, array(
+            ->add('groupe', Select2DocumentType::class, array(
                 'class'         => BSGroupe::class,
                 'label'         => 'Unité'
             ))
