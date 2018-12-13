@@ -48,5 +48,6 @@ class BSMembre extends BaseMembre
         if($statut !== BaseMembre::INSCRIT)
             foreach($this->getActivesAttributions() as $attribution)
                 $attribution->setDateFin(new \DateTime());
+        return $this;
     }
 }
