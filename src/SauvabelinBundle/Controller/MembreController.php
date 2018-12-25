@@ -25,6 +25,7 @@ class MembreController extends Controller
         $config             = $this->get('netbs.fichier.config');
         $infos              = new CirculaireMembre();
         $em                 = $this->get('doctrine.orm.entity_manager');
+        $selectedFamilyId   = $request->request->get('circulaire_membre')['familleId'];
         $previousNumber     = $em->createQueryBuilder()
             ->select('m')->from($config->getMembreClass(), 'm')
             ->orderBy('m.numeroBS', 'DESC')
@@ -33,16 +34,16 @@ class MembreController extends Controller
             ->getSingleResult()
             ->getNumeroBS();
 
+        $options = ['validation_groups' => $selectedFamilyId ? ['default'] : ['default', 'noFamily']];
         $infos->numero      = $previousNumber + 1;
-        $form               = $this->createForm(CirculaireMembreType::class, $infos);
-        $selectedFamilyId   = $request->request->get('circulaire_membre')['familleId'];
+        $form               = $this->createForm(CirculaireMembreType::class, $infos, $options);
         $form->handleRequest($request);
-      
+
         if(!empty($selectedFamilyId)) {
             $infos->famille = $em->find($config->getFamilleClass(), intval($selectedFamilyId));
         }
         else $infos->generateFamille();
-      
+
         if($form->isSubmitted() && $form->isValid()) {
 
             $membre     = $infos->getMembre();
