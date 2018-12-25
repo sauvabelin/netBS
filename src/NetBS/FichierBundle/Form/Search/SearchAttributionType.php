@@ -34,8 +34,8 @@ class SearchAttributionType extends AbstractType
                 'class'     => $this->config->getGroupeClass(),
                 'required'  => false,
             ))
-            ->add('dateDebut', DatepickerType::class, array('label' => 'Commencée après', 'required' => false))
-            ->add('dateFin', DatepickerType::class, array('label' => 'Terminée avant', 'required' => false))
+            ->add('dateDebut', DatepickerType::class, array('label' => 'Commencée le', 'required' => false))
+            ->add('dateFin', DatepickerType::class, array('label' => 'Terminée le', 'required' => false))
             ->add('actif', SearchActiveAttributionType::class, array('label' => 'Attribution active'))
         ;
     }
@@ -46,5 +46,4 @@ class SearchAttributionType extends AbstractType
             'data_class' => SearchAttribution::class
         ));
     }
-
 }
