@@ -1,4 +1,4 @@
-<table class="table table-striped table-hover {{ tableClass }}" id="mass-items-table-{{ _updater_id }}">
+<table class="table table-striped table-hover {{ tableClass }}" id="mass-items-table-{{ _updater_id }}" style="width:auto;">
     <thead>
         <tr>
             {% if showToString %}
@@ -15,13 +15,14 @@
 
     <tbody>
     {% for item in items %}
+        {% set width = 100 / ((item.children|length) + (showToString ? 1 : 0)) %}
         <tr>
             {% if showToString %}
-                <td>{{ item.vars.value }}</td>
+                <td style="width:{{ width }}%">{{ item.vars.value }}</td>
             {% endif %}
             {% for field in item.children %}
-                <td>
-                    {{ form_widget(field) }}
+                <td style="width:{{ width }}%">
+                    {{ form_widget(field, {attr: {style: 'width:100%'}}) }}
                     {{ form_errors(field) }}
                 </td>
             {% endfor %}
