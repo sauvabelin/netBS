@@ -6,6 +6,7 @@ use NetBS\CoreBundle\Exporter\CSVColumns;
 use NetBS\CoreBundle\Exporter\CSVExporter;
 use NetBS\CoreBundle\Utils\StrUtil;
 use NetBS\FichierBundle\Mapping\BaseMembre;
+use NetBS\FichierBundle\Mapping\Personne;
 use NetBS\FichierBundle\Service\FichierConfig;
 
 class CSVRega extends CSVExporter
@@ -49,9 +50,13 @@ class CSVRega extends CSVExporter
      */
     public function configureColumns(CSVColumns $columns)
     {
+        'NO_PERS_BDNJS;SEXE;NOM;PRENOM;DAT_NAISSANCE;RUE;NPA;LOCALITE;PAYS;NATIONALITE;1ERE_LANGUE;CLASSE/GROUPE';
         $columns
             ->addColumn('NO_PERS_BDNJS', function(BaseMembre $membre) {
                 return null;
+            })
+            ->addColumn('SEXE', function (BaseMembre $membre) {
+                return $membre->getSexe() === Personne::FEMME ? '0' : '1';
             })
             ->addColumn('NOM', function(BaseMembre $membre) {
                 return StrUtil::removeAccents($membre->getFamille()->getNom());
@@ -74,10 +79,13 @@ class CSVRega extends CSVExporter
                 if($adresse = $membre->getSendableAdresse())
                     return StrUtil::removeAccents($adresse->getLocalite());
             })
-            ->addColumn('RUE', function(BaseMembre $membre) {
+            ->addColumn('PAYS', function(BaseMembre $membre) {
                 return 'CH';
             })
-            ->addColumn('1ERE LANGUE', function (BaseMembre $membre) {
+            ->addColumn('NATIONALITE', function(BaseMembre $membre) {
+                return 'CH';
+            })
+            ->addColumn('1ERE_LANGUE', function (BaseMembre $membre) {
                 return 'F';
             })
             ->addColumn('CLASSE/GROUPE', function(BaseMembre $membre) {
