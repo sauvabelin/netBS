@@ -56,7 +56,7 @@ class CSVRega extends CSVExporter
                 return null;
             })
             ->addColumn('SEXE', function (BaseMembre $membre) {
-                return $membre->getSexe() === Personne::FEMME ? '0' : '1';
+                return $membre->getSexe() === Personne::FEMME ? '2' : '1';
             })
             ->addColumn('NOM', function(BaseMembre $membre) {
                 return StrUtil::removeAccents($membre->getFamille()->getNom());
