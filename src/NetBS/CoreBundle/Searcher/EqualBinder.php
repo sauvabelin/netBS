@@ -18,8 +18,10 @@ class EqualBinder implements BinderInterface
         $field  = $alias . "." . $config->getName();
         $param  = '_param' . $this->count++;
 
-        if(strpos($data, "%") !== false)
+        if(is_string($data) && strpos($data, "%") !== false)
             $builder->andWhere($builder->expr()->like($field, ':' . $param));
+        elseif($data instanceof \DateTime)
+            $builder->andWhere($builder->expr()->eq("DATE($field)", "DATE(:$param)"));
         else
             $builder->andWhere($builder->expr()->eq($field, ':' . $param));
 
