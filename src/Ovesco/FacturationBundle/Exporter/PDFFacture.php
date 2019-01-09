@@ -10,14 +10,13 @@ use NetBS\CoreBundle\Model\ExporterInterface;
 use NetBS\CoreBundle\Utils\Traits\ConfigurableExporterTrait;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseMembre;
-use NetBS\FichierBundle\Model\AdressableInterface;
 use Ovesco\FacturationBundle\Entity\Compte;
 use Ovesco\FacturationBundle\Entity\Creance;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Util\BVR;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-define('FPDF_FONTPATH', __DIR__ . '/Facture/fonts/');
+// define('FPDF_FONTPATH', __DIR__ . '/Facture/fonts/');
 
 class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 {

@@ -50,7 +50,6 @@ class CSVRega extends CSVExporter
      */
     public function configureColumns(CSVColumns $columns)
     {
-        'NO_PERS_BDNJS;SEXE;NOM;PRENOM;DAT_NAISSANCE;RUE;NPA;LOCALITE;PAYS;NATIONALITE;1ERE_LANGUE;CLASSE/GROUPE';
         $columns
             ->addColumn('NO_PERS_BDNJS', function(BaseMembre $membre) {
                 return null;

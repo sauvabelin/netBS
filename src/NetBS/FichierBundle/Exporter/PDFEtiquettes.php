@@ -12,7 +12,6 @@ use NetBS\FichierBundle\Form\Export\EtiquettesType;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Model\AdressableInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PDFEtiquettes implements ExporterInterface, ConfigurableExporterInterface
