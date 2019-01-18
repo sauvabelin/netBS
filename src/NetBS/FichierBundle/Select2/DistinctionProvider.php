@@ -54,6 +54,7 @@ class DistinctionProvider implements Select2ProviderInterface
         return $query
             ->where($query->expr()->like('x.nom', ':n'))
             ->setParameter('n', '%'.$needle.'%')
+            ->orderBy('LENGTH(x.nom)', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
             ->execute();
