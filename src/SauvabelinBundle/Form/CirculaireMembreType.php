@@ -10,6 +10,7 @@ use NetBS\CoreBundle\Form\Type\TelephoneMaskType;
 use NetBS\CoreBundle\Service\ParameterManager;
 use NetBS\FichierBundle\Entity\Fonction;
 use NetBS\FichierBundle\Entity\Geniteur;
+use NetBS\FichierBundle\Select2\GroupeProvider;
 use SauvabelinBundle\Entity\BSGroupe;
 use SauvabelinBundle\Model\CirculaireMembre;
 use Symfony\Component\Form\AbstractType;
@@ -32,6 +33,7 @@ class CirculaireMembreType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $select2provider = new GroupeProvider();
         $louveteauxId = $this->params->getValue('bs', 'fonction.louveteau_id');
         $eclaireurId = $this->params->getValue('bs', 'fonction.eclaireur_id');
 
@@ -58,6 +60,9 @@ class CirculaireMembreType extends AbstractType
                 }
             ))
             ->add('groupe', Select2DocumentType::class, array(
+                'choice_label'  => function(BSGroupe $groupe) use ($select2provider) {
+                    return $select2provider->toString($groupe);
+                },
                 'class'         => BSGroupe::class,
                 'label'         => 'Unité'
             ))
