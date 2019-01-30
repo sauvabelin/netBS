@@ -245,6 +245,9 @@ abstract class BaseMembre extends Personne implements EqualInterface
     public function getActiveAttribution() {
 
         $attributions   = $this->getActivesAttributions();
+        usort($attributions, function(BaseAttribution $a1, BaseAttribution $a2) {
+            return $a1->getFonction()->getPoids() < $a2->getFonction()->getPoids() ? 1 : -1;
+        });
 
         return count($attributions) > 0 ? $attributions[0] : null;
     }
