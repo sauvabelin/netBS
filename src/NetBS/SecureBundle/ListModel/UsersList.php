@@ -10,6 +10,7 @@ use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\FichierBundle\Utils\Traits\FichierConfigTrait;
 use NetBS\FichierBundle\Utils\Traits\SecureConfigTrait;
+use NetBS\ListBundle\Column\DateTimeColumn;
 use NetBS\ListBundle\Column\SimpleColumn;
 use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
@@ -88,6 +89,7 @@ class UsersList extends BaseListModel
                 XEditableColumn::PROPERTY   => 'isActive',
                 XEditableColumn::TYPE_CLASS => SwitchType::class,
             ))
+            ->addColumn('Création', 'dateAdded', DateTimeColumn::class)
             ->addColumn("Actions", null,ActionColumn::class, array(
                 ActionColumn::ACTIONS_KEY   => [
                     new ActionItem(IconAction::class, [
