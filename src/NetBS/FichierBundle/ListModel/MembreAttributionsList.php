@@ -69,7 +69,12 @@ class MembreAttributionsList extends BaseListModel
     public function configureColumns(ListColumnsConfiguration $configuration)
     {
         $configuration
-            ->addColumn('Unité', 'groupe', HelperColumn::class)
+            // ->addColumn('Unité', 'groupe', HelperColumn::class)
+            ->addColumn('Unité', null, XEditableColumn::class, [
+                XEditableColumn::PROPERTY   => 'groupe',
+                XEditableColumn::TYPE_CLASS => AjaxSelect2DocumentType::class,
+                XEditableColumn::PARAMS     => ['class' => $this->getFichierConfig()->getGroupeClass()]
+            ])
             ->addColumn('Fonction', null, XEditableColumn::class, array(
                 XEditableColumn::PROPERTY   => 'fonction',
                 XEditableColumn::TYPE_CLASS => AjaxSelect2DocumentType::class,
