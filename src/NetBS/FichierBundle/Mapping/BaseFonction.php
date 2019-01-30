@@ -135,7 +135,7 @@ abstract class BaseFonction
      */
     public function setPoids($poids)
     {
-        $this->poids = $poids;
+        $this->poids = intval($poids);
 
         return $this;
     }
