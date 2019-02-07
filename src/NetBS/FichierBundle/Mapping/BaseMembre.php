@@ -382,6 +382,10 @@ abstract class BaseMembre extends Personne implements EqualInterface
     {
         $this->statut = $statut;
 
+        if(in_array($statut, [self::DECEDE, self::DESINSCRIT]))
+            foreach ($this->getActivesAttributions() as $attribution)
+                $attribution->setDateFin(new \DateTime());
+
         return $this;
     }
 
