@@ -4,7 +4,6 @@ namespace SauvabelinBundle\Listener;
 
 use Doctrine\ORM\EntityManager;
 use NetBS\CoreBundle\Block\CardBlock;
-use NetBS\CoreBundle\Block\ListBlock;
 use NetBS\CoreBundle\Event\PreRenderLayoutEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 

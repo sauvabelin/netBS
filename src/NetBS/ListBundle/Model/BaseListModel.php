@@ -10,6 +10,8 @@ abstract class BaseListModel implements ListModelInterface
 
     protected $parameters           = [];
 
+    protected $rendererVariables    = [];
+
     protected $managedItems         = null;
 
     /**
@@ -33,6 +35,23 @@ abstract class BaseListModel implements ListModelInterface
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+    }
+
+    /**
+     * Adds a custom variable provided to the renderer, if it can support any
+     * @param $key
+     * @param $value
+     */
+    public function addRendererVariable($key, $value) {
+        $this->rendererVariables[$key] = $value;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRendererVariables()
+    {
+        return $this->rendererVariables;
     }
 
     /**

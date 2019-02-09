@@ -65,6 +65,8 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
      */
     public function export($items)
     {
+        define('FPDF_FONTPATH', __DIR__ . '/Facture/fonts/');
+
         $fpdf   = new \FPDF();
         $fpdf->SetLeftMargin(15);
         $fpdf->SetRightMargin(15);
@@ -141,7 +143,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         $i = 0;
         /** @var Creance[] $creances */
-        $creances = array_merge($facture->getCreances()->toArray(), $facture->getCreances()->toArray());
+        $creances = $facture->getCreances()->toArray();
         for(; $i < count($creances); $i++)
             $this->printCreanceLine($fpdf, $i, $creances[$i]->getTitre(), $creances[$i]->getMontant());
 
@@ -246,13 +248,13 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         $adresse = $debiteur->getSendableAdresse();
 
         $fpdf->SetXY($x , $y);
-        $fpdf->Cell(10, $interligne, $nom);
+        $fpdf->Cell(10, $interligne, utf8_decode($nom));
 
         if($adresse) {
             $fpdf->SetXY($x, $y + $interligne);
-            $fpdf->Cell(10, $interligne, $adresse->getRue());
+            $fpdf->Cell(10, $interligne, utf8_decode($adresse->getRue()));
             $fpdf->SetXY($x, $y + $interligne * 2);
-            $fpdf->Cell(10, $interligne, $adresse->getNpa(). ' ' . $adresse->getLocalite());
+            $fpdf->Cell(10, $interligne, utf8_decode($adresse->getNpa(). ' ' . $adresse->getLocalite()));
         }
     }
 

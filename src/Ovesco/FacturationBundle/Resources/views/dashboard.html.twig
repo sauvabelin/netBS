@@ -1,0 +1,12 @@
+{% extends '@NetBSCore/layout/backend.layout.twig' %}
+
+{% set title %}Facturation{% endset %}
+
+{% block main %}
+    <div class="container-fluid">
+        {% include '@NetBSCore/includes/header.include.twig' with {
+            header: 'Facturation',
+            subHeader: 'Administration et vue d\'ensemble'
+        } %}
+    </div>
+{% endblock %}

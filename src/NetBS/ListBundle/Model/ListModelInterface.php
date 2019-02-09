@@ -50,6 +50,18 @@ interface ListModelInterface
     public function setParameter($key, $value);
 
     /**
+     * Adds a custom variable provided to the renderer, if it can support any
+     * @param $key
+     * @param $value
+     */
+    public function addRendererVariable($key, $value);
+
+    /**
+     * @return array
+     */
+    public function getRendererVariables();
+
+    /**
      * Returns a string representation of the contained items
      * @return string
      */

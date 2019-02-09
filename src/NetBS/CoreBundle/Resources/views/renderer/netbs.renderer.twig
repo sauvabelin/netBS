@@ -16,7 +16,6 @@
 {% set itemClass                = table.model.managedItemsClass %}
 
 <div class="netbs-renderer" style="border:1px solid #eee">
-
     <table id="{{ tableId }}" class="table table-hover dataTable table-responsive-md table-striped table-fw-widget" style="margin:0 !important;">
         <thead>
         <tr>
@@ -26,6 +25,7 @@
                     <label class="custom-control-label" for="{{ mainCheckboxId }}"></label>
                 </div>
             </th>
+
             {% for header in table.headers %}
                 <th>{{ header }}</th>
             {% endfor %}
@@ -60,7 +60,6 @@
                 {% for item in toolbar.items('left') %}
                     {{ item.render()|raw }}
                 {% endfor %}
-
                 {#
                 Nature des éléments : <b>{{ table.model.containedItemsName }}</b>
                 #}

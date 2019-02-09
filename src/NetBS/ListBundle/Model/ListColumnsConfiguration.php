@@ -10,7 +10,7 @@ class ListColumnsConfiguration
      * @var array
      */
     protected $columns = [];
-
+    
     /**
      * Adds a column to the list
      * @param string            $header     Column header

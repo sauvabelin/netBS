@@ -1,5 +1,22 @@
 services:
 
+    ovesco.facturation.debiteur_type:
+        class: Ovesco\FacturationBundle\Form\Type\DebiteurType
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@ovesco.facturation.select2.debiteur"
+            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    ovesco.facturation.select2.debiteur:
+        class: Ovesco\FacturationBundle\Select2\Select2DebiteurProvider
+        arguments:
+            - "@netbs.fichier.select2.membre_provider"
+            - "@netbs.fichier.select2.famille_provider"
+        tags:
+            - { name: netbs.select2_provider }
+
     ovesco.facturation.subscribers.doctrine_debiteur:
         class: Ovesco\FacturationBundle\Subscriber\DoctrineDebiteurSubscriber
         arguments:
@@ -11,3 +28,84 @@ services:
         class: Ovesco\FacturationBundle\Exporter\PDFFacture
         tags:
             - { name: netbs.exporter }
+
+    ovesco.facturation.list.debiteur_factures:
+        class: Ovesco\FacturationBundle\ListModel\DebiteurFacturesList
+        tags:
+            - { name: netbs.list.model }
+
+    ovesco.facturation.list.debiteur_creances:
+        class: Ovesco\FacturationBundle\ListModel\DebiteurCreancesList
+        tags:
+            - { name: netbs.list.model }
+
+    ovesco.facturation.list.facture_creances:
+        class: Ovesco\FacturationBundle\ListModel\FactureCreancesList
+        tags:
+            - { name: netbs.list.model }
+
+    ovesco.facturation.list.facture_rappels:
+        class: Ovesco\FacturationBundle\ListModel\FactureRappelsList
+        tags:
+            - { name: netbs.list.model }
+
+    ovesco.facturation.list.facture_paiements:
+        class: Ovesco\FacturationBundle\ListModel\FacturePaiementsList
+        tags:
+            - { name: netbs.list.model }
+
+    ovesco.facturation.listener.membre_famille_page_layout:
+        class: Ovesco\FacturationBundle\Listener\MembreFamillePageListener
+        arguments:
+            - "@request_stack"
+            - "@twig"
+        tags:
+            - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: extendsMembreFamillePage }
+
+    ovesco.facturation.security.facturation_voter:
+        class: Ovesco\FacturationBundle\Voter\FacturationVoter
+        tags:
+            - { name: security.voter }
+
+    ovesco.facturation.listener.main_menu:
+        class: Ovesco\FacturationBundle\Listener\MainMenuListener
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure, priority: 80 }
+
+    ovesco.facturation.mass_creance:
+        class: Ovesco\FacturationBundle\MassUpdater\CreanceMassUpdater
+        tags:
+            - { name: netbs.mass_updater }
+
+    ovesco.facturation.bridge.creance_to_adressable:
+        class: Ovesco\FacturationBundle\Bridge\CreanceToAdressable
+        tags:
+              - { name: netbs.bridge }
+
+    ovesco.facturation.bridge.facture_to_adressable:
+        class: Ovesco\FacturationBundle\Bridge\FactureToAdressable
+        tags:
+              - { name: netbs.bridge }
+
+    ovesco.facturation.renderer.netbs.toolbar_listener:
+        class: Ovesco\FacturationBundle\Listener\NetbsToolbarListener
+        arguments:
+            - "@netbs.core.bridge_manager"
+            - "@twig"
+            - "@security.token_storage"
+        tags:
+            - { name: kernel.event_listener, event: netbs.list_model.renderer.toolbar, method: extend }
+
+    ovesco.facturation.searcher.creances:
+        class: Ovesco\FacturationBundle\Searcher\CreanceSearcher
+        tags:
+            - { name: netbs.searcher }
+            - { name: netbs.list.model }
+
+    ovesco.facturation.searcher.factures:
+        class: Ovesco\FacturationBundle\Searcher\FactureSearcher
+        tags:
+            - { name: netbs.searcher }
+            - { name: netbs.list.model }

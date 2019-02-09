@@ -33,8 +33,9 @@ class NetBSRenderer implements RendererInterface
      * Renders the given prototype table
      * @param SnapshotTable $table
      * @return string
+     * @throws \Exception
      */
-    public function render(SnapshotTable $table)
+    public function render(SnapshotTable $table, $params = [])
     {
         $toolbar    = new Toolbar();
         $tableId    = uniqid("__dt_");
@@ -45,7 +46,8 @@ class NetBSRenderer implements RendererInterface
         return $this->engine->render('@NetBSCore/renderer/netbs.renderer.twig', array(
             'table'     => $table,
             'tableId'   => $tableId,
-            'toolbar'   => $toolbar
+            'toolbar'   => $toolbar,
+            'params'    => $params,
         ));
     }
 }

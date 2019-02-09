@@ -65,6 +65,11 @@ class Compte
      */
     protected $line4;
 
+    public function __toString()
+    {
+        return $this->ccp;
+    }
+
     /**
      * @return int
      */

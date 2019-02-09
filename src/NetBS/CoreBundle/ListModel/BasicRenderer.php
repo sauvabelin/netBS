@@ -27,11 +27,13 @@ class BasicRenderer implements RendererInterface
      * Renders the given prototype table
      * @param SnapshotTable $table
      * @return string
+     * @throws
      */
-    public function render(SnapshotTable $table)
+    public function render(SnapshotTable $table, $params = [])
     {
         return $this->engine->render('@NetBSCore/renderer/basic.renderer.twig', array(
-            'table' => $table
+            'table' => $table,
+            'params' => $params,
         ));
     }
 }

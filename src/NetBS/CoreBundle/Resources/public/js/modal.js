@@ -34,8 +34,13 @@ var BSModal = function(path, params) {
 
             mdl.attachButtonEvents();
 
-        }).fail(function() {
-            alert("Une erreur est survenue, veuillez réessayer ou contactez le développeur!");
+        }).fail(function(err) {
+            var modal       = mdl.generate(err.responseText);
+
+            $(document.body).append(modal);
+            var $modal      = $('#' + mdl.id);
+
+            $modal.modal();
         });
     };
 
@@ -72,8 +77,9 @@ var BSModal = function(path, params) {
             window.location.href = response.getResponseHeader("Location");
         if(code === 201)
             location.reload();
-        else
-            this.remove();
+        if(code === 202)
+            toastr.success(data);
+        this.remove();
     };
 
     this.remove = function() {

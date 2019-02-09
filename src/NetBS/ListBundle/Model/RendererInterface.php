@@ -15,5 +15,5 @@ interface RendererInterface
      * @param SnapshotTable $table
      * @return string
      */
-    public function render(SnapshotTable $table);
+    public function render(SnapshotTable $table, $params = []);
 }

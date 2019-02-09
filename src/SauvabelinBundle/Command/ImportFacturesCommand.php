@@ -39,6 +39,7 @@ class ImportFacturesCommand extends ContainerAwareCommand
 
         $compte = new Compte();
         $compte->setCcp("10-1915-8");
+        $compte->setIban("10-1915-8");
         $compte->setLine1("Brigade de Sauvabelin");
         $compte->setLine2("Lausanne");
 

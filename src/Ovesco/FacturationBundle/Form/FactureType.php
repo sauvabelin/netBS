@@ -3,6 +3,7 @@
 namespace Ovesco\FacturationBundle\Form;
 
 use NetBS\FichierBundle\Utils\Form\RemarquesUtils;
+use Ovesco\FacturationBundle\Entity\Compte;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Form\Type\DebiteurType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -18,8 +19,8 @@ class FactureType extends AbstractType
     {
         $builder
             ->add('date', DateType::class, ['label' => 'date', 'required' => false])
-            ->add('compteToUse', EntityType::class, ['label' => 'Compte à utiliser'])
             ->add('debiteur', DebiteurType::class, ['label' => 'Débiteur'])
+            ->add('compteToUse', EntityType::class, ['label' => 'Compte à utiliser', 'class' => Compte::class])
             ->add('statut', ChoiceType::class, ['label' => 'statut', 'choices' => [
                 Facture::PAYEE      => 'payée',
                 Facture::ANNULEE    => 'annulée',
@@ -28,6 +29,7 @@ class FactureType extends AbstractType
         ;
 
         RemarquesUtils::addRemarquesField($builder);
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

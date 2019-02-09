@@ -47,4 +47,8 @@ class PreRenderLayoutEvent extends Event
     {
         return $this->parameters;
     }
+
+    public function getParameter($key) {
+        return isset($this->parameters[$key]) ? $this->parameters[$key] : null;
+    }
 }

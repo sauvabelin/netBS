@@ -15,12 +15,9 @@ class PostLoadDynamicListListener
         if(!$dynamicList instanceof DynamicList)
             return;
 
-        $repository     = $em->getRepository($dynamicList->getItemsClass());
-        $items          = [];
-        $itemIds        = $dynamicList->_getItemIds();
-        foreach($itemIds as $id)
-            $items[] = $repository->find($id);
-
+        $query          = $em->getRepository($dynamicList->getItemsClass())->createQueryBuilder('i');
+        $items          = $query->where($query->expr()->in('i.id', ':ids'))
+            ->setParameter('ids', $dynamicList->_getItemIds())->getQuery()->getResult();
         $dynamicList->_setItems($items);
     }
 }

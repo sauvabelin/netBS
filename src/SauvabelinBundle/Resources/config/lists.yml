@@ -32,3 +32,10 @@ services:
         tags:
           - { name: netbs.list.model }
           - { name: netbs.automatic_list }
+
+
+    sauvabelin.automatic.cotisations:
+        class: SauvabelinBundle\Automatics\CotisationsAutomatic
+        tags:
+          - { name: netbs.list.model }
+          - { name: netbs.automatic_list }

@@ -2,6 +2,7 @@
 
 namespace SauvabelinBundle\Entity;
 
+use NetBS\FichierBundle\Mapping\BaseAttribution;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use Doctrine\ORM\Mapping as ORM;
 use NetBS\CoreBundle\Validator\Constraints as BSAssert;
@@ -43,11 +44,20 @@ class BSMembre extends BaseMembre
 
     public function setStatut($statut)
     {
-        parent::setStatut($statut);
+        $this->statut = $statut;
+        $close = [];
+        if($statut === self::DECEDE)
+            foreach ($this->getActivesAttributions() as $attribution)
+                $close[] = $attribution;
+        else if(in_array($statut, [self::DECEDE, self::AUTRE]))
+            foreach ($this->getActivesAttributions() as $attribution)
+                if (strtolower($attribution->getGroupe()->getNom()) !== 'adabs')
+                    $close[] = $attribution;
 
-        if($statut !== BaseMembre::INSCRIT)
-            foreach($this->getActivesAttributions() as $attribution)
-                $attribution->setDateFin(new \DateTime());
+        /** @var BaseAttribution $attribution */
+        foreach($close as $attribution)
+            $attribution->setDateFin(new \DateTime());
+
         return $this;
     }
 }

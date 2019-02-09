@@ -75,6 +75,16 @@ class Row
     }
 
     /**
+     * @param $i
+     * @return Column
+     * @throws \Exception
+     */
+    public function getColumn($i) {
+        if(isset($this->columns[$i])) return $this->columns[$i];
+        throw new \Exception("No column exist at index $i");
+    }
+
+    /**
      * @return Column
      */
     public function close() {

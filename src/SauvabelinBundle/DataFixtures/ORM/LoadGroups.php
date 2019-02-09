@@ -68,7 +68,8 @@ class LoadGroups extends BSFixture implements OrderedFixtureInterface
             'groupe.branche_eclaireurs_id'      => "branche éclaireurs",
             'groupe.branche_eclaireuses_id'     => "branche éclaireuses",
             'groupe.branche_louveteaux_id'      => "branche louveteaux",
-            'groupe.branche_louvettes_id'       => "branche louvettes"
+            'groupe.branche_louvettes_id'       => "branche louvettes",
+            'groupe.branche_smt_id'             => 'branche SMT',
         ];
 
         foreach($updates as $key => $fn)

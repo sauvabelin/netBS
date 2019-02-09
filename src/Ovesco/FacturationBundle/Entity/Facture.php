@@ -38,7 +38,7 @@ class Facture
      * @ORM\Column(name="old_fichier_id", type="integer")
      * @Groups({"default"})
      */
-    protected $oldFichierId;
+    protected $oldFichierId = -1;
 
     /**
      * @var string
@@ -46,7 +46,7 @@ class Facture
      * @ORM\Column(name="statut", type="string", length=255)
      * @Groups({"default"})
      */
-    protected $statut;
+    protected $statut = self::OUVERTE;
 
     /**
      * @var \DateTime
@@ -96,6 +96,20 @@ class Facture
         $this->creances = new ArrayCollection();
         $this->rappels = new ArrayCollection();
         $this->paiements = new ArrayCollection();
+        $this->date = new \DateTime();
+    }
+
+    public function __toString()
+    {
+        return "[{$this->getFactureId()}] pour " . $this->debiteur->__toString();
+    }
+
+    public static function getStatutChoices() {
+        return [
+            'payée' => self::PAYEE,
+            'ouverte' => self::OUVERTE,
+            'annulée' => self::ANNULEE,
+        ];
     }
 
     /**

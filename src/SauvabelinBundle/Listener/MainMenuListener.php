@@ -31,17 +31,14 @@ class MainMenuListener
 
         $adminCategory  = $menu->getCategory('secure.admin');
 
-        if(!$user->hasRole("ROLE_SG"))
-            return;
+        if($user->hasRole("ROLE_SG")) {
+            $adminCategory->getLink('netbs.secure.admin.users')
+                ->addSubLink('Derniers comptes', 'sauvabelin.user.latest_created');
+        }
 
-        $adminCategory->getLink('netbs.secure.admin.users')
-            ->addSubLink('Derniers comptes', 'sauvabelin.user.latest_created');
-
-
-        if(!$user->hasRole("ROLE_ADMIN"))
-            return;
-
-        $mailsMenu      = $adminCategory->addSubMenu('bs.mails', 'Mails BS', 'fas fa-envelope');
-        $mailsMenu->addSubLink("Mailing listes", "sauvabelin.mailing_lists.lists_mailing_lists");
+        if($user->hasRole("ROLE_ADMIN")) {
+            $mailsMenu = $adminCategory->addSubMenu('bs.mails', 'Mails BS', 'fas fa-envelope');
+            $mailsMenu->addSubLink("Mailing listes", "sauvabelin.mailing_lists.lists_mailing_lists");
+        }
     }
 }

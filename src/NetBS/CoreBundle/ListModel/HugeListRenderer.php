@@ -28,10 +28,11 @@ class HugeListRenderer implements RendererInterface
      * @param SnapshotTable $table
      * @return string
      */
-    public function render(SnapshotTable $table)
+    public function render(SnapshotTable $table, $params = [])
     {
         return $this->engine->render('@NetBSCore/renderer/huge_list.renderer.twig', array(
-            'table'     => $table
+            'table'     => $table,
+            'params'    => $params,
         ));
     }
 }

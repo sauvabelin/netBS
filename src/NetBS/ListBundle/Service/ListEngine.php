@@ -86,6 +86,7 @@ class ListEngine
     public function render($list, $renderer, $params = []) {
 
         if(is_string($list))
+        if(is_string($list))
             $list       = $this->listModelManager->getModelByAlias($list);
 
         if(is_string($renderer))
@@ -115,7 +116,8 @@ class ListEngine
         $this->stopwatch->start($list->getAlias());
 
         $this->dispatcher->dispatch(ListEvents::PRE_RENDER, new PreRenderListEvent($list, $renderer));
-        $content                = new RenderedContent($renderer->render($this->generateSnaphot($list)));
+        $snapshot = $this->generateSnaphot($list);
+        $content = new RenderedContent($renderer->render($snapshot, $list->getRendererVariables()));
 
         $this->stopwatch->lap($list->getAlias());
         $this->dispatcher->dispatch(ListEvents::POST_RENDER, new PostRenderListEvent($list, $renderer, $content));

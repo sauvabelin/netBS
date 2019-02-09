@@ -59,8 +59,8 @@ class Select2DebiteurProvider implements Select2ProviderInterface
      */
     public function search($needle, $limit = 5)
     {
-        $membres    = $this->membreProvider->search($term, $limit);
-        $familles   = $this->familleProvider->search($term, $limit);
+        $membres    = $this->membreProvider->search($needle, $limit);
+        $familles   = $this->familleProvider->search($needle, $limit);
         return array_merge($membres, $familles);
     }
 }

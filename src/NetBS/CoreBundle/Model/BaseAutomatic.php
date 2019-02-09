@@ -3,6 +3,7 @@
 namespace NetBS\CoreBundle\Model;
 
 use NetBS\ListBundle\Model\BaseListModel;
+use NetBS\SecureBundle\Mapping\BaseUser;
 
 abstract class BaseAutomatic extends BaseListModel
 {
@@ -37,5 +38,14 @@ abstract class BaseAutomatic extends BaseListModel
 
     public function _setAutomaticData($data) {
         $this->_data    = $data;
+    }
+
+    /**
+     * Defines if the current user is allowed to see this list
+     * @param BaseUser $user
+     * @return bool
+     */
+    public function isAllowed(BaseUser $user) {
+        return true;
     }
 }

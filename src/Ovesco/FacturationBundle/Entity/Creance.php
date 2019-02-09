@@ -57,7 +57,7 @@ class Creance
      * @ORM\Column(name="rabais", type="float")
      * @Groups({"default"})
      */
-    protected $rabais;
+    protected $rabais = 0;
 
     /**
      * @var Facture
@@ -66,6 +66,16 @@ class Creance
      * @Groups({"creance_with_facture"})
      */
     protected $facture;
+
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+    }
+
+    public function __toString()
+    {
+        return "[{$this->id}] {$this->titre}";
+    }
 
     /**
      * Get id.
@@ -163,6 +173,7 @@ class Creance
     public function setRabais($rabais)
     {
         $this->rabais = $rabais;
+        return $this;
     }
 
     /**
@@ -179,5 +190,6 @@ class Creance
     public function setDate($date)
     {
         $this->date = $date;
+        return $this;
     }
 }

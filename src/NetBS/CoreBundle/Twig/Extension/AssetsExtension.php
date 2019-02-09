@@ -65,10 +65,9 @@ class AssetsExtension extends \Twig_Extension
         $this->js[] = ['js' => $js, 'weight' => $weight];
     }
 
-    public function registerScript($script, $weight = 0) {
-
+    public function registerScript(\Twig_Markup $script, $weight = 0) {
         foreach($this->scripts as $scr)
-            if($scr['script'] === $script)
+            if($scr['script']->jsonSerialize() === $script->jsonSerialize())
                 return;
 
         $this->scripts[]    = ['script' => $script, 'weight' => $weight];
