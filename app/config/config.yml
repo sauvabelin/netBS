@@ -76,7 +76,7 @@ swiftmailer:
         path: "%kernel.root_dir%/../spool"
 
 doctrine_migrations:
-    dir_name: '%kernel.project_dir%/var/migrations'
+    dir_name: '%kernel.project_dir%/migrations'
     namespace: 'DoctrineMigrations'
     table_name: 'migration_versions'
     name: 'NetBS Migrations'
