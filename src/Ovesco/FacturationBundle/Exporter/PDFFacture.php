@@ -2,9 +2,8 @@
 
 namespace Ovesco\FacturationBundle\Exporter;
 
-use NetBS\CoreBundle\Exporter\Config\FPDFConfig;
+use Doctrine\ORM\EntityManager;
 use NetBS\CoreBundle\Exporter\PDFPreviewer;
-use NetBS\CoreBundle\Form\PDFConfig\FPDFType;
 use NetBS\CoreBundle\Model\ConfigurableExporterInterface;
 use NetBS\CoreBundle\Model\ExporterInterface;
 use NetBS\CoreBundle\Utils\Traits\ConfigurableExporterTrait;
@@ -13,14 +12,26 @@ use NetBS\FichierBundle\Mapping\BaseMembre;
 use Ovesco\FacturationBundle\Entity\Compte;
 use Ovesco\FacturationBundle\Entity\Creance;
 use Ovesco\FacturationBundle\Entity\Facture;
+use Ovesco\FacturationBundle\Entity\FactureModel;
+use Ovesco\FacturationBundle\Form\FactureConfigType;
+use Ovesco\FacturationBundle\Model\FactureConfig;
 use Ovesco\FacturationBundle\Util\BVR;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-
-// define('FPDF_FONTPATH', __DIR__ . '/Facture/fonts/');
 
 class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 {
     use ConfigurableExporterTrait;
+
+    private $manager;
+
+    private $engine;
+
+    public function __construct(EntityManager $manager)
+    {
+        $this->manager = $manager;
+        $this->engine = new ExpressionLanguage();
+    }
 
     /**
      * Returns an alias representing this exporter
@@ -67,9 +78,12 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
     {
         define('FPDF_FONTPATH', __DIR__ . '/Facture/fonts/');
 
+        /** @var FactureConfig $config */
+        $config = $this->configuration;
         $fpdf   = new \FPDF();
-        $fpdf->SetLeftMargin(15);
-        $fpdf->SetRightMargin(15);
+        $fpdf->SetLeftMargin($config->margeGauche);
+        $fpdf->SetRightMargin($config->margeGauche);
+        $fpdf->SetTopMargin($config->margeHaut);
         $fpdf->SetAutoPageBreak(true, 0);
         $fpdf->AddFont('OpenSans', '', 'OpenSans-Regular.php');
         $fpdf->AddFont('OpenSans', 'B', 'OpenSans-Bold.php');
@@ -84,7 +98,46 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         });
     }
 
+    private function getModel(Facture $facture) {
+
+        $modelId = $this->configuration->model;
+        if (is_int($modelId)) return $this->manager->getRepository('OvescoFacturationBundle:FactureModel')
+            ->find($modelId);
+        else {
+            $models = $this->manager->getRepository('OvescoFacturationBundle:FactureModel')
+                ->createQueryBuilder('m')->orderBy('m.poids')->getQuery()->getResult();
+
+            /** @var FactureModel $item */
+            foreach($models as $item)
+                if ($this->evaluate($item->getApplicationRule(), $facture, false))
+                    return $item;
+
+            return $models[0];
+        }
+    }
+
+    private function evaluate($string, Facture $facture, $parse = true) {
+
+        if ($string === null) return true;
+
+        if($parse) {
+            $string = str_replace("\r", '', str_replace("\n", '', $string));
+            $string = str_replace("'", "\\'", $string);
+            $string = str_replace('[', "'~", str_replace("]", "~'", "'$string'"));
+        }
+
+        return $this->engine->evaluate($string, [
+            'facture' => $facture,
+            'debiteur' => $facture->getDebiteur(),
+            'isFamille' => $facture->getDebiteur() instanceof BaseFamille
+        ]);
+    }
+
     private function printFacture(Facture $facture, \FPDF $fpdf) {
+
+        /** @var FactureConfig $config */
+        $config = $this->configuration;
+        $model = $this->getModel($facture);
 
         $fpdf->AddPage();
         $debiteur = $facture->getDebiteur();
@@ -93,23 +146,20 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         // Print adresse
         $fpdf->SetXY(35, 17);
-        $fpdf->Cell(50, 10, 'Brigade de Sauvabelin');
+        $fpdf->Cell(50, 10, $model->getGroupName());
 
         $fpdf->SetFont('OpenSans', '', 9);
         $fpdf->SetXY(35, 21);
-        $fpdf->Cell(50, 10, utf8_decode('Le quartier-maître'));
+        $fpdf->Cell(50, 10, utf8_decode($model->getRue()));
 
         $fpdf->SetXY(35, 25);
-        $fpdf->Cell(50, 10, utf8_decode('Case Postale 5455'));
-
-        $fpdf->SetXY(35, 29);
-        $fpdf->Cell(50, 10, utf8_decode('1002 Lausanne'));
+        $fpdf->Cell(50, 10, utf8_decode($model->getNpaVille()));
 
         // Print date and destinataire
         $fpdf->SetXY(130, 17);
         $mois = $this->toMois($facture->getDate()->format('m'));
         $date = $facture->getDate()->format('d') . " $mois " . $facture->getDate()->format('Y');
-        $fpdf->Cell(50, 10, utf8_decode("Lausanne le $date"));
+        $fpdf->Cell(50, 10, utf8_decode($model->getCityFrom() . " le $date"));
 
         $adresse    = $facture->getDebiteur()->getSendableAdresse();
 
@@ -129,7 +179,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         // Print title
         $fpdf->SetXY(15, 60);
         $fpdf->SetFont('OpenSans', 'B', 20);
-        $fpdf->Cell(0, 20, utf8_decode(strtoupper("Facture stylee")));
+        $fpdf->Cell(0, 20, utf8_decode(strtoupper($this->evaluate($model->getTitre(), $facture))));
 
         $fpdf->SetXY(15.2, 73);
         $fpdf->SetFont('OpenSans', '', 7);
@@ -137,7 +187,8 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         $fpdf->SetXY(15, 90);
         $fpdf->SetFontSize(10);
-        $fpdf->Cell(0, 30, '', 1);
+        $fpdf->MultiCell(0, $config->interligne, $this->evaluate($model->getTopDescription(), $facture), 0);
+        $currentY = $fpdf->GetY() + 2;
 
         $fpdf->SetFontSize(9);
 
@@ -145,31 +196,37 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         /** @var Creance[] $creances */
         $creances = $facture->getCreances()->toArray();
         for(; $i < count($creances); $i++)
-            $this->printCreanceLine($fpdf, $i, $creances[$i]->getTitre(), $creances[$i]->getMontant());
+            $this->printCreanceLine($fpdf, $currentY, $i, $creances[$i]->getTitre(), $creances[$i]->getMontant());
 
         if(count($facture->getPaiements()) > 0)
-            $this->printCreanceLine($fpdf, $i++, "Montant déjà payé", -($facture->getMontantPaye()));
+            $this->printCreanceLine($fpdf, $currentY, $i++, "Montant déjà payé", -($facture->getMontantPaye()));
 
         if(count($creances) > 1 || count($facture->getPaiements()) > 0)
-            $this->printCreanceLine($fpdf, $i++, "Total", $facture->getMontantEncoreDu(), true);
+            $this->printCreanceLine($fpdf, $currentY, $i++, "Total", $facture->getMontantEncoreDu(), true);
 
-        $fpdf->SetXY(15, 130 + $i*7);
-        $fpdf->Cell(0, 30, '', 1);
+        $currentY = $fpdf->GetY() + $config->interligne*2;
 
+        $fpdf->SetFontSize(10);
+        $fpdf->SetXY(15, $currentY);
+        $fpdf->MultiCell(0, $config->interligne, $this->evaluate(utf8_decode($model->getBottomSalutations()), $facture));
+
+        // Signature
+        $fpdf->SetXY(130, $fpdf->GetY() + $config->interligne);
+        $fpdf->Cell(50, 10, utf8_decode($model->getSignataire()));
 
         // Print BVR stuff
         $ref    = BVR::getReferenceNumber($facture);
-        $ms     = 10;
-        $mg     = 12.3;
-        $haddr  = 200;
-        $hg     = $ms + 248;
-        $waddr  = $mg + 56;
-        $wg     = $mg - 8;
-        $wd     = $mg + 115;
-        $hd     = $ms + 212;
-        $wb     = $mg + 83;
-        $hb     = $ms + 266;
-        $il     = 4;
+        $ms     = $config->margeHaut;
+        $mg     = $config->margeGauche;
+        $haddr  = $ms + $config->haddr;
+        $hg     = $ms + $config->hg;
+        $waddr  = $mg + $config->waddr;
+        $wg     = $mg - $config->wg;
+        $wd     = $mg + $config->wd;
+        $hd     = $ms + $config->hd;
+        $wb     = $mg + $config->wb;
+        $hb     = $ms + $config->hb;
+        $il     = $config->bvrIl;
         $compte = $facture->getCompteToUse();
 
         //Adresse haut gauche
@@ -182,7 +239,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         //CCP
         $fpdf->SetFontSize(11);
         $fpdf->SetFont('Arial', '', 9);
-        $fpdf->SetXY($mg + 77 , $ms + 221);
+        $fpdf->SetXY($mg + $config->wccp , $ms + $config->hccp);
         $fpdf->Cell(50, $il, $compte->getCcp());
 
         //ligne codage gauche + adresse bas gauche
@@ -214,16 +271,16 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
     }
 
-    private function printCreanceLine(\FPDF $fpdf, $i, $titre, $montant, $bold = false) {
+    private function printCreanceLine(\FPDF $fpdf, $baseY, $i, $titre, $montant, $bold = false) {
 
         if($bold) {
             $fpdf->SetFont('OpenSans', 'B');
         }
 
-        $fpdf->SetXY(15, 125 + ($i*6));
+        $fpdf->SetXY(15, $baseY + ($i*6));
         $fpdf->Cell(0, 6, utf8_decode($titre), 1);
 
-        $fpdf->SetXY(170, 125 + ($i*6));
+        $fpdf->SetXY(170, $baseY + ($i*6));
         $montant = number_format($montant, 2, '.', "'");
         $fpdf->Cell(0, 6, 'CHF ' . $montant, 'L', 'ln', 'R');
 
@@ -275,7 +332,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
      */
     public function getConfigFormClass()
     {
-        return FPDFType::class;
+        return FactureConfigType::class;
     }
 
     /**5
@@ -284,7 +341,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
      */
     public function getConfigClass()
     {
-        return FPDFConfig::class;
+        return FactureConfig::class;
     }
 
     /**

@@ -7,6 +7,7 @@ use NetBS\CoreBundle\ListModel\Renderer\BasicToolbarItem;
 use NetBS\CoreBundle\Service\ListBridgeManager;
 use NetBS\FichierBundle\Model\AdressableInterface;
 use Ovesco\FacturationBundle\Entity\Creance;
+use Ovesco\FacturationBundle\Entity\Facture;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class NetbsToolbarListener
@@ -44,6 +45,7 @@ class NetbsToolbarListener
         $itemClass      = $event->getTable()->getItemClass();
 
         $addCreances    = $itemClass !== Creance::class && $this->bridgeManager->isValidTransformation($itemClass, AdressableInterface::class);
+        $addRappels     = $itemClass === Facture::class;
         $generate       = $itemClass === Creance::class;
 
         if(!$addCreances && !$generate)
@@ -53,6 +55,7 @@ class NetbsToolbarListener
             'table'         => $event->getTable(),
             'tableId'       => $event->getTableId(),
             'addCreances'   => $addCreances,
+            'addRappels'    => $addRappels,
             'generate'      => $generate
         ]);
 

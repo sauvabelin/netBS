@@ -14,7 +14,8 @@
 
                     $(elem).popover({
                         html: true,
-                        placement: pos === null ? "top" : pos
+                        placement: pos === null ? "top" : pos,
+                        container: 'body',
                     });
 
                     elem.attr("data-original-title", response.title);
@@ -28,7 +29,7 @@
         $(document).on('mouseleave', '[data-helper]', function() {
 
             clearTimeout($.data(this, "_helper_timer"));
-            $(this).popover("hide");
+            $(this).popover("dispose");
         });
     });
 </script>

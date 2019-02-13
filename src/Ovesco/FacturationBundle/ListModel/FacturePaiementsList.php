@@ -2,6 +2,9 @@
 
 namespace Ovesco\FacturationBundle\ListModel;
 
+use NetBS\CoreBundle\ListModel\Action\RemoveAction;
+use NetBS\CoreBundle\ListModel\Column\ActionColumn;
+use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
 use NetBS\ListBundle\Column\DateTimeColumn;
 use NetBS\ListBundle\Column\SimpleColumn;
@@ -9,6 +12,7 @@ use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Entity\Paiement;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FacturePaiementsList extends BaseListModel
@@ -61,6 +65,15 @@ class FacturePaiementsList extends BaseListModel
             ->addColumn('Date d\'enregistrement', 'date', DateTimeColumn::class)
             ->addColumn('Montant', 'montant', SimpleColumn::class)
             ->addColumn('Compte credité', 'compte.ccp', SimpleColumn::class)
+            ->addColumn('Remarques', null, XEditableColumn::class, [
+                XEditableColumn::TYPE_CLASS => TextType::class,
+                XEditableColumn::PROPERTY => 'remarques',
+            ])
+            ->addColumn('Supprimer', null, ActionColumn::class, [
+                ActionColumn::ACTIONS_KEY => [
+                    RemoveAction::class
+                ]
+            ])
         ;
     }
 }

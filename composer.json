@@ -23,6 +23,7 @@
     },
     "require": {
         "php": ">=5.5.9",
+        "ext-json": "*",
         "beberlei/DoctrineExtensions": "^1.0",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
@@ -30,6 +31,7 @@
         "doctrine/orm": "^2.5",
         "erusev/parsedown": "^1.7",
         "gdm/ispconfig-soap-client": "^0.0.3",
+        "genkgo/camt": "^0.5.0",
         "gfreeau/get-jwt-bundle": "^2.0",
         "h4cc/wkhtmltopdf-amd64": "^0.12.3",
         "incenteev/composer-parameter-handler": "^2.0",
@@ -48,8 +50,7 @@
         "symfony/swiftmailer-bundle": "^2.6.4",
         "symfony/symfony": "3.4.*",
         "sysmoh/nextcloud-api-wrapper": "dev-master",
-        "twig/twig": "^1.0||^2.0",
-        "ext-json": "*"
+        "twig/twig": "^1.0||^2.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

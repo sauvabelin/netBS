@@ -86,7 +86,6 @@ class ListEngine
     public function render($list, $renderer, $params = []) {
 
         if(is_string($list))
-        if(is_string($list))
             $list       = $this->listModelManager->getModelByAlias($list);
 
         if(is_string($renderer))

@@ -7,6 +7,7 @@ use NetBS\SecureBundle\Voter\NetBSVoter;
 use Ovesco\FacturationBundle\Entity\Compte;
 use Ovesco\FacturationBundle\Entity\Creance;
 use Ovesco\FacturationBundle\Entity\Facture;
+use Ovesco\FacturationBundle\Entity\FactureModel;
 use Ovesco\FacturationBundle\Entity\Paiement;
 use Ovesco\FacturationBundle\Entity\Rappel;
 
@@ -24,6 +25,7 @@ class FacturationVoter extends NetBSVoter
             Facture::class,
             Paiement::class,
             Rappel::class,
+            FactureModel::class,
             Compte::class
         ];
     }

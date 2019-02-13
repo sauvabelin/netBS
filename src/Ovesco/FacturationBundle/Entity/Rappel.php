@@ -33,6 +33,14 @@ class Rappel
      */
     protected $facture;
 
+    /*
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_impression", type="datetime", nullable=true)
+     *
+    protected $dateImpression;
+     */
+
     /**
      * @var \DateTime
      *
@@ -40,6 +48,11 @@ class Rappel
      * @Groups({"default"})
      */
     protected $date;
+
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+    }
 
     /**
      * Get id.
@@ -89,5 +102,24 @@ class Rappel
     public function setDate($date)
     {
         $this->date = $date;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateImpression()
+    {
+        return $this->dateImpression;
+    }
+
+    /**
+     * @param \DateTime $dateImpression
+     * @return Rappel
+     */
+    public function setDateImpression($dateImpression)
+    {
+        $this->dateImpression = $dateImpression;
+
+        return $this;
     }
 }

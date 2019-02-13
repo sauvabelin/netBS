@@ -33,7 +33,7 @@ class DateTimeColumn extends BaseColumn
         if($item === null)
             return '';
 
-        if($item instanceof \DateTime)
+        if($item instanceof \DateTime || $item instanceof \DateTimeImmutable)
             return $item->format($params['format']);
 
         throw new \Exception("Object is not a DateTime!");

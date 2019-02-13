@@ -27,19 +27,9 @@ class MembreFamillePageListener
 
         $route  = $this->stack->getCurrentRequest()->get('_route');
 
-        if ($route === 'netbs.fichier.membre.page_membre') $this->configureMembre($event);
-        if ($route === 'netbs.fichier.famille.page_famille') $this->configureFamille($event);
-    }
+        if (!in_array($route, ['netbs.fichier.membre.page_membre', 'netbs.fichier.famille.page_famille']))
+            return;
 
-    private function configureFamille(PreRenderLayoutEvent $event) {
-
-    }
-
-    /**
-     * @param PreRenderLayoutEvent $event
-     * @throws \Exception
-     */
-    private function configureMembre(PreRenderLayoutEvent $event) {
         $block = $event->getConfigurator()->getRow(0)->getColumn(1)->getRow(0)->getColumn(0)->getBlock();
         $tabs = $block->getParameters()->get('tabs');
         $tabs[] = $this->getTab($event);

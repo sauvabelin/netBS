@@ -28,6 +28,12 @@
                 </td>
             </tr>
         {% endif %}
+    {% else %}
+        <tr>
+            <td colspan="{{ table.configuration.columns|length + (togglable ? 1 : 0) }}" class="text-center">
+                Rien à afficher
+            </td>
+        </tr>
     {% endfor %}
     </tbody>
 </table>
@@ -40,7 +46,7 @@
             }
 
             .togglable-row > td {
-                background: white;
+                box-shadow: inset 0 0 2px #007bff;
             }
 
             .togglable-row.active {
@@ -54,6 +60,7 @@
     {% set toggleJs %}
         <script type="text/javascript">
             $('.toggleRow').click(function() {
+                $(this).parent().parent().toggleClass('bg-primary');
                 $('#togglable-' + $(this).attr('data-row')).toggleClass('active');
             });
         </script>

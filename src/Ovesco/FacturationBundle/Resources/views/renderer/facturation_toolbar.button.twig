@@ -7,6 +7,7 @@
     <div role="menu" class="dropdown-menu dropdown-menu-right">
 
         {% if addCreances %}<a class="dropdown-item" style="cursor:pointer;" id="add-creances-{{ tableId }}">Ajouter des créances</a>{% endif %}
+        {% if addRappels %}<a class="dropdown-item" style="cursor:pointer;" id="add-rappels-{{ tableId }}">Ajouter des rappels</a>{% endif %}
         {% if generate %}<a class="dropdown-item" style="cursor:pointer;" id="generate-factures-{{ tableId }}">Fusionner en facture</a>{% endif %}
         {% if generate %}<a class="dropdown-item" style="cursor:pointer;" id="check-factures-{{ tableId }}">Prévisualiser la fusion</a>{% endif %}
     </div>
@@ -21,6 +22,15 @@
 
                 var modal = new BSModal("{{ path('ovesco.facturation.creance.modal_add_many') }}", {
                     selectedIds: {{ tableId }}.getSelectedIds(),
+                    itemsClass:  "{{ table.itemClass|toBase64 }}"
+                });
+                modal.launch();
+            });
+
+            $('#add-rappels-{{ tableId }}').click(function() {
+
+                var modal = new BSModal("{{ path('ovesco.facturation.rappel.add_modal') }}", {
+                        selectedIds: {{ tableId }}.getSelectedIds(),
                     itemsClass:  "{{ table.itemClass|toBase64 }}"
                 });
                 modal.launch();

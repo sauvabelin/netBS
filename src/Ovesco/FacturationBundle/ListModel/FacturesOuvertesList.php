@@ -1,46 +1,28 @@
 <?php
 
-namespace Ovesco\FacturationBundle\Searcher;
+namespace Ovesco\FacturationBundle\ListModel;
 
 use NetBS\CoreBundle\ListModel\Column\HelperColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
-use NetBS\CoreBundle\Model\BaseSearcher;
+use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
 use NetBS\ListBundle\Column\DateTimeColumn;
 use NetBS\ListBundle\Column\SimpleColumn;
+use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
-use NetBS\ListBundle\Model\TogglableRow;
 use Ovesco\FacturationBundle\Entity\Facture;
-use Ovesco\FacturationBundle\Form\SearchFactureType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class FactureSearcher extends BaseSearcher
+class FacturesOuvertesList extends BaseListModel
 {
-    /**
-     * Returns the search form type class
-     * @return string
-     */
-    public function getSearchType()
-    {
-        return SearchFactureType::class;
-    }
+    use EntityManagerTrait;
 
     /**
-     * Returns an object used to render form, which will contain search data
-     * @return object
+     * Retrieves all elements managed by this list
+     * @return array
      */
-    public function getSearchObject()
+    protected function buildItemsList()
     {
-        return new Facture();
-    }
-
-    /**
-     * Returns the twig template used to render the form. A variable casually named 'form' will be available
-     * for you to use
-     * @return string
-     */
-    public function getFormTemplate()
-    {
-        return "@OvescoFacturation/facture/search_facture.html.twig";
+        return $this->entityManager->getRepository('OvescoFacturationBundle:Facture')->findBy(['statut' => Facture::OUVERTE]);
     }
 
     /**
@@ -53,6 +35,15 @@ class FactureSearcher extends BaseSearcher
     }
 
     /**
+     * Returns this list's alias
+     * @return string
+     */
+    public function getAlias()
+    {
+        return 'ovesco.facturation.factures_ouvertes';
+    }
+
+    /**
      * Configures the list columns
      * @param ListColumnsConfiguration $configuration
      */
@@ -60,7 +51,7 @@ class FactureSearcher extends BaseSearcher
     {
         $configuration
             ->addColumn('numero', null, HelperColumn::class)
-            ->addColumn('Débiteur', 'debiteur', HelperColumn::class)
+            ->addColumn('débiteur', 'debiteur', HelperColumn::class)
             ->addColumn('statut', null, XEditableColumn::class, [
                 XEditableColumn::TYPE_CLASS => ChoiceType::class,
                 XEditableColumn::PROPERTY => 'statut',
@@ -68,7 +59,8 @@ class FactureSearcher extends BaseSearcher
             ])
             ->addColumn('Date de création', 'date', DateTimeColumn::class)
             ->addColumn('Montant', 'montant', SimpleColumn::class)
-            ->addColumn('Reste à payer', 'montantEncoreDu', SimpleColumn::class)
+            ->addColumn('Montant payé', 'montantPaye', SimpleColumn::class)
+            ->addColumn('Montant encore du', 'montantEncoreDu', SimpleColumn::class)
             ->addColumn('Compte', 'compteToUse.ccp', SimpleColumn::class)
         ;
     }

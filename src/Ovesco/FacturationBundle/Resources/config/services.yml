@@ -26,6 +26,8 @@ services:
 
     ovesco.facturation.exporter.pdf_factures:
         class: Ovesco\FacturationBundle\Exporter\PDFFacture
+        arguments:
+            - "@doctrine.orm.entity_manager"
         tags:
             - { name: netbs.exporter }
 
@@ -39,8 +41,23 @@ services:
         tags:
             - { name: netbs.list.model }
 
+    ovesco.facturation.list.factures_ouvertes:
+        class: Ovesco\FacturationBundle\ListModel\FacturesOuvertesList
+        tags:
+            - { name: netbs.list.model }
+
+    ovesco.facturation.list.facture_models:
+        class: Ovesco\FacturationBundle\ListModel\FactureModelsList
+        tags:
+            - { name: netbs.list.model }
+
     ovesco.facturation.list.facture_creances:
         class: Ovesco\FacturationBundle\ListModel\FactureCreancesList
+        tags:
+            - { name: netbs.list.model }
+
+    ovesco.facturation.list.given_factures:
+        class: Ovesco\FacturationBundle\ListModel\GivenFacturesList
         tags:
             - { name: netbs.list.model }
 
@@ -53,6 +70,18 @@ services:
         class: Ovesco\FacturationBundle\ListModel\FacturePaiementsList
         tags:
             - { name: netbs.list.model }
+
+    ovesco.facturation.list.comptes:
+        class: Ovesco\FacturationBundle\ListModel\ComptesList
+        tags:
+            - { name: netbs.list.model }
+
+    ovesco.facturation.form.config_facture_export:
+        class: Ovesco\FacturationBundle\Form\FactureConfigType
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: form.type }
 
     ovesco.facturation.listener.membre_famille_page_layout:
         class: Ovesco\FacturationBundle\Listener\MembreFamillePageListener
@@ -109,3 +138,8 @@ services:
         tags:
             - { name: netbs.searcher }
             - { name: netbs.list.model }
+
+    ovesco.facturation.helper.facture:
+        class: Ovesco\FacturationBundle\Helper\FactureHelper
+        tags:
+            - { name: netbs.helper }

@@ -24,8 +24,9 @@ class DebiteurCreancesList extends BaseListModel
      */
     protected function buildItemsList()
     {
-        return $this->entityManager->getRepository('OvescoFacturationBundle:Creance')
+        $creances = $this->entityManager->getRepository('OvescoFacturationBundle:Creance')
             ->findBy(['debiteurId' => $this->getParameter('debiteurId')]);
+        return array_filter($creances, function(Creance $creance) { return $creance->getFacture() === null; });
     }
 
     public function configureOptions(OptionsResolver $resolver)

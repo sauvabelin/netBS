@@ -1,0 +1,91 @@
+{% extends '@NetBSCore/layout/backend.layout.twig' %}
+
+{% block main %}
+    <div class="container-fluid">
+        {% set backbtn %}<a href="{{ path('ovesco.facturation.camt.import') }}" class="btn btn-primary">Importer un nouveau fichier</a>{% endset %}
+        {% include '@NetBSCore/includes/header.include.twig' with {
+            header: "Résultat de l'importation",
+            subHeader: 'Liste des factures concernées par le fichier BVR importé',
+            actions: [
+                backbtn
+            ]
+        } %}
+
+        {% if result.orphanPaiements|length > 0 %}
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="card bg-danger">
+                        <div class="card-header">
+                            <h5 class="card-title">Paiements orphelins</h5>
+                        </div>
+                        <div class="card-body text-white">
+                            Des paiements orphelins (qui n'ont pas pu être rattachés à une facture) étaient présents dans le
+                            fichier chargé. Les informations sont marquées ci-contre.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-8">
+                    <div class="card card-table">
+                        <div class="card-header">
+                            <h5 class="card-title">Paiements orphelins</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Débiteur</th>
+                                    <th>Montant</th>
+                                    <th>Référence</th>
+                                    <th>Date de paiement</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for paiement in result.orphanPaiements %}
+                                    {% set details = paiement.transactionDetails %}
+                                    <tr>
+                                        <td>
+                                            {% for party in details.relatedParties %}
+                                                {% set partyDetails = party.relatedPartyType %}
+                                                {% if partyDetails %}
+                                                    {{ partyDetails.name }}<br/>
+                                                    {% if partyDetails.address %}
+                                                        {{ partyDetails.address.streetName }} {{ partyDetails.address.buildingNumber }}<br/>
+                                                        {{ partyDetails.address.postCode }} {{ partyDetails.address.townName }}
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if not loop.last %}<hr/>{% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>{{ paiement.montant }}</td>
+                                        <td>
+                                            {% if details.remittanceInformation %}
+                                                {{ details.remittanceInformation.message }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{ paiement.dateEffectivePaiement|date(param('format', 'php_date')) }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        {% endif %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h5 class="card-title">Factures payées</h5>
+                    </div>
+                    <div class="card-body">
+                        {{ render_list('ovesco.facturation.given_factures', 'basic', { factures: result.factures }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

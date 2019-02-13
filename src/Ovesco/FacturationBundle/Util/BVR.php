@@ -17,7 +17,6 @@ class BVR
      * @return array
      */
     public static function getReferenceNumber(Facture $facture){
-
         $chaine     = '04';
         $chaine    .= self::getControlNumber($chaine);
         $tab[0]     = $chaine;
@@ -38,7 +37,6 @@ class BVR
      * @return int
      */
     public static function getControlNumber($id) {
-
         $report     = 0;
         $cpt        = strlen($id);
 

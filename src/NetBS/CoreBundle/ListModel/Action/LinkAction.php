@@ -25,7 +25,7 @@ class LinkAction implements ActionInterface
 
     public function configureOptions(OptionsResolver $resolver) {
 
-        $resolver->setDefault('text', 'button')
+        $resolver->setDefault(self::TEXT, null)
             ->setDefault(self::THEME, 'secondary')
             ->setDefault(self::SIZE, 'btn-xs')
             ->setDefault(self::CLASSE, '')

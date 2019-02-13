@@ -2,11 +2,10 @@
 
 namespace Ovesco\FacturationBundle\Form;
 
+use NetBS\CoreBundle\Form\Type\DatepickerType;
 use NetBS\FichierBundle\Utils\Form\RemarquesUtils;
 use Ovesco\FacturationBundle\Entity\Rappel;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,8 +14,7 @@ class RappelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('facture', EntityType::class, ['label' => 'facture'])
-            ->add('date', DateType::class, ['label' => 'Date', 'required' => false])
+            ->add('date', DatepickerType::class, ['label' => 'Date', 'required' => false])
         ;
 
         RemarquesUtils::addRemarquesField($builder);

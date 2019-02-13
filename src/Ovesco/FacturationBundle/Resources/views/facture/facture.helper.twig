@@ -1,0 +1,45 @@
+<div style="width:300px">
+    <div class="row no-gutters">
+        <div class="col-8">
+            <h6>Créances</h6>
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Montant</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for creance in facture.creances %}
+                    <tr>
+                        <td>{{ creance.titre }}</td>
+                        <td>{{ creance.montant }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+            <h6>Rappels</h6>
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for rappel in facture.rappels %}
+                    <tr>
+                        <td>{{ rappel.date|date(param('format', 'php_date')) }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>Aucun</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

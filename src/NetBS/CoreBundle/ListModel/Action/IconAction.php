@@ -24,6 +24,8 @@ class IconAction extends LinkAction
 
     public function render($item, $params = [])
     {
+        if ($params[self::TEXT] !== null) return parent::render($item, $params);
+
         $params[LinkAction::TEXT] = "<i class='{$params['icon']}'></i>";
         return parent::render($item, $params);
     }

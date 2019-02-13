@@ -1,46 +1,32 @@
 <?php
 
-namespace Ovesco\FacturationBundle\Searcher;
+namespace Ovesco\FacturationBundle\ListModel;
 
 use NetBS\CoreBundle\ListModel\Column\HelperColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
-use NetBS\CoreBundle\Model\BaseSearcher;
+use NetBS\CoreBundle\Model\TogglableRow;
 use NetBS\ListBundle\Column\DateTimeColumn;
 use NetBS\ListBundle\Column\SimpleColumn;
+use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
-use NetBS\ListBundle\Model\TogglableRow;
 use Ovesco\FacturationBundle\Entity\Facture;
-use Ovesco\FacturationBundle\Form\SearchFactureType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FactureSearcher extends BaseSearcher
+class GivenFacturesList extends BaseListModel
 {
     /**
-     * Returns the search form type class
-     * @return string
+     * Retrieves all elements managed by this list
+     * @return array
      */
-    public function getSearchType()
+    protected function buildItemsList()
     {
-        return SearchFactureType::class;
+        return $this->getParameter('factures');
     }
 
-    /**
-     * Returns an object used to render form, which will contain search data
-     * @return object
-     */
-    public function getSearchObject()
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return new Facture();
-    }
-
-    /**
-     * Returns the twig template used to render the form. A variable casually named 'form' will be available
-     * for you to use
-     * @return string
-     */
-    public function getFormTemplate()
-    {
-        return "@OvescoFacturation/facture/search_facture.html.twig";
+        $resolver->isRequired('factures');
     }
 
     /**
@@ -53,6 +39,15 @@ class FactureSearcher extends BaseSearcher
     }
 
     /**
+     * Returns this list's alias
+     * @return string
+     */
+    public function getAlias()
+    {
+        return 'ovesco.facturation.given_factures';
+    }
+
+    /**
      * Configures the list columns
      * @param ListColumnsConfiguration $configuration
      */
@@ -60,7 +55,7 @@ class FactureSearcher extends BaseSearcher
     {
         $configuration
             ->addColumn('numero', null, HelperColumn::class)
-            ->addColumn('Débiteur', 'debiteur', HelperColumn::class)
+            ->addColumn('débiteur', 'debiteur', HelperColumn::class)
             ->addColumn('statut', null, XEditableColumn::class, [
                 XEditableColumn::TYPE_CLASS => ChoiceType::class,
                 XEditableColumn::PROPERTY => 'statut',
@@ -68,8 +63,11 @@ class FactureSearcher extends BaseSearcher
             ])
             ->addColumn('Date de création', 'date', DateTimeColumn::class)
             ->addColumn('Montant', 'montant', SimpleColumn::class)
-            ->addColumn('Reste à payer', 'montantEncoreDu', SimpleColumn::class)
+            ->addColumn('Montant payé', 'montantPaye', SimpleColumn::class)
+            ->addColumn('Montant encore du', 'montantEncoreDu', SimpleColumn::class)
             ->addColumn('Compte', 'compteToUse.ccp', SimpleColumn::class)
         ;
+
+        $this->addRendererVariable('togglableRow', new TogglableRow( '@OvescoFacturation/creance/facture_creances.row.twig'));
     }
 }

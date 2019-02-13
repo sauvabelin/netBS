@@ -22,7 +22,7 @@ class SnapshotTable
     /**
      * @var array[]
      */
-    protected $data     = [[]];
+    protected $data     = [];
 
     /**
      * @var array

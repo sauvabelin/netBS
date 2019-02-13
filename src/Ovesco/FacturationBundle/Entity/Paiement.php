@@ -4,6 +4,7 @@ namespace Ovesco\FacturationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Genkgo\Camt\DTO\EntryTransactionDetail;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -59,6 +60,18 @@ class Paiement
     protected $compte;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="transactionDetails", type="text", nullable=true)
+     */
+    protected $transactionDetails;
+
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+    }
+
+    /**
      * Get id.
      *
      * @return int
@@ -77,7 +90,7 @@ class Paiement
      */
     public function setMontant($montant)
     {
-        $this->montant = $montant;
+        $this->montant = floatval($montant);
 
         return $this;
     }
@@ -126,10 +139,12 @@ class Paiement
 
     /**
      * @param Compte $compte
+     * @return Paiement
      */
     public function setCompte($compte)
     {
         $this->compte = $compte;
+        return $this;
     }
 
     /**
@@ -142,9 +157,38 @@ class Paiement
 
     /**
      * @param \DateTime $date
+     * @return Paiement
      */
     public function setDate($date)
     {
         $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * @return EntryTransactionDetail
+     */
+    public function getTransactionDetails()
+    {
+        return unserialize($this->transactionDetails);
+    }
+
+    /**
+     * @param EntryTransactionDetail $transactionDetails
+     * @return Paiement
+     */
+    public function setTransactionDetails($transactionDetails)
+    {
+        $this->transactionDetails = serialize($transactionDetails);
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTimeImmutable
+     */
+    public function getDateEffectivePaiement() {
+
+        return $this->getTransactionDetails()->getRelatedDates()->getAcceptanceDateTime();
     }
 }

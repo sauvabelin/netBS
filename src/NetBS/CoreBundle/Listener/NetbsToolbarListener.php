@@ -119,9 +119,6 @@ class NetbsToolbarListener
         $addable    = $this->bridgeManager->isValidTransformation($event->getTable()->getItemClass(), $this->config->getMembreClass());
         $updatable  = $this->massUpdaterManager->getUpdaterForClass($event->getTable()->getItemClass());
 
-        dump($addable);
-        dump($updatable);
-
         if(!$addable && !$updatable)
             return;
 

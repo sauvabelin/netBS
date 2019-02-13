@@ -88,6 +88,14 @@ class Facture
      */
     protected $compteToUse;
 
+    /*
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_impression", type="datetime", nullable=true)
+     *
+    protected $dateImpression;
+    */
+
     /**
      * Constructor
      */
@@ -123,7 +131,7 @@ class Facture
     }
 
     public function getFactureId() {
-        return empty($this->oldFichierId) ? $this->id : $this->oldFichierId;
+        return $this->oldFichierId === -1 ? $this->id : $this->oldFichierId;
     }
 
     /**
@@ -249,6 +257,9 @@ class Facture
     {
         $this->paiements[] = $paiement;
         $paiement->setFacture($this);
+
+        if ($this->getMontantEncoreDu() <= 0) $this->setStatut(self::PAYEE);
+        else if($this->statut !== self::ANNULEE) $this->setStatut(self::OUVERTE);
         return $this;
     }
 
@@ -306,6 +317,22 @@ class Facture
         $this->date = $date;
     }
 
+    /**
+     * @return \DateTime
+     */
+    public function getDateImpression()
+    {
+        return $this->dateImpression;
+    }
+
+    /**
+     * @param \DateTime $dateImpression
+     */
+    public function setDateImpression($dateImpression)
+    {
+        $this->dateImpression = $dateImpression;
+    }
+
     public function getMontant() {
         return array_reduce($this->creances->toArray(), function($montant, Creance $creance) {
             return $montant + $creance->getMontant();
@@ -320,5 +347,19 @@ class Facture
 
     public function getMontantEncoreDu() {
         return $this->getMontant() - $this->getMontantPaye();
+    }
+
+    public function getLatestImpression() {
+
+        $rappels = $this->rappels->toArray();
+        usort($rappels, function(Rappel $a, Rappel $b) {
+            if ($a->getDateImpression()) return 1;
+            if ($b->getDateImpression()) return -1;
+            return $a->getDateImpression() > $b->getDateImpression() ? 1 : -1;
+        });
+
+        foreach($rappels as $rappel)
+            if($rappel->getDateImpression()) return $rappel->getDateImpression();
+        return $this->dateImpression;
     }
 }

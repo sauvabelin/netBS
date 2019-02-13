@@ -5,6 +5,7 @@ namespace Ovesco\FacturationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -27,6 +28,7 @@ class Compte
     /**
      * @var string
      * @ORM\Column(name="ccp", type="string", length=255, nullable=false, unique=true)
+     * @Assert\Regex("/^[0-9-]+$/", message="Ne peut contenir que des numéros [0-9] et des traits [-]")
      * @Groups({"default"})
      */
     protected $ccp;
@@ -34,8 +36,9 @@ class Compte
     /**
      * @var string
      * @ORM\Column(name="iban", type="string", length=255, nullable=false, unique=true)
-     */
+     *
     protected $iban;
+     */
 
     /**
      * @var string
@@ -160,7 +163,7 @@ class Compte
 
     /**
      * @return string
-     */
+     *
     public function getIban()
     {
         return $this->iban;
@@ -168,9 +171,10 @@ class Compte
 
     /**
      * @param string $iban
-     */
+     *
     public function setIban($iban)
     {
         $this->iban = $iban;
     }
+     */
 }
