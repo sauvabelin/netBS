@@ -46,6 +46,7 @@ class CirculaireMembreType extends AbstractType
             ->add('naissance', DateMaskType::class, array('label' => 'Date de naissance'))
             ->add('adresse', TextType::class, array('label' => "Adresse", 'required' => false))
             ->add('npa', NumberType::class, array('label' => "NPA", 'required' => false))
+            ->add('inscription', DateMaskType::class, ['label' => 'Inscription'])
             ->add('localite', TextType::class, array('label' => 'Localité', 'required' => false))
             ->add('email', EmailType::class, array('label' => 'Email', 'required' => false))
             ->add('telephone', TelephoneMaskType::class, array('label' => 'Téléphone', 'required' => false))

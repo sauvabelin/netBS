@@ -22,7 +22,7 @@ class Directory
     public function getChildren() {
 
         $dirnames   = array_filter(glob($this->path . '/*'), 'is_dir');
-
+        sort($dirnames);
         return array_values(array_map(function($name) {
             return new Directory($name, $this->config);
         }, $dirnames));

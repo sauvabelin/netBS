@@ -46,6 +46,11 @@ class CirculaireMembre implements GroupSequenceProviderInterface
     public $nom;
 
     /**
+     * @var \DateTime
+     */
+    public $inscription;
+
+    /**
      * @var string
      * @Assert\Choice({"homme", "femme"}, groups={"default"})
      */
@@ -214,6 +219,14 @@ class CirculaireMembre implements GroupSequenceProviderInterface
 
     public $famille = null;
 
+    /**
+     * CirculaireMembre constructor.
+     */
+    public function __construct()
+    {
+        $this->inscription = new \DateTime();
+    }
+
     public function setFamille(Famille $famille) {
 
         $this->famille  = $famille;
@@ -311,6 +324,7 @@ class CirculaireMembre implements GroupSequenceProviderInterface
             ->setNumeroBS($this->numero)
             ->setStatut(BaseMembre::INSCRIT)
             ->setNaissance($this->naissance)
+            ->setInscription($this->inscription)
             ->setPrenom($this->prenom)
             ->setSexe($this->sexe);
 
