@@ -157,9 +157,9 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         // Print date and destinataire
         $fpdf->SetXY(130, 17);
-        $mois = $this->toMois($facture->getDate()->format('m'));
-        $date = $facture->getDate()->format('d') . " $mois " . $facture->getDate()->format('Y');
-        $fpdf->Cell(50, 10, utf8_decode($model->getCityFrom() . " le $date"));
+        $date = $config->date instanceof \DateTime ? $config->date : $facture->getDate();
+        $printDate = $date->format('d') . " " .$this->toMois($date->format('m')) . " " . $date->format('Y');
+        $fpdf->Cell(50, 10, utf8_decode($model->getCityFrom() . " le $printDate"));
 
         $adresse    = $facture->getDebiteur()->getSendableAdresse();
 
@@ -356,6 +356,6 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
     private function toMois($mois) {
         return (['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre',
-            'Octobre', 'Novembre', 'Décembre'])[intval($mois)];
+            'Octobre', 'Novembre', 'Décembre'])[intval($mois) - 1];
     }
 }

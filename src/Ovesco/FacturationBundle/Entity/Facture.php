@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
+use Ovesco\FacturationBundle\Util\DateImpressionTrait;
 use Ovesco\FacturationBundle\Util\DebiteurTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -21,7 +22,7 @@ class Facture
     const OUVERTE   = 'ouverte';
     const ANNULEE   = 'annulee';
 
-    use TimestampableEntity, RemarqueTrait, DebiteurTrait;
+    use TimestampableEntity, RemarqueTrait, DebiteurTrait, DateImpressionTrait;
 
     /**
      * @var int
@@ -87,14 +88,6 @@ class Facture
      * @Groups({"default"})
      */
     protected $compteToUse;
-
-    /*
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_impression", type="datetime", nullable=true)
-     *
-    protected $dateImpression;
-    */
 
     /**
      * Constructor
@@ -317,22 +310,6 @@ class Facture
         $this->date = $date;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getDateImpression()
-    {
-        return $this->dateImpression;
-    }
-
-    /**
-     * @param \DateTime $dateImpression
-     */
-    public function setDateImpression($dateImpression)
-    {
-        $this->dateImpression = $dateImpression;
-    }
-
     public function getMontant() {
         return array_reduce($this->creances->toArray(), function($montant, Creance $creance) {
             return $montant + $creance->getMontant();
@@ -349,17 +326,27 @@ class Facture
         return $this->getMontant() - $this->getMontantPaye();
     }
 
-    public function getLatestImpression() {
+    public function setLatestImpression(\DateTime $date) {
+        $rappel = $this->getLatestRappel();
+        if ($rappel) $rappel->setDateImpression($date);
+        else $this->setDateImpression($date);
+    }
 
+    /**
+     * @return Rappel|null
+     */
+    public function getLatestRappel() {
         $rappels = $this->rappels->toArray();
         usort($rappels, function(Rappel $a, Rappel $b) {
-            if ($a->getDateImpression()) return 1;
-            if ($b->getDateImpression()) return -1;
+            if (!$a->getDateImpression()) return 1;
+            if (!$b->getDateImpression()) return -1;
             return $a->getDateImpression() > $b->getDateImpression() ? 1 : -1;
         });
+        return array_pop($rappels);
+    }
 
-        foreach($rappels as $rappel)
-            if($rappel->getDateImpression()) return $rappel->getDateImpression();
-        return $this->dateImpression;
+    public function getLatestImpression() {
+        $rappel = $this->getLatestRappel();
+        return $rappel ? $rappel->getDateImpression() : $this->getDateImpression();
     }
 }

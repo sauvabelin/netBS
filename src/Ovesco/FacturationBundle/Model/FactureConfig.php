@@ -18,6 +18,7 @@ class FactureConfig extends FPDFConfig
     public $wb = 83; // ligne codage bas
     public $hb = 266; // ligne codage bas
     public $bvrIl = 4;
+    public $date = null;
 
     public function __construct()
     {

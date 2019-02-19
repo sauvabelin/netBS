@@ -4,6 +4,7 @@ namespace Ovesco\FacturationBundle\Form;
 
 use Doctrine\ORM\EntityManager;
 use NetBS\CoreBundle\Form\PDFConfig\FPDFType;
+use NetBS\CoreBundle\Form\Type\DatepickerType;
 use Ovesco\FacturationBundle\Entity\FactureModel;
 use Ovesco\FacturationBundle\Model\FactureConfig;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -31,6 +32,10 @@ class FactureConfigType extends FPDFType
             ->add('model', ChoiceType::class, [
                 'label' => 'Modèle à utiliser',
                 'choices' => array_flip($choices)
+            ])
+            ->add('date', DatepickerType::class, [
+                'label' => 'Date sur la facture',
+                'required' => false,
             ])
             ->add('wg', NumberType::class, ['label' => "Décalement gauche BVR"])
             ->add('hg', NumberType::class, ['label' => "Ligne de codage gauche"])

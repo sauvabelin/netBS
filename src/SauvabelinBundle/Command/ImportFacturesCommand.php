@@ -38,10 +38,11 @@ class ImportFacturesCommand extends ContainerAwareCommand
         $io = new SymfonyStyle($input, $output);
 
         $compte = new Compte();
-        $compte->setCcp("10-1915-8");
-        $compte->setIban("10-1915-8");
+        $compte->setCcp("01-066840-7");
+        // $compte->setIban("10-1915-8");
         $compte->setLine1("Brigade de Sauvabelin");
-        $compte->setLine2("Lausanne");
+        $compte->setLine2("Case Postale 5455");
+        $compte->setLine3("1002 Lausanne");
 
         $manager->persist($compte);
         $this->compte = $compte;

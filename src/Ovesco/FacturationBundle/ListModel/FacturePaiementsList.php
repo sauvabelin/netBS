@@ -69,11 +69,13 @@ class FacturePaiementsList extends BaseListModel
                 XEditableColumn::TYPE_CLASS => TextType::class,
                 XEditableColumn::PROPERTY => 'remarques',
             ])
+            /*
             ->addColumn('Supprimer', null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY => [
                     RemoveAction::class
                 ]
             ])
+            */
         ;
     }
 }

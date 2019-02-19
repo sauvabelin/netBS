@@ -4,6 +4,7 @@ namespace Ovesco\FacturationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
+use Ovesco\FacturationBundle\Util\DateImpressionTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -14,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Rappel
 {
-    use RemarqueTrait;
+    use RemarqueTrait, DateImpressionTrait;
 
     /**
      * @var int
@@ -32,14 +33,6 @@ class Rappel
      * @Groups({"rappel_with_facture"})
      */
     protected $facture;
-
-    /*
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_impression", type="datetime", nullable=true)
-     *
-    protected $dateImpression;
-     */
 
     /**
      * @var \DateTime
@@ -102,24 +95,5 @@ class Rappel
     public function setDate($date)
     {
         $this->date = $date;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getDateImpression()
-    {
-        return $this->dateImpression;
-    }
-
-    /**
-     * @param \DateTime $dateImpression
-     * @return Rappel
-     */
-    public function setDateImpression($dateImpression)
-    {
-        $this->dateImpression = $dateImpression;
-
-        return $this;
     }
 }

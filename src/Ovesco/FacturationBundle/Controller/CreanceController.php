@@ -42,7 +42,8 @@ class CreanceController extends Controller
 
         $mass       = new MassCreances();
         $mass->setItemsClass($request->request->get('itemsClass'));
-        $mass->setSelectedIds(serialize($request->request->get('selectedIds')));
+        if ($request->request->get('selectedIds'))
+            $mass->setSelectedIds(serialize($request->request->get('selectedIds')));
 
         $form       = $this->createForm(MassCreanceType::class, $mass);
         $form->handleRequest($request);
