@@ -79,9 +79,7 @@ abstract class BaseSearcher extends BaseListModel
         if(!$form)
             return [];
 
-        $query = $this->queryMaker->buildQuery($this->getManagedItemsClass(), $form);
-
-        $this->results = $query->getQuery()->execute();
+        $this->results = $this->queryMaker->getResult($this->getManagedItemsClass(), $form);
         return $this->results;
     }
 

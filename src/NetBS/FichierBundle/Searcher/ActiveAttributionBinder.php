@@ -3,11 +3,11 @@
 namespace NetBS\FichierBundle\Searcher;
 
 use Doctrine\ORM\QueryBuilder;
-use NetBS\CoreBundle\Model\BinderInterface;
+use NetBS\CoreBundle\Model\BaseBinder;
 use NetBS\FichierBundle\Form\Search\SearchActiveAttributionType;
 use Symfony\Component\Form\Form;
 
-class ActiveAttributionBinder implements BinderInterface
+class ActiveAttributionBinder extends BaseBinder
 {
     protected $count = 0;
 

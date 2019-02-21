@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use NetBS\CoreBundle\Model\BinderInterface;
+use NetBS\CoreBundle\Model\BindPostFilterHolder;
 use Symfony\Component\Form\Form;
 
 class QueryMaker
@@ -39,23 +40,34 @@ class QueryMaker
     }
 
     /**
-     * @param $itemClass
-     * @param Form $form
-     * @return QueryBuilder
+     * @return BinderInterface[]
      */
-    public function buildQuery($itemClass, Form $form) {
+    public function getPostFilters() {
+        return array_filter($this->binders, function (BinderInterface $binder) {
+            return $binder->getType() === BinderInterface::POST_FILTER;
+        });
+    }
+
+    public function getResult($itemClass, Form $form) {
 
         $alias  = '_item';
         $query  = $this->manager->createQueryBuilder()
             ->select($alias)
             ->from($itemClass, $alias);
 
-        $this->concatWith($query, $form, $alias);
+        $holder = new BindPostFilterHolder();
+        $this->concatWith($query, $form, $alias, $holder);
+        $result = $query->getQuery()->execute();
+        foreach($holder->getBinders() as $data) {
+            $result = array_filter($result, function($item) use ($data) {
+                return $data['binder']->postFilter($item, $data['data'], $data['options']);
+            });
+        }
 
-        return $query;
+        return $result;
     }
 
-    protected function concatWith(QueryBuilder $builder, Form $form, $alias) {
+    protected function concatWith(QueryBuilder $builder, Form $form, $alias, BindPostFilterHolder $holder) {
 
         foreach($form as $item) {
 
@@ -64,8 +76,11 @@ class QueryMaker
             $class  = get_class($type);
 
             //Binder
-            if(isset($this->binders[$class]))
-                $this->binders[$class]->bind($alias, $item, $builder);
+            if(isset($this->binders[$class])) {
+                if ($this->binders[$class]->getType() === BinderInterface::BIND)
+                    $this->binders[$class]->bind($alias, $item, $builder);
+                else $holder->addBinder($this->binders[$class], $item->getData(), $item->getConfig()->getOptions());
+            }
 
             //Children
             elseif($item->count() > 0) {
@@ -75,7 +90,7 @@ class QueryMaker
                 $joins      = $builder->getDQLPart('join'); //On sauve les joins d'avant
 
                 $builder->join($alias . '.' . $item->getName(), $childAlias);
-                $this->concatWith($builder, $item, $childAlias);
+                $this->concatWith($builder, $item, $childAlias, $holder);
 
                 if($wheres === $this->countWheres($builder)) {
 

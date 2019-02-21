@@ -4,11 +4,11 @@ namespace NetBS\CoreBundle\Searcher;
 
 use Doctrine\ORM\QueryBuilder;
 use NetBS\CoreBundle\Form\Type\NumberrangeType;
-use NetBS\CoreBundle\Model\BinderInterface;
+use NetBS\CoreBundle\Model\BaseBinder;
 use NetBS\CoreBundle\Model\Numberrange;
 use Symfony\Component\Form\Form;
 
-class NumberrangeBinder implements BinderInterface
+class NumberrangeBinder extends BaseBinder
 {
     protected $count = 0;
 

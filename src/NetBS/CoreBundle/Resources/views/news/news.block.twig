@@ -1,6 +1,11 @@
 {% set newsStyle %}
     <style>
 
+        .channel {
+            padding:0.3rem 0.5rem;
+            color:white;
+            border-radius:6px;
+        }
         .news-container {
 
             max-height:500px;
@@ -46,49 +51,42 @@
     </style>
 {% endset %}
 
+{% macro news(item) %}
+    <div class="p-2">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h4>{{ item.titre }}</h4>
+                <h6 class="text-muted">{{ item.user }} - {{ item.createdAt|date(param('format', 'php_date')) }}</h6>
+            </div>
+            <div>
+                <div class="d-flex">
+                    {% if item.isPinned %}
+                        <div class="channel mr-1" style="background:#b6b62d">Important</div>
+                    {% endif %}
+                    <div class="channel" style="background:{{ item.channel.color }}">{{ item.channel.nom }}</div>
+                </div>
+            </div>
+        </div>
+        <div style="font-size:0.9rem">
+            {{ item.contenu|raw }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% import _self as swag %}
+
 {{ registerStyle(newsStyle) }}
 {{ registerJs(asset('bundles/netbscore/js/modal.js')) }}
 
 <div class="news-container">
     {% for item in news if item.isPinned %}
-
-        <div class="d-flex align-items-stretch news-item">
-            <div class="news-item-left" style="background-color:{{ item.channel.color }};border:1px solid {{ item.channel.color }}">
-                <h5>{{ item.user }}</h5>
-                <h5>{{ item.createdAt|date('d.m.Y') }}</h5>
-                <h6 style="background:white;color:black;border-radius:3px;padding:0.3rem 0.6rem;">{{ item.channel.nom }}</h6>
-            </div>
-
-            <div class="news-item-right">
-                <div class="bg" style="background:{{ item.channel.color }};border:1px solid {{ item.channel.color }};opacity:0.3;"></div>
-
-                <div class="news-contenu">
-                    <h4>{{ item.titre }}</h4>
-
-                    <p>{{ item.contenu | raw }}</p>
-                </div>
-            </div>
-        </div>
+        {{ swag.news(item) }}
+        <hr/>
     {% endfor %}
 
     {% for item in news if not item.isPinned %}
-
-        <div class="d-flex align-items-stretch news-item">
-            <div class="news-item-left" style="background-color:{{ item.channel.color }};border:1px solid {{ item.channel.color }}">
-                <h5>{{ item.user }}</h5>
-                <h5>{{ item.createdAt|date('d.m.Y') }}</h5>
-                <h6 style="background:white;color:black;border-radius:3px;padding:0.3rem 0.6rem;">{{ item.channel.nom }}</h6>
-            </div>
-
-            <div class="news-item-right">
-                <div class="bg" style="border:1px solid #eee;"></div>
-                <div class="news-contenu">
-                    <h4>{{ item.titre }}</h4>
-
-                    <p>{{ item.contenu | raw }}</p>
-                </div>
-            </div>
-        </div>
+        {{ swag.news(item) }}
+        <hr/>
     {% endfor %}
 </div>
 

@@ -73,8 +73,8 @@ class WNGMembre
 
     public function __construct(array $d)
     {
-        $this->idMembre             = $d['id_membre'];
-        $this->idFamille            = $d['id_famille'];
+        $this->idMembre             = intval($d['id_membre']);
+        $this->idFamille            = intval($d['id_famille']);
         $this->idFichier            = intval($d['id_fichier']);
         $this->numeroMembre         = intval($d['no_membre']);
         $this->nom                  = $d['nom'];

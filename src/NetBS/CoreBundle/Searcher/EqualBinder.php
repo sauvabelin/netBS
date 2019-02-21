@@ -3,10 +3,11 @@
 namespace NetBS\CoreBundle\Searcher;
 
 use Doctrine\ORM\QueryBuilder;
+use NetBS\CoreBundle\Model\BaseBinder;
 use NetBS\CoreBundle\Model\BinderInterface;
 use Symfony\Component\Form\Form;
 
-class EqualBinder implements BinderInterface
+class EqualBinder extends BaseBinder
 {
     const KEY        = 'netbs.equals';
     protected $count = 0;

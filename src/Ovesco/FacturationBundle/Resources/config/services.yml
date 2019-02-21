@@ -143,3 +143,10 @@ services:
         class: Ovesco\FacturationBundle\Helper\FactureHelper
         tags:
             - { name: netbs.helper }
+
+    ovesco.facturation.searcher.count_binder:
+        class: Ovesco\FacturationBundle\Searcher\CountBinder
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: netbs.searcher.binder }

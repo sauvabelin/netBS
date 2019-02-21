@@ -8,9 +8,9 @@ use NetBS\CoreBundle\Model\BaseSearcher;
 use NetBS\ListBundle\Column\DateTimeColumn;
 use NetBS\ListBundle\Column\SimpleColumn;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
-use NetBS\ListBundle\Model\TogglableRow;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Form\SearchFactureType;
+use Ovesco\FacturationBundle\Model\SearchFacture;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class FactureSearcher extends BaseSearcher
@@ -30,7 +30,7 @@ class FactureSearcher extends BaseSearcher
      */
     public function getSearchObject()
     {
-        return new Facture();
+        return new SearchFacture();
     }
 
     /**

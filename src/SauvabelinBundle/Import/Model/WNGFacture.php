@@ -42,11 +42,11 @@ class WNGFacture
         $this->montantPayeFacture = $data['montant_paye_facture'];
         $this->rabaisFacture    = $data['rabais_facture'];
         $this->dateFacture  = WNGHelper::toDatetime($data['date_facture']);
-        $this->dateImpressionFacture = WNGHelper::toDatetime($data['date_impression_facture']);
+        $this->dateImpressionFacture = WNGHelper::toDatetime($data['date_facture']);
         $this->datePayeFacture = WNGHelper::toDatetime($data['date_paye_facture']);
         $this->dateRappel1 = WNGHelper::toDatetime($data['date_rappel_1']);
         $this->dateRappel2 = WNGHelper::toDatetime($data['date_rappel_2']);
         $this->statusFacture = $data['status_facture'];
-        $this->remarques = $data['remarques_facture'];
+        $this->remarques = WNGHelper::sanitize($data['remarques_facture']);
     }
 }

@@ -4,10 +4,10 @@ namespace NetBS\CoreBundle\Searcher;
 
 use Doctrine\ORM\QueryBuilder;
 use NetBS\CoreBundle\Form\Type\AjaxSelect2DocumentType;
-use NetBS\CoreBundle\Model\BinderInterface;
+use NetBS\CoreBundle\Model\BaseBinder;
 use Symfony\Component\Form\Form;
 
-class Select2Binder implements BinderInterface
+class Select2Binder extends BaseBinder
 {
     protected $count = 0;
 

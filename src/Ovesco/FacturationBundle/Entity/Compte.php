@@ -36,9 +36,8 @@ class Compte
     /**
      * @var string
      * @ORM\Column(name="iban", type="string", length=255, nullable=false, unique=true)
-     *
-    protected $iban;
      */
+    protected $iban;
 
     /**
      * @var string
@@ -163,7 +162,7 @@ class Compte
 
     /**
      * @return string
-     *
+     */
     public function getIban()
     {
         return $this->iban;
@@ -171,10 +170,9 @@ class Compte
 
     /**
      * @param string $iban
-     *
+     */
     public function setIban($iban)
     {
         $this->iban = $iban;
     }
-     */
 }

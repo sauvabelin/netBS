@@ -22,8 +22,12 @@ final class Version20190208080122 extends AbstractMigration
         $this->addSql('DROP TABLE facture');
         $this->addSql('DROP TABLE paiement');
         $this->addSql('DROP TABLE rappel');
+        $this->addSql('ALTER TABLE ovesco_facturation_comptes ADD iban VARCHAR(255) NOT NULL');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_2BBC099EFAD56E62 ON ovesco_facturation_comptes (iban)');
         $this->addSql('ALTER TABLE ovesco_facturation_paiements ADD transactionDetails LONGTEXT DEFAULT NULL');
-        // $this->addSql('CREATE UNIQUE INDEX UNIQ_2BBC099EFAD56E62 ON ovesco_facturation_comptes (iban)');
+        $this->addSql('ALTER TABLE ovesco_facturation_factures ADD date_impression DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE ovesco_facturation_factures AUTO_INCREMENT = 20000');
+        $this->addSql('ALTER TABLE ovesco_facturation_rappels ADD date_impression DATETIME DEFAULT NULL');
         $this->addSql('ALTER TABLE ovesco_facturation_factures ADD old_fichier_id INT NOT NULL');
         $this->addSql('CREATE TABLE ovesco_facturation_facture_models (id INT AUTO_INCREMENT NOT NULL, name TINYTEXT NOT NULL, application_rule TINYTEXT DEFAULT NULL COLLATE utf8_unicode_ci, top_description LONGTEXT NOT NULL, titre LONGTEXT NOT NULL, bottom_salutations LONGTEXT NOT NULL, signataire VARCHAR(255) NOT NULL, group_name VARCHAR(255) NOT NULL, rue VARCHAR(255) NOT NULL, npa_ville VARCHAR(255) NOT NULL, city_from VARCHAR(255) NOT NULL, poids INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET UTF8 COLLATE UTF8_unicode_ci ENGINE = InnoDB');
     }

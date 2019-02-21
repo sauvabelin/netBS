@@ -57,7 +57,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
      */
     public function getName()
     {
-        return "PDF Factures";
+        return "Imprimer les factures";
     }
 
     /**
@@ -92,6 +92,9 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         foreach($items as $facture)
             $this->printFacture($facture, $fpdf);
+
+        // We've set impression date
+        $this->manager->flush();
 
         return new StreamedResponse(function() use ($fpdf) {
             $fpdf->Output();
@@ -138,6 +141,10 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         /** @var FactureConfig $config */
         $config = $this->configuration;
         $model = $this->getModel($facture);
+        $date = $config->date instanceof \DateTime ? $config->date : $facture->getDate();
+
+        $facture->setLatestImpression($date);
+        $this->manager->persist($facture);
 
         $fpdf->AddPage();
         $debiteur = $facture->getDebiteur();
@@ -157,7 +164,6 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         // Print date and destinataire
         $fpdf->SetXY(130, 17);
-        $date = $config->date instanceof \DateTime ? $config->date : $facture->getDate();
         $printDate = $date->format('d') . " " .$this->toMois($date->format('m')) . " " . $date->format('Y');
         $fpdf->Cell(50, 10, utf8_decode($model->getCityFrom() . " le $printDate"));
 

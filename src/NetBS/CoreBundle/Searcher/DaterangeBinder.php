@@ -4,11 +4,11 @@ namespace NetBS\CoreBundle\Searcher;
 
 use Doctrine\ORM\QueryBuilder;
 use NetBS\CoreBundle\Form\Type\DaterangeType;
-use NetBS\CoreBundle\Model\BinderInterface;
+use NetBS\CoreBundle\Model\BaseBinder;
 use NetBS\CoreBundle\Model\Daterange;
 use Symfony\Component\Form\Form;
 
-class DaterangeBinder implements BinderInterface
+class DaterangeBinder extends BaseBinder
 {
     protected $count = 0;
 
