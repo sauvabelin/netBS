@@ -9,14 +9,21 @@ use Symfony\Component\Routing\Router;
 
 class ModalAction extends IconAction
 {
+    private $registrer;
+
+    private $assets;
+
     public function __construct(AssetExtension $asset, AssetsExtension $registrer, Router $router)
     {
         parent::__construct($router);
-        $registrer->registerJs($asset->getAssetUrl('bundles/netbscore/js/modal.js'));
+        $this->registrer = $registrer;
+        $this->assets = $asset;
     }
 
     public function render($item, $params = [])
     {
+        $this->registrer->registerJs($this->assets->getAssetUrl('bundles/netbscore/js/modal.js'));
+
         $route  = is_string($params[LinkColumn::ROUTE])
             ? $params[LinkColumn::ROUTE]
             : ($params[LinkColumn::ROUTE])($item);

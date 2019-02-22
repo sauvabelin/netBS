@@ -72,8 +72,14 @@ class NetbsToolbarListener
 
         $this->extendWithMassUpdaters($event);
 
-        if(in_array($itemClass, $this->dynamicManager->getManagedClasses())
-            || in_array($itemClass, $this->bridgeManager->getBridgesClasses()))
+        $dynamics = false;
+        if(in_array($itemClass, $this->dynamicManager->getManagedClasses()))
+            $dynamics = true;
+
+        foreach($this->dynamicManager->getManagedClasses() as $managedClass)
+            if($this->bridgeManager->isValidTransformation($itemClass, $managedClass))
+                $dynamics = true;
+        if($dynamics)
             $this->extendWithDynamics($event);
 
         if($event->getTable()->getItemClass() === LoggedChange::class)

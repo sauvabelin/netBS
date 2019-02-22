@@ -107,20 +107,20 @@ class ListBridgeManager
         if(count($dataset) == 0)
             return [];
 
-        $fromClass      = ClassUtils::getClass($dataset[0]);
-        $pcc            = $this->dijkstra->shortestPaths($fromClass, $destinationClass);
+        $fromClass = ClassUtils::getClass($dataset[0]);
+        $pcc = $this->dijkstra->shortestPaths($fromClass, $destinationClass);
 
         if(count($pcc) == 0)
             return [];
 
         for($i = 0; $i < count($pcc[0]) - 1; $i++) {
 
-            $transformer    = null;
+            $transformer = null;
             foreach($this->bridges as $bridge)
                 if($bridge->getFromClass() === $pcc[0][$i] && $bridge->getToClass() === $pcc[0][$i + 1])
-                    $transformer    = $bridge;
+                    $transformer = $bridge;
 
-            $dataset         = $transformer->transform($dataset);
+            $dataset = $transformer->transform($dataset);
         }
 
         return $dataset;

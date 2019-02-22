@@ -2,13 +2,15 @@
 
 namespace Ovesco\FacturationBundle\Model;
 
-use Ovesco\FacturationBundle\Entity\Facture;
-
-class SearchFacture extends Facture
+class SearchFacture
 {
+    public $factureId;
+
     public $montant;
 
     public $montantPaye;
+
+    public $compteToUse;
 
     public $nombreDeRappels;
 
@@ -19,6 +21,10 @@ class SearchFacture extends Facture
     public $date;
 
     public $dateImpression;
+
+    public $isPrinted;
+
+    public $datePaiement;
 
     public $statut;
 }

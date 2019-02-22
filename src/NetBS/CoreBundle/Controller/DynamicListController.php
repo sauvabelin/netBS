@@ -153,9 +153,14 @@ class DynamicListController extends Controller
      */
     public function addListModalAction(Request $request) {
 
+        $encoded    = $request->request->get('itemClass');
+        $class      = $encoded ? base64_decode($encoded) : null;
+
         $dynamics   = $this->get('netbs.core.dynamic_list_manager');
         $list       = new DynamicList();
-        $form       = $this->createForm(DynamicListType::class, $list);
+        $form       = $this->createForm(DynamicListType::class, $list, [
+            'itemClass' => $class,
+        ]);
 
         $form->handleRequest($request);
 

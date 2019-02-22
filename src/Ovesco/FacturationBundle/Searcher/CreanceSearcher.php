@@ -2,6 +2,8 @@
 
 namespace Ovesco\FacturationBundle\Searcher;
 
+use NetBS\CoreBundle\ListModel\Action\RemoveAction;
+use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\ListModel\Column\HelperColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\CoreBundle\Model\BaseSearcher;
@@ -10,14 +12,12 @@ use NetBS\ListBundle\Column\SimpleColumn;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use Ovesco\FacturationBundle\Entity\Creance;
 use Ovesco\FacturationBundle\Form\SearchCreanceType;
-use Ovesco\FacturationBundle\Util\CreanceListTrait;
+use Ovesco\FacturationBundle\Model\SearchCreance;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CreanceSearcher extends BaseSearcher
 {
-    use CreanceListTrait;
-
     /**
      * Returns the search form type class
      * @return string
@@ -27,15 +27,18 @@ class CreanceSearcher extends BaseSearcher
         return SearchCreanceType::class;
     }
 
+    public function getManagedItemsClass()
+    {
+        return Creance::class;
+    }
+
     /**
      * Returns an object used to render form, which will contain search data
      * @return object
      */
     public function getSearchObject()
     {
-        $creance = new Creance();
-        $creance->setRabais(null)->setDate(null);
-        return $creance;
+        return new SearchCreance();
     }
 
     /**
@@ -65,6 +68,11 @@ class CreanceSearcher extends BaseSearcher
             ->addColumn('Rabais', null, XEditableColumn::class, [
                 XEditableColumn::TYPE_CLASS => NumberType::class,
                 XEditableColumn::PROPERTY => 'rabais',
+            ])
+            ->addColumn('', null, ActionColumn::class, [
+                ActionColumn::ACTIONS_KEY => [
+                    RemoveAction::class
+                ]
             ])
         ;
     }

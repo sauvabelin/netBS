@@ -4,6 +4,8 @@ namespace Ovesco\FacturationBundle\Form;
 
 use NetBS\CoreBundle\Form\Type\DatepickerType;
 use Ovesco\FacturationBundle\Entity\Creance;
+use Ovesco\FacturationBundle\Form\Type\CreanceOuverteType;
+use Ovesco\FacturationBundle\Model\SearchCreance;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,13 +23,14 @@ class SearchCreanceType extends AbstractType
             ->add('montant', NumberType::class, ['label' => 'Montant', 'required' => false])
             ->add('rabais', NumberType::class, ['label' => 'Rabais (en francs)', 'required' => false])
             ->add('date', DatepickerType::class, ['label' => 'Date de création', 'required' => false])
+            ->add('isOuverte', CreanceOuverteType::class, ['label' => 'Créances ouvertes'])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Creance::class
+            'data_class' => SearchCreance::class
         ]);
     }
 }

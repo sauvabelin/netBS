@@ -2,7 +2,8 @@
 
 namespace Ovesco\FacturationBundle\ListModel;
 
-use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
+use NetBS\CoreBundle\ListModel\Action\RemoveAction;
+use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
 use NetBS\ListBundle\Column\DateTimeColumn;
 use NetBS\ListBundle\Column\SimpleColumn;
@@ -10,14 +11,11 @@ use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use Ovesco\FacturationBundle\Entity\Creance;
 use Ovesco\FacturationBundle\Entity\Facture;
-use Ovesco\FacturationBundle\Util\CreanceListTrait;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FactureCreancesList extends BaseListModel
 {
-    use EntityManagerTrait, CreanceListTrait;
+    use EntityManagerTrait;
 
     /**
      * Retrieves all elements managed by this list
@@ -32,6 +30,11 @@ class FactureCreancesList extends BaseListModel
             ->findBy(['facture' => $facture]);
     }
 
+    public function getManagedItemsClass()
+    {
+        return Creance::class;
+    }
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->isRequired('facture');
@@ -44,5 +47,23 @@ class FactureCreancesList extends BaseListModel
     public function getAlias()
     {
         return 'ovesco.facturation.facture_creances';
+    }
+
+    public function configureColumns(ListColumnsConfiguration $configuration)
+    {
+        $configuration
+            ->addColumn('Numéro', 'id', SimpleColumn::class)
+            ->addColumn('Titre', 'titre', SimpleColumn::class)
+            ->addColumn('Date de création', 'date', DateTimeColumn::class)
+            ->addColumn('Montant', 'montant', SimpleColumn::class)
+            ->addColumn('Rabais', 'rabais', SimpleColumn::class)
+            ->addColumn('Montant effectif', 'actualMontant', SimpleColumn::class)
+            ->addColumn('Remarques', 'remarques', SimpleColumn::class)
+            ->addColumn('', null, ActionColumn::class, [
+                ActionColumn::ACTIONS_KEY => [
+                    RemoveAction::class
+                ]
+            ])
+        ;
     }
 }

@@ -62,20 +62,14 @@ class FacturePaiementsList extends BaseListModel
     public function configureColumns(ListColumnsConfiguration $configuration)
     {
         $configuration
-            ->addColumn('Date d\'enregistrement', 'date', DateTimeColumn::class)
+            ->addColumn('Exécuté le', 'dateEffectivePaiement', DateTimeColumn::class)
             ->addColumn('Montant', 'montant', SimpleColumn::class)
-            ->addColumn('Compte credité', 'compte.ccp', SimpleColumn::class)
-            ->addColumn('Remarques', null, XEditableColumn::class, [
-                XEditableColumn::TYPE_CLASS => TextType::class,
-                XEditableColumn::PROPERTY => 'remarques',
-            ])
-            /*
-            ->addColumn('Supprimer', null, ActionColumn::class, [
+            ->addColumn('Remarques', 'remarques', SimpleColumn::class)
+            ->addColumn('', null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY => [
                     RemoveAction::class
                 ]
             ])
-            */
         ;
     }
 }

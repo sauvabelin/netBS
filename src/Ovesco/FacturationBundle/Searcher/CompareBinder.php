@@ -3,10 +3,10 @@
 namespace Ovesco\FacturationBundle\Searcher;
 
 use NetBS\CoreBundle\Model\BaseBinder;
-use Ovesco\FacturationBundle\Form\Type\CountSearchType;
+use Ovesco\FacturationBundle\Form\Type\CompareType;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class CountBinder extends BaseBinder
+class CompareBinder extends BaseBinder
 {
     private $propertyAccessor;
 
@@ -22,12 +22,13 @@ class CountBinder extends BaseBinder
 
     public function getType()
     {
-        return CountSearchType::class;
+        return CompareType::class;
     }
 
     public function postFilter($item, $value, array $options)
     {
-        $items = $this->propertyAccessor->getValue($item, $options['property']);
-        return count($items) === intval($value);
+        $fn = $options['function'];
+        $data = $this->propertyAccessor->getValue($item, $options['property']);
+        return $fn($data) === $fn($value);
     }
 }

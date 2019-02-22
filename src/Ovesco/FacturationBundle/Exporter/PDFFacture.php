@@ -90,6 +90,23 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         $fpdf->AddFont('Arial', '', 'arial.php');
         $fpdf->AddFont('BVR', '', 'ocrb10n.php');
 
+        /** @var Facture[] $noAdress */
+        $noAdress = [];
+        foreach($items as $facture)
+            if (!$facture->getDebiteur()->getSendableAdresse())
+                $noAdress[] = $facture;
+
+        if (count($noAdress) > 0) {
+            $text = "Certaines factures sont adressées à des débiteurs n'ayant aucune adresse!\n" .
+                "Les factures suivantes ne seront pas générées:\n";
+            foreach($noAdress as $facture)
+                $text .= " - {$facture->__toString()}, montant total: {$facture->getMontant()}\n";
+
+            $fpdf->AddPage();
+            $fpdf->SetFont('OpenSans', '', 10);
+            $fpdf->MultiCell(200, 6, utf8_decode($text));
+        }
+
         foreach($items as $facture)
             $this->printFacture($facture, $fpdf);
 
@@ -137,6 +154,8 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
     }
 
     private function printFacture(Facture $facture, \FPDF $fpdf) {
+
+        if (!$facture->getDebiteur()->getSendableAdresse()) return;
 
         /** @var FactureConfig $config */
         $config = $this->configuration;

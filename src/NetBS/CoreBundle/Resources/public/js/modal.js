@@ -1,13 +1,10 @@
 (function() {
 
     $('[data-modal]').click(function() {
-
-        var path    = $(this).attr('data-modal-url');
-        var modal   = new BSModal(path, {});
-
+        let path    = $(this).attr('data-modal-url');
+        let modal   = new BSModal(path, {});
         modal.launch();
     });
-
 })();
 
 var BSModal = function(path, params) {

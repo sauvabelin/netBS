@@ -112,7 +112,6 @@ class Dijkstra {
      */
     public function shortestPaths($source, $target, array $exclude = array()) {
 
-
         $this->distance             = array_fill_keys(array_keys($this->graph), INF);
         $this->distance[$source]    = 0;
         $this->previous             = array_fill_keys(array_keys($this->graph), array());

@@ -43,7 +43,7 @@ services:
         class: NetBS\FichierBundle\ListModel\DynamicMembreList
         tags:
             - { name: netbs.list.model }
-            - { name: netbs.dynamic_model, managedClass: NetBS\FichierBundle\Document\Membre }
+            - { name: netbs.dynamic_model }
 
     netbs.fichier.list.membre_attributions:
         class: NetBS\FichierBundle\ListModel\MembreAttributionsList

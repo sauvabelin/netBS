@@ -22,4 +22,15 @@ class FactureController extends Controller
         $instance       = $searcher->bind(Facture::class);
         return $searcher->render($instance);
     }
+
+    /**
+     * @param Facture $facture
+     * @Route("/modal-view/{id}", name="ovesco.facturation.facture_modal")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function factureModalAction(Facture $facture) {
+        return $this->render('@OvescoFacturation/facture/facture.modal.twig', [
+            'facture' => $facture,
+        ]);
+    }
 }

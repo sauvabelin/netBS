@@ -136,6 +136,15 @@ class Creance
     }
 
     /**
+     * @return float|int
+     */
+    public function getActualMontant() {
+        return $this->rabais > 0
+            ? $this->montant - ($this->montant * ($this->rabais / 100))
+            : $this->montant;
+    }
+
+    /**
      * Set facture.
      *
      * @param \Ovesco\FacturationBundle\Entity\Facture|null $facture

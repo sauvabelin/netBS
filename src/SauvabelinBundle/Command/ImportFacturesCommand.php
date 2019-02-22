@@ -98,12 +98,12 @@ class ImportFacturesCommand extends ContainerAwareCommand
             $creance->setDebiteur($debiteur);
             $manager->persist($creance);
 
-            if($WNGFacture->statusFacture !== 'non_payee') {
+            //if($WNGFacture->statusFacture !== 'non_payee') {
                 $facture = $this->toFacture($WNGFacture);
                 $facture->setDebiteur($debiteur);
                 $facture->addCreance($creance);
                 $manager->persist($facture);
-            }
+            //}
             $io->progressAdvance();
         }
 

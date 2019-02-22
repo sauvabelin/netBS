@@ -2,14 +2,15 @@
 
 namespace Ovesco\FacturationBundle\ListModel;
 
-use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
+use NetBS\CoreBundle\ListModel\Action\RemoveAction;
+use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
 use NetBS\ListBundle\Column\DateTimeColumn;
+use NetBS\ListBundle\Column\SimpleColumn;
 use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Entity\Rappel;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FactureRappelsList extends BaseListModel
@@ -59,10 +60,13 @@ class FactureRappelsList extends BaseListModel
     public function configureColumns(ListColumnsConfiguration $configuration)
     {
         $configuration
-            ->addColumn('Date d\'enregistrement', 'date', DateTimeColumn::class)
-            ->addColumn('remarques', null, XEditableColumn::class, [
-                XEditableColumn::PROPERTY => 'remarques',
-                XEditableColumn::TYPE_CLASS => TextareaType::class,
+            ->addColumn("Date", 'date', DateTimeColumn::class)
+            ->addColumn("Date d'impression", 'dateImpression', DateTimeColumn::class)
+            ->addColumn('Remarques', 'remarques', SimpleColumn::class)
+            ->addColumn('', null, ActionColumn::class, [
+                ActionColumn::ACTIONS_KEY => [
+                    RemoveAction::class
+                ]
             ])
         ;
     }

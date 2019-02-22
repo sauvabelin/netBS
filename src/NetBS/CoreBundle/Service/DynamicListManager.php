@@ -5,6 +5,8 @@ namespace NetBS\CoreBundle\Service;
 use Doctrine\ORM\EntityManager;
 use NetBS\CoreBundle\Entity\DynamicList;
 use NetBS\CoreBundle\ListModel\AbstractDynamicListModel;
+use NetBS\FichierBundle\Entity\Membre;
+use NetBS\FichierBundle\Model\AdressableInterface;
 use NetBS\ListBundle\Exceptions\ListModelNotFoundException;
 use NetBS\ListBundle\Model\ListModelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -98,14 +100,12 @@ class DynamicListManager
 
         $lists  = [];
         foreach($this->getCurrentUserLists() as $list)
-            if($list->getItemsClass() == $class)
+            if($list->getItemsClass() === $class)
                 $lists[] = $list;
 
-        foreach($this->bridges->getBridges() as $bridge)
-            if($bridge->getFromClass() == $class)
-                foreach($this->getCurrentUserLists() as $list)
-                    if($list->getItemsClass() == $bridge->getToClass() && !in_array($list, $lists))
-                        $lists[] = $list;
+        foreach($this->getCurrentUserLists() as $list)
+            if($this->bridges->isValidTransformation($class, $list->getItemsClass()) && !in_array($list, $lists))
+                $lists[] = $list;
 
         return $lists;
     }

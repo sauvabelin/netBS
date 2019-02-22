@@ -59,9 +59,14 @@ class QueryMaker
         $this->concatWith($query, $form, $alias, $holder);
         $result = $query->getQuery()->execute();
         foreach($holder->getBinders() as $data) {
-            $result = array_filter($result, function($item) use ($data) {
-                return $data['binder']->postFilter($item, $data['data'], $data['options']);
-            });
+            if ($data['data'] !== null) {
+                $subResult = [];
+
+                foreach($result as $item)
+                    if ($data['binder']->postFilter($item, $data['data'], $data['options']))
+                        $subResult[] = $item;
+                $result = $subResult;
+            }
         }
 
         return $result;
@@ -77,7 +82,7 @@ class QueryMaker
 
             //Binder
             if(isset($this->binders[$class])) {
-                if ($this->binders[$class]->getType() === BinderInterface::BIND)
+                if ($this->binders[$class]->bindType() === BinderInterface::BIND)
                     $this->binders[$class]->bind($alias, $item, $builder);
                 else $holder->addBinder($this->binders[$class], $item->getData(), $item->getConfig()->getOptions());
             }

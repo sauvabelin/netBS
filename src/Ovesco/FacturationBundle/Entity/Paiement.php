@@ -170,7 +170,9 @@ class Paiement
      */
     public function getTransactionDetails()
     {
-        return unserialize($this->transactionDetails);
+        if ($this->transactionDetails)
+            return unserialize($this->transactionDetails);
+        return null;
     }
 
     /**
@@ -185,10 +187,12 @@ class Paiement
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return \DateTime|\DateTimeImmutable
      */
     public function getDateEffectivePaiement() {
 
-        return $this->getTransactionDetails()->getRelatedDates()->getAcceptanceDateTime();
+        return $this->getTransactionDetails()
+            ? $this->getTransactionDetails()->getRelatedDates()->getAcceptanceDateTime()
+            : $this->date;
     }
 }

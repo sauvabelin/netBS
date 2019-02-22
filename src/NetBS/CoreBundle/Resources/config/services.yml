@@ -143,10 +143,15 @@ services:
         public: true
         class: NetBS\CoreBundle\Service\MassUpdaterManager
 
+    netbs.core.deleter_manager:
+        public: true
+        class: NetBS\CoreBundle\Service\DeleterManager
+
     netbs.core.form.dynamic_list_type:
         class: NetBS\CoreBundle\Form\DynamicListType
         arguments:
             - "@netbs.core.dynamic_list_manager"
+            - "@netbs.core.bridge_manager"
         tags:
             - { name: form.type }
 

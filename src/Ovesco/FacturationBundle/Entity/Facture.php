@@ -102,7 +102,7 @@ class Facture
 
     public function __toString()
     {
-        return "[{$this->getFactureId()}] pour " . $this->debiteur->__toString();
+        return "#{$this->getFactureId()} pour " . $this->debiteur->__toString();
     }
 
     public static function getStatutChoices() {
@@ -190,6 +190,7 @@ class Facture
      */
     public function removeCreance(Creance $creance)
     {
+        $creance->setFacture(null);
         return $this->creances->removeElement($creance);
     }
 
@@ -279,6 +280,19 @@ class Facture
     }
 
     /**
+     * @return Paiement|null
+     */
+    public function getLatestPaiement() {
+        $paiements = $this->paiements->toArray();
+        usort($paiements, function(Paiement $a, Paiement $b) {
+            if (!$a->getDateEffectivePaiement()) return 1;
+            if (!$b->getDateEffectivePaiement()) return -1;
+            return $a->getDateEffectivePaiement() > $b->getDateEffectivePaiement() ? 1 : -1;
+        });
+        return array_pop($paiements);
+    }
+
+    /**
      * @return Compte
      */
     public function getCompteToUse()
@@ -312,7 +326,7 @@ class Facture
 
     public function getMontant() {
         return array_reduce($this->creances->toArray(), function($montant, Creance $creance) {
-            return $montant + $creance->getMontant();
+            return $montant + $creance->getActualMontant();
         }, 0);
     }
 
@@ -348,5 +362,12 @@ class Facture
     public function getLatestImpression() {
         $rappel = $this->getLatestRappel();
         return $rappel ? $rappel->getDateImpression() : $this->getDateImpression();
+    }
+
+    public function hasBeenPrinted() {
+
+        if ($this->dateImpression === null) return false;
+        $lastRappel = $this->getLatestRappel();
+        return $lastRappel ? $lastRappel->getDateImpression() !== null : false;
     }
 }

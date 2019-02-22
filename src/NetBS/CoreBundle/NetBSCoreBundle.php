@@ -5,6 +5,7 @@ namespace NetBS\CoreBundle;
 use NetBS\CoreBundle\DependencyInjection\Compiler\MassUpdaterPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterAutomaticListsPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterBlockPass;
+use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterDeleterPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterDynamicsModel;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterExporterPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterHelpersPass;
@@ -39,6 +40,7 @@ class NetBSCoreBundle extends Bundle
         $container->addCompilerPass(new RegisterPreviewersPass());
         $container->addCompilerPass(new RegisterPostInstallScriptsPass());
         $container->addCompilerPass(new RegisterListActionsPass());
+        $container->addCompilerPass(new RegisterDeleterPass());
     }
 
 }

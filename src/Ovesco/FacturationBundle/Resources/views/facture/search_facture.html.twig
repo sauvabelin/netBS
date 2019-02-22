@@ -5,20 +5,29 @@
     {{ form_start(form) }}
     <div class="row">
         <div class="col-md-4">
-            <h4>Description</h4>
-            {{ form_row(form.compteToUse) }}
-        </div>
-        <div class="col-md-4">
-            <h4>Montant</h4>
+            {{ form_row(form.factureId) }}
             {{ form_row(form.statut) }}
+            <div class="row">
+                <div class="col-md-6">{{ form_row(form.montant) }}</div>
+                <div class="col-md-6">{{ form_row(form.montantPaye) }}</div>
+            </div>
         </div>
         <div class="col-md-4">
-            <h4>Date de création</h4>
-            {{ form_row(form.date) }}
+            {{ form_row(form.compteToUse) }}
+            {{ form_row(form.nombreDeCreances) }}
+            {{ form_row(form.nombreDeRappels) }}
         </div>
-
-        <button class="btn btn-primary">Rechercher</button>
+        <div class="col-md-4">
+            {{ form_row(form.date) }}
+            <div class="row">
+                <div class="col-md-6">{{ form_row(form.dateImpression) }}</div>
+                <div class="col-md-6">{{ form_row(form.isPrinted) }}</div>
+            </div>
+            {{ form_row(form.datePaiement) }}
+        </div>
     </div>
+
+    <button class="btn btn-primary">Rechercher</button>
     {{ form_end(form) }}
 
 {% endblock %}
