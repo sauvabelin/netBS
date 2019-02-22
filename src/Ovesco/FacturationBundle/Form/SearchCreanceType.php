@@ -21,7 +21,7 @@ class SearchCreanceType extends AbstractType
         $builder
             ->add('titre', TextType::class, ['label' => 'Titre de la créance', 'required' => false])
             ->add('montant', NumberType::class, ['label' => 'Montant', 'required' => false])
-            ->add('rabais', NumberType::class, ['label' => 'Rabais (en francs)', 'required' => false])
+            ->add('rabais', NumberType::class, ['label' => 'Rabais (%)', 'required' => false])
             ->add('date', DatepickerType::class, ['label' => 'Date de création', 'required' => false])
             ->add('isOuverte', CreanceOuverteType::class, ['label' => 'Créances ouvertes'])
         ;

@@ -17,7 +17,7 @@ class BaseCreanceType extends AbstractType
         $builder
             ->add('titre', TextType::class, ['label' => 'Titre de la créance'])
             ->add('montant', NumberType::class, ['label' => 'Montant'])
-            ->add('rabais', NumberType::class, ['label' => 'Rabais (en francs)'])
+            ->add('rabais', NumberType::class, ['label' => 'Rabais (%)'])
         ;
 
         RemarquesUtils::addRemarquesField($builder);

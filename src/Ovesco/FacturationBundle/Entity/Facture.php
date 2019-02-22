@@ -342,8 +342,8 @@ class Facture
 
     public function setLatestImpression(\DateTime $date) {
         $rappel = $this->getLatestRappel();
-        if ($rappel) $rappel->setDateImpression($date);
-        else $this->setDateImpression($date);
+        if ($rappel && $rappel->getDateImpression() === null) $rappel->setDateImpression($date);
+        elseif ($this->getDateImpression() === null) $this->setDateImpression($date);
     }
 
     /**
