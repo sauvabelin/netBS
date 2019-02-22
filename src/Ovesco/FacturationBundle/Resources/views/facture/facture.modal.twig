@@ -9,6 +9,7 @@
 
     <h2>Facture #{{ facture.factureId }}</h2>
 
+    {{ dump(facture.hasBeenPrinted()) }}
     <div class="row">
         <div class="col-md-5">
             <table class="table table-bordered">
@@ -24,6 +25,10 @@
                 <tr>
                     <th>Date de création</th>
                     <td>{{ facture.date|date(param('format', 'php_date')) }}</td>
+                </tr>
+                <tr>
+                    <th>Première impression</th>
+                    <td>{% if facture.dateImpression %}{{ facture.dateImpression|date(param('format', 'php_date')) }}{% endif %}</td>
                 </tr>
                 <tr>
                     <th>Dernière impression</th>

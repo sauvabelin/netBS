@@ -2,6 +2,8 @@
 
 namespace Ovesco\FacturationBundle\Model;
 
+use Ovesco\FacturationBundle\Entity\Facture;
+
 class SearchFacture
 {
     public $factureId;
@@ -26,5 +28,5 @@ class SearchFacture
 
     public $datePaiement;
 
-    public $statut;
+    public $statut = Facture::OUVERTE;
 }

@@ -26,6 +26,6 @@ class HasBeenPrintedBinder extends BaseBinder
      */
     public function postFilter($item, $value, array $options)
     {
-        return $value === 'yes' ? $item->hasBeenPrinted() : !$item->hasBeenPrinted();
+        return $value === 'yes' ? !$item->hasBeenPrinted() : $item->hasBeenPrinted();
     }
 }
