@@ -368,6 +368,8 @@ class Facture
 
         if ($this->dateImpression === null) return false;
         $lastRappel = $this->getLatestRappel();
-        return $lastRappel ? $lastRappel->getDateImpression() !== null : false;
+        if ($lastRappel) {
+            return $lastRappel->getDateImpression() !== null;
+        } else return $this->dateImpression !== null;
     }
 }
