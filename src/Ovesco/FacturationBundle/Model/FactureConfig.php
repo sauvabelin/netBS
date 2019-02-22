@@ -15,7 +15,7 @@ class FactureConfig extends FPDFConfig
     public $hccp = 221; // position Y du CCP
     public $wd = 115; // ligne codage droite
     public $hd = 212; // ligne codage droite
-    public $wb = 83; // ligne codage bas
+    public $wb = 70; // ligne codage bas
     public $hb = 266; // ligne codage bas
     public $bvrIl = 4;
     public $date = null;
