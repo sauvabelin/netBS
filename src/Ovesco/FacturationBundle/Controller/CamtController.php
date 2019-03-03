@@ -41,7 +41,7 @@ class CamtController extends Controller
                     'result' => $parsedBVR,
                 ]);
             } catch (\Exception $e) {
-                throw $e;
+                // throw $e;
                 $this->addFlash('error', "Fichier illisible: " . $e->getMessage());
                 return $this->redirectToRoute('ovesco.facturation.camt.import');
             }
