@@ -28,6 +28,7 @@ class CamtController extends Controller
     public function importAction(Request $request) {
 
         $parsedBVR = null;
+        $em = $this->get('doctrine.orm.entity_manager');
         $form = $this->createFormBuilder([])->add('file', FileType::class, ['label' => 'Fichier BVR'])->getForm();
         $form->handleRequest($request);
 
@@ -35,6 +36,7 @@ class CamtController extends Controller
             $data = $form->getData();
             try {
                 $parsedBVR = $this->parseBVRFile($data['file']);
+                $em->flush();
                 return $this->render('@OvescoFacturation/camt/result.html.twig', [
                     'result' => $parsedBVR,
                 ]);
@@ -76,7 +78,12 @@ class CamtController extends Controller
                     $paiement = $this->transactionToPaiement($transactionDetail);
                     $paiement->setCompte($compte[0]);
 
-                    if ($facture) $parsedBVR->addFacture($facture->addPaiement($paiement));
+                    if ($facture) {
+                        if ($facture->getStatut() === Facture::OUVERTE) {
+                            $em->persist($paiement);
+                            $parsedBVR->addFacture($facture->addPaiement($paiement));
+                        }
+                    }
                     else $parsedBVR->addOrphanPaiement($paiement);
                 }
             }
