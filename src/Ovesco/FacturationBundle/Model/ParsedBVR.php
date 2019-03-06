@@ -6,6 +6,8 @@ class ParsedBVR
 {
     private $factures = [];
 
+    private $alreadyPaid = [];
+
     private $orphanPaiements = [];
 
     /**
@@ -20,6 +22,10 @@ class ParsedBVR
         $this->factures[] = $facture;
     }
 
+    public function addAlreadyPaid($facture) {
+        $this->alreadyPaid[] = $facture;
+    }
+
     /**
      * @return array
      */
@@ -30,5 +36,13 @@ class ParsedBVR
 
     public function addOrphanPaiement($orphanPaiement) {
         $this->orphanPaiements[] = $orphanPaiement;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAlreadyPaid()
+    {
+        return $this->alreadyPaid;
     }
 }

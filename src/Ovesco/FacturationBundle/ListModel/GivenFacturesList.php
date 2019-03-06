@@ -68,6 +68,6 @@ class GivenFacturesList extends BaseListModel
             ->addColumn('Compte', 'compteToUse.ccp', SimpleColumn::class)
         ;
 
-        $this->addRendererVariable('togglableRow', new TogglableRow( '@OvescoFacturation/creance/facture_creances.row.twig'));
+        // $this->addRendererVariable('togglableRow', new TogglableRow( '@OvescoFacturation/creance/facture_creances.row.twig'));
     }
 }

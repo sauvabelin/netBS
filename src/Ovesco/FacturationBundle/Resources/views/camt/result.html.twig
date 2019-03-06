@@ -75,6 +75,21 @@
             </div>
             <hr/>
         {% endif %}
+        {% if result.alreadyPaid|length > 0 %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h3 class="card-title">Factures ayant déjà reçu un paiement</h3>
+                        <h5 class="card-subtitle">Un paiement a été trouvé pour ces factures, mais celui-ci était déjà comptabilisé.</h5>
+                    </div>
+                    <div class="card-body">
+                        {{ render_list('ovesco.facturation.given_factures', 'basic', { factures: result.alreadyPaid }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         <div class="row">
             <div class="col-12">
                 <div class="card card-table">

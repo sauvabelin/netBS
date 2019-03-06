@@ -272,7 +272,7 @@ class Facture
     /**
      * Get paiements.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Paiement[]
      */
     public function getPaiements()
     {

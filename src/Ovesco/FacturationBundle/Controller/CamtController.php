@@ -4,7 +4,6 @@ namespace Ovesco\FacturationBundle\Controller;
 
 use Genkgo\Camt\Config;
 use Genkgo\Camt\DTO\EntryTransactionDetail;
-use Genkgo\Camt\Reader;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Entity\Paiement;
 use Ovesco\FacturationBundle\Model\ParsedBVR;
@@ -41,7 +40,7 @@ class CamtController extends Controller
                     'result' => $parsedBVR,
                 ]);
             } catch (\Exception $e) {
-                // throw $e;
+                throw $e;
                 $this->addFlash('error', "Fichier illisible: " . $e->getMessage());
                 return $this->redirectToRoute('ovesco.facturation.camt.import');
             }
@@ -59,7 +58,7 @@ class CamtController extends Controller
     private function parseBVRFile(UploadedFile $file) {
         $em = $this->get('doctrine.orm.entity_manager');
         $parsedBVR = new ParsedBVR();
-        $reader = new Reader(Config::getDefault());
+        $reader = new \Genkgo\Camt\Reader(Config::getDefault());
         $data = $reader->readFile($file);
         $statements = $data->getRecords();
         $factureRepo = $this->get('doctrine.orm.entity_manager')->getRepository('OvescoFacturationBundle:Facture');
@@ -70,7 +69,6 @@ class CamtController extends Controller
                 $query = $em->getRepository('OvescoFacturationBundle:Compte')->createQueryBuilder('c');
                 $compte = $query->where("REPLACE(c.ccp, '-', '') = :ccp")->setParameter('ccp', $entry->getReference())->getQuery()->getResult();
                 if (count($compte) !== 1) throw new \Exception("Aucun compte enregistré pour le CCP " . $entry->getReference());
-
                 foreach ($entry->getTransactionDetails() as $transactionDetail) {
 
                     /** @var Facture $facture */
@@ -79,10 +77,21 @@ class CamtController extends Controller
                     $paiement->setCompte($compte[0]);
 
                     if ($facture) {
-                        if ($facture->getStatut() === Facture::OUVERTE) {
-                            $em->persist($paiement);
-                            $parsedBVR->addFacture($facture->addPaiement($paiement));
+                        $paid = false;
+                        foreach ($facture->getPaiements() as $p) {
+                            if ($p->getMontant() === $paiement->getMontant() && $p->getDateEffectivePaiement()->getTimestamp() === $paiement->getDateEffectivePaiement()->getTimestamp()) {
+                                $paid = true;
+                                break;
+                            }
                         }
+
+                        if (!$paid) {
+                            $em->persist($paiement);
+                            $facture->addPaiement($paiement);
+                            $parsedBVR->addFacture($facture);
+                        }
+                        else
+                            $parsedBVR->addAlreadyPaid($facture);
                     }
                     else $parsedBVR->addOrphanPaiement($paiement);
                 }
@@ -97,7 +106,6 @@ class CamtController extends Controller
         $refNumber  = $entryTransactionDetail->getRemittanceInformation()->getCreditorReferenceInformation()->getRef(); //Get reference number
         $refNumber  = ltrim($refNumber, 0); //Enlever tous les 0 de remplissage
         $refNumber  = substr($refNumber, 0, -1); //Enlever la somme de contrôle
-
         return intval($refNumber);
     }
 
