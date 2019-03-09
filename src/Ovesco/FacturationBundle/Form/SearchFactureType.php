@@ -27,7 +27,7 @@ class SearchFactureType extends AbstractType
             ->add('datePaiement', LatestDateType::class, ['label' => 'Date de dernier paiement', 'property' => 'paiement'])
             ->add('isPrinted', HasBeenPrintedType::class, ['label' => "En attente d'impression"])
             ->add('compteToUse', EntityType::class, ['label' => 'Compte', 'required' => false, 'class' => Compte::class])
-            ->add('statut', ChoiceType::class, ['label' => 'statut', 'choices' => array_flip([
+            ->add('statut', ChoiceType::class, ['label' => 'statut', 'required' => false, 'choices' => array_flip([
                 Facture::PAYEE      => 'payée',
                 Facture::ANNULEE    => 'annulée',
                 Facture::OUVERTE    => 'ouverte'

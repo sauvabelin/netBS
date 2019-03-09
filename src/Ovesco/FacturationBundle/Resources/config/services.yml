@@ -71,6 +71,16 @@ services:
         tags:
             - { name: netbs.list.model }
 
+    ovesco.facturation.list.facture_attente_paiement:
+        class: Ovesco\FacturationBundle\ListModel\FacturesAttentePaiementList
+        tags:
+            - { name: netbs.list.model }
+
+    ovesco.facturation.list.facture_attente_impression:
+        class: Ovesco\FacturationBundle\ListModel\FacturesAttenteImpressionList
+        tags:
+            - { name: netbs.list.model }
+
     ovesco.facturation.list.comptes:
         class: Ovesco\FacturationBundle\ListModel\ComptesList
         tags:

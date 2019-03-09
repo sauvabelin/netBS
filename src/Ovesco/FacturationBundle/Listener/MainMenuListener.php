@@ -27,6 +27,11 @@ class MainMenuListener
         $category = $menu->registerCategory('ovesco.facturation', 'Facturation');
 
         $category->addLink('facturation.dashboard', 'Administration', 'fas fa-money-bill-alt', 'ovesco.facturation.dashboard');
+
+        $listes = $category->addSubMenu('facturation.lists', 'Listes de factures', 'fas fa-file-alt');
+        $listes->addSubLink('En attente de paiement', 'ovesco.facturation.facture.attente_paiement');
+        $listes->addSubLink("En attente d'impression", 'ovesco.facturation.facture.attente_impression');
+
         $search = $category->addSubMenu('facturation.search', 'Rechercher', 'fas fa-search');
         $search->addSubLink('Créances', 'ovesco.facturation.search_creances');
         $search->addSubLink('Factures', 'ovesco.facturation.search_factures');
