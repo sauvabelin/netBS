@@ -28,12 +28,6 @@ class FacturationController extends Controller
      * @return mixed
      */
     private function amountThunes($factures) {
-
-        $cc = 0;
-        foreach($factures as $facture) {
-            $cc += $facture->getMontantEncoreDu();
-        }
-        dump($cc);
         return array_reduce($factures, function($carry, Facture $facture) {
             return $carry + $facture->getMontantEncoreDu();
         }, 0);
