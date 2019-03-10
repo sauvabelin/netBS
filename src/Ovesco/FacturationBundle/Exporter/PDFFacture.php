@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use NetBS\CoreBundle\Exporter\PDFPreviewer;
 use NetBS\CoreBundle\Model\ConfigurableExporterInterface;
 use NetBS\CoreBundle\Model\ExporterInterface;
+use NetBS\CoreBundle\Utils\StrUtil;
 use NetBS\CoreBundle\Utils\Traits\ConfigurableExporterTrait;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseMembre;
@@ -107,6 +108,10 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
             $fpdf->MultiCell(200, 6, utf8_decode($text));
         }
 
+        if ($config->setPrintDate)
+            foreach($items as $facture)
+                $facture->setLatestImpression(new \DateTime());
+
         foreach($items as $facture)
             $this->printFacture($facture, $fpdf);
 
@@ -162,9 +167,6 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         $model = $this->getModel($facture);
         $date = $config->date instanceof \DateTime ? $config->date : $facture->getDate();
 
-        $facture->setLatestImpression($date);
-        $this->manager->persist($facture);
-
         $fpdf->AddPage();
         $debiteur = $facture->getDebiteur();
         $fpdf->Image(__DIR__ . '/Facture/logo.png', 15, 20, 16, 16);
@@ -191,7 +193,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         if($adresse) {
 
             $fpdf->SetXY(130, 33);
-            $fpdf->Cell(50, 10, $facture->getDebiteur()->__toString());
+            $fpdf->Cell(50, 10, utf8_decode($facture->getDebiteur()->__toString()));
 
             $fpdf->SetXY(130, 37);
             $fpdf->Cell(50, 10, utf8_decode($adresse->getRue()));
@@ -204,7 +206,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         // Print title
         $fpdf->SetXY(15, 60);
         $fpdf->SetFont('OpenSans', 'B', 20);
-        $fpdf->Cell(0, 20, utf8_decode(strtoupper($this->evaluate($model->getTitre(), $facture))));
+        $fpdf->Cell(0, 20, utf8_decode(strtoupper(StrUtil::removeAccents($this->evaluate($model->getTitre(), $facture)))));
 
         $fpdf->SetXY(15.2, 73);
         $fpdf->SetFont('OpenSans', '', 7);
@@ -360,7 +362,7 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         return FactureConfigType::class;
     }
 
-    /**5
+    /**
      * Returns the configuration object class
      * @return string
      */

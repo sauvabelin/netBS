@@ -4,7 +4,6 @@ namespace NetBS\CoreBundle\DependencyInjection\Compiler;
 
 use NetBS\CoreBundle\Utils\DIHelper;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
-use NetBS\CoreBundle\Utils\Traits\NetBSTrait;
 use NetBS\CoreBundle\Utils\Traits\ParamTrait;
 use NetBS\CoreBundle\Utils\Traits\RouterTrait;
 use NetBS\CoreBundle\Utils\Traits\TokenTrait;
@@ -28,9 +27,8 @@ class TraitFeederPass implements CompilerPassInterface
             $definiton      = $container->findDefinition($id);
             $modelClass     = $definiton->getClass();
             $refClass       = new \ReflectionClass($modelClass);
-            $traits         = DIHelper::getTraits($refClass);
+            $traits         = array_unique($this->findTraitsRecursive($refClass));
 
-            //Register services with traits
             if(in_array(EntityManagerTrait::class, $traits))
                 $definiton->addMethodCall('setEntityManager', [new Reference('doctrine.orm.default_entity_manager')]);
 
@@ -49,5 +47,13 @@ class TraitFeederPass implements CompilerPassInterface
             if(in_array(SecureConfigTrait::class, $traits))
                 $definiton->addMethodCall('setSecureConfig', [new Reference('netbs.secure.config')]);
         }
+    }
+
+    private function findTraitsRecursive(\ReflectionClass $refClass) {
+        $traits = DIHelper::getTraits($refClass);
+
+        foreach($traits as $trait)
+            $traits = array_merge($traits, $this->findTraitsRecursive(new \ReflectionClass($trait)));
+        return $traits;
     }
 }

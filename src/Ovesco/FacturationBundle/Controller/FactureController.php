@@ -3,6 +3,7 @@
 namespace Ovesco\FacturationBundle\Controller;
 
 use Ovesco\FacturationBundle\Entity\Facture;
+use Ovesco\FacturationBundle\Model\FactureConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -32,6 +33,31 @@ class FactureController extends Controller
         return $this->render('@OvescoFacturation/facture/facture.modal.twig', [
             'facture' => $facture,
         ]);
+    }
+
+    /**
+     * @param Facture $facture
+     * @Route("/modal-pdf-view/{id}", name="ovesco.facturation.pdf_facture_modal")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function facturePdfModalAction(Facture $facture) {
+        return $this->render('@OvescoFacturation/facture/pdf_facture.modal.twig', [
+            'facture' => $facture,
+        ]);
+    }
+
+    /**
+     * @param Facture $facture
+     * @Route("/facture-pdf-no-print-date/{id}", name="ovesco.facturation.export_pdf_facture_no_date")
+     */
+    public function facturePdfNoDateExportAction(Facture $facture) {
+
+        $items      = [$facture];
+        $exporter   = $this->get('ovesco.facturation.exporter.pdf_factures');
+        $config = new FactureConfig(false);
+        $exporter->setConfig($config);
+        $previewer  = $this->get('netbs.core.previewer_manager')->getPreviewer($exporter->getPreviewer());
+        return $previewer->preview($items, $exporter);
     }
 
     /**

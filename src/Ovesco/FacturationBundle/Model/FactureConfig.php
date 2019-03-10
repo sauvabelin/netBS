@@ -6,6 +6,7 @@ use NetBS\CoreBundle\Exporter\Config\FPDFConfig;
 
 class FactureConfig extends FPDFConfig
 {
+    public $setPrintDate = true;
     public $model = null;
     public $wg = 8; // marge gauche BVR
     public $hg = 248;// ligne codage gauche
@@ -20,8 +21,9 @@ class FactureConfig extends FPDFConfig
     public $bvrIl = 4;
     public $date = null;
 
-    public function __construct()
+    public function __construct($printDate = true)
     {
+        $this->setPrintDate = $printDate;
         $this->margeHaut = 10;
         $this->margeGauche = 12.3;
     }

@@ -16,11 +16,12 @@ use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Form\SearchFactureType;
 use Ovesco\FacturationBundle\Model\SearchFacture;
+use Ovesco\FacturationBundle\Util\FactureListTrait;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class FactureSearcher extends BaseSearcher
 {
-    use RouterTrait;
+    use FactureListTrait;
 
     /**
      * Returns the search form type class
@@ -48,52 +49,5 @@ class FactureSearcher extends BaseSearcher
     public function getFormTemplate()
     {
         return "@OvescoFacturation/facture/search_facture.html.twig";
-    }
-
-    /**
-     * Returns the class of items managed by this list
-     * @return string
-     */
-    public function getManagedItemsClass()
-    {
-        return Facture::class;
-    }
-
-    /**
-     * Configures the list columns
-     * @param ListColumnsConfiguration $configuration
-     */
-    public function configureColumns(ListColumnsConfiguration $configuration)
-    {
-        $configuration
-            ->addColumn('numero', 'factureId', SimpleColumn::class)
-            ->addColumn('Débiteur', 'debiteur', HelperColumn::class)
-            ->addColumn('statut', null, XEditableColumn::class, [
-                XEditableColumn::TYPE_CLASS => ChoiceType::class,
-                XEditableColumn::PROPERTY => 'statut',
-                XEditableColumn::PARAMS => ['choices' => Facture::getStatutChoices()]
-            ])
-            ->addColumn('Date de création', 'date', DateTimeColumn::class)
-            ->addColumn("Dernière impression", 'latestImpression', DateTimeColumn::class)
-            ->addColumn('Montant', 'montant', SimpleColumn::class)
-            ->addColumn('Montant payé', 'montantPaye', SimpleColumn::class)
-            ->addColumn('', null, ActionColumn::class, [
-                ActionColumn::ACTIONS_KEY => [
-                    new ActionItem(ModalAction::class, [
-                        ModalAction::TEXT => '+ paiement',
-                        ModalAction::ROUTE => function(Facture $facture) {
-                            return $this->router->generate('ovesco.facturation.paiement.modal_add', ['id' => $facture->getId()]);
-                        }
-                    ]),
-                    new ActionItem(ModalAction::class, [
-                        ModalAction::ICON => 'fas fa-expand',
-                        ModalAction::ROUTE => function(Facture $facture) {
-                            return $this->router->generate('ovesco.facturation.facture_modal', ['id' => $facture->getId()]);
-                        }
-                    ]),
-                    new ActionItem(RemoveAction::class)
-                ]
-            ])
-        ;
     }
 }
