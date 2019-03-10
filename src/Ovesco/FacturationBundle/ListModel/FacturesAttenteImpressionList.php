@@ -10,11 +10,12 @@ use NetBS\ListBundle\Column\SimpleColumn;
 use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use Ovesco\FacturationBundle\Entity\Facture;
+use Ovesco\FacturationBundle\Util\FactureListTrait;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class FacturesAttenteImpressionList extends BaseListModel
 {
-    use EntityManagerTrait;
+    use EntityManagerTrait, FactureListTrait;
 
     /**
      * Retrieves all elements managed by this list
@@ -31,44 +32,11 @@ class FacturesAttenteImpressionList extends BaseListModel
     }
 
     /**
-     * Returns the class of items managed by this list
-     * @return string
-     */
-    public function getManagedItemsClass()
-    {
-        return Facture::class;
-    }
-
-    /**
      * Returns this list's alias
      * @return string
      */
     public function getAlias()
     {
         return 'ovesco.facturation.factures_attente_impression';
-    }
-
-    /**
-     * Configures the list columns
-     * @param ListColumnsConfiguration $configuration
-     */
-    public function configureColumns(ListColumnsConfiguration $configuration)
-    {
-        $configuration
-            ->addColumn('numero', null, HelperColumn::class)
-            ->addColumn('débiteur', 'debiteur', HelperColumn::class)
-            ->addColumn('statut', null, XEditableColumn::class, [
-                XEditableColumn::TYPE_CLASS => ChoiceType::class,
-                XEditableColumn::PROPERTY => 'statut',
-                XEditableColumn::PARAMS => ['choices' => Facture::getStatutChoices()]
-            ])
-            ->addColumn('Date de création', 'date', DateTimeColumn::class)
-            ->addColumn('Montant', 'montant', SimpleColumn::class)
-            ->addColumn('Montant payé', 'montantPaye', SimpleColumn::class)
-            ->addColumn('Montant encore du', 'montantEncoreDu', SimpleColumn::class)
-            ->addColumn('Nombre de rappels', function(Facture $facture) {
-                return count($facture->getRappels());
-            }, SimpleColumn::class)
-        ;
     }
 }
