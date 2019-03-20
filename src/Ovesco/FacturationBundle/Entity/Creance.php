@@ -4,6 +4,8 @@ namespace Ovesco\FacturationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use NetBS\FichierBundle\Mapping\BaseFamille;
+use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
 use Ovesco\FacturationBundle\Util\DebiteurTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -58,6 +60,14 @@ class Creance
      * @Groups({"default"})
      */
     protected $rabais = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="rabais_if_in_famille", type="float")
+     * @Groups({"default"})
+     */
+    protected $rabaisIfInFamille = 0;
 
     /**
      * @var Facture
@@ -139,9 +149,17 @@ class Creance
      * @return float|int
      */
     public function getActualMontant() {
-        return $this->rabais > 0
-            ? $this->montant - ($this->montant * ($this->rabais / 100))
-            : $this->montant;
+        $rabaisFamille = 0;
+        $rabais = ($this->montant * ($this->rabais / 100));
+        if ($this->facture) {
+            $debiteur = $this->facture->getDebiteur();
+            $famille = $debiteur instanceof BaseFamille ? $debiteur : $debiteur->getFamille();
+            $inscrits = 0;
+            foreach($famille->getMembres() as $membre)
+                if ($membre->getStatut() === BaseMembre::INSCRIT) $inscrits++;
+            $rabaisFamille = $inscrits > 1 ? ($this->montant * ($this->rabaisIfInFamille / 100)) : 0;
+        }
+        return $this->montant - $rabaisFamille - $rabais;
     }
 
     /**
@@ -199,6 +217,24 @@ class Creance
     public function setDate($date)
     {
         $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRabaisIfInFamille()
+    {
+        return $this->rabaisIfInFamille;
+    }
+
+    /**
+     * @param float $rabaisIfInFamille
+     */
+    public function setRabaisIfInFamille($rabaisIfInFamille)
+    {
+        $this->rabaisIfInFamille = $rabaisIfInFamille;
+
         return $this;
     }
 }

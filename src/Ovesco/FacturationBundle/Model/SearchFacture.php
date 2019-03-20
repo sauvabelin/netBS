@@ -27,4 +27,6 @@ class SearchFacture
     public $datePaiement;
 
     public $statut;
+
+    public $creanceInFacture;
 }

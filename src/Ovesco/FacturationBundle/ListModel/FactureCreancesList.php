@@ -57,6 +57,7 @@ class FactureCreancesList extends BaseListModel
             ->addColumn('Date de création', 'date', DateTimeColumn::class)
             ->addColumn('Montant', 'montant', SimpleColumn::class)
             ->addColumn('Rabais', 'rabais', SimpleColumn::class)
+            ->addColumn('Rabais famille', 'rabaisIfInFamille', SimpleColumn::class)
             ->addColumn('Montant effectif', 'actualMontant', SimpleColumn::class)
             ->addColumn('Remarques', 'remarques', SimpleColumn::class)
             ->addColumn('', null, ActionColumn::class, [

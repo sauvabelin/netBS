@@ -6,6 +6,7 @@ use NetBS\CoreBundle\Form\Type\DatepickerType;
 use Ovesco\FacturationBundle\Entity\Compte;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Form\Type\CountSearchType;
+use Ovesco\FacturationBundle\Form\Type\CreanceInFactureType;
 use Ovesco\FacturationBundle\Form\Type\HasBeenPrintedType;
 use Ovesco\FacturationBundle\Form\Type\LatestDateType;
 use Ovesco\FacturationBundle\Form\Type\CompareType;
@@ -25,6 +26,7 @@ class SearchFactureType extends AbstractType
             ->add('date', DatepickerType::class, ['label' => 'Date de création', 'required' => false])
             ->add('dateImpression', LatestDateType::class, ['label' => "Date de dernière impression", 'property' => 'impression'])
             ->add('datePaiement', LatestDateType::class, ['label' => 'Date de dernier paiement', 'property' => 'paiement'])
+            ->add('creanceInFacture', CreanceInFactureType::class, ['label' => 'Contient une créance nommée'])
             ->add('isPrinted', HasBeenPrintedType::class, ['label' => "En attente d'impression"])
             ->add('compteToUse', EntityType::class, ['label' => 'Compte', 'required' => false, 'class' => Compte::class])
             ->add('statut', ChoiceType::class, ['label' => 'statut', 'required' => false, 'choices' => array_flip([

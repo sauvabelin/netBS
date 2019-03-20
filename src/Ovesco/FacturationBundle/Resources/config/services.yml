@@ -186,6 +186,11 @@ services:
         tags:
             - { name: netbs.searcher.binder }
 
+    ovesco.facturation.searcher.creance_in_facture:
+        class: Ovesco\FacturationBundle\Searcher\CreanceInFactureBinder
+        tags:
+            - { name: netbs.searcher.binder }
+
     ovesco.facturation.deleter.creance:
         class: Ovesco\FacturationBundle\Deleter\CreanceDeleter
         tags:

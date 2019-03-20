@@ -21,6 +21,8 @@ class CreanceOuverteBinder extends BaseBinder
 
     public function bind($alias, Form $form, QueryBuilder $builder)
     {
+        if ($form->getData() === null) return;
+
         $query = $form->getData() === 'yes'
             ? $builder->expr()->isNull("$alias.facture")
             : $builder->expr()->isNotNull("$alias.facture");

@@ -60,6 +60,7 @@ class MassCreances extends Creance
         $creance
             ->setMontant($this->montant)
             ->setRabais($this->rabais)
+            ->setRabaisIfInFamille($this->rabaisIfInFamille)
             ->setTitre($this->titre)
             ->setRemarques($this->remarques);
 
