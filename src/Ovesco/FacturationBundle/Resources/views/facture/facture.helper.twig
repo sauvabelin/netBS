@@ -1,10 +1,10 @@
-<h5>Informations</h5>
 <h6>Créances</h6>
 <table class="table table-sm">
     <thead>
     <tr>
         <th>Titre</th>
         <th>Montant</th>
+        <th>Remarques</th>
     </tr>
     </thead>
     <tbody>
@@ -12,6 +12,7 @@
         <tr>
             <td>{{ creance.titre }}</td>
             <td>{{ creance.montant }}</td>
+            <td>{{ creance.remarques }}</td>
         </tr>
     {% endfor %}
     </tbody>

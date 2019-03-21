@@ -73,6 +73,10 @@ class CreanceSearcher extends BaseSearcher
                 XEditableColumn::TYPE_CLASS => NumberType::class,
                 XEditableColumn::PROPERTY => 'rabaisIfInFamille',
             ])
+            ->addColumn('Remarques', null, XEditableColumn::class, [
+                XEditableColumn::TYPE_CLASS => TextType::class,
+                XEditableColumn::PROPERTY => 'remarques',
+            ])
             ->addColumn('', null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY => [
                     RemoveAction::class

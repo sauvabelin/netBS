@@ -29,4 +29,6 @@ class SearchFacture
     public $statut;
 
     public $creanceInFacture;
+
+    public $remarques;
 }

@@ -36,7 +36,7 @@ trait FactureListTrait
     public function configureColumns(ListColumnsConfiguration $configuration)
     {
         $configuration
-            ->addColumn('numero', 'factureId', SimpleColumn::class)
+            ->addColumn('numero', null, HelperColumn::class)
             ->addColumn('Débiteur', 'debiteur', HelperColumn::class)
             ->addColumn('statut', null, XEditableColumn::class, [
                 XEditableColumn::TYPE_CLASS => ChoiceType::class,

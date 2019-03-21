@@ -347,29 +347,37 @@ class Facture
     }
 
     /**
-     * @return Rappel|null
+     * @return Rappel[]
      */
-    public function getLatestRappel() {
+    public function sortRappelsByImpression() {
         $rappels = $this->rappels->toArray();
         usort($rappels, function(Rappel $a, Rappel $b) {
+            if (!$a->getDateImpression() && !$b->getDateImpression())
+                return $a->getDate() > $b->getDate();
             if (!$a->getDateImpression()) return 1;
             if (!$b->getDateImpression()) return -1;
             return $a->getDateImpression() > $b->getDateImpression() ? 1 : -1;
         });
+        return $rappels;
+    }
+
+    /**
+     * @return Rappel|null
+     */
+    public function getLatestRappel() {
+        $rappels = $this->sortRappelsByImpression();
         return array_pop($rappels);
     }
 
     public function getLatestImpression() {
-        $rappel = $this->getLatestRappel();
-        return $rappel ? $rappel->getDateImpression() : $this->getDateImpression();
+        foreach($this->sortRappelsByImpression() as $rappel)
+            if($rappel->getDateImpression())
+                return $rappel->getDateImpression();
+
+        return $this->getDateImpression();
     }
 
     public function hasBeenPrinted() {
-
-        if ($this->dateImpression === null) return false;
-        $lastRappel = $this->getLatestRappel();
-        if ($lastRappel) {
-            return $lastRappel->getDateImpression() !== null;
-        } else return $this->dateImpression !== null;
+        return $this->getLatestImpression() !== null;
     }
 }

@@ -40,5 +40,10 @@ class MainMenuListener
             $mailsMenu = $adminCategory->addSubMenu('bs.mails', 'Mails BS', 'fas fa-envelope');
             $mailsMenu->addSubLink("Mailing listes", "sauvabelin.mailing_lists.lists_mailing_lists");
         }
+
+        if($user->hasRole('ROLE_TRESORIER')) {
+            $menu->getCategory('ovesco.facturation')->getLink('facturation.autre')
+                ->addSubLink('Cotisations', 'netbs.core.automatic_list.view_list', ['alias' => 'sauvabelin.cotisations']);
+        }
     }
 }

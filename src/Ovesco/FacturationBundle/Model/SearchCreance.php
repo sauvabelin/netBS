@@ -13,4 +13,6 @@ class SearchCreance
     public $rabais;
 
     public $date;
+
+    public $remarques;
 }

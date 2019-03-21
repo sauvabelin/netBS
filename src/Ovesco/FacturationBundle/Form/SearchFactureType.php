@@ -14,6 +14,7 @@ use Ovesco\FacturationBundle\Model\SearchFacture;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,6 +25,7 @@ class SearchFactureType extends AbstractType
         $builder
             ->add('factureId', CompareType::class, ['label' => 'Numéro de facture', 'property' => 'factureId', 'function' => 'intval'])
             ->add('date', DatepickerType::class, ['label' => 'Date de création', 'required' => false])
+            ->add('remarques', TextType::class, ['label' => 'Remarques', 'required' => false])
             ->add('dateImpression', LatestDateType::class, ['label' => "Date de dernière impression", 'property' => 'impression'])
             ->add('datePaiement', LatestDateType::class, ['label' => 'Date de dernier paiement', 'property' => 'paiement'])
             ->add('creanceInFacture', CreanceInFactureType::class, ['label' => 'Contient une créance nommée'])

@@ -205,14 +205,14 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         // Print title
         $fpdf->SetXY(15, 60);
-        $fpdf->SetFont('OpenSans', 'B', 20);
-        $fpdf->Cell(0, 20, utf8_decode(strtoupper(StrUtil::removeAccents($this->evaluate($model->getTitre(), $facture)))));
+        $fpdf->SetFont('OpenSans', 'B', 10);
+        $fpdf->Cell(0, 10, utf8_decode(strtoupper(StrUtil::removeAccents($this->evaluate($model->getTitre(), $facture)))));
 
-        $fpdf->SetXY(15.2, 73);
+        $fpdf->SetXY(15.2, 65);
         $fpdf->SetFont('OpenSans', '', 7);
         $fpdf->Cell(20, 10, 'N/Ref : ' . $facture->getFactureId());
 
-        $fpdf->SetXY(15, 90);
+        $fpdf->SetXY(15, 75);
         $fpdf->SetFontSize(10);
         $fpdf->MultiCell(0, $config->interligne, $this->evaluate($model->getTopDescription(), $facture), 0);
         $currentY = $fpdf->GetY() + 2;
