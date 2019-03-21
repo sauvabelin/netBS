@@ -26,9 +26,11 @@ class ApiGalerieController extends Controller
         $config         = $this->get('ovesco.galerie.config');
         $realPath       = $config->getFullMappedDirectory() . '/';
         $directory      = new Directory($realPath, $config);
-        return array_map(function(Directory $directory) {
+        $images         = array_map(function(Directory $directory) {
             return $directory->getThumbnail();
             }, $directory->getChildren());
+
+        return new JsonResponse($this->get('serializer')->serialize($images, 'json'), 200, [], true);
     }
 
     /**
