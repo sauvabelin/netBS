@@ -22,6 +22,15 @@ abstract class BaseAutomatic extends BaseListModel
     abstract public function getDescription();
 
     /**
+     * Checks if user has authorization to use this automatic
+     * @param BaseUser $user
+     * @return bool
+     */
+    public function userAuthorization(BaseUser $user) {
+        return $user->hasRole('ROLE_SG');
+    }
+
+    /**
      * @param $data
      * @return array
      */
