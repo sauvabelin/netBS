@@ -19,6 +19,21 @@ class ApiGalerieController extends Controller
     /**
      * @param Request $request
      * @return Response
+     * @Route("/api/v1/public/netBS/galerie/root-pictures", name="ovesco.galerie.public_api.root-pictures")
+     */
+    public function publicPicturesAction() {
+
+        $config         = $this->get('ovesco.galerie.config');
+        $realPath       = $config->getFullMappedDirectory() . '/';
+        $directory      = new Directory($realPath, $config);
+        return array_map(function(Directory $directory) {
+            return $directory->getThumbnail();
+            }, $directory->getChildren());
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
      * @Route("/api/v1/public/netBS/galerie/directory", name="ovesco.galerie.public_api.directory")
      */
     public function publicAccessAction(Request $request) {
