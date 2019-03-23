@@ -222,8 +222,14 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         $i = 0;
         /** @var Creance[] $creances */
         $creances = $facture->getCreances()->toArray();
-        for(; $i < count($creances); $i++)
-            $this->printCreanceLine($fpdf, $currentY, $i, $creances[$i]->getTitre(), $creances[$i]->getMontant());
+        for(; $i < count($creances); $i++) {
+            $creance = $creances[$i];
+            $rbs = '';
+            $both = $creance->getRabaisIfInFamille() > 0 && $creance->getRabais() > 0;
+            if ($creance->getRabais() > 0) $rbs .= "Rabais " . $creance->getRabais() . "%";
+            if ($creance->getRabaisIfInFamille() > 0) $rbs .= ($both ? ' - ' : '') . "Rabais famille " . $creance->getRabaisIfInFamille() . "%";
+            $this->printCreanceLine($fpdf, $currentY, $i, $creances[$i]->getTitre() . (strlen($rbs) ? " ($rbs)" : ''), $creances[$i]->getActualMontant());
+        }
 
         if(count($facture->getPaiements()) > 0)
             $this->printCreanceLine($fpdf, $currentY, $i++, "Montant déjà payé", -($facture->getMontantPaye()));
