@@ -225,9 +225,9 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
         for(; $i < count($creances); $i++) {
             $creance = $creances[$i];
             $rbs = '';
-            $both = $creance->getRabaisIfInFamille() > 0 && $creance->getRabais() > 0;
+            $both = $creance->rabaisFamilleApplicable() > 0 && $creance->getRabais() > 0;
             if ($creance->getRabais() > 0) $rbs .= "Rabais " . $creance->getRabais() . "%";
-            if ($creance->getRabaisIfInFamille() > 0) $rbs .= (($both ? ' - ' : '') . "Rabais famille " . $creance->getRabaisIfInFamille() . "%");
+            if ($creance->rabaisFamilleApplicable()) $rbs .= (($both ? ' - ' : '') . "Rabais famille " . $creance->getRabaisIfInFamille() . "%");
             $this->printCreanceLine($fpdf, $currentY, $i, $creances[$i]->getTitre() . (strlen($rbs) ? " ($rbs)" : ''), $creances[$i]->getActualMontant());
         }
 

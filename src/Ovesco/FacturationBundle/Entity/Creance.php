@@ -149,17 +149,22 @@ class Creance
      * @return float|int
      */
     public function getActualMontant() {
-        $rabaisFamille = 0;
         $rabais = ($this->montant * ($this->rabais / 100));
+        $rabaisFamille = $this->rabaisFamilleApplicable() ? ($this->montant * ($this->rabaisIfInFamille / 100)) : 0;
+        return $this->montant - $rabaisFamille - $rabais;
+    }
+
+    public function rabaisFamilleApplicable() {
+
         if ($this->facture) {
             $debiteur = $this->facture->getDebiteur();
             $famille = $debiteur instanceof BaseFamille ? $debiteur : $debiteur->getFamille();
             $inscrits = 0;
             foreach($famille->getMembres() as $membre)
                 if ($membre->getStatut() === BaseMembre::INSCRIT) $inscrits++;
-            $rabaisFamille = $inscrits > 1 ? ($this->montant * ($this->rabaisIfInFamille / 100)) : 0;
+            return $inscrits > 1;
         }
-        return $this->montant - $rabaisFamille - $rabais;
+        return false;
     }
 
     /**
