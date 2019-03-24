@@ -192,13 +192,13 @@ class PDFFacture implements ExporterInterface, ConfigurableExporterInterface
 
         if($adresse) {
 
-            $fpdf->SetXY(130, 33);
+            $fpdf->SetXY(130, 46);
             $fpdf->Cell(50, 10, utf8_decode($facture->getDebiteur()->__toString()));
 
-            $fpdf->SetXY(130, 37);
+            $fpdf->SetXY(130, 50);
             $fpdf->Cell(50, 10, utf8_decode($adresse->getRue()));
 
-            $fpdf->SetXY(130, 41);
+            $fpdf->SetXY(130, 54);
             $fpdf->Cell(50, 10, $adresse->getNpa() . " " . utf8_decode($adresse->getLocalite()));
 
         }
