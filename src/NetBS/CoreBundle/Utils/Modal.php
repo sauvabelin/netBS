@@ -3,6 +3,7 @@
 namespace NetBS\CoreBundle\Utils;
 
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,8 +21,8 @@ class Modal
         return $response;
     }
 
-    public static function ack($message) {
-        return new Response($message, 202);
+    public static function ack($message, $type = 'info') {
+        return new JsonResponse(['type' => $type, 'message' => $message], 202);
     }
 
     public static function renderModal(FormInterface $form) {

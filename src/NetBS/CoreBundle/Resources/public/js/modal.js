@@ -16,20 +16,25 @@ var BSModal = function(path, params) {
 
         var mdl = this;
 
-        $.post(path, params).done(function(data) {
+        $.post(path, params).done(function(data, status, response) {
 
-            var modal       = mdl.generate(data);
+            if (parseInt(response.status) === 202)
+                toastr[data.type](data.message);
 
-            $(document.body).append(modal);
-            var $modal      = $('#' + mdl.id);
+            else {
+                var modal = mdl.generate(data);
 
-            $modal.modal();
+                $(document.body).append(modal);
+                var $modal      = $('#' + mdl.id);
 
-            $modal.on('hidden.bs.modal', function() {
-                $modal.remove();
-            });
+                $modal.modal();
 
-            mdl.attachButtonEvents();
+                $modal.on('hidden.bs.modal', function() {
+                    $modal.remove();
+                });
+
+                mdl.attachButtonEvents();
+            }
 
         }).fail(function(err) {
             var modal       = mdl.generate(err.responseText);
@@ -68,6 +73,7 @@ var BSModal = function(path, params) {
 
     this.handleSubmit = function(data, status, response) {
 
+        console.log(data);
         var code    = parseInt(response.status);
 
         if(data === "redirected")
@@ -75,7 +81,7 @@ var BSModal = function(path, params) {
         if(code === 201)
             location.reload();
         if(code === 202)
-            toastr.success(data);
+            toastr[data.type](data.message);
         this.remove();
     };
 

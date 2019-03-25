@@ -129,17 +129,22 @@ class CreanceController extends Controller
 
         $creanceIds = unserialize($merger->getCreanceIds());
         $creances = $this->extractCreances($creanceIds);
-        $factures = $this->generatePack($creances);
+        try {
+            $factures = $this->generatePack($creances);
 
-        if($form->isValid() && $form->isSubmitted()) {
+            if ($form->isValid() && $form->isSubmitted()) {
 
-            /** @var Facture $facture */
-            foreach($factures as $facture) {
-                $facture->setCompteToUse($merger->getCompteToUse());
-                $em->persist($facture);
+                /** @var Facture $facture */
+                foreach ($factures as $facture) {
+                    $facture->setCompteToUse($merger->getCompteToUse());
+                    $facture->setRemarques($merger->getRemarques());
+                    $em->persist($facture);
+                }
+                $em->flush();
+                return Modal::ack(count($factures) . " factures ont été générées, veuillez éventuellement rafraichir la page");
             }
-            $em->flush();
-            return Modal::ack(count($factures) . " factures ont été générées, veuillez éventuellement rafraichir la page");
+        } catch (\Exception $e) {
+            return Modal::ack($e->getMessage(), 'error');
         }
 
         return $this->render('@OvescoFacturation/facture/merge_creances_to_facture.modal.twig', [
