@@ -311,7 +311,9 @@ class PDFQrFacture extends BaseFactureExporter
             'CH'
         ));
 
-        $qrBill->setPaymentAmountInformation(PaymentAmountInformation::create('CHF', $facture->getMontantEncoreDu()));
+        $montant = $facture->getMontantEncoreDu();
+        $montant = $montant < 0 ? 0 : $montant;
+        $qrBill->setPaymentAmountInformation(PaymentAmountInformation::create('CHF', $montant));
         $qrBill->setPaymentReference(PaymentReference::create(
             PaymentReference::TYPE_QR,
             QrPaymentReferenceGenerator::generate(
@@ -319,7 +321,13 @@ class PDFQrFacture extends BaseFactureExporter
                 $facture->getFactureId()
             )
         ));
-        return 'data://text/plain;base64,' . base64_encode($qrBill->getQrCode()->writeString());
+
+        try {
+            return 'data://text/plain;base64,' . base64_encode($qrBill->getQrCode()->writeString());
+        } catch (\Exception $e) {
+            dump($qrBill->getViolations());
+            throw $e;
+        }
     }
 
     /**
