@@ -31,6 +31,13 @@ services:
         tags:
             - { name: netbs.exporter }
 
+    ovesco.facturation.exporter.pdf_qr_factures:
+        class: Ovesco\FacturationBundle\Exporter\PDFQrFacture
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: netbs.exporter }
+
     ovesco.facturation.list.debiteur_factures:
         class: Ovesco\FacturationBundle\ListModel\DebiteurFacturesList
         tags:
@@ -88,6 +95,13 @@ services:
 
     ovesco.facturation.form.config_facture_export:
         class: Ovesco\FacturationBundle\Form\FactureConfigType
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: form.type }
+
+    ovesco.facturation.form.config_qr_facture_export:
+        class: Ovesco\FacturationBundle\Form\QrFactureConfigType
         arguments:
             - "@doctrine.orm.entity_manager"
         tags:

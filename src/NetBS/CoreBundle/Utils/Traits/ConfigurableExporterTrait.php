@@ -7,7 +7,10 @@ trait ConfigurableExporterTrait
     protected $configuration;
 
     public function setConfig($config) {
+        $this->configuration = $config;
+    }
 
-        $this->configuration    = $config;
+    public function getConfiguration() {
+        return $this->configuration;
     }
 }

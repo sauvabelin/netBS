@@ -4466,7 +4466,8 @@ body .app {
 }
 
 .main .main-content .page-aside {
-  height: calc(100vh - 3.6rem);
+  min-height: calc(100vh - 3.6rem);
+  height: 100%;
   width: 280px;
   background: white;
   border-right: 1px solid #e3e3e3;
