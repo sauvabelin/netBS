@@ -12,6 +12,9 @@ use NetBS\SecureBundle\Mapping\BaseUser;
  */
 class BSUser extends BaseUser
 {
+    const HAS_REDIRECT = 'has_a_mail_redirect';
+    const HAS_ACCOUNT = 'has_an_account';
+
     //Nextcloud data
     /**
      * @var bool
@@ -141,6 +144,10 @@ class BSUser extends BaseUser
     public function isInGroup($groupe) {
 
         return $this->membre ? $this->membre->isInGroup($groupe) : false;
+    }
+
+    public function isActif() {
+        return $this->membre ? count($this->membre->getActivesAttributions()) > 0 : false;
     }
 
     public function hasDistinction($distinction) {

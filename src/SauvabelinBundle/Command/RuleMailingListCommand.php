@@ -2,13 +2,14 @@
 
 namespace SauvabelinBundle\Command;
 
+use NetBS\SecureBundle\Mapping\BaseUser;
 use SauvabelinBundle\Entity\RuleMailingList;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-class MailingListCommand extends ContainerAwareCommand
+class RuleMailingListCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -25,14 +26,32 @@ class MailingListCommand extends ContainerAwareCommand
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $isp = $this->getContainer()->get('sauvabelin.isp_config_manager');
-        $listes = $em->getRepository('SauvabelinBundle:RuleMailingList');
+
+
+        $listes = $em->getRepository('SauvabelinBundle:RuleMailingList')->findAll();
         $config = $this->getContainer()->get('netbs.secure.config');
         $users = $em->getRepository($config->getUserClass())->findAll();
         $el = new ExpressionLanguage();
 
+
         /** @var RuleMailingList $liste */
         foreach($listes as $liste) {
-            $address = $isp->getMailingList($liste->getFromAdresse());
+            if ($liste->getFromAdresse() === 'embs@sauvabelin.ch') {
+                $inners = array_filter($users, function (BaseUser $user) use ($el, $liste) {
+                    return $el->evaluate($liste->getElRule(), ['user' => $user]);
+                });
+                dump(array_map(function(BaseUser $user) {
+                    return $user->getSendableEmail();
+                }, $inners));
+                // $address = $isp->getMailingList($liste->getFromAdresse());
+                die;
+            }
         }
+    }
+
+    private function parseList($liste) {
+        return array_filter(explode("\r\n", $liste), function($str) {
+            return strlen($str) > 13;
+        });
     }
 }

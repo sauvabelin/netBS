@@ -6,6 +6,7 @@ use NetBS\CoreBundle\Exporter\PDFPreviewer;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Form\QrFactureConfigType;
 use Ovesco\FacturationBundle\Model\QrFactureConfig;
+use Ovesco\FacturationBundle\Util\BVR;
 use Sprain\SwissQrBill\DataGroup\Element\CombinedAddress;
 use Sprain\SwissQrBill\DataGroup\Element\CreditorInformation;
 use Sprain\SwissQrBill\DataGroup\Element\PaymentAmountInformation;
@@ -118,7 +119,7 @@ class PDFQrFacture extends BaseFactureExporter
         $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 9, 'Reference');
         $fpdf->SetXY($left, $top + $margin + 34);
         $fpdf->SetFont('Arial', '', 8);
-        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 4, '12 23456 67890 54546 67675 53689');
+        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 4, BVR::getCleanReference($facture));
 
         // Payable by
         $fpdf->SetXY($left, $top + $margin + 38);
@@ -147,6 +148,8 @@ class PDFQrFacture extends BaseFactureExporter
         // draw user put amount
         $x = self::DEBTOR_WIDTH - $margin - 30;
         $y = $margin + $top + 7 + 56 + 1;
+
+        /*
         $width = 30;
         $height = 10;
         $fpdf->SetDrawColor(0,0,0);
@@ -165,6 +168,8 @@ class PDFQrFacture extends BaseFactureExporter
 
         if ($this->getConfiguration()->border)
             $fpdf->SetDrawColor(255,0,0);
+        */
+        $fpdf->Image(__DIR__ . '/Facture/coin_receipt.png', $x, $y, 30, 10);
 
         // Acceptance point
         $fpdf->SetFont('Arial', 'B', 6);
@@ -223,10 +228,12 @@ class PDFQrFacture extends BaseFactureExporter
         $fpdf->Cell(12, 5, 'CHF');
 
         // draw user put amount
-        $width = 40;
-        $height = 15;
         $x = $left + 11;
         $y = $top + 3*$margin + 7 + 46 + 6;
+
+        /*
+        $width = 40;
+        $height = 15;
         $fpdf->SetDrawColor(0,0,0);
         $fpdf->SetLineWidth(0.25);
         $fpdf->Line($x, $y, $x + 2, $y);
@@ -243,6 +250,8 @@ class PDFQrFacture extends BaseFactureExporter
 
         if ($this->getConfiguration()->border)
             $fpdf->SetDrawColor(255,0,0);
+        */
+        $fpdf->Image(__DIR__ . '/Facture/coin_paiement.png', $x, $y, 40, 15);
 
         // More information
         $sleft = $left + 51;
@@ -266,7 +275,7 @@ class PDFQrFacture extends BaseFactureExporter
         $fpdf->Cell(87, 11, 'Reference');
         $fpdf->SetXY($sleft, $top + $margin + 33);
         $fpdf->SetFont('Arial', '', 10);
-        $fpdf->Cell(87, 4, '12 23456 67890 54546 67675 53689');
+        $fpdf->Cell(87, 4, BVR::getCleanReference($facture));
 
         // Informations additionnelles
         $fpdf->SetXY($sleft, $top + $margin + 36);

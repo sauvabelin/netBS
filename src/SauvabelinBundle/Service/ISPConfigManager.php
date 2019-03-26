@@ -77,7 +77,6 @@ class ISPConfigManager
     public function getMailbox($email) {
 
         $mailbox    = $this->getClient()->mailUserGet(['email' => $email]);
-
         return count($mailbox) ? $mailbox[0] : null;
     }
 
