@@ -65,7 +65,7 @@ class EtiquettesController extends Controller
         return $this->redirectToRoute('netbs.core.export.export_selected', ['data' => json_encode([
             'itemsClass'    => base64_encode($config->getMembreClass()),
             'selectedIds'   => $ids,
-            'exporterAlias' => 'pdf.etiquettes'
+            'exporterAlias' => 'pdf.etiquettes.v2'
         ])]);
     }
 }

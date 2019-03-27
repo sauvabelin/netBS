@@ -24,7 +24,7 @@ class PDFEtiquettesV2 implements ExporterInterface, ConfigurableExporterInterfac
      */
     public function getAlias()
     {
-        return 'pdf.etiquettes';
+        return 'pdf.etiquettes.v2';
     }
 
     /**
