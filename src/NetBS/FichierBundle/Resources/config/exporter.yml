@@ -21,8 +21,8 @@ services:
         tags:
             - { name: netbs.exporter }
 
-    netbs.fichier.exporter.pdf_etiquettes:
-        class: NetBS\FichierBundle\Exporter\PDFEtiquettes
+    netbs.fichier.exporter.pdf_etiquettes_v2:
+        class: NetBS\FichierBundle\Exporter\PDFEtiquettesV2
         tags:
             - { name: netbs.exporter }
 

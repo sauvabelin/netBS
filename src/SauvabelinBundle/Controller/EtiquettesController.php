@@ -19,7 +19,7 @@ class EtiquettesController extends Controller
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function etiquettesGroupeAction(Request $request, $id) {
+    public function etiquettesGroupeAction($id) {
 
         $em     = $this->get('doctrine.orm.default_entity_manager');
         $config = $this->get('netbs.fichier.config');
