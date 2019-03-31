@@ -20,6 +20,7 @@ class CSVRega extends CSVExporter
     }
 
     private static function convert($ville) {
+
         $villes = [
             "Renens" => "Renens VD",
             "Cheseaux/Lausanne" => "Cheseaux-Lausanne",
@@ -36,11 +37,11 @@ class CSVRega extends CSVExporter
             "Lausanne-26" => "Lausanne 26",
             "Cheseaux-sur-Lausanne" => "Cheseaux-Lausanne",
             "Bretigny-sur-Morrens" => "Bretigny-Morrens",
-            "Fiaugeres" => "St-Martin FR"
+            "Fiaugères" => "St-Martin FR"
         ];
 
         foreach($villes as $key => $result)
-            if (WNGHelper::similar($key, $ville) > 95)
+            if (WNGHelper::similar($key, $ville) > 92)
                 return $result;
 
         return $ville;
