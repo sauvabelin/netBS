@@ -8,6 +8,7 @@ use NetBS\CoreBundle\Utils\StrUtil;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Mapping\Personne;
 use NetBS\FichierBundle\Service\FichierConfig;
+use SauvabelinBundle\Import\Model\WNGHelper;
 
 class CSVRega extends CSVExporter
 {
@@ -16,6 +17,32 @@ class CSVRega extends CSVExporter
     public function __construct(FichierConfig $config)
     {
         $this->config   = $config;
+    }
+
+    private static function convert($ville) {
+        $villes = [
+            "Renens" => "Renens VD",
+            "Cheseaux/Lausanne" => "Cheseaux-Lausanne",
+            "Bussigny" => "Bussigny-Lausanne",
+            "Chappelle-sur-Moudon" => "Chapelle-s-Moudon",
+            "Le Mont" => "Mont-sur-Lausanne",
+            "Cossonay" => "Cossonay-Ville",
+            "Romanel" => "Romanel-s-Lausanne",
+            "Cheseaux" => "Cheseaux-Lausanne",
+            "Saint-Légier" => "St-Légier-Chiésaz",
+            "Cheseaux sur Lausanne" => "Cheseaux-Lausanne",
+            "Le Mont-sur-Lausanne" => "Mont-sur-Lausanne",
+            "Lausanne-26" => "Lausanne 26",
+            "Cheseaux-sur-Lausanne" => "Cheseaux-Lausanne",
+            "Bretigny-sur-Morrens" => "Bretigny-Morrens",
+            "Fiaugeres" => "St-Martin FR"
+        ];
+
+        foreach($villes as $key => $result)
+            if (WNGHelper::similar($key, $ville) > 95)
+                return $result;
+
+        return $ville;
     }
 
     /**
@@ -76,7 +103,7 @@ class CSVRega extends CSVExporter
             })
             ->addColumn('LOCALITE', function(BaseMembre $membre) {
                 if($adresse = $membre->getSendableAdresse())
-                    return StrUtil::removeAccents($adresse->getLocalite());
+                    return StrUtil::removeAccents(self::convert($adresse->getLocalite()));
             })
             ->addColumn('PAYS', function(BaseMembre $membre) {
                 return 'CH';
