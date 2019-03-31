@@ -61,5 +61,13 @@ class PageGroupeListener
                 ]);
             }
         }
+
+
+        $column->addRow()->addColumn(0, 12)->setBlock(TemplateBlock::class, [
+            'template' => '@Sauvabelin/block/rega_groupe.block.twig',
+            'params' => [
+                'groupe' => $groupe
+            ]
+        ]);
     }
 }

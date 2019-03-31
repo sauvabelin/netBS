@@ -33,6 +33,7 @@ class CSVRega extends CSVExporter
             "Saint-Légier" => "St-Légier-Chiésaz",
             "Cheseaux sur Lausanne" => "Cheseaux-Lausanne",
             "Mont sur Lausanne" => "Mont-sur-Lausanne",
+            "Le Mont sur Lausanne" => "Mont-sur-Lausanne",
             "Le Mont-sur-Lausanne" => "Mont-sur-Lausanne",
             "Lausanne-26" => "Lausanne 26",
             "Cheseaux-sur-Lausanne" => "Cheseaux-Lausanne",
