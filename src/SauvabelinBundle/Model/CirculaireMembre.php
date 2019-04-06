@@ -83,6 +83,11 @@ class CirculaireMembre implements GroupSequenceProviderInterface
     public $localite;
 
     /**
+     * @var string
+     */
+    public $pays = 'CH';
+
+    /**
      * @Assert\Email(groups={"noFamily"})
      * @var string
      */
@@ -151,6 +156,11 @@ class CirculaireMembre implements GroupSequenceProviderInterface
     /**
      * @var string
      */
+    public $r1pays = 'CH';
+
+    /**
+     * @var string
+     */
     public $r1telephone;
 
     /**
@@ -201,6 +211,11 @@ class CirculaireMembre implements GroupSequenceProviderInterface
      * @var string
      */
     public $r2localite;
+
+    /**
+     * @var string
+     */
+    public $r2pays = 'CH';
 
     /**
      * @var string
@@ -256,7 +271,8 @@ class CirculaireMembre implements GroupSequenceProviderInterface
         $adresse    = new Adresse();
         $adresse->setRue($this->adresse)
             ->setNpa($this->npa)
-            ->setLocalite($this->localite);
+            ->setLocalite($this->localite)
+            ->setPays($this->pays);
 
         $famille->addAdresse($adresse);
 
@@ -279,6 +295,7 @@ class CirculaireMembre implements GroupSequenceProviderInterface
             if(!empty($this->r1adresse) && !empty($this->r1npa) && !empty($this->r1localite))
                 $geniteur->addAdresse((new Adresse())->setRue($this->r1adresse)
                         ->setNpa($this->r1npa)
+                        ->setPays($this->r1pays)
                         ->setLocalite($this->r1localite));
 
             if(!empty($this->r1telephone))
@@ -302,6 +319,7 @@ class CirculaireMembre implements GroupSequenceProviderInterface
             if(!empty($this->r2adresse) && !empty($this->r2npa) && !empty($this->r2localite))
             $geniteur->addAdresse((new Adresse())->setRue($this->r2adresse)
                 ->setNpa($this->r2npa)
+                ->setPays($this->r2pays)
                 ->setLocalite($this->r2localite));
 
             if(!empty($this->r2telephone))

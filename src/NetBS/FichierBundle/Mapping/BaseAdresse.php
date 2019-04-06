@@ -57,6 +57,15 @@ class BaseAdresse implements GroupSequenceProviderInterface, EqualInterface
     protected $localite;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="pays", type="string", length=255)
+     * @Groups({"default"})
+     * @Assert\NotBlank(groups={"checkable"})
+     */
+    protected $pays = 'CH';
+
+    /**
      * @var BaseContactInformation
      */
     protected $contactInformation;
@@ -191,5 +200,23 @@ class BaseAdresse implements GroupSequenceProviderInterface, EqualInterface
         return [
             $this->isEmpty() ? '' : 'checkable'
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getPays()
+    {
+        return $this->pays;
+    }
+
+    /**
+     * @param string $pays
+     * @return BaseAdresse
+     */
+    public function setPays($pays)
+    {
+        $this->pays = $pays;
+        return $this;
     }
 }

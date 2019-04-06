@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use NetBS\CoreBundle\Exporter\PDFPreviewer;
 use NetBS\CoreBundle\Model\ConfigurableExporterInterface;
 use NetBS\CoreBundle\Model\ExporterInterface;
+use NetBS\CoreBundle\Utils\Countries;
 use NetBS\CoreBundle\Utils\StrUtil;
 use NetBS\CoreBundle\Utils\Traits\ConfigurableExporterTrait;
 use NetBS\FichierBundle\Mapping\BaseFamille;
@@ -151,7 +152,6 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
         $date = $config->date instanceof \DateTime ? $config->date : $facture->getDate();
 
         $fpdf->AddPage();
-        $debiteur = $facture->getDebiteur();
         $fpdf->Image(__DIR__ . '/Facture/logo.png', 15, 20, 16, 16);
         $fpdf->SetFont('OpenSans', 'B', 10);
 
@@ -166,23 +166,39 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
         $fpdf->SetXY(35, 25);
         $fpdf->Cell(50, 10, utf8_decode($model->getNpaVille()));
 
+        $fpdf->SetXY(35, 29);
+        $fpdf->Cell(50, 10, utf8_decode("Suisse"));
+
         // Print date and destinataire
         $fpdf->SetXY(130, 17);
         $printDate = $date->format('d') . " " .$this->toMois($date->format('m')) . " " . $date->format('Y');
         $fpdf->Cell(50, 10, utf8_decode($model->getCityFrom() . " le $printDate"));
 
-        $adresse    = $facture->getDebiteur()->getSendableAdresse();
+        $debiteur = $facture->getDebiteur();
+        $adresse = $debiteur->getSendableAdresse();
 
         if($adresse) {
 
+            $title = $debiteur->__toString();
+            if ($debiteur instanceof BaseFamille) {
+                $debiteurs = [];
+                foreach($facture->getCreances() as $creance)
+                    $debiteurs[$creance->_getDebiteurId()] = $creance->getDebiteur();
+                if (count($debiteurs) === 1)
+                    $title = "Aux parents de " . array_pop($debiteurs)->__toString();
+            }
+
             $fpdf->SetXY(130, 46);
-            $fpdf->Cell(50, 10, utf8_decode($facture->getDebiteur()->__toString()));
+            $fpdf->Cell(50, 10, utf8_decode($title));
 
             $fpdf->SetXY(130, 50);
             $fpdf->Cell(50, 10, utf8_decode($adresse->getRue()));
 
             $fpdf->SetXY(130, 54);
             $fpdf->Cell(50, 10, $adresse->getNpa() . " " . utf8_decode($adresse->getLocalite()));
+
+            $fpdf->SetXY(130, 58);
+            $fpdf->Cell(50, 10, utf8_decode(Countries::getName($adresse->getPays())));
         }
 
         // Print title

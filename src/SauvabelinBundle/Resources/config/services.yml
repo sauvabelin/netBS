@@ -167,3 +167,10 @@ services:
             - "@session"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: verifyUser }
+
+    sauvabelin.listener.doctrine_membre_adabs_id:
+        class: SauvabelinBundle\Listener\DoctrineMembreAdabsIdListener
+        arguments:
+            - "@netbs.params"
+        tags:
+            - { name: doctrine.event_listener, event: postLoad }

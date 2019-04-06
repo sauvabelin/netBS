@@ -371,6 +371,10 @@ abstract class BaseMembre extends Personne implements EqualInterface
         return $this->desinscription;
     }
 
+    public function consideredInscrit() {
+        return $this->statut === self::INSCRIT;
+    }
+
     /**
      * Set statut
      *

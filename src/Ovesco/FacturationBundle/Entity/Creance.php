@@ -161,7 +161,7 @@ class Creance
             $famille = $debiteur instanceof BaseFamille ? $debiteur : $debiteur->getFamille();
             $inscrits = 0;
             foreach($famille->getMembres() as $membre)
-                if ($membre->getStatut() === BaseMembre::INSCRIT) $inscrits++;
+                if ($membre->consideredInscrit()) $inscrits++;
             return $inscrits > 1;
         }
         return false;

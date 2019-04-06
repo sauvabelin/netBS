@@ -8,6 +8,7 @@ use NetBS\CoreBundle\Form\Type\Select2DocumentType;
 use NetBS\CoreBundle\Form\Type\SexeType;
 use NetBS\CoreBundle\Form\Type\TelephoneMaskType;
 use NetBS\CoreBundle\Service\ParameterManager;
+use NetBS\CoreBundle\Utils\Countries;
 use NetBS\FichierBundle\Entity\Fonction;
 use NetBS\FichierBundle\Entity\Geniteur;
 use NetBS\FichierBundle\Select2\GroupeProvider;
@@ -48,6 +49,11 @@ class CirculaireMembreType extends AbstractType
             ->add('npa', NumberType::class, array('label' => "NPA", 'required' => false))
             ->add('inscription', DateMaskType::class, ['label' => 'Inscription'])
             ->add('localite', TextType::class, array('label' => 'Localité', 'required' => false))
+            ->add('pays', ChoiceType::class, array(
+                'label' => 'Pays',
+                'required' => false,
+                'choices' => array_flip(Countries::getCountries())
+                ))
             ->add('email', EmailType::class, array('label' => 'Email', 'required' => false))
             ->add('telephone', TelephoneMaskType::class, array('label' => 'Téléphone', 'required' => false))
             ->add('natel', TelephoneMaskType::class, array('label' => 'Natel', 'required' => false))
@@ -77,6 +83,11 @@ class CirculaireMembreType extends AbstractType
             ->add('r1adresse', TextType::class, array('label' => 'Adresse', 'required' => false))
             ->add('r1npa', NumberType::class, array('label' => 'NPA', 'required' => false))
             ->add('r1localite', TextType::class, array('label' => 'Localité', 'required' => false))
+            ->add('r1pays', ChoiceType::class, array(
+                'label' => 'Pays',
+                'required' => false,
+                'choices' => array_flip(Countries::getCountries())
+            ))
             ->add('r1telephone', TelephoneMaskType::class, array('label' => 'Téléphone', 'required' => false))
             ->add('r1email', EmailType::class, array('label' => 'Email', 'required' => false))
             ->add('r1profession', TextType::class, array('label' => 'Profession', 'required' => false))
@@ -91,6 +102,11 @@ class CirculaireMembreType extends AbstractType
             ->add('r2adresse', TextType::class, array('label' => 'Adresse', 'required' => false))
             ->add('r2npa', NumberType::class, array('label' => 'NPA', 'required' => false))
             ->add('r2localite', TextType::class, array('label' => 'Localité', 'required' => false))
+            ->add('r2pays', ChoiceType::class, array(
+                'label' => 'Pays',
+                'required' => false,
+                'choices' => array_flip(Countries::getCountries())
+            ))
             ->add('r2telephone', TelephoneMaskType::class, array('label' => 'Téléphone', 'required' => false))
             ->add('r2email', EmailType::class, array('label' => 'Email', 'required' => false))
             ->add('r2profession', TextType::class, array('label' => 'Profession', 'required' => false))

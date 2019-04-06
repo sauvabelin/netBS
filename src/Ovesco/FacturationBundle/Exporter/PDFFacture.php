@@ -3,6 +3,7 @@
 namespace Ovesco\FacturationBundle\Exporter;
 
 use NetBS\CoreBundle\Exporter\PDFPreviewer;
+use NetBS\CoreBundle\Utils\Countries;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use Ovesco\FacturationBundle\Entity\Compte;
@@ -125,6 +126,8 @@ class PDFFacture extends BaseFactureExporter
             $fpdf->Cell(10, $interligne, utf8_decode($adresse->getRue()));
             $fpdf->SetXY($x, $y + $interligne * 2);
             $fpdf->Cell(10, $interligne, utf8_decode($adresse->getNpa(). ' ' . $adresse->getLocalite()));
+            $fpdf->SetXY($x, $y + $interligne * 3);
+            $fpdf->Cell(10, $interligne, utf8_decode(Countries::getName($adresse->getPays())));
         }
     }
 

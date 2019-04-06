@@ -197,7 +197,7 @@ class Facture
     /**
      * Get creances.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Creance[]
      */
     public function getCreances()
     {

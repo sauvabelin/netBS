@@ -25,6 +25,19 @@ class BSMembre extends BaseMembre
     protected $numeroBS;
 
     /**
+     * @var int
+     */
+    private $_adabsId;
+
+    /**
+     * We need adabs ID for facturation shit^2
+     * @param $adabsId
+     */
+    public function _setAdabsId($adabsId) {
+        $this->_adabsId = intval($adabsId);
+    }
+
+    /**
      * @return int
      */
     public function getNumeroBS()
@@ -51,7 +64,7 @@ class BSMembre extends BaseMembre
                 $close[] = $attribution;
         else if(in_array($statut, [self::DECEDE, self::AUTRE]))
             foreach ($this->getActivesAttributions() as $attribution)
-                if (strtolower($attribution->getGroupe()->getNom()) !== 'adabs')
+                if ($attribution->getGroupeId() !== $this->_adabsId)
                     $close[] = $attribution;
 
         /** @var BaseAttribution $attribution */
@@ -59,5 +72,15 @@ class BSMembre extends BaseMembre
             $attribution->setDateFin(new \DateTime());
 
         return $this;
+    }
+
+    public function consideredInscrit()
+    {
+        $adabs = false;
+        foreach($this->getActivesAttributions() as $attribution)
+            if ($attribution->getGroupeId() === $this->_adabsId)
+                $adabs = true;
+
+        return $this->statut === BaseMembre::INSCRIT && !$adabs;
     }
 }

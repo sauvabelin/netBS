@@ -34,6 +34,7 @@ class OwnableAdresse extends BaseAdresse
             ->setLocalite($adresse->getLocalite())
             ->setNpa($adresse->getNpa())
             ->setRue($adresse->getRue())
+            ->setPays($adresse->getPays())
             ->setRemarques($adresse->getRemarques());
 
         $this->id = $adresse->getId();

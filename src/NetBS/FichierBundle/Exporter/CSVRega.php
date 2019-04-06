@@ -109,7 +109,9 @@ class CSVRega extends CSVExporter
                     return StrUtil::removeAccents(self::convert($adresse->getLocalite()));
             })
             ->addColumn('PAYS', function(BaseMembre $membre) {
-                return 'CH';
+                if($adresse = $membre->getSendableAdresse())
+                    return $adresse->getPays() === "CH" ? "CH" : "DIV";
+                return "CH";
             })
             ->addColumn('NATIONALITE', function(BaseMembre $membre) {
                 return 'CH';

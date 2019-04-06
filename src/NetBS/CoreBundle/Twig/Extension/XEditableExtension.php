@@ -96,7 +96,7 @@ class XEditableExtension extends \Twig_Extension
         foreach($choices as $option)
             $return[] = (object)['value' => $option->value, 'text' => $option->label];
 
-        return json_encode($return);
+        return $return;
     }
 
     public function toSelect2(array $choices) {
@@ -107,7 +107,7 @@ class XEditableExtension extends \Twig_Extension
         foreach($choices as $option)
             $return[] = (object)['id' => $option->value, 'text' => $option->label];
 
-        return json_encode($return);
+        return $return;
     }
 
 }

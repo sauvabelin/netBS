@@ -35,11 +35,11 @@
         class="editable"
         data-type="textarea"
         data-value="{{ value }}"
-    {% elseif type in CHOICES %}
 
+    {% elseif type in CHOICES %}
         data-type="select"
-        data-source='{{ form.vars['choices']|xEditableChoices }}'
-        data-value="{{ value|join(',') }}"
+        data-source='{{ form.vars['choices']|xEditableChoices|json_encode }}'
+        data-value='{{ value }}'
         class="editable"
 
     {% elseif type in DATES %}
@@ -61,12 +61,10 @@
 
         class="editable"
         data-type="select2"
-        data-source='{{ form.vars['choices']|xEditableSelect2 }}'
+        data-value="{{ value }}"
+        data-source='{{ form.vars['choices']|xEditableSelect2|json_encode }}'
         {% if form.vars.multiple %}
-            data-value="{{ value|json_encode }}"
             data-select2="{{ {'multiple' : true}|json_encode }}"
-        {% else %}
-            data-value="{{ value }}"
         {% endif %}
 
     {% elseif type in AJAX %}

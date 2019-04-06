@@ -3,10 +3,12 @@
 namespace NetBS\FichierBundle\Form\Contact;
 
 use NetBS\CoreBundle\Form\Type\SwitchType;
+use NetBS\CoreBundle\Utils\Countries;
 use NetBS\FichierBundle\Entity\Adresse;
 use NetBS\FichierBundle\Service\FichierConfig;
 use NetBS\FichierBundle\Utils\Form\RemarquesUtils;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,6 +30,11 @@ class AdresseType extends AbstractType
             ->add('npa', NumberType::class, array('label' => 'NPA', 'required' => false))
             ->add('localite', TextType::class, array('label' => 'Localité', 'required' => false))
             ->add('expediable', SwitchType::class, array('label' => 'Prioritaire', 'required' => false))
+            ->add('pays', ChoiceType::class, array(
+                'label' => 'Pays',
+                'required' => false,
+                'choices' => array_flip(Countries::getCountries()),
+            ))
         ;
 
         RemarquesUtils::addRemarquesField($builder);
