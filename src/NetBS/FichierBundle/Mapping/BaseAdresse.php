@@ -4,6 +4,7 @@ namespace NetBS\FichierBundle\Mapping;
 
 use Doctrine\ORM\Mapping as ORM;
 use NetBS\CoreBundle\Model\EqualInterface;
+use NetBS\CoreBundle\Utils\Countries;
 use NetBS\FichierBundle\Utils\Entity\ExpediableTrait;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -208,6 +209,14 @@ class BaseAdresse implements GroupSequenceProviderInterface, EqualInterface
     public function getPays()
     {
         return $this->pays;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaysFull() {
+
+        return Countries::getName($this->pays);
     }
 
     /**

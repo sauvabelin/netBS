@@ -117,9 +117,9 @@ class CSVMembre extends CSVExporter implements ConfigurableExporterInterface
      * Returns the configuration object class
      * @return string
      */
-    public function getConfigClass()
+    public function getBasicConfig()
     {
-        return CSVMembreConfig::class;
+        return new CSVMembreConfig();
     }
 
     /**

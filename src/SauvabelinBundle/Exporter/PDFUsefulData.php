@@ -109,9 +109,9 @@ class PDFUsefulData extends PDFExporter implements ConfigurableExporterInterface
      * Returns the configuration object class
      * @return string
      */
-    public function getConfigClass()
+    public function getBasicConfig()
     {
-        return UsefulDataConfig::class;
+        return new UsefulDataConfig();
     }
 
     /**

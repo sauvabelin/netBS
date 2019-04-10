@@ -126,8 +126,11 @@ class PDFFacture extends BaseFactureExporter
             $fpdf->Cell(10, $interligne, utf8_decode($adresse->getRue()));
             $fpdf->SetXY($x, $y + $interligne * 2);
             $fpdf->Cell(10, $interligne, utf8_decode($adresse->getNpa(). ' ' . $adresse->getLocalite()));
-            $fpdf->SetXY($x, $y + $interligne * 3);
-            $fpdf->Cell(10, $interligne, utf8_decode(Countries::getName($adresse->getPays())));
+
+            if ($adresse->getPays() !== "CH") {
+                $fpdf->SetXY($x, $y + $interligne * 3);
+                $fpdf->Cell(10, $interligne, utf8_decode(Countries::getName($adresse->getPays())));
+            }
         }
     }
 
@@ -155,9 +158,9 @@ class PDFFacture extends BaseFactureExporter
      * Returns the configuration object class
      * @return string
      */
-    public function getConfigClass()
+    public function getBasicConfig()
     {
-        return FactureConfig::class;
+        return new FactureConfig();
     }
 
     /**

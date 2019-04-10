@@ -8,6 +8,7 @@ use NetBS\CoreBundle\Form\Type\DatepickerType;
 use NetBS\CoreBundle\Form\Type\SwitchType;
 use Ovesco\FacturationBundle\Model\QrFactureConfig;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -32,6 +33,8 @@ class QrFactureConfigType extends FPDFType
                 'label' => 'Modèle à utiliser',
                 'choices' => array_flip($choices)
             ])
+            ->add('adresseLeft', NumberType::class, ['label' => 'Gauche adresse postale'])
+            ->add('adresseTop', NumberType::class, ['label' => 'Haut adresse postale'])
             ->add('date', DatepickerType::class, [
                 'label' => 'Date sur la facture',
                 'required' => false,

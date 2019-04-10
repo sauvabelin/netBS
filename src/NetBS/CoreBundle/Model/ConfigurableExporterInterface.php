@@ -12,9 +12,9 @@ interface ConfigurableExporterInterface
 
     /**
      * Returns the configuration object class
-     * @return string
+     * @return ExporterConfigInterface|ExporterConfigInterface[]
      */
-    public function getConfigClass();
+    public function getBasicConfig();
 
     /**
      * Sets the configuration for this export

@@ -2,7 +2,9 @@
 
 namespace NetBS\FichierBundle\Exporter\Config;
 
-class CSVMembreConfig
+use NetBS\CoreBundle\Model\ExporterConfigInterface;
+
+class CSVMembreConfig implements ExporterConfigInterface
 {
     public $adresse = true;
 
@@ -15,4 +17,20 @@ class CSVMembreConfig
     public $fonction = true;
 
     public $sexe = true;
+
+    /**
+     * @return string
+     */
+    public static function getName()
+    {
+        return "Par défaut";
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getDescription()
+    {
+        return null;
+    }
 }

@@ -3,11 +3,14 @@
 namespace Ovesco\FacturationBundle\Model;
 
 use NetBS\CoreBundle\Exporter\Config\FPDFConfig;
+use NetBS\CoreBundle\Model\ExporterConfigInterface;
 
-class FactureConfig extends FPDFConfig
+class FactureConfig extends FPDFConfig implements ExporterConfigInterface
 {
     public $setPrintDate = true;
     public $model = null;
+    public $adresseTop = 46; // décalage haut adresse lettre
+    public $adresseLeft = 130; // décalage gauche adresse lettre
     public $wg = 8; // marge gauche BVR
     public $hg = 248;// ligne codage gauche
     public $haddr = 190; // décalage hauteur adresses du haut
@@ -26,5 +29,21 @@ class FactureConfig extends FPDFConfig
         $this->setPrintDate = $printDate;
         $this->margeHaut = 10;
         $this->margeGauche = 12.3;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getName()
+    {
+        return "Par défaut";
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getDescription()
+    {
+        return null;
     }
 }

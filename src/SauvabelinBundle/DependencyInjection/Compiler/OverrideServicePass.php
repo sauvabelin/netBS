@@ -3,6 +3,7 @@
 namespace SauvabelinBundle\DependencyInjection\Compiler;
 
 use Ovesco\GalerieBundle\Imagine\GalerieLoader;
+use SauvabelinBundle\Exporter\EtiquettesV2Exporter;
 use SauvabelinBundle\ListModel\BSUserList;
 use SauvabelinBundle\LogRepresenter\MembreRepresenter;
 use SauvabelinBundle\Searcher\BSMembreSearcher;
@@ -19,5 +20,7 @@ class OverrideServicePass implements CompilerPassInterface
         $container->getDefinition('netbs.fichier.searcher.membres')->setClass(BSMembreSearcher::class);
         $container->getDefinition('netbs.secure.user_manager')->setClass(UserManager::class);
         $container->getDefinition('liip_imagine.binary.loader.prototype.filesystem')->setClass(GalerieLoader::class);
+
+        $container->getDefinition('netbs.fichier.exporter.pdf_etiquettes_v2')->setClass(EtiquettesV2Exporter::class);
     }
 }

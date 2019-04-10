@@ -2,6 +2,7 @@
 
 namespace NetBS\CoreBundle\Service;
 
+use NetBS\CoreBundle\Model\ConfigurableExporterInterface;
 use NetBS\CoreBundle\Model\ExporterInterface;
 
 class ExporterManager

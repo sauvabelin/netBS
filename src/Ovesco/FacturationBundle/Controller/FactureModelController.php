@@ -22,8 +22,6 @@ class FactureModelController extends Controller
      */
 
     public function listAction() {
-        $el = new ExpressionLanguage();
-        dump($el->evaluate("'yolo'"));
         return $this->render('@NetBSFichier/generic/page_generic.html.twig', [
             'title' => 'Modèles de facture',
             'subtitle' => "Tous les modèles de facture enregistrés et utilisables",

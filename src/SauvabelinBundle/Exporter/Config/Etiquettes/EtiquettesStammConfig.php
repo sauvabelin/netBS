@@ -1,11 +1,11 @@
 <?php
 
-namespace NetBS\FichierBundle\Exporter\Config;
-
+namespace SauvabelinBundle\Exporter\Config\Etiquettes;
 
 use NetBS\CoreBundle\Model\ExporterConfigInterface;
+use NetBS\FichierBundle\Exporter\Config\EtiquettesV2Config;
 
-class EtiquettesV2Config implements ExporterConfigInterface
+class EtiquettesStammConfig extends EtiquettesV2Config implements ExporterConfigInterface
 {
     public $reperes = false;
 
@@ -31,19 +31,13 @@ class EtiquettesV2Config implements ExporterConfigInterface
 
     public $mergeFamilles = true;
 
-    /**
-     * @return string
-     */
     public static function getName()
     {
-        return "Par défaut";
+        return "Stamm DN2250";
     }
 
-    /**
-     * @return string|null
-     */
     public static function getDescription()
     {
-        return null;
+        return "Imprimante du stamm";
     }
 }

@@ -5,6 +5,7 @@ namespace NetBS\CoreBundle\Controller;
 use NetBS\CoreBundle\Entity\ExportConfiguration;
 use NetBS\CoreBundle\Exporter\ExportBlob;
 use NetBS\CoreBundle\Model\ConfigurableExporterInterface;
+use NetBS\CoreBundle\Model\ExporterConfigInterface;
 use NetBS\CoreBundle\Model\ExporterInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,12 +54,23 @@ class ExportController extends Controller
     public function switchConfigAction($blobKey, $configId) {
 
         /** @var ExportBlob $blob */
-        $blob   = unserialize($this->get('session')->get($blobKey));
-        $em     = $this->get('doctrine.orm.entity_manager');
-        $config = null;
+        $blob       = unserialize($this->get('session')->get($blobKey));
+        $em         = $this->get('doctrine.orm.entity_manager');
+        /** @var ConfigurableExporterInterface $exporter */
+        $exporter   = $this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias());
+        $data       = explode("__", $configId);
+        $config     = null;
 
         if($configId === 'new')
-            $config = $this->getNewConfig($this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias()));
+            $config = $this->getNewConfig($exporter->getBasicConfig(), $exporter->getAlias());
+
+        elseif($data[0] === "model") {
+            $base = array_filter($exporter->getBasicConfig(), function($config) use ($data) {
+                return get_class($config) === base64_decode($data[1]);
+            });
+
+            $config = $this->getNewConfig(array_shift($base), $exporter->getAlias());
+        }
 
         else
             $config = $em->getRepository('NetBSCoreBundle:ExportConfiguration')->findOneBy([
@@ -139,6 +151,7 @@ class ExportController extends Controller
 
         return $this->render('@NetBSCore/export/check_export.html.twig', [
             'form'      => $form->createView(),
+            'exporter'  => $exporter,
             'configs'   => $configs,
             'blob'      => $blob
         ]);
@@ -238,26 +251,29 @@ class ExportController extends Controller
             'exporterAlias' => $exporter->getAlias()
         ));
 
-        if(count($configs) == 0)
-            $configs[] = $this->getNewConfig($exporter);
+        if(count($configs) == 0) {
+            $class = is_array($exporter->getBasicConfig()) ? $exporter->getBasicConfig()[0] : $exporter->getBasicConfig();
+            $configs[] = $this->getNewConfig($class, $exporter->getAlias());
+        }
 
         return $configs;
     }
 
     /**
      * @param ConfigurableExporterInterface $exporter
+     * @param null $model
      * @return ExportConfiguration
      */
-    protected function getNewConfig(ConfigurableExporterInterface $exporter) {
+    protected function getNewConfig(ExporterConfigInterface $base, $alias) {
 
         $em     = $this->get('doctrine.orm.entity_manager');
         $config = new ExportConfiguration();
-        $name   = $exporter->getConfigClass();
+        /** @var ExporterConfigInterface $item */
 
         $config->setUser($this->getUser())
-            ->setExporterAlias($exporter->getAlias())
-            ->setConfiguration(new $name())
-            ->setNom("Config. de base");
+            ->setExporterAlias($alias)
+            ->setConfiguration($base)
+            ->setNom($base->getName());
 
         $em->persist($config);
         $em->flush();

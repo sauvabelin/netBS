@@ -37,6 +37,8 @@ class FactureConfigType extends FPDFType
                 'label' => 'Date sur la facture',
                 'required' => false,
             ])
+            ->add('adresseLeft', NumberType::class, ['label' => 'Gauche adresse postale'])
+            ->add('adresseTop', NumberType::class, ['label' => 'Haut adresse postale'])
             ->add('wg', NumberType::class, ['label' => "Décalement gauche BVR"])
             ->add('hg', NumberType::class, ['label' => "Ligne de codage gauche"])
             ->add('haddr', NumberType::class, ['label' => 'Position Y adresses haut'])

@@ -2,7 +2,9 @@
 
 namespace NetBS\FichierBundle\Exporter\Config;
 
-class PDFListMembresConfig
+use NetBS\CoreBundle\Model\ExporterConfigInterface;
+
+class PDFListMembresConfig implements ExporterConfigInterface
 {
     /**
      * @var string
@@ -13,4 +15,20 @@ class PDFListMembresConfig
      * @var int
      */
     public $fontSize = 12;
+
+    /**
+     * @return string
+     */
+    public static function getName()
+    {
+        return "Par défaut";
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getDescription()
+    {
+        return null;
+    }
 }

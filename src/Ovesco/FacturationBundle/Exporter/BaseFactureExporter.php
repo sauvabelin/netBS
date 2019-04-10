@@ -114,7 +114,7 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
             ->find($modelId);
         else {
             $models = $this->manager->getRepository('OvescoFacturationBundle:FactureModel')
-                ->createQueryBuilder('m')->orderBy('m.poids')->getQuery()->getResult();
+                ->createQueryBuilder('m')->orderBy('m.poids', 'DESC')->getQuery()->getResult();
 
             /** @var FactureModel $item */
             foreach($models as $item)
@@ -135,11 +135,13 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
             $string = str_replace('[', "'~", str_replace("]", "~'", "'$string'"));
         }
 
-        return $this->engine->evaluate($string, [
+        $res = $this->engine->evaluate($string, [
             'facture' => $facture,
             'debiteur' => $facture->getDebiteur(),
             'isFamille' => $facture->getDebiteur() instanceof BaseFamille
         ]);
+
+        return $res;
     }
 
     private function printFacture(Facture $facture, \FPDF $fpdf) {
@@ -176,29 +178,36 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
 
         $debiteur = $facture->getDebiteur();
         $adresse = $debiteur->getSendableAdresse();
-
+        $adresseIndex = 0;
         if($adresse) {
-
             $title = $debiteur->__toString();
-            if ($debiteur instanceof BaseFamille) {
+            if ($debiteur instanceof BaseFamille  && $adresse->getPays() === "CH") {
                 $debiteurs = [];
                 foreach($facture->getCreances() as $creance)
                     $debiteurs[$creance->_getDebiteurId()] = $creance->getDebiteur();
-                if (count($debiteurs) === 1)
-                    $title = "Aux parents de " . array_pop($debiteurs)->__toString();
+                if (count($debiteurs) === 1) {
+                    $fpdf->SetXY($config->adresseLeft, $config->adresseTop + 4 * $adresseIndex++);
+                    $fpdf->Cell(50, 10, utf8_decode("Aux parents de"));
+                    $fpdf->SetXY($config->adresseLeft, $config->adresseTop + 4*$adresseIndex++);
+                    $fpdf->Cell(50, 10, utf8_decode(array_pop($debiteurs)->__toString()));
+                }
             }
 
-            $fpdf->SetXY(130, 46);
-            $fpdf->Cell(50, 10, utf8_decode($title));
+            if ($adresseIndex === 0) {
+                $fpdf->SetXY($config->adresseLeft, $config->adresseTop + 4*$adresseIndex++);
+                $fpdf->Cell(50, 10, utf8_decode($title));
+            }
 
-            $fpdf->SetXY(130, 50);
+            $fpdf->SetXY($config->adresseLeft, $config->adresseTop + 4*$adresseIndex++);
             $fpdf->Cell(50, 10, utf8_decode($adresse->getRue()));
 
-            $fpdf->SetXY(130, 54);
+            $fpdf->SetXY($config->adresseLeft, $config->adresseTop + 4*$adresseIndex++);
             $fpdf->Cell(50, 10, $adresse->getNpa() . " " . utf8_decode($adresse->getLocalite()));
 
-            $fpdf->SetXY(130, 58);
-            $fpdf->Cell(50, 10, utf8_decode(Countries::getName($adresse->getPays())));
+            if ($adresse->getPays() !== "CH") {
+                $fpdf->SetXY($config->adresseLeft, $config->adresseTop + 4 * $adresseIndex);
+                $fpdf->Cell(50, 10, utf8_decode(Countries::getName($adresse->getPays())));
+            }
         }
 
         // Print title
@@ -212,7 +221,7 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
 
         $fpdf->SetXY(15, 75);
         $fpdf->SetFontSize(10);
-        $fpdf->MultiCell(0, $config->interligne, $this->evaluate($model->getTopDescription(), $facture), 0);
+        $fpdf->MultiCell(0, $config->interligne, utf8_decode($this->evaluate($model->getTopDescription(), $facture)), 0);
         $currentY = $fpdf->GetY() + 2;
 
         $fpdf->SetFontSize(9);

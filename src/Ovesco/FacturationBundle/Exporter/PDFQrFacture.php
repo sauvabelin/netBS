@@ -362,8 +362,8 @@ class PDFQrFacture extends BaseFactureExporter
      * Returns the configuration object class
      * @return string
      */
-    public function getConfigClass()
+    public function getBasicConfig()
     {
-        return QrFactureConfig::class;
+        return new QrFactureConfig();
     }
 }

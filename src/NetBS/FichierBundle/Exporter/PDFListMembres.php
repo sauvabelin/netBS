@@ -69,9 +69,9 @@ class PDFListMembres extends PDFExporter implements ConfigurableExporterInterfac
      * Returns the configuration object class
      * @return string
      */
-    public function getConfigClass()
+    public function getBasicConfig()
     {
-        return PDFListMembresConfig::class;
+        return new PDFListMembresConfig();
     }
 
     /**
