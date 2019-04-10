@@ -11,16 +11,16 @@ class FactureConfig extends FPDFConfig implements ExporterConfigInterface
     public $model = null;
     public $adresseTop = 46; // décalage haut adresse lettre
     public $adresseLeft = 130; // décalage gauche adresse lettre
-    public $wg = 8; // marge gauche BVR
+    public $wg = 6; // marge gauche BVR
     public $hg = 248;// ligne codage gauche
     public $haddr = 190; // décalage hauteur adresses du haut
     public $waddr = 56; // décalage gauche adresse haut droite
     public $wccp = 77; // position X du CCP
-    public $hccp = 221; // position Y du CCP
-    public $wd = 115; // ligne codage droite
-    public $hd = 212; // ligne codage droite
+    public $hccp = 223; // position Y du CCP
+    public $wd = 114; // ligne codage droite
+    public $hd = 215; // ligne codage droite
     public $wb = 70; // ligne codage bas
-    public $hb = 266; // ligne codage bas
+    public $hb = 268; // ligne codage bas
     public $bvrIl = 4;
     public $date = null;
 
@@ -47,3 +47,4 @@ class FactureConfig extends FPDFConfig implements ExporterConfigInterface
         return null;
     }
 }
+
