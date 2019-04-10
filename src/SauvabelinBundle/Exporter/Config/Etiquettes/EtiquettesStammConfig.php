@@ -9,19 +9,19 @@ class EtiquettesStammConfig extends EtiquettesV2Config implements ExporterConfig
 {
     public $reperes = false;
 
-    public $horizontalMargin = 12.5;
+    public $horizontalMargin = 2;
 
     public $verticalMargin = 12.5;
 
-    public $rows = 8;
+    public $rows = 10;
 
     public $columns = 4;
 
-    public $paddingLeft = 5;
+    public $paddingLeft = 4;
 
-    public $paddingTop = 5;
+    public $paddingTop = 3;
 
-    public $fontSize = 8;
+    public $fontSize = 9;
 
     public $interligne = 4;
 
@@ -33,11 +33,12 @@ class EtiquettesStammConfig extends EtiquettesV2Config implements ExporterConfig
 
     public static function getName()
     {
-        return "Stamm DN2250";
+        return "Etiquettes ultragrip 4x10";
     }
 
     public static function getDescription()
     {
-        return "Imprimante du stamm";
+        return "Testé sur la HL-2250DN (marquée TN2210)";
     }
 }
+
