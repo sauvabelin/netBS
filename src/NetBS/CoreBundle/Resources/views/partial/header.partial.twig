@@ -1,16 +1,14 @@
 <header class="main-header">
     <div class="header-sections">
 
-        {% if is_granted("ROLE_READ_EVERYWHERE") %}
         <div class="header-section header-search">
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
-                <input id="_quick_search_input" type="text" class="form-control" placeholder="Rechercher">
+                <input id="_quick_search_input" type="text" class="form-control" placeholder="Rechercher parmi vos unités">
             </div>
         </div>
-        {% endif %}
 
         <div class="header-section user-menu-section section-right">
             <div class="dropdown">
@@ -39,7 +37,6 @@
 
 {% set __quickSearch %}
     <script type="text/javascript">
-        {% if is_granted("ROLE_READ_EVERYWHERE") %}
         $(function() {
 
             let popover = null,
@@ -104,7 +101,6 @@
                 timeout = null;
             });
         });
-        {% endif %}
     </script>
 {% endset %}
 

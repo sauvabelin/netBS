@@ -23,15 +23,16 @@ class UIController extends Controller
     {
         $term           = $request->get('query');
         $router         = $this->get('router');
-        $membres        = $this->get('netbs.fichier.select2.membre_provider')->search($term, 5);
-        $groupes        = $this->get('netbs.fichier.select2.groupe_provider')->search($term, 2);
-        $familles       = $this->get('netbs.fichier.select2.famille_provider')->search($term, 3);
+        $membres        = $this->get('netbs.fichier.select2.membre_provider')->search($term, 20);
+        $groupes        = $this->get('netbs.fichier.select2.groupe_provider')->search($term, 20);
+        $familles       = $this->get('netbs.fichier.select2.famille_provider')->search($term, 20);
 
         $results        = [];
 
         /** @var BaseMembre $membre */
         foreach($membres as $membre) {
 
+            if(count($results) > 4) break;
             if(!$this->isGranted(CRUD::READ, $membre))
                 continue;
 
@@ -48,7 +49,7 @@ class UIController extends Controller
 
         /** @var BaseFamille $famille */
         foreach($familles as $famille) {
-
+            if(count($results) > 9) break;
             if(!$this->isGranted(CRUD::READ, $famille))
                 continue;
 
@@ -66,6 +67,7 @@ class UIController extends Controller
         /** @var BaseGroupe $groupe */
         foreach($groupes as $groupe) {
 
+            if(count($results) > 14) break;
             if(!$this->isGranted(CRUD::READ, $groupe))
                 continue;
 
