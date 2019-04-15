@@ -57,6 +57,9 @@ abstract class NetBSVoter extends Voter
         if(!$user instanceof BaseUser)
             return false;
 
+        if ($user->hasRole("ROLE_" . strtoupper($attribute) . "_EVERYWHERE"))
+            return true;
+
         if($this->specialRule($user))
             return true;
 
