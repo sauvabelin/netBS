@@ -40,3 +40,9 @@ parameters:
     jwt_public_key_path:  '%kernel.root_dir%/../config/jwt/public.pem'
     jwt_key_pass_phrase:  'your_secret_passphrase'
     jwt_token_ttl:        3600
+    
+    redis_host: '127.0.0.1'
+    redis_port: 6379
+    redis_pass: 'yoyoyo'
+    redis_db_index: 2
+    
