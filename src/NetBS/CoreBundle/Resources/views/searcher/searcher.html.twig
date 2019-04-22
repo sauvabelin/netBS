@@ -3,7 +3,7 @@
 {% block main %}
 
     <div class="container-fluid" style="background: white;">
-        <h3>Rechercher</h3>
+        <h3>{% if title is defined %}{{ title }}{% else %}Rechercher{% endif %}</h3>
         {% block searchForm %}{% endblock %}
     </div>
 

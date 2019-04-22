@@ -81,13 +81,23 @@ class SearcherManager
         return new SearchInstance($searcher, $form);
     }
 
-    public function render(SearchInstance $instance) {
+    /**
+     * @param $searcher
+     * @param $form
+     * @return SearchInstance
+     */
+    public function bindForm($searcher, $form) {
+
+        return new SearchInstance($searcher, $form);
+    }
+
+    public function render(SearchInstance $instance, array $params = []) {
 
         $form   = $instance->getForm();
 
-        return new Response($this->twig->render($instance->getSearcher()->getFormTemplate(), [
+        return new Response($this->twig->render($instance->getSearcher()->getFormTemplate(), array_merge($params, [
             'form'          => $form->createView(),
-            'searcher'      => $instance->getSearcher()
-        ]));
+            'searcher'      => $instance->getSearcher(),
+        ])));
     }
 }

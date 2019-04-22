@@ -66,7 +66,7 @@ class HasBeenPrintedBinder extends BaseBinder
             ->groupBy('f5.id')
             ->having('COUNT(r5.id) = 0');
 
-        $query = $em->createQueryBuilder()->select('f.id')->from('OvescoFacturationBundle:Facture', 'f')
+        $query = $em->createQueryBuilder()->select('DISTINCT f.id')->from('OvescoFacturationBundle:Facture', 'f')
             ->leftJoin('f.rappels', 'r')
             ->where($em->createQueryBuilder()->expr()->in('r.id', $subNested->getDQL()))
             ->orWhere($builder->expr()->andX(
@@ -78,18 +78,6 @@ class HasBeenPrintedBinder extends BaseBinder
         $waitingForPrintIds = array_map(function(array $item) { return $item['id']; }, $result);
 
         $adj = $form->getData() === 'yes' ? '' : 'NOT';
-        if ($form->getData() === 'yes') $builder->andWhere("$alias.id $adj IN (:ids)")
-            ->setParameter('ids', $waitingForPrintIds);
-    }
-
-    /**
-     * @param Facture $item
-     * @param $value
-     * @param array $options
-     * @return bool
-     */
-    public function postFilter($item, $value, array $options)
-    {
-        return $value === 'yes' ? !$item->hasBeenPrinted() : $item->hasBeenPrinted();
+        $builder->andWhere("$alias.id $adj IN (:ids)")->setParameter('ids', $waitingForPrintIds);
     }
 }

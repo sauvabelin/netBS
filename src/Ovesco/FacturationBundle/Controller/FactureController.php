@@ -4,6 +4,7 @@ namespace Ovesco\FacturationBundle\Controller;
 
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Model\FactureConfig;
+use Ovesco\FacturationBundle\Model\SearchFacture;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,6 +15,40 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class FactureController extends Controller
 {
+    /**
+     * @Route("/attente-paiement", name="ovesco.facturation.facture.attente_paiement")
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     */
+    public function factureAttentePaiementAction() {
+        return $this->search('Factures en attente de paiement', 'no');
+    }
+
+    /**
+     * @Route("/attente-impression", name="ovesco.facturation.facture.attente_impression")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function factureAttenteImpressionAction() {
+        return $this->search('Factures en attente d\'impression', 'yes');
+    }
+
+    private function search($title, $printed) {
+
+        $searcher       = $this->get('netbs.core.searcher_manager');
+        $instance       = $searcher->bind(Facture::class);
+        $params         = [];
+
+        if (!$instance->getForm()->isSubmitted()) {
+            $params['title'] = $title;
+            $instance->getForm()->get('statut')->submit(Facture::OUVERTE);
+            $instance->getForm()->get('isPrinted')->submit($printed);
+            $instance->getSearcher()->setForm($instance->getForm());
+        }
+
+
+        return $searcher->render($instance, $params);
+    }
+
     /**
      * @Route("/search", name="ovesco.facturation.search_factures")
      */
@@ -58,31 +93,5 @@ class FactureController extends Controller
         $exporter->setConfig($config);
         $previewer  = $this->get('netbs.core.previewer_manager')->getPreviewer($exporter->getPreviewer());
         return $previewer->preview($items, $exporter);
-    }
-
-    /**
-     * @Route("/attente-paiement", name="ovesco.facturation.facture.attente_paiement")
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function factureAttentePaiementAction() {
-        return $this->render('@NetBSCore/generic/list.generic.twig', [
-            'header' => "Factures impayées",
-            'subHeader' => "Factures en attente de paiement",
-            "cardTitle" => "Liste des factures",
-            "list" => "ovesco.facturation.factures_attente_paiement"
-        ]);
-    }
-
-    /**
-     * @Route("/attente-impression", name="ovesco.facturation.facture.attente_impression")
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function factureAttenteImpressionAction() {
-        return $this->render('@NetBSCore/generic/list.generic.twig', [
-            'header' => "Factures en attente d'impression",
-            'subHeader' => "Toutes les factures en attente d'être imprimées et envoyées",
-            "cardTitle" => "Liste des factures",
-            "list" => "ovesco.facturation.factures_attente_impression"
-        ]);
     }
 }
