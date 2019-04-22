@@ -378,6 +378,7 @@ class Facture
     }
 
     public function hasBeenPrinted() {
-        return $this->getLatestImpression() !== null;
+        if (count($this->rappels) === 0) return $this->getDateImpression() !== null;
+        return $this->getLatestRappel()->getDateImpression() !== null;
     }
 }

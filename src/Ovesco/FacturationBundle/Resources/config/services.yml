@@ -195,6 +195,11 @@ services:
         tags:
             - { name: netbs.searcher.binder }
 
+    ovesco.facturation.searcher.facture_id_binder:
+        class: Ovesco\FacturationBundle\Searcher\FactureIdBinder
+        tags:
+            - { name: netbs.searcher.binder }
+
     ovesco.facturation.searcher.creance_ouverte_binder:
         class: Ovesco\FacturationBundle\Searcher\CreanceOuverteBinder
         tags:

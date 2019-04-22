@@ -7,6 +7,7 @@ use Ovesco\FacturationBundle\Entity\Compte;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Form\Type\CountSearchType;
 use Ovesco\FacturationBundle\Form\Type\CreanceInFactureType;
+use Ovesco\FacturationBundle\Form\Type\FactureIdType;
 use Ovesco\FacturationBundle\Form\Type\HasBeenPrintedType;
 use Ovesco\FacturationBundle\Form\Type\LatestDateType;
 use Ovesco\FacturationBundle\Form\Type\CompareType;
@@ -23,7 +24,7 @@ class SearchFactureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('factureId', CompareType::class, ['label' => 'Numéro de facture', 'property' => 'factureId', 'function' => 'intval'])
+            ->add('factureId', FactureIdType::class, ['label' => 'Numéro de facture'])
             ->add('date', DatepickerType::class, ['label' => 'Date de création', 'required' => false])
             ->add('remarques', TextType::class, ['label' => 'Remarques', 'required' => false])
             ->add('dateImpression', LatestDateType::class, ['label' => "Date de dernière impression", 'property' => 'impression'])

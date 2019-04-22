@@ -2,22 +2,18 @@
 
 namespace Ovesco\FacturationBundle\Searcher;
 
+use Doctrine\ORM\QueryBuilder;
 use NetBS\CoreBundle\Model\BaseBinder;
 use Ovesco\FacturationBundle\Form\Type\CountSearchType;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Form\Form;
 
 class CountBinder extends BaseBinder
 {
-    private $propertyAccessor;
-
-    public function __construct()
-    {
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-    }
+    private $index = 0;
 
     public function bindType()
     {
-        return self::POST_FILTER;
+        return self::BIND;
     }
 
     public function getType()
@@ -25,9 +21,20 @@ class CountBinder extends BaseBinder
         return CountSearchType::class;
     }
 
-    public function postFilter($item, $value, array $options)
+    public function bind($alias, Form $form, QueryBuilder $builder)
     {
-        $items = $this->propertyAccessor->getValue($item, $options['property']);
-        return count($items) === intval($value);
+        $data = $form->getData();
+        $property = $form->getConfig()->getOption('property');
+        $join = "jcount_items" . $this->index;
+        $param = "count_items" . $this->index;
+
+        if(empty($data) && $data !== 0.0) return;
+
+        $builder->leftJoin("$alias.$property", $join)
+            ->groupBy("$alias.id")
+            ->andHaving("COUNT(DISTINCT $join) = :$param")
+            ->setParameter($param, intval($data));
+
+        $this->index++;
     }
 }

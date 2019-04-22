@@ -100,3 +100,4 @@ doctrine:
                 uuid_short: DoctrineExtensions\Query\Mysql\UuidShort
                 hex: DoctrineExtensions\Query\Mysql\Hex
                 unhex: DoctrineExtensions\Query\Mysql\Unhex
+                limit: NetBS\CoreBundle\Doctrine\Extension\LimitFunction

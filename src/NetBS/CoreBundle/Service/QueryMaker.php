@@ -63,7 +63,7 @@ class QueryMaker
                 $subResult = [];
 
                 foreach($result as $item)
-                    if ($data['binder']->postFilter($item, $data['data'], $data['options']))
+                    if ($item !== null && $data['binder']->postFilter($item, $data['data'], $data['options']))
                         $subResult[] = $item;
                 $result = $subResult;
             }
