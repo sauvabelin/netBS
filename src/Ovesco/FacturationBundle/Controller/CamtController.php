@@ -35,7 +35,7 @@ class CamtController extends Controller
             $data = $form->getData();
             try {
                 $parsedBVR = $this->parseBVRFile($data['file']);
-                // $em->flush();
+                $em->flush();
                 return $this->render('@OvescoFacturation/camt/result.html.twig', [
                     'result' => $parsedBVR,
                 ]);
