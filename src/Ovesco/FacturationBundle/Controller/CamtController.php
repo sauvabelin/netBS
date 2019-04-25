@@ -35,12 +35,12 @@ class CamtController extends Controller
             $data = $form->getData();
             try {
                 $parsedBVR = $this->parseBVRFile($data['file']);
-                $em->flush();
+                // $em->flush();
                 return $this->render('@OvescoFacturation/camt/result.html.twig', [
                     'result' => $parsedBVR,
                 ]);
             } catch (\Exception $e) {
-                // throw $e;
+                throw $e;
                 $this->addFlash('error', "Fichier illisible: " . $e->getMessage());
                 return $this->redirectToRoute('ovesco.facturation.camt.import');
             }
@@ -77,21 +77,47 @@ class CamtController extends Controller
                     $paiement->setCompte($compte[0]);
 
                     if ($facture) {
-                        $paid = false;
-                        foreach ($facture->getPaiements() as $p) {
-                            if ($p->getMontant() === $paiement->getMontant() && $p->getDateEffectivePaiement()->getTimestamp() === $paiement->getDateEffectivePaiement()->getTimestamp()) {
-                                $paid = true;
-                                break;
-                            }
+
+                        $alreadyPaid = false;
+                        $samePaiement = false;
+                        // Check paiement à double
+                        if (count($facture->getPaiements()) === 1) {
+
+                            $p = $facture->getLatestPaiement();
+
+                            $refPaiement = $transactionDetail->getReference()->getInstructionId();
+                            $refExisting = $p->getTransactionDetails()->getReference()->getInstructionId();
+
+                            // mêmes refs de paiement
+                            if ($refPaiement !== null && $refExisting !== null)
+                                if ($refPaiement === $refExisting)
+                                    $samePaiement = true;
+                            else if($p->getMontant() === $paiement->getMontant() && $p->getDateEffectivePaiement()->getTimestamp() === $paiement->getDateEffectivePaiement()->getTimestamp())
+                                $samePaiement = true;
                         }
 
-                        if (!$paid) {
-                            $em->persist($paiement);
-                            $facture->addPaiement($paiement);
-                            $parsedBVR->addFacture($facture);
+                        // facture déjà payée avant le paiement
+                        if ($facture->getStatut() === Facture::PAYEE) {
+                            $alreadyPaid = true;
+                            if ($samePaiement) $parsedBVR->addDoublePaiement($facture);
+                            else $parsedBVR->addAlreadyPaid($facture);
                         }
-                        else
-                            $parsedBVR->addAlreadyPaid($facture);
+
+                        $em->persist($paiement);
+                        $facture->addPaiement($paiement);
+
+                        if (!$alreadyPaid) {
+                            // Paiement à double
+                            if ($samePaiement) {
+                                $parsedBVR->addDoublePaiement($facture);
+                            } // Normal
+                            else {
+                                if ($facture->getStatut() === Facture::PAYEE)
+                                    $parsedBVR->addFacture($facture);
+                                else
+                                    $parsedBVR->addNotEnough($facture);
+                            }
+                        }
                     }
                     else $parsedBVR->addOrphanPaiement($paiement);
                 }
