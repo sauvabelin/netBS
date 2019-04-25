@@ -320,9 +320,7 @@ class PDFQrFacture extends BaseFactureExporter
             'CH'
         ));
 
-        $montant = $facture->getMontantEncoreDu();
-        $montant = $montant < 0 ? 0 : $montant;
-        $qrBill->setPaymentAmountInformation(PaymentAmountInformation::create('CHF', $montant));
+        $qrBill->setPaymentAmountInformation(PaymentAmountInformation::create('CHF', null));
         $qrBill->setPaymentReference(PaymentReference::create(
             PaymentReference::TYPE_QR,
             QrPaymentReferenceGenerator::generate(
