@@ -8,8 +8,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 /**
  * DirectoryView
  *
- * @ORM\Table(name="directory_view")
- * @ORM\Entity(repositoryClass="Ovesco\GalerieBundle\Repository\DirectoryViewRepository")
+ * @ORM\Table(name="ovesco_galerie_directory_view")
+ * @ORM\Entity
  */
 class DirectoryView
 {
