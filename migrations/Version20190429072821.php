@@ -16,7 +16,6 @@ final class Version20190429072821 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE ovesco_galerie_directory_view (id INT AUTO_INCREMENT NOT NULL, path VARCHAR(255) NOT NULL, device VARCHAR(255) NOT NULL, createdAt DATETIME NOT NULL, updatedAt DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET UTF8 COLLATE UTF8_unicode_ci ENGINE = InnoDB');
-        $this->addSql('DROP TABLE directory_view');
     }
 
     public function down(Schema $schema) : void
