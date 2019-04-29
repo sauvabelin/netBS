@@ -2,6 +2,7 @@
 
 namespace Ovesco\GalerieBundle\ApiController;
 
+use Ovesco\GalerieBundle\Entity\DirectoryView;
 use Ovesco\GalerieBundle\Model\Directory;
 use Ovesco\GalerieBundle\Model\Markdown;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -85,6 +86,24 @@ class ApiGalerieController extends Controller
             'medias'        => $directory->getMedias()
         ];
 
+        $this->logDirectoryView($directory);
         return new JsonResponse($this->get('serializer')->serialize($data, 'json'), 200, [], true);
+    }
+
+    /**
+     * @param Directory $directory
+     */
+    private function logDirectoryView(Directory $directory) {
+        $view = new DirectoryView();
+        $detect = new \Mobile_Detect();
+        $type = $detect->isMobile() ? DirectoryView::MOBILE
+                : $detect->isTablet()
+                    ? DirectoryView::TABLETTE
+                    : DirectoryView::ORDINATEUR;
+        $view->setDevice($type);
+        $view->setPath($directory->getPath());
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($view);
+        $em->flush();
     }
 }
