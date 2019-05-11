@@ -36,6 +36,56 @@ class ApiGalerieController extends Controller
     /**
      * @param Request $request
      * @return Response
+     * @Route("/api/v1/public/netBS/galerie/latest-change", name="ovesco.galerie.public_api.root-pictures")
+     */
+    public function latestChangeAction() {
+
+        $config = $this->get('ovesco.galerie.config');
+        $host = $this->getParameter('database_host');
+        $user = $this->getParameter('database_user');
+        $pass = $this->getParameter('database_password');
+
+        $pdo = new \PDO("mysql:dbname=stammbox;host=$host", $user, $pass);
+        $query = $pdo->prepare("SELECT path, name, mtime FROM `oc_filecache` where storage = 313 and mimetype = 2 and parent != -1 order by mtime desc limit 70");
+        $query->execute();
+        $result = $query->fetchAll();
+        $descriptionQuery = $pdo->prepare("SELECT path, mtime FROM `oc_filecache` where name = 'description.md' order by mtime desc");
+        $descriptionQuery->execute();
+        $descriptions = $descriptionQuery->fetchAll();
+
+        $aggr = [];
+        $res = [];
+
+        foreach($result as $item) {
+            if (!isset($aggr[$item["mtime"]]))
+                $aggr[$item["mtime"]] = [];
+
+            $aggr[$item["mtime"]][] = $item;
+        }
+
+        foreach($descriptions as $description)
+            if(isset($aggr[$description['mtime']]))
+                unset($aggr[$description['mtime']]);
+
+        foreach($aggr as $items) {
+            usort($items, function ($l1, $l2) {
+                return strlen($l1['path']) > strlen($l2['path']) ? -1 : 1;
+            });
+
+            $res[] = [
+                'hash' => (new Directory(utf8_encode($items[0]['path']), $config))->getHashPath(),
+                'path' => utf8_encode($items[0]['path']),
+                'name' => utf8_encode($items[0]['name']),
+                'date' => date("d.m.Y", $items[0]['mtime'])
+            ];
+        }
+
+        return new JsonResponse($res);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
      * @Route("/api/v1/public/netBS/galerie/directory", name="ovesco.galerie.public_api.directory")
      */
     public function publicAccessAction(Request $request) {
