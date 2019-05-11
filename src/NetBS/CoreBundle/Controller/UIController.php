@@ -26,7 +26,6 @@ class UIController extends Controller
         $membres        = $this->get('netbs.fichier.select2.membre_provider')->search($term, 20);
         $groupes        = $this->get('netbs.fichier.select2.groupe_provider')->search($term, 20);
         $familles       = $this->get('netbs.fichier.select2.famille_provider')->search($term, 20);
-
         $results        = [];
 
         /** @var BaseMembre $membre */

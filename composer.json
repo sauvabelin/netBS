@@ -39,6 +39,7 @@
         "league/flysystem-webdav": "^1.0",
         "lexik/jwt-authentication-bundle": "^2.4",
         "liip/imagine-bundle": "^2.0",
+        "mobiledetect/mobiledetectlib": "^2.8",
         "nelmio/cors-bundle": "^1.5",
         "pagerfanta/pagerfanta": "^2.0",
         "sensio/distribution-bundle": "^5.0.19",

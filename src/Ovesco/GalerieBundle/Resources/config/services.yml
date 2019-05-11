@@ -23,5 +23,6 @@ services:
         class: Ovesco\GalerieBundle\Serializer\DirectoryNormalizer
         arguments:
             - "@ovesco.galerie.serializer.media_normalizer"
+            - "@doctrine.orm.entity_manager"
         tags:
             - { name: serializer.normalizer }

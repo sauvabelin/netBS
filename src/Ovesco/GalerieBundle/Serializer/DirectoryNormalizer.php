@@ -2,6 +2,7 @@
 
 namespace Ovesco\GalerieBundle\Serializer;
 
+use Doctrine\ORM\EntityManager;
 use Ovesco\GalerieBundle\Model\Directory;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -9,9 +10,12 @@ class DirectoryNormalizer implements NormalizerInterface
 {
     private $normalizer;
 
-    public function __construct(MediaNormalizer $normalizer)
+    private $manager;
+
+    public function __construct(MediaNormalizer $normalizer, EntityManager $manager)
     {
         $this->normalizer   = $normalizer;
+        $this->manager      = $manager;
     }
 
     /**
@@ -23,9 +27,13 @@ class DirectoryNormalizer implements NormalizerInterface
     public function normalize($directory, $format = null, array $context = array())
     {
         $thumb  = $directory->getThumbnail();
+        $count = $this->manager->getRepository('OvescoGalerieBundle:DirectoryView')->count([
+            'path' => $directory->getPath()
+        ]);
 
         return [
 
+            'count'     => $count,
             'name'      => $directory->getName(),
             'thumbnail' => $thumb ? $this->normalizer->normalize($thumb) : null,
             'path'      => $directory->getRelativePath(),
