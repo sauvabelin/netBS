@@ -135,7 +135,7 @@ class ApiGalerieController extends Controller
             'medias'        => $directory->getMedias()
         ];
 
-        $this->logDirectoryView($directory);
+        // $this->logDirectoryView($directory);
         return new JsonResponse($this->get('serializer')->serialize($data, 'json'), 200, [], true);
     }
 
