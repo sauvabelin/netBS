@@ -21,8 +21,21 @@ class Directory
      */
     public function getChildren() {
 
-        $dirnames   = array_filter(glob($this->path . '/*'), 'is_dir');
-        sort($dirnames);
+        $dirnames   = array_filter(glob($this->path . DIRECTORY_SEPARATOR . '*'), 'is_dir');
+        $names = [];
+        $numbers = [];
+        foreach($dirnames as $dirname) {
+            $data = explode(DIRECTORY_SEPARATOR, $dirname);
+            $last = array_pop($data);
+            if (is_numeric($last)) $numbers[$dirname] = $last;
+            else $names[$dirname] = $last;
+        }
+
+        asort($names);
+        arsort($numbers);
+
+        $dirnames = array_merge(array_keys($names), array_keys($numbers));
+
         return array_values(array_map(function($name) {
             return new Directory($name, $this->config);
         }, $dirnames));
