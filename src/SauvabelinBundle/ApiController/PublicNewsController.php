@@ -2,6 +2,7 @@
 
 namespace SauvabelinBundle\ApiController;
 
+use NetBS\CoreBundle\Entity\NewsChannel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,6 +38,21 @@ class PublicNewsController extends Controller
             ->getResult();
 
         return new JsonResponse($this->get('serializer')->serialize($result, 'json'), 200, [], true);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route("/api/v1/public/netBS/sauvabelin/channels", name="sauvabelin.public_api.channels")
+     */
+    public function channelsAction(Request $request) {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $channels = $em->getRepository('NetBSCoreBundle:NewsChannel')->findAll();
+        $channels = array_map(function(NewsChannel $channel) {
+            return $channel->getNom();
+        }, $channels);
+
+        return new JsonResponse($channels);
     }
 
     private function getValue(Request $request, $name, $default) {
