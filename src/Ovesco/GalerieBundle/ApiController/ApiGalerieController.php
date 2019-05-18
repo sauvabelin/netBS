@@ -36,7 +36,7 @@ class ApiGalerieController extends Controller
     /**
      * @param Request $request
      * @return Response
-     * @Route("/api/v1/public/netBS/galerie/latest-change", name="ovesco.galerie.public_api.root-pictures")
+     * @Route("/api/v1/public/netBS/galerie/latest-change", name="ovesco.galerie.public_api.latest-change")
      */
     public function latestChangeAction() {
 
