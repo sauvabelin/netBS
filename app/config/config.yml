@@ -5,7 +5,7 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: dql_functions.yml }
-    - { resource: "@SauvabelinBundle/Resources/config/services.yml" }
+    - { resource: "@TDGLBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -97,51 +97,6 @@ stof_doctrine_extensions:
             timestampable: true
             softdeleteable: true
 
-liip_imagine:
-    loaders:
-        ovesco_galerie:
-            filesystem:
-                data_root: "%kernel.project_dir%/web/galerie/originals"
-
-    filter_sets:
-        thumbnail:
-            data_loader: ovesco_galerie
-            cache: ovesco.galerie_cache_resolver
-            quality: 75
-            filters:
-                thumbnail: { size: [200,200], mode: outbound }
-                auto_rotate: ~
-
-nelmio_cors:
-    defaults:
-        allow_credentials: false
-        allow_origin: []
-        allow_headers: []
-        allow_methods: []
-        expose_headers: []
-        max_age: 0
-        hosts: []
-        origin_regex: false
-        forced_allow_origin_value: ~
-    paths:
-        '^/api/v1/':
-            allow_origin: ['*']
-            allow_headers: ['*']
-            allow_methods: ['GET', 'POST']
-            max_age: 3600
-
-
-lexik_jwt_authentication:
-    private_key_path: '%jwt_private_key_path%'
-    public_key_path:  '%jwt_public_key_path%'
-    pass_phrase:      '%jwt_key_pass_phrase%'
-    token_ttl:        '%jwt_token_ttl%'
-    token_extractors:
-        authorization_header:
-            enabled: true
-            prefix:  Bearer
-            name:    x-authorization
-
 net_bs_core:
     mailer:
         subject_prefix: "[netBS] "
@@ -151,18 +106,11 @@ net_bs_core:
                 subject: "Alerte de sécurité"
                 template: "@NetBSSecure/mailer/security.mail.twig"
 
-
 net_bs_fichier:
     entities:
-        membre_class: SauvabelinBundle\Entity\BSMembre
-        groupe_class: SauvabelinBundle\Entity\BSGroupe
+        membre_class: TDGLBundle\Entity\TDGLMembre
+        famille_class: TDGLBundle\Entity\TDGLFamille
 
 net_bs_secure:
     entities:
         user_class: "%netbs_secure_user_class%"
-
-ovesco_galerie:
-    prefix_directory: "/web"
-    mapped_directory: "/galerie/originals"
-    cache_directory:  "/galerie/cache"
-    image_extensions: ["jpg", "png"]

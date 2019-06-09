@@ -19,22 +19,6 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        gettoken:
-            pattern:  ^/api/v1/netBS/gettoken$
-            stateless: true
-            gfreeau_get_jwt:
-                username_parameter: username
-                password_parameter: password
-                authentication_provider:  security.authentication.provider.dao
-                user_checker: security.user_checker
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
-        api:
-            pattern:   ^/api/v1/netBS
-            stateless: true
-            lexik_jwt: ~
-
         netbs:
             anonymous:  true
             switch_user: true

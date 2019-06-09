@@ -15,6 +15,7 @@ roles:
                                 poids: 100
                                 description: "Création dans les groupes"
                             ROLE_CREATE_ATTRIBUTION:
+                                description: "Création d'attributions"
                                 poids: 150
                     ROLE_UPDATE_EVERYWHERE:
                         poids: 5000
@@ -37,9 +38,6 @@ roles:
                             ROLE_DELETE:
                                 poids: 100
                                 description: "Suppression dans les groupes"
-
-
-
     ROLE_USER:
         description: "Autorisation d'accès à l'application"
         poids: 1

@@ -1,0 +1,96 @@
+categories:
+  - brigade
+  - branche
+  - unité
+  - "sous-unité"
+  - association
+
+types:
+  brigade:
+    categorie: brigade
+    se: 0
+  association:
+    categorie: association
+    se: 1
+  "première branche":
+    categorie: branche
+    se: 0
+  "deuxième branche":
+    categorie: branche
+    se: 0
+  "troisième branche":
+    categorie: branche
+    se: 0
+  "quatrième branche":
+    categorie: branche
+    se: 0
+  troupe:
+    categorie: unité
+    se: 1
+  meute:
+    categorie: unité
+    se: 1
+  patrouille:
+    categorie: "sous-unité"
+    se: 1
+  sizaine:
+    categorie: "sous-unité"
+    se: 1
+
+unites:
+  tdgl:
+    type: brigade
+    enfants:
+      anciens:
+        type: association
+      éclaireurs:
+        type: "deuxième branche"
+        enfants:
+          "Mondisé":
+            type: troupe
+            enfants:
+              Aigles:
+                type: patrouille
+              Marmottes:
+                type: patrouille
+              "Chauves-souris":
+                type: patrouille
+      éclaireuses:
+        type: "deuxième branche"
+        enfants:
+          "Vieux-Castel":
+            type: troupe
+            enfants:
+              Ecureuils:
+                type: patrouille
+              Elephants:
+                type: patrouille
+          "Lac Vert":
+            type: troupe
+            enfants:
+              Chamois:
+                type: patrouille
+      louveteaux:
+        type: "première branche"
+        enfants:
+          "Meute du château":
+            type: meute
+            enfants:
+              Bleue:
+                type: sizaine
+              Blanche:
+                type: sizaine
+              Noire:
+                type: sizaine
+              Rouge:
+                type: sizaine
+      picos:
+        type: "troisième branche"
+        enfants:
+          FMR:
+            type: troupe
+      routiers:
+        type: "quatrième branche"
+        enfants:
+          "Clan des Yacks":
+            type: troupe
