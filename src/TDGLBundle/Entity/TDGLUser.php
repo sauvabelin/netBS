@@ -7,7 +7,7 @@ use NetBS\SecureBundle\Mapping\BaseUser;
 
 /**
  * User
- * @ORM\Table(name="sauvabelin_netbs_users")
+ * @ORM\Table(name="tdgl_users")
  * @ORM\Entity
  */
 class TDGLUser extends BaseUser

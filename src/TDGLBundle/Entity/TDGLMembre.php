@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class TDGLMembre
  * @package TDGLBundle\Entity
  * @ORM\Entity
+ * @ORM\Table(name="tdgl_membres")
  */
 class TDGLMembre extends BaseMembre
 {

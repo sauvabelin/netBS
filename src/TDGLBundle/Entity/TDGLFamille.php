@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class TDGLFamille
  * @package TDGLBundle\Entity
  * @ORM\Entity
+ * @ORM\Table(name="tdgl_familles")
  */
 class TDGLFamille extends BaseFamille
 {
