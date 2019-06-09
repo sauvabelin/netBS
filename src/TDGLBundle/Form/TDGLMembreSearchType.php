@@ -13,7 +13,7 @@ class TDGLMembreSearchType extends base
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder->add('totem', TextType::class, ["label" => "Totem"]);
+        $builder->add('totem', TextType::class, ["label" => "Totem", 'required' => false]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
