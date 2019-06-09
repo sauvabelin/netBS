@@ -133,6 +133,14 @@ class GroupeController extends Controller
                                 ]
                             ])
                         ->close()
+                        ->pushColumn(12)
+                            ->setBlock(TemplateBlock::class, [
+                                'template'  => '@NetBSFichier/groupe/groupe_links.block.twig',
+                                'params'    => [
+                                    'groupe'    => $groupe
+                                ]
+                            ])
+                        ->close()
                     ->close()
                 ->close()
                 ->pushColumn(9)

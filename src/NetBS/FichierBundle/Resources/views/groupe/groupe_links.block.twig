@@ -1,0 +1,23 @@
+{% if groupe.groupeType.affichageEffectifs %}
+    <a href="{{ path('netbs.fichier.etiquettes.groupe', {id: groupe.id}) }}" class="btn btn-secondary btn-block">Générer des étiquettes</a>
+{% endif %}
+
+<button id="exportTroupe" class="btn btn-secondary btn-block mb-2">Générer une liste de {{ groupe.groupeType.nom }}</button>
+
+{{ registerJs(asset('bundles/netbscore/js/post_link.js')) }}
+{% set script %}
+    <script>
+        document.getElementById('exportTroupe').addEventListener('click', function() {
+            var data = {
+                itemsClass: "{{ get_class(groupe)|toBase64 }}",
+                exporterAlias: "pdf.unite",
+                selectedIds: [{{ groupe.id }}]
+            };
+
+            PostLink("{{ path('netbs.core.export.export_selected') }}", data);
+        });
+    </script>
+{% endset %}
+{{ registerScript(script) }}
+
+<a href="{{ path('netbs.fichier.liste_rega.groupe', {id: groupe.id}) }}" class="btn btn-secondary btn-block">Liste REGA pour {{ groupe.nom }}</a>
