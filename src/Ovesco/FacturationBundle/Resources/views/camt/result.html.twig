@@ -112,6 +112,7 @@
                                     <th>Débiteur</th>
                                     <th>Montant</th>
                                     <th>Référence</th>
+                                    <th>Numéro facture</th>
                                     <th>Date de paiement</th>
                                 </tr>
                                 </thead>
@@ -136,6 +137,11 @@
                                         <td>
                                             {% if details.remittanceInformation %}
                                                 {{ details.remittanceInformation.message }}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if details.remittanceInformation %}
+                                                {{ details.remittanceInformation.message[20:][:6]|number_format(0, '', '') }}
                                             {% endif %}
                                         </td>
                                         <td>

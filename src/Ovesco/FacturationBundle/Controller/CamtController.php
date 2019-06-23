@@ -4,6 +4,7 @@ namespace Ovesco\FacturationBundle\Controller;
 
 use Genkgo\Camt\Config;
 use Genkgo\Camt\DTO\EntryTransactionDetail;
+use NetBS\FichierBundle\Mapping\BaseFamille;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Entity\Paiement;
 use Ovesco\FacturationBundle\Model\ParsedBVR;
@@ -35,7 +36,7 @@ class CamtController extends Controller
             $data = $form->getData();
             try {
                 $parsedBVR = $this->parseBVRFile($data['file']);
-                $em->flush();
+                //$em->flush();
                 return $this->render('@OvescoFacturation/camt/result.html.twig', [
                     'result' => $parsedBVR,
                 ]);
@@ -72,6 +73,7 @@ class CamtController extends Controller
                 foreach ($entry->getTransactionDetails() as $transactionDetail) {
 
                     /** @var Facture $facture */
+
                     $facture = $factureRepo->findByFactureId($this->getFactureId($transactionDetail));
                     $paiement = $this->transactionToPaiement($transactionDetail);
                     $paiement->setCompte($compte[0]);
@@ -86,7 +88,7 @@ class CamtController extends Controller
                             $p = $facture->getLatestPaiement();
 
                             $refPaiement = $transactionDetail->getReference()->getInstructionId();
-                            $refExisting = $p->getTransactionDetails()->getReference()->getInstructionId();
+                            $refExisting = $p->getTransactionDetails() ? $p->getTransactionDetails()->getReference()->getInstructionId() : null;
 
                             // mêmes refs de paiement
                             if ($refPaiement !== null && $refExisting !== null)
@@ -119,7 +121,9 @@ class CamtController extends Controller
                             }
                         }
                     }
-                    else $parsedBVR->addOrphanPaiement($paiement);
+                    else {
+                        $parsedBVR->addOrphanPaiement($paiement);
+                    }
                 }
             }
         }
