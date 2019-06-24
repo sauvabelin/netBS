@@ -41,6 +41,12 @@ class CirculaireMembre implements GroupSequenceProviderInterface
 
     /**
      * @var string
+     * @Assert\Regex("/^(\d{3}).?(\d{4}).?(\d{4}).?(\d{2})$/", message="Numéro AVS au format 123.1234.1234.12")
+     */
+    public $numeroAvs;
+
+    /**
+     * @var string
      * @Assert\NotBlank(groups={"default"})
      */
     public $nom;
@@ -340,6 +346,7 @@ class CirculaireMembre implements GroupSequenceProviderInterface
         $membre->setContactInformation(new ContactInformation());
         $membre
             ->setNumeroBS($this->numero)
+            ->setNumeroAvs($this->numeroAvs)
             ->setStatut(BaseMembre::INSCRIT)
             ->setNaissance($this->naissance)
             ->setInscription($this->inscription)

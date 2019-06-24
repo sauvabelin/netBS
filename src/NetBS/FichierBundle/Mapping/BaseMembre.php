@@ -78,6 +78,13 @@ abstract class BaseMembre extends Personne implements EqualInterface
      */
     protected $statut;
 
+    /**
+     * @var string
+     * @ORM\Column(name="numero_avs", type="string", length=255, nullable=true)
+     * @Assert\Regex("/^(\d{3}).?(\d{4}).?(\d{4}).?(\d{2})$/", message="Numéro AVS au format 123.1234.1234.12")
+     */
+    protected $numeroAvs;
+
     //Quick data
     /**
      * Défini automatiquement lorsque la famille est mise à jour
@@ -381,6 +388,7 @@ abstract class BaseMembre extends Personne implements EqualInterface
      * @param string $statut
      *
      * @return BaseMembre
+     * @throws \Exception
      */
     public function setStatut($statut)
     {
@@ -401,6 +409,40 @@ abstract class BaseMembre extends Personne implements EqualInterface
     public function getStatut()
     {
         return $this->statut;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumeroAvs()
+    {
+        $num = $this->numeroAvs;
+        if ($num) {
+            return $num[0] .
+                $num[1] .
+                $num[2] . '.' .
+                $num[3] .
+                $num[4] .
+                $num[5].
+                $num[6] . '.' .
+                $num[7] .
+                $num[8] .
+                $num[9] .
+                $num[10] . '.' .
+                $num[11] .
+                $num[12];
+        }
+        return null;
+    }
+
+    /**
+     * @param string $numeroAvs
+     * @return BaseMembre
+     */
+    public function setNumeroAvs($numeroAvs)
+    {
+        $this->numeroAvs = str_replace('.', '', $numeroAvs);
+        return $this;
     }
 
     /**

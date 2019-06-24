@@ -4,6 +4,7 @@ namespace SauvabelinBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use NetBS\CoreBundle\Form\Type\DateMaskType;
+use NetBS\CoreBundle\Form\Type\MaskType;
 use NetBS\CoreBundle\Form\Type\Select2DocumentType;
 use NetBS\CoreBundle\Form\Type\SexeType;
 use NetBS\CoreBundle\Form\Type\TelephoneMaskType;
@@ -43,6 +44,7 @@ class CirculaireMembreType extends AbstractType
             ->add('numero', NumberType::class, array('label' => "Numéro BS", 'required' => false))
             ->add('prenom', TextType::class, array('label' => 'Prénom'))
             ->add('nom', TextType::class, array('label' => 'Nom de famille'))
+            ->add('numeroAvs', MaskType::class, array('label' => 'Numéro AVS', 'mask' => "'mask' : '999.9999.9999.99'", 'required' => false))
             ->add('sexe', SexeType::class, array('label' => 'Sexe'))
             ->add('naissance', DateMaskType::class, array('label' => 'Date de naissance'))
             ->add('adresse', TextType::class, array('label' => "Adresse", 'required' => false))

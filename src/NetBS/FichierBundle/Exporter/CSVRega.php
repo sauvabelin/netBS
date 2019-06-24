@@ -96,6 +96,7 @@ class CSVRega extends CSVExporter
             ->addColumn('DAT_NAISSANCE', function(BaseMembre $membre) {
                 return $membre->getNaissance()->format('d.m.Y');
             })
+            ->addColumn('N_AVS', 'numeroAvs')
             ->addColumn('RUE', function(BaseMembre $membre) {
                 if($adresse = $membre->getSendableAdresse())
                     return StrUtil::removeAccents($adresse->getRue());
