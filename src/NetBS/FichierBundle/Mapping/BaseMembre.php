@@ -80,7 +80,7 @@ abstract class BaseMembre extends Personne implements EqualInterface
 
     /**
      * @var string
-     * @ORM\Column(name="numero_avs", type="string", length=255, nullable=true)
+     * @ORM\Column(name="num_avs", type="string", length=255, nullable=true)
      * @Assert\Regex("/^(\d{3}).?(\d{4}).?(\d{4}).?(\d{2})$/", message="Numéro AVS au format 123.1234.1234.12")
      */
     protected $numeroAvs;
@@ -535,4 +535,5 @@ abstract class BaseMembre extends Personne implements EqualInterface
                 return new OwnableEmail($geniteur, $email);
     }
 }
+
 
