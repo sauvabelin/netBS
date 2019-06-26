@@ -5,6 +5,7 @@ namespace NetBS\FichierBundle\Controller;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\DistinctionType;
 use NetBS\FichierBundle\Mapping\BaseDistinction;
+use NetBS\SecureBundle\Mapping\BaseRole;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,6 +24,7 @@ class DistinctionController extends Controller
      */
     public function pageDistinctionsAction() {
 
+        dump(array_map(function(BaseRole $role) { return $role->getRole();}, $this->getUser()->getAllRoles()));
         return $this->render('@NetBSFichier/generic/page_generic.html.twig', array(
             'list'      => 'netbs.fichier.distinctions',
             'title'     => 'Distinctions',
@@ -35,7 +37,7 @@ class DistinctionController extends Controller
      * @param Request $request
      * @return Response
      * @Route("/modal/add", name="netbs.fichier.distinction.modal_add")
-     * @Security("has_role('ROLE_CREATE_EVERYWHERE')")
+     * @Security("is_granted('ROLE_CREATE_EVERYWHERE')")
      */
     public function addDistinctionModalAction(Request $request) {
 
