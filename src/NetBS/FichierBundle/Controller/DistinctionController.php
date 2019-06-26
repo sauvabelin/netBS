@@ -24,7 +24,6 @@ class DistinctionController extends Controller
      */
     public function pageDistinctionsAction() {
 
-        dump(array_map(function(BaseRole $role) { return $role->getRole();}, $this->getUser()->getAllRoles()));
         return $this->render('@NetBSFichier/generic/page_generic.html.twig', array(
             'list'      => 'netbs.fichier.distinctions',
             'title'     => 'Distinctions',
@@ -65,3 +64,4 @@ class DistinctionController extends Controller
         ], Modal::renderModal($form));
     }
 }
+
