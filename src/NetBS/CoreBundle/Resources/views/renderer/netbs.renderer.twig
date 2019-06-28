@@ -36,7 +36,7 @@
         {% for item in table.items %}
 
             {% set row = table.data[loop.index0] %}
-            <tr data-id="{{ idMapper(item) }}">
+            <tr data-id="{{ loader_id(item, table.model.managedItemsClass) }}">
                 <td>
                     <div class="custom-control custom-checkbox">
                         <input id="{{ tableId }}_{{ loop.index }}" class="{{ checkboxClass }} custom-control-input" type="checkbox">

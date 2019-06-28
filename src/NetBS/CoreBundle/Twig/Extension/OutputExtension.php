@@ -2,13 +2,23 @@
 
 namespace NetBS\CoreBundle\Twig\Extension;
 
+use NetBS\CoreBundle\Service\LoaderManager;
+
 class OutputExtension extends \Twig_Extension
 {
+    private $loaders;
+
+    public function __construct(LoaderManager $loaderManager)
+    {
+        $this->loaders = $loaderManager;
+    }
+
     public function getFunctions() {
 
         return [
 
-            new \Twig_SimpleFunction('fake_row', [$this, 'fakeRowFunction'], array('is_safe' => array('html')))
+            new \Twig_SimpleFunction('fake_row', [$this, 'fakeRowFunction'], array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('loader_id', [$this, 'loadedId'])
         ];
     }
 
@@ -30,5 +40,14 @@ class OutputExtension extends \Twig_Extension
     public function formatBool($value) {
 
         return boolval($value) ? 'Oui' : 'Non';
+    }
+
+    public function loadedId($item, $class = null) {
+
+        if ($class === null) $class = get_class($item);
+
+        if ($this->loaders->hasLoader($class))
+            return $this->loaders->getLoader($class)->toId($item);
+        return $item->getId();
     }
 }

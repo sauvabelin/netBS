@@ -13,7 +13,7 @@ class RegisterLoaderPass implements CompilerPassInterface
         $manager    = $container->getDefinition('netbs.core.loader_manager');
 
         foreach($container->findTaggedServiceIds('netbs.loader') as $serviceId => $params) {
-            $manager->addMethodCall('pushHelper', [new Reference($serviceId)]);
+            $manager->addMethodCall('registerLoader', [new Reference($serviceId)]);
         }
 
     }

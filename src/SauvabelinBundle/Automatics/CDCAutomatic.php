@@ -10,6 +10,7 @@ use NetBS\CoreBundle\Utils\Traits\ParamTrait;
 use NetBS\CoreBundle\Utils\Traits\SessionTrait;
 use NetBS\FichierBundle\Exporter\PDFEtiquettesV2;
 use NetBS\FichierBundle\Mapping\BaseAdresse;
+use NetBS\FichierBundle\Mapping\BaseAttribution;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Model\AdressableInterface;
 use NetBS\FichierBundle\Utils\Traits\FichierConfigTrait;
@@ -51,7 +52,14 @@ class CDCAutomatic extends BaseAutomatic implements ConfigurableAutomaticInterfa
      */
     protected function getItems($data = null)
     {
-        $items = $this->entityManager->getRepository($this->fichierConfig->getMembreClass())->findBy(['statut' => BaseMembre::INSCRIT]);
+        $membres = $this->entityManager->getRepository($this->fichierConfig->getMembreClass())->findBy(['statut' => BaseMembre::INSCRIT]);
+        $adabs = array_map(function(BaseAttribution $attribution) {
+            return $attribution->getMembre();
+        }, $this->entityManager->getRepository($this->fichierConfig->getGroupeClass())->find($this->parameterManager->getValue('bs', 'groupe.adabs_id'))->getActivesAttributions());
+
+
+        $items = array_unique(array_merge($membres, $adabs));
+
         if ($data['merge'] === true)
             $items = PDFEtiquettesV2::merge($items);
 

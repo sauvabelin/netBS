@@ -133,7 +133,6 @@ class ExportController extends Controller
         $exporter           = $this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias());
         $configs            = $this->getUserConfigurations($exporter);
         $configContainer    = $em->find('NetBSCoreBundle:ExportConfiguration', $blob->getConfigId());
-
         $form               = $this->createForm($exporter->getConfigFormClass(), $configContainer->getConfiguration());
 
         $form->handleRequest($request);
@@ -221,17 +220,26 @@ class ExportController extends Controller
      */
     protected function getItems(ExportBlob $blob) {
 
-        $listItems      = array_map(function($val) {return intval($val);}, $blob->getIds());
+        $listItems      = $blob->getIds();
         $em             = $this->get('doctrine.orm.entity_manager');
         $exporter       = $this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias());
+        $loaders        = $this->get('netbs.core.loader_manager');
+        $elements       = [];
 
-        $query          = $em->createQueryBuilder();
-        $elements       = $query->select('x')
-            ->from($blob->getItemsClass(), 'x')
-            ->where($query->expr()->in('x.id', ':ids'))
-            ->setParameter('ids', $listItems)
-            ->getQuery()
-            ->execute();
+        if ($loaders->hasLoader($blob->getItemsClass())) {
+            $loader = $loaders->getLoader($blob->getItemsClass());
+            $elements   = array_map(function($id) use ($loader) {
+                return $loader->fromId($id);
+            }, $listItems);
+        } else {
+            $query = $em->createQueryBuilder();
+            $elements = $query->select('x')
+                ->from($blob->getItemsClass(), 'x')
+                ->where($query->expr()->in('x.id', ':ids'))
+                ->setParameter('ids', $listItems)
+                ->getQuery()
+                ->execute();
+        }
 
         return $this->get('netbs.core.bridge_manager')->convertItems($elements, $exporter->getExportableClass());
     }

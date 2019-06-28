@@ -20,12 +20,13 @@ class AdressableLoader implements LoaderInterface
     public function toId($item)
     {
         $prefix = $item instanceof BaseMembre ? 'm' : 'f';
-        return $prefix . '_' . $item->getId();
+        return $prefix . $item->getId();
     }
 
     public function fromId($id)
     {
-        list($type, $key) = explode('_', $id);
+        $type = $id[0];
+        $key = substr($id, 1, strlen($id));
         $class = $type === 'f'
             ? $this->fichierConfig->getFamilleClass()
             : $this->fichierConfig->getMembreClass();

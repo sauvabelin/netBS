@@ -185,6 +185,8 @@ services:
 
     netbs.core.twig.output_extension:
         class: NetBS\CoreBundle\Twig\Extension\OutputExtension
+        arguments:
+            - "@netbs.core.loader_manager"
         tags:
             - { name: twig.extension }
 
