@@ -33,9 +33,14 @@ services:
           - { name: netbs.list.model }
           - { name: netbs.automatic_list }
 
-
     sauvabelin.automatic.cotisations:
         class: SauvabelinBundle\Automatics\CotisationsAutomatic
         tags:
           - { name: netbs.list.model }
           - { name: netbs.automatic_list }
+
+    sauvabelin.automatic.cdc:
+        class: SauvabelinBundle\Automatics\CDCAutomatic
+        tags:
+            - { name: netbs.list.model }
+            - { name: netbs.automatic_list }

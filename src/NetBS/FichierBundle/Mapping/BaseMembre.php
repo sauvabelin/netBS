@@ -93,6 +93,8 @@ abstract class BaseMembre extends Personne implements EqualInterface
      */
     protected $nom;
 
+    // Store
+
     public function __construct()
     {
         $this->naissance                = new \DateTime();
@@ -176,6 +178,11 @@ abstract class BaseMembre extends Personne implements EqualInterface
     public function _setNom() {
 
         $this->nom  = $this->famille->getNom();
+    }
+
+    public function _getNom() {
+
+        return !empty($this->nom) ? $this->nom : $this->famille->getNom();
     }
 
     /**

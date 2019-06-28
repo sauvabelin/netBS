@@ -7,7 +7,7 @@ use NetBS\SecureBundle\Mapping\BaseUser;
 
 abstract class BaseAutomatic extends BaseListModel
 {
-    protected $_data    = null;
+    protected $_data = null;
 
     /**
      * @return string
@@ -20,15 +20,6 @@ abstract class BaseAutomatic extends BaseListModel
      * Returns this list's description, displayed
      */
     abstract public function getDescription();
-
-    /**
-     * Checks if user has authorization to use this automatic
-     * @param BaseUser $user
-     * @return bool
-     */
-    public function userAuthorization(BaseUser $user) {
-        return $user->hasRole('ROLE_SG');
-    }
 
     /**
      * @param $data
@@ -55,6 +46,6 @@ abstract class BaseAutomatic extends BaseListModel
      * @return bool
      */
     public function isAllowed(BaseUser $user) {
-        return true;
+        return $user->hasRole('ROLE_SG');
     }
 }

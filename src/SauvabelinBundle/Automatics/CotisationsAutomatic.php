@@ -27,11 +27,6 @@ class CotisationsAutomatic extends BaseAutomatic implements ConfigurableAutomati
         return "Cotisations";
     }
 
-    public function userAuthorization(BaseUser $user)
-    {
-        return $user->hasRole('ROLE_TRESORIER');
-    }
-
     /**
      * @return string
      * Returns this list's description, displayed

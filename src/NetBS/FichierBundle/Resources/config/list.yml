@@ -64,5 +64,5 @@ services:
     netbs.fichier.automatic.birthday:
         class: NetBS\FichierBundle\Automatics\BirtdayAutomatic
         tags:
-          - { name: netbs.list.model }
-          - { name: netbs.automatic_list }
+            - { name: netbs.list.model }
+            - { name: netbs.automatic_list }

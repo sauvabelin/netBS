@@ -143,3 +143,8 @@ services:
             - "@netbs.fichier.config"
         tags:
             - { name: doctrine.event_subscriber }
+
+    netbs.fichier.loader.adressable:
+        class: NetBS\FichierBundle\Loader\AdressableLoader
+        tags:
+            - { name: netbs.loader }

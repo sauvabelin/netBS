@@ -39,7 +39,7 @@ class AutomaticListController extends Controller
         $model  = $this->get('netbs.core.automatic_lists_manager')->getAutomaticByAlias($alias);
         $form   = null;
 
-        if (!$model->userAuthorization($this->getUser()))
+        if (!$model->isAllowed($this->getUser()))
             throw $this->createAccessDeniedException("Pas autorisé à utiliser cette liste!");
 
         if($model instanceof ConfigurableAutomaticInterface) {

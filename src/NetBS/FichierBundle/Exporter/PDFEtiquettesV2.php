@@ -69,7 +69,7 @@ class PDFEtiquettesV2 implements ExporterInterface, ConfigurableExporterInterfac
             return $adressable->getSendableAdresse() === null;
         });
         $members = array_diff($items, $noAdress);
-        $set = $config->mergeFamilles ? $this->merge($members) : $members;
+        $set = $config->mergeFamilles ? self::merge($members) : $members;
         $fpdf = new \FPDF();
         $fpdf->SetFont('Arial');
         $fpdf->SetFontSize($config->fontSize);
@@ -149,7 +149,7 @@ class PDFEtiquettesV2 implements ExporterInterface, ConfigurableExporterInterfac
      * @param AdressableInterface[] $adressables
      * @return array
      */
-    private function merge($adressables) {
+    public static function merge($adressables) {
 
         $result = [];
         foreach($adressables as $adressable) {

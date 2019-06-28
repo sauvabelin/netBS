@@ -6,6 +6,7 @@ use NetBS\CoreBundle\Utils\DIHelper;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
 use NetBS\CoreBundle\Utils\Traits\ParamTrait;
 use NetBS\CoreBundle\Utils\Traits\RouterTrait;
+use NetBS\CoreBundle\Utils\Traits\SessionTrait;
 use NetBS\CoreBundle\Utils\Traits\TokenTrait;
 use NetBS\FichierBundle\Utils\Traits\FichierConfigTrait;
 use NetBS\FichierBundle\Utils\Traits\SecureConfigTrait;
@@ -19,7 +20,8 @@ class TraitFeederPass implements CompilerPassInterface
     {
         $services   = array_merge(
             $container->findTaggedServiceIds('netbs.select2_provider'),
-            $container->findTaggedServiceIds('netbs.list.model')
+            $container->findTaggedServiceIds('netbs.list.model'),
+            $container->findTaggedServiceIds('netbs.loader')
         );
 
         foreach($services as $id => $p) {
@@ -31,6 +33,9 @@ class TraitFeederPass implements CompilerPassInterface
 
             if(in_array(EntityManagerTrait::class, $traits))
                 $definiton->addMethodCall('setEntityManager', [new Reference('doctrine.orm.default_entity_manager')]);
+
+            if(in_array(SessionTrait::class, $traits))
+                $definiton->addMethodCall('setSession', [new Reference('session')]);
 
             if(in_array(RouterTrait::class, $traits))
                 $definiton->addMethodCall('setRouter', [new Reference('router')]);

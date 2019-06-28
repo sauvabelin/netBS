@@ -114,6 +114,10 @@ services:
         public: true
         class: NetBS\CoreBundle\Service\ListBridgeManager
 
+    netbs.core.loader_manager:
+        public: true
+        class: NetBS\CoreBundle\Service\LoaderManager
+
     netbs.core.exporter_manager:
         public: true
         arguments:

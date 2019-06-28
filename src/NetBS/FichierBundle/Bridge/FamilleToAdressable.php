@@ -2,6 +2,7 @@
 
 namespace NetBS\FichierBundle\Bridge;
 
+use Doctrine\ORM\EntityManager;
 use NetBS\CoreBundle\Model\BridgeInterface;
 use NetBS\FichierBundle\Model\AdressableInterface;
 use NetBS\FichierBundle\Service\FichierConfig;
