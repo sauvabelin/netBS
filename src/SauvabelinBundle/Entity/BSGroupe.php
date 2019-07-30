@@ -2,6 +2,8 @@
 
 namespace SauvabelinBundle\Entity;
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use NetBS\FichierBundle\Mapping\BaseGroupe;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package SauvabelinBundle\Entity
  * @ORM\Entity()
  * @ORM\Table(name="sauvabelin_netbs_groupes")
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\HasLifecycleCallbacks
  */
 class BSGroupe extends BaseGroupe
 {
@@ -61,7 +63,7 @@ class BSGroupe extends BaseGroupe
     /**
      * @ORM\PrePersist()
      */
-    public function PrePersist() {
+    public function PrePersist(LifecycleEventArgs $args) {
 
         if($this->ncGroupName === null)
             $this->updateNCGroupName();
@@ -70,7 +72,7 @@ class BSGroupe extends BaseGroupe
     /**
      * @ORM\PreUpdate()
      */
-    public function PreUpdate() {
+    public function PreUpdate(PreUpdateEventArgs $args) {
 
         if($this->ncGroupName === null)
             $this->updateNCGroupName();
