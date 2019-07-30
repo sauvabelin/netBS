@@ -12,10 +12,12 @@ use NetBS\FichierBundle\Entity\Telephone;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\GroupSequence;
+use Symfony\Component\Validator\GroupSequenceProviderInterface;
 use TDGLBundle\Entity\TDGLFamille;
 use TDGLBundle\Entity\TDGLMembre;
 
-class Inscription
+class Inscription implements GroupSequenceProviderInterface
 {
     /**
      * @var int
@@ -28,24 +30,24 @@ class Inscription
     public $famille;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"default"})
      */
     public $prenom;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"default"})
      */
     public $sexe;
 
     /**
      * @var string
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"default"})
      */
     public $nom;
 
     /**
      * @var \DateTime
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"default"})
      * @Assert\DateTime
      */
     public $naissance;
@@ -56,27 +58,27 @@ class Inscription
     public $inscription;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"noFamily"})
      */
     public $adresse;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"noFamily"})
      */
     public $npa;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"noFamily"})
      */
     public $localite;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"noFamily"})
      */
     public $telephone;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank(groups={"noFamily"})
      */
     public $email;
 
@@ -86,13 +88,13 @@ class Inscription
     public $professionsParents;
 
     /**
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"default"})
      * @var Groupe
      */
     public $unite;
 
     /**
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"default"})
      * @var Fonction
      */
     public $fonction;
@@ -139,5 +141,19 @@ class Inscription
             ->setGroupe($this->unite);
         $membre->addAttribution($attribution);
         return $membre;
+    }
+
+    /**
+     * Returns which validation groups should be used for a certain state
+     * of the object.
+     *
+     * @return string[]|GroupSequence An array of validation groups
+     */
+    public function getGroupSequence()
+    {
+        return [
+            'default',
+            $this->famille ? '' : 'noFamily',
+        ];
     }
 }

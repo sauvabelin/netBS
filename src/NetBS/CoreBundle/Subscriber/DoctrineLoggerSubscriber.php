@@ -152,13 +152,6 @@ class DoctrineLoggerSubscriber implements EventSubscriber
         if(!$this->manager->canRepresent(ClassUtils::getClass($object)))
             return false;
 
-        /** @var BaseUser $user */
-
-        $user   = $this->storage->getToken()->getUser();
-
-        if($user->hasRole('ROLE_SG'))
-            return false;
-
         return true;
     }
 }

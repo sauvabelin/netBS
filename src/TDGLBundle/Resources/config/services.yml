@@ -16,3 +16,10 @@ services:
       - "@netbs.fichier.config"
     tags:
       - { name: form.type }
+
+  tdgl.listener.main_menu:
+    class: TDGLBundle\Listener\MainMenuListener
+    arguments:
+      - "@security.token_storage"
+    tags:
+      - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure, priority: 60 }

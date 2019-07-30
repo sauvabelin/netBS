@@ -24,14 +24,14 @@ class InscriptionType extends AbstractType
             ->add('familleId', HiddenType::class)
             ->add('nom', TextType::class, ['label' => 'Nom'])
             ->add('prenom', TextType::class, ['label' => 'Prénom'])
-            ->add('sexe', SexeType::class, ['sexe' => 'Prénom'])
+            ->add('sexe', SexeType::class, ['label' => 'Sexe'])
             ->add('naissance', DateMaskType::class, ['label' => 'Date de naissance'])
-            ->add('adresse', TextType::class, ['label' => 'Adresse'])
-            ->add('npa', TextType::class, ['label' => 'NPA'])
-            ->add('localite', TextType::class, ['label' => 'Localité'])
-            ->add('email', EmailType::class, ['label' => 'Email'])
-            ->add('telephone', TelephoneMaskType::class, ['label' => 'Téléphone'])
-            ->add('professionsParents', TextType::class, ['label' => 'Professions des parents (séparer par une virgule)', 'required' => true])
+            ->add('adresse', TextType::class, ['label' => 'Adresse', 'required' => false])
+            ->add('npa', TextType::class, ['label' => 'NPA', 'required' => false])
+            ->add('localite', TextType::class, ['label' => 'Localité', 'required' => false])
+            ->add('email', EmailType::class, ['label' => 'Email', 'required' => false])
+            ->add('telephone', TelephoneMaskType::class, ['label' => 'Téléphone', 'required' => false])
+            ->add('professionsParents', TextType::class, ['label' => 'Professions des parents (séparer par une virgule)', 'required' => false])
             ->add('unite', Select2DocumentType::class, array(
                 'class' => Groupe::class,
                 'label' => 'Unité'

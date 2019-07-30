@@ -1,7 +1,7 @@
 tdgl:
     resource: "@TDGLBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /netBS/tdgl
 
 netbs:
     resource: '@NetBSCoreBundle/Resources/config/routing.yml'

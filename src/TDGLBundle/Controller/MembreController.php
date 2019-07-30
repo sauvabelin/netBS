@@ -20,19 +20,17 @@ class MembreController extends Controller
      */
     public function pageAddMembreAction(Request $request) {
 
-        /** @var User $user */
-        $user = $this->getUser();
         $config = $this->get('netbs.fichier.config');
         $infos = new Inscription();
         $em = $this->get('doctrine.orm.entity_manager');
-        $selectedFamilyId = $request->request->get('circulaire_membre')['familleId'];
         $form = $this->createForm(InscriptionType::class, $infos);
 
         $form->handleRequest($request);
 
-        if(!empty($selectedFamilyId))
-            $infos->famille = $em->find($config->getFamilleClass(), intval($selectedFamilyId));
-        else $infos->generateFamille();
+        if(!empty($infos->familleId)) {
+            $infos->famille = $em->find($config->getFamilleClass(), $infos->familleId);
+
+        } else $infos->generateFamille();
 
         if($form->isSubmitted() && $form->isValid()) {
 

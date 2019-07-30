@@ -29,12 +29,12 @@ class MainMenuListener
     {
         $menu       = $event->getMenu();
 
-        /** @var BaseUser $user */
-        $user       = $this->storage->getToken()->getUser();
-
         $menu->registerCategory('app.home', 'Home', 3000)
             ->addLink('app.home.dashboard', 'Dashboard', 'fas fa-home', 'netbs.core.home.dashboard')
             ->addLink('netbs.core.news.read_news', 'Lire les news', 'fas fa-newspaper', 'netbs.core.news.read_news');
+
+        /** @var BaseUser $user */
+        $user       = $this->storage->getToken()->getUser();
 
         $repo       = $this->manager->getRepository('NetBSCoreBundle:DynamicList');
         $lists      = $repo->findForUser($user);
