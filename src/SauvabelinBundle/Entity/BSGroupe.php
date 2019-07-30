@@ -26,10 +26,6 @@ class BSGroupe extends BaseGroupe
      */
     protected $ncMapped = false;
 
-    public function getSlug() {
-
-    }
-
     /**
      * @return string
      */
@@ -63,5 +59,12 @@ class BSGroupe extends BaseGroupe
             $this->updateNCGroupName();
 
         $this->ncMapped = $ncMapped;
+    }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function postPersist() {
+        $this->updateNCGroupName();
     }
 }
