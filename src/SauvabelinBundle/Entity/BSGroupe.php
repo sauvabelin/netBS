@@ -62,9 +62,9 @@ class BSGroupe extends BaseGroupe
     }
 
     /**
-     * @ORM\PostPersist
+     * @ORM\PreFlush
      */
-    public function postPersist() {
+    public function preFlush() {
         $this->updateNCGroupName();
     }
 }
