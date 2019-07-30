@@ -63,7 +63,7 @@ class BSGroupe extends BaseGroupe
      */
     public function PrePersist() {
 
-        if($this->ncMapped && $this->ncGroupName === null)
+        if($this->ncGroupName === null)
             $this->updateNCGroupName();
     }
 
@@ -72,7 +72,7 @@ class BSGroupe extends BaseGroupe
      */
     public function PreUpdate() {
 
-        if($this->ncMapped && $this->ncGroupName === null)
+        if($this->ncGroupName === null)
             $this->updateNCGroupName();
     }
 }
