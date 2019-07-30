@@ -55,16 +55,24 @@ class BSGroupe extends BaseGroupe
      */
     public function setNcMapped($ncMapped)
     {
-        if($ncMapped && $this->ncGroupName === null)
-            $this->updateNCGroupName();
-
         $this->ncMapped = $ncMapped;
     }
 
     /**
-     * @ORM\PreFlush
+     * @ORM\PrePersist()
      */
-    public function preFlush() {
-        $this->updateNCGroupName();
+    public function PrePersist() {
+
+        if($this->ncMapped && $this->ncGroupName === null)
+            $this->updateNCGroupName();
+    }
+
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function PreUpdate() {
+
+        if($this->ncMapped && $this->ncGroupName === null)
+            $this->updateNCGroupName();
     }
 }
