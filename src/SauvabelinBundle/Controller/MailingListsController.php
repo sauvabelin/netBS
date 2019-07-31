@@ -92,7 +92,6 @@ class MailingListsController extends Controller
         $ispManager = $this->get('sauvabelin.isp_config_manager');
 
         if ($ispManager->getMailingList($list->getFromAdresse()) === null) {
-            return $this->render()
         }
         return $this->render('@Sauvabelin/mail/rule_check_update.modal.twig', [
             'list'  => $list,
