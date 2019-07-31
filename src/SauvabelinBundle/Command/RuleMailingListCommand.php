@@ -27,7 +27,11 @@ class RuleMailingListCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         $isp = $this->getContainer()->get('sauvabelin.isp_config_manager');
 
-
+        $contt = ($isp->getMailingList('embs@sauvabelin.ch'));
+        $contt = explode("\r\n", $contt['destination']);
+        dump($contt);
+        die;
+        die;
         $listes = $em->getRepository('SauvabelinBundle:RuleMailingList')->findAll();
         $config = $this->getContainer()->get('netbs.secure.config');
         $users = $em->getRepository($config->getUserClass())->findAll();
@@ -40,9 +44,11 @@ class RuleMailingListCommand extends ContainerAwareCommand
                 $inners = array_filter($users, function (BaseUser $user) use ($el, $liste) {
                     return $el->evaluate($liste->getElRule(), ['user' => $user]);
                 });
-                dump(array_map(function(BaseUser $user) {
+
+                $addresses = array_values(array_filter(array_map(function(BaseUser $user) {
                     return $user->getSendableEmail();
-                }, $inners));
+                }, $inners), function($str) { return !empty($str); }));
+                dump($addresses);
                 // $address = $isp->getMailingList($liste->getFromAdresse());
                 die;
             }

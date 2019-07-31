@@ -2,6 +2,7 @@
 
 namespace SauvabelinBundle\ListModel;
 
+use NetBS\CoreBundle\ListModel\Action\ModalAction;
 use NetBS\CoreBundle\ListModel\Action\RemoveAction;
 use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
@@ -65,7 +66,11 @@ class RuleMailingListsList extends BaseListModel
             ])
             ->addColumn('Actions', null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY   => [
-                    RemoveAction::class
+                    RemoveAction::class,
+                    ModalAction::class => [
+                        ModalAction::ROUTE => function(RuleMailingList $list) { return $this->router->generate('sauvabelin.mailing_lists.modal_check_update', ['id' => $list->getId()]); },
+                        ModalAction::ICON => 'fas fa-sync'
+                    ]
                 ]
             ]);
     }

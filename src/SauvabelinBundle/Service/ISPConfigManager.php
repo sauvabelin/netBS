@@ -149,7 +149,7 @@ class ISPConfigManager
 
     private function parseDestination($to) {
 
-        return implode("\n", $to);
+        return implode("\r\n", $to);
     }
 
     private function getClient() {

@@ -10,6 +10,7 @@ use SauvabelinBundle\Form\RuleMailingListType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package SauvabelinBundle\Controller
@@ -81,4 +82,46 @@ class MailingListsController extends Controller
         ], Modal::renderModal($form));
     }
 
+    /**
+     * @param Request $request
+     * @Route("/modal/rule-ml/check-update/{id}", name="sauvabelin.mailing_lists.modal_check_update")
+     */
+    public function modalCheckRuleMailingListResultAction(Request $request, RuleMailingList $list) {
+
+        $lmManager = $this->get('sauvabelin.mailing_list_manager');
+        $ispManager = $this->get('sauvabelin.isp_config_manager');
+
+        if ($ispManager->getMailingList($list->getFromAdresse()) === null) {
+            return $this->render()
+        }
+        return $this->render('@Sauvabelin/mail/rule_check_update.modal.twig', [
+            'list'  => $list,
+            'current'   => $lmManager->getCurrentRuleMailingListEmails($list),
+            'fresh'   => $lmManager->getFreshRuleMailingListEmails($list),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/rule-ml/update/{id}", name="sauvabelin.mailing_lists.update_rule_ml")
+     */
+    public function updateRuleMailingList(Request $request, RuleMailingList $list) {
+        $type = $request->get('type');
+        if (!in_array($type, ['fusionner', 'ecraser']))
+            throw $this->createAccessDeniedException('Type de commande inconnu');
+
+        $lmManager = $this->get('sauvabelin.mailing_list_manager');
+        $ispManager = $this->get('sauvabelin.isp_config_manager');
+        $emails = $lmManager->getFreshRuleMailingListEmails($list);
+
+        if ($type === 'ecraser')
+            $ispManager->updateMailingList($list->getFromAdresse(), $emails);
+
+        else {
+            $current = $lmManager->getCurrentRuleMailingListEmails($list);
+            $ispManager->updateMailingList($list->getFromAdresse(), array_merge([$current, $emails]));
+        }
+
+        return new Response();
+    }
 }

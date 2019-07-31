@@ -140,6 +140,13 @@ services:
         tags:
             - { name: form.type }
 
+    sauvabelin.mailing_list_manager:
+        class: SauvabelinBundle\Service\MailingListManager
+        arguments:
+            - "@sauvabelin.isp_config_manager"
+            - "@doctrine.orm.entity_manager"
+            - "@netbs.secure.config"
+
 #    sauvabelin.subscriber.mailing_lists:
 #        class: SauvabelinBundle\Subscriber\MailingListSubscriber
 #        arguments:

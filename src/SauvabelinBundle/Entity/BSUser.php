@@ -3,6 +3,7 @@
 namespace SauvabelinBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\SecureBundle\Mapping\BaseUser;
 
 /**
@@ -142,12 +143,16 @@ class BSUser extends BaseUser
     }
 
     public function isInGroup($groupe) {
-
         return $this->membre ? $this->membre->isInGroup($groupe) : false;
     }
 
     public function isActif() {
-        return $this->membre ? count($this->membre->getActivesAttributions()) > 0 : false;
+
+        return $this->membre ? count($this->membre->getActivesAttributions()) > 0 && !$this->isInGroup('ADABS') : false;
+    }
+
+    public function isInscrit() {
+        return $this->membre ? $this->membre->getStatut() === BaseMembre::INSCRIT : false;
     }
 
     public function hasDistinction($distinction) {

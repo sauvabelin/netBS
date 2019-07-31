@@ -1,0 +1,54 @@
+{% extends '@NetBSCore/layout/modal.layout.twig' %}
+{% set scripts %}
+    <script>
+        $('.btn-update-modal').click(function() {
+            var $btn = $(this);
+            var id = $btn.closest('.modal').attr('id');
+            var type = ('data-type');
+            $('.btn-modal').addClass('disabled');
+
+            $.get('{{ path('sauvabelin.mailing_lists.update_rule_ml', {id: list.id}) }}?type=' + type).then(function(data) {
+                $('.btn-modal').removeClass('disabled');
+                $('#' + id).modal('hide');
+            });
+        });
+    </script>
+{% endset %}
+
+{% block title %}Vérifier la mise à jour d'une mailing liste{% endblock %}
+{% block widthClass %}modal-lg{% endblock %}
+{% block content %}
+
+    {{ registerScript(scripts) }}
+
+    <div class="alert alert-primary">
+        <b class="d-block">Ecraser</b>
+        <p>Les emails actuellement enregistrés seront simplement écrasés par les nouveaux emails tels que refletés par le fichier</p>
+        <b class="d-block">Fusionner</b>
+        <p class="m-0">Les emails reflets du fichier qui ne sont pas dans celles actuellement enregistrés seront ajoutées</p>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <b class="d-block mb-2">Emails actuellement enregistrés</b>
+            <div style="background:#f9f9f9;border:1px solid #ddd; border-radius:10px;" class="p-2">
+                {% for email in current %}
+                    <div {% if email not in fresh %}style="color:red"{% endif %}>{{ email }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-6">
+            <b class="d-block mb-2">Emails reflet du fichier</b>
+            <div style="background:#f9f9f9;border:1px solid #ddd; border-radius:10px;" class="p-2">
+                {% for email in fresh %}
+                    <div {% if email not in current %}style="color:green" {% endif %}>{{ email }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <button type="button" data-dismiss="modal" class="btn btn-modal btn-secondary">Fermer</button>
+    <button type="button" class="btn btn-primary btn-modal btn-update-modal" data-type="ecraser">Ecraser</button>
+    <button type="button" class="btn btn-primary btn-modal btn-update-modal" data-type="fusionner">Fusionner</button>
+{% endblock %}
