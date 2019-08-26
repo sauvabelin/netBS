@@ -6,7 +6,6 @@ use NetBS\CoreBundle\Block\Model\Tab;
 use NetBS\CoreBundle\Block\CardBlock;
 use NetBS\CoreBundle\Block\TabsCardBlock;
 use NetBS\CoreBundle\Block\TemplateBlock;
-use NetBS\FichierBundle\Form\Contact\ContactInformationType;
 use NetBS\FichierBundle\Form\Personne\MembreType;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\SecureBundle\Voter\CRUD;

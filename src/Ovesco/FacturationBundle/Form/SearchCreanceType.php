@@ -3,6 +3,7 @@
 namespace Ovesco\FacturationBundle\Form;
 
 use NetBS\CoreBundle\Form\Type\DatepickerType;
+use NetBS\CoreBundle\Form\Type\DaterangeType;
 use Ovesco\FacturationBundle\Entity\Creance;
 use Ovesco\FacturationBundle\Form\Type\CreanceOuverteType;
 use Ovesco\FacturationBundle\Model\SearchCreance;
@@ -23,7 +24,7 @@ class SearchCreanceType extends AbstractType
             ->add('remarques', TextType::class, ['label' => 'Remarques', 'required' => false])
             ->add('montant', NumberType::class, ['label' => 'Montant', 'required' => false])
             ->add('rabais', NumberType::class, ['label' => 'Rabais (%)', 'required' => false])
-            ->add('date', DatepickerType::class, ['label' => 'Date de création', 'required' => false])
+            ->add('date', DaterangeType::class, ['label' => 'Date de création', 'required' => false])
             ->add('isOuverte', CreanceOuverteType::class, ['label' => 'Créances ouvertes'])
         ;
     }

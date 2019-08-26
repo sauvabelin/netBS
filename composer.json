@@ -13,7 +13,8 @@
             "SauvabelinBundle\\": "src/SauvabelinBundle",
             "GalerieBundle\\": "src/GalerieBundle",
             "Ovesco\\GalerieBundle\\": "src/Ovesco/GalerieBundle",
-            "Ovesco\\FacturationBundle\\": "src/Ovesco/FacturationBundle"
+            "Ovesco\\FacturationBundle\\": "src/Ovesco/FacturationBundle",
+            "Ovesco\\WhatsappBundle\\": "src/Ovesco/WhatsappBundle"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
@@ -52,7 +53,8 @@
         "symfony/swiftmailer-bundle": "^2.6.4",
         "symfony/symfony": "3.4.*",
         "sysmoh/nextcloud-api-wrapper": "dev-master",
-        "twig/twig": "^1.0||^2.0"
+        "twig/twig": "^1.0||^2.0",
+        "twilio/sdk": "^5.34"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

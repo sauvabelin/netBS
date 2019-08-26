@@ -1,0 +1,72 @@
+services:
+    twilio.client:
+        class: Twilio\Rest\Client
+        arguments:
+            - "%twilio_sid%"
+            - "%twilio_auth_token%"
+
+    ovesco.whatsapp.messages_service:
+        class: Ovesco\WhatsappBundle\Service\MessageService
+        arguments:
+            - "@doctrine.orm.entity_manager"
+
+    ovesco.whatsapp.listener.dashboard_layout:
+        class: Ovesco\WhatsappBundle\Listener\AccountLayoutListener
+        arguments:
+            - "@request_stack"
+            - "@doctrine.orm.entity_manager"
+            - "@security.token_storage"
+        tags:
+            - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: extendLayout }
+
+    ovesco.whatsapp.subscriber.doctrine_mapper:
+        class: Ovesco\WhatsappBundle\Subscriber\DoctrineMapperSubscriber
+        arguments:
+            - "@netbs.secure.config"
+        tags:
+            - { name: doctrine.event_subscriber }
+
+
+
+    ovesco.whatsapp.service.scenarios_manager:
+        class: Ovesco\WhatsappBundle\Service\ScenarioManager
+
+# scenarios:
+    ovesco.whatsapp.scenario.annuaire_search:
+        class: Ovesco\WhatsappBundle\Scenario\AnnuaireSearchScenario
+        arguments:
+            - "@netbs.fichier.select2.membre_provider"
+        tags:
+            - { name: ovesco.whatsapp.scenario }
+
+    ovesco.whatsapp.scenario.default_message:
+        class: Ovesco\WhatsappBundle\Scenario\DefaultMessageScenario
+        tags:
+            - { name: ovesco.whatsapp.scenario }
+
+    ovesco.whatsapp.scenario.help:
+        class: Ovesco\WhatsappBundle\Scenario\HelpScenario
+        tags:
+            - { name: ovesco.whatsapp.scenario }
+
+    ovesco.whatsapp.scenario.invalid_message:
+        class: Ovesco\WhatsappBundle\Scenario\InvalidMessageScenario
+        tags:
+            - { name: ovesco.whatsapp.scenario }
+
+    ovesco.whatsapp.scenario.login:
+        class: Ovesco\WhatsappBundle\Scenario\LoginScenario
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@ovesco.whatsapp.messages_service"
+            - "@netbs.secure.config"
+        tags:
+            - { name: ovesco.whatsapp.scenario }
+
+    ovesco.whatsapp.scenario.news:
+        class: Ovesco\WhatsappBundle\Scenario\NewsScenario
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            - { name: ovesco.whatsapp.scenario }
+

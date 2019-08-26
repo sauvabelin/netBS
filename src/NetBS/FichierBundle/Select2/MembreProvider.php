@@ -64,13 +64,12 @@ class MembreProvider implements Select2ProviderInterface
         $query  = $this->entityManager->getRepository($this->getManagedClass())
             ->createQueryBuilder('m');
 
-        $likeResults    = $query
+        $likeResults = $query
             ->where($query->expr()->orX(
-                $query->expr()->like('m.prenom', ':prenom'),
-                $query->expr()->like('m.nom', ':nom')
+                $query->expr()->like('m.prenom', ':term'),
+                $query->expr()->like('m.nom', ':term')
             ))
-            ->setParameter('prenom', '%'.$term.'%')
-            ->setParameter('nom', '%'.$term.'%')
+            ->setParameter('term', '%'.$term.'%')
             ->setMaxResults( $limit - count($results))
             ->getQuery()
             ->execute();

@@ -2,9 +2,12 @@
 
 namespace NetBS\SecureBundle\Controller;
 
+use NetBS\CoreBundle\Block\CardBlock;
+use NetBS\CoreBundle\Block\TemplateBlock;
 use NetBS\SecureBundle\Event\UserPasswordChangeEvent;
 use NetBS\SecureBundle\Form\ChangePasswordType;
 use NetBS\SecureBundle\Form\UserType;
+use NetBS\SecureBundle\Mapping\BaseUser;
 use NetBS\SecureBundle\Model\ChangePassword;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -118,9 +121,11 @@ class UserController extends Controller
     public function accountPageAction(Request $request) {
 
         $manager            = $this->get('netbs.secure.user_manager');
+        $designer           = $this->get('netbs.core.block.layout');
+
+        /** @var BaseUser $user */
         $user               = $this->getUser();
         $userForm           = $this->createForm(UserType::class, $user);
-
         $changePassword     = new ChangePassword();
         $changePasswordForm = $this->createForm(ChangePasswordType::class, $changePassword);
 
@@ -140,11 +145,41 @@ class UserController extends Controller
             return $this->redirectToRoute('netbs.secure.user.account_page');
         }
 
-        return $this->render('@NetBSSecure/user/account_page.html.twig', array(
-            'user'          => $user,
-            'membre'        => $user->getMembre(),
-            'userForm'      => $userForm->createView(),
-            'cpForm'        => $changePasswordForm->createView(),
-        ));
+        $config = $designer::configurator()
+            ->addRow()
+                ->pushColumn(4)
+                    ->addRow()
+                        ->pushColumn(12)
+                            ->setBlock(CardBlock::class, [
+                                'template'  => "@NetBSSecure/user/user_presentation.block.twig",
+                                'title'     => 'Informations de compte',
+                                'subtitle'  => 'Compte lié à ' . ($user->getMembre() ? $user->getMembre() : ' aucun membre'),
+                                'params'    => [
+                                    'userForm'  => $userForm->createView(),
+                                    'user'      => $user,
+                                ]
+                            ])
+                        ->close()
+                    ->close()
+                ->close()
+                ->pushColumn(8)
+                    ->addRow()
+                        ->pushColumn(12)
+                            ->setBlock(CardBlock::class, [
+                                'template'  => '@NetBSSecure/user/user_change_password.block.twig',
+                                'title'     => 'Changer de mot de passe',
+                                'subtitle'  => 'Définir un nouveau mot de passe pour le compte',
+                                'params'    => [
+                                    'cpForm'    => $changePasswordForm->createView(),
+                                ]
+                            ])
+                        ->close()
+                    ->close()
+                ->close()
+            ->close();
+
+        return $designer->renderResponse('netbs', $config, [
+            'title' => 'Mon compte'
+        ]);
     }
 }

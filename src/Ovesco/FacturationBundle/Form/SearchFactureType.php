@@ -3,6 +3,7 @@
 namespace Ovesco\FacturationBundle\Form;
 
 use NetBS\CoreBundle\Form\Type\DatepickerType;
+use NetBS\CoreBundle\Form\Type\DaterangeType;
 use Ovesco\FacturationBundle\Entity\Compte;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Form\Type\CountSearchType;
@@ -25,7 +26,10 @@ class SearchFactureType extends AbstractType
     {
         $builder
             ->add('factureId', FactureIdType::class, ['label' => 'Numéro de facture'])
-            ->add('date', DatepickerType::class, ['label' => 'Date de création', 'required' => false])
+            // ->add('date', DatepickerType::class, ['label' => 'Date de création', 'required' => false])
+            ->add('date', DaterangeType::class, [
+                'label' => 'date de création'
+            ])
             ->add('remarques', TextType::class, ['label' => 'Remarques', 'required' => false])
             ->add('dateImpression', LatestDateType::class, ['label' => "Date de dernière impression", 'property' => 'impression'])
             ->add('datePaiement', LatestDateType::class, ['label' => 'Date de dernier paiement', 'property' => 'paiement'])

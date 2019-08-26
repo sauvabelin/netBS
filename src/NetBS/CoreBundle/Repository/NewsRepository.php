@@ -32,7 +32,7 @@ class NewsRepository extends EntityRepository
         $result = [];
         /** @var News $item */
         foreach($news as $item) {
-            if($max > 0 && count($result) > $max)
+            if($max > 0 && count($result) > $max - 1)
                 break;
 
             $rule = $item->getChannel()->getReadRule();

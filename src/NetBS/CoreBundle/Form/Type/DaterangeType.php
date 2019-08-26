@@ -24,8 +24,8 @@ class DaterangeType extends AbstractType
         $resolver
             ->setDefaults(array(
                 'data_class'    => Daterange::class,
-                'lt_options'    => ['label' => "Plus petit que"],
-                'gt_options'    => ['label' => "Plus grand que"]
+                'lt_options'    => ['label' => "Jusqu'à", 'required' => false],
+                'gt_options'    => ['label' => "Depuis", 'required' => false]
             ));
     }
 }

@@ -147,10 +147,14 @@
 {# daterange #}
 {% block daterange_widget %}
     <div>
-        <div class="input-daterange input-group" data-date-format="dd.mm.yyyy">
-            {{ form_widget(form.start, {placeholder: 'Obligatoire'}) }}
-            <span class="input-group-addon"><i class="fas fa-chevron-right"></i></span>
-            {{ form_widget(form.end, { placeholder: 'Optionnel'}) }}
+        <div class="input-daterange input-group d-flex align-items-center" data-date-format="dd.mm.yyyy">
+            <div class="flex-grow-1">
+                {{ form_row(form.biggerThan) }}
+            </div>
+            <span class="input-group-addon ml-3 mr-3"><i class="fas fa-chevron-right"></i></span>
+            <div class="flex-grow-1">
+                {{ form_row(form.lowerThan) }}
+            </div>
         </div>
     </div>
 {% endblock %}
