@@ -27,8 +27,7 @@
                 itemsClass:     "{{ table.itemClass|toBase64 }}",
                 exporterAlias:  $(this).attr("data-exporter"),
                 selectedIds:    {{ tableId }}.getSelectedIds()
-        };
-
+            };
             PostLink("{{ path('netbs.core.export.export_selected') }}", data);
         });
     </script>

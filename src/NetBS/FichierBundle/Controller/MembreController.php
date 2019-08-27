@@ -27,6 +27,7 @@ class MembreController extends Controller
     public function pageMembreAction($id) {
 
         $config     = $this->get('netbs.fichier.config');
+        $exporters  = $this->get('netbs.core.exporter_manager')->getExportersForClass($config->getMembreClass());
 
         /** @var BaseMembre $membre */
         $membre     = $this->get('doctrine.orm.entity_manager')->find($config->getMembreClass(), $id);
@@ -60,8 +61,10 @@ class MembreController extends Controller
                             ->setBlock(TemplateBlock::class, [
                                 'template'  => '@NetBSFichier/block/membre_links.block.twig',
                                 'params'    => [
-                                    'membre'    => $membre,
-                                    'lists'     => $lists
+                                    'membre'        => $membre,
+                                    'lists'         => $lists,
+                                    'exporters'     => $exporters,
+                                    'exportClass'   => base64_encode($config->getMembreClass()),
                                 ]
                             ])
                         ->close()
