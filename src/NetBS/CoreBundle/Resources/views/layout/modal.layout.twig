@@ -18,7 +18,7 @@
             <div class="modal-footer">
                 {% block footer %}
                     <button type="button" data-dismiss="modal" class="btn btn-secondary">Fermer</button>
-                    <button type="button" data-modal-validate class="btn btn-primary">Valider</button>
+                    <button type="button" data-modal-validate id="validate-modal-btn" class="btn btn-primary">Valider</button>
                 {% endblock %}
             </div>
         </div>
@@ -35,5 +35,10 @@
 <script type="text/javascript">
     $('[data-type="select2"]').css('width', '100%');
     $('[data-type="ajax-select2"]').css('width', '100%');
+
+    $('.modal-dialog form').submit(function(e) {
+        e.preventDefault();
+        $('#validate-modal-btn').trigger('click');
+    });
 </script>
 {{ dumpScript() }}
