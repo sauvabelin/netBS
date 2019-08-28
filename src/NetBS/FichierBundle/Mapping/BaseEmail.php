@@ -45,6 +45,11 @@ class BaseEmail
         $this->setEmail($email);
     }
 
+    public function __toString()
+    {
+        return $this->getEmail();
+    }
+
     /**
      * Get id
      *

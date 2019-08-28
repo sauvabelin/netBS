@@ -48,6 +48,11 @@ class BaseTelephone
         $this->setTelephone($telephone);
     }
 
+    public function __toString()
+    {
+        return $this->getTelephone();
+    }
+
     /**
      * Get id
      *

@@ -71,6 +71,11 @@ class BaseAdresse implements GroupSequenceProviderInterface, EqualInterface
      */
     protected $contactInformation;
 
+    public function __toString()
+    {
+        return $this->rue . "\n" . $this->npa . " " . $this->localite;
+    }
+
     /**
      * @param BaseAdresse $adresse
      * @return bool

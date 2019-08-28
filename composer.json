@@ -14,7 +14,8 @@
             "GalerieBundle\\": "src/GalerieBundle",
             "Ovesco\\GalerieBundle\\": "src/Ovesco/GalerieBundle",
             "Ovesco\\FacturationBundle\\": "src/Ovesco/FacturationBundle",
-            "Ovesco\\WhatsappBundle\\": "src/Ovesco/WhatsappBundle"
+            "Ovesco\\WhatsappBundle\\": "src/Ovesco/WhatsappBundle",
+            "StreetWarBundle\\": "src/StreetWarBundle"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },

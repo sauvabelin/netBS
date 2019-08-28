@@ -33,6 +33,7 @@ class AppKernel extends Kernel
             new Ovesco\GalerieBundle\OvescoGalerieBundle(),
             new Ovesco\FacturationBundle\OvescoFacturationBundle(),
             // new Ovesco\WhatsappBundle\OvescoWhatsappBundle(),
+            new StreetWarBundle\StreetWarBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
