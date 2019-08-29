@@ -219,3 +219,9 @@ services:
         class: Ovesco\FacturationBundle\Deleter\FactureDeleter
         tags:
             - { name: netbs.deleter }
+
+
+    ovesco.facturation.list.column.facture_creances:
+        class: Ovesco\FacturationBundle\ListModel\Column\FactureCreancesColumn
+        tags:
+            - { name: netbs.list.column }
