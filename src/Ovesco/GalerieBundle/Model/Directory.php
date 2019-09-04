@@ -111,14 +111,14 @@ class Directory
     public function getHashPath() {
 
         $data = explode('/', $this->getRelativePath());
-        $data = array_map(function($item) {return base64_encode($item);}, $data);
+        $data = array_map(function($item) {return base64_encode(str_replace('?', '__intermark', $item));}, $data);
 
         return implode("/", $data);
     }
 
     public static function unhashPath($path) {
         $data = explode('/', $path);
-        $data = array_map(function($item) {return base64_decode($item);}, $data);
+        $data = array_map(function($item) {return str_replace('__intermark', '?', base64_decode($item));}, $data);
 
         return implode("/", $data);
     }
