@@ -66,7 +66,7 @@ class ApiController extends Controller
     public function ciblePhoto() {
 
         $participant = $this->getCurrentParticipant();
-        $path = __DIR__ . "/../../../../Streetwar/photos/" . $participant->cible . ".jpg";
+        $path = __DIR__ . "/../../../../stammbox/stammbox-data/Streetwar/Activités/Streetwar/photos/" . $participant->cible . ".jpg";
         if (file_exists($path))
             return new BinaryFileResponse($path);
         else return new BinaryFileResponse(__DIR__ . "/../Resources/assets/ayy.jpg");
@@ -83,7 +83,7 @@ class ApiController extends Controller
 
     private function getParticipants() {
 
-        $content = file_get_contents(__DIR__ . "/../../../../Streetwar/participants.txt");
+        $content = file_get_contents(__DIR__ . "/../../../../stammbox/stammbox-data/Streetwar/Activités/Streetwar/participants.txt");
         $content = explode(PHP_EOL, $content);
         return array_map(function($str) {
             $data = array_map(function($s) { return trim($s); }, explode(':', $str));
