@@ -353,9 +353,9 @@ class Facture
         $rappels = $this->rappels->toArray();
         usort($rappels, function(Rappel $a, Rappel $b) {
             if (!$a->getDateImpression() && !$b->getDateImpression())
-                return $a->getDate() > $b->getDate();
-            if (!$a->getDateImpression()) return 1;
-            if (!$b->getDateImpression()) return -1;
+                return $a->getDate() > $b->getDate() ? 1 : -1;
+            if (!$a->getDateImpression()) return -1;
+            if (!$b->getDateImpression()) return 1;
             return $a->getDateImpression() > $b->getDateImpression() ? 1 : -1;
         });
         return $rappels;
@@ -378,6 +378,7 @@ class Facture
     }
 
     public function hasBeenPrinted() {
+
         if (count($this->rappels) === 0) return $this->getDateImpression() !== null;
         return $this->getLatestRappel()->getDateImpression() !== null;
     }

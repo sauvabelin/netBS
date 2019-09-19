@@ -2,10 +2,12 @@
 
 namespace Ovesco\FacturationBundle\ListModel;
 
+use NetBS\CoreBundle\ListModel\Action\ModalAction;
 use NetBS\CoreBundle\ListModel\Action\RemoveAction;
 use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
+use NetBS\CoreBundle\Utils\Traits\RouterTrait;
 use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use Ovesco\FacturationBundle\Entity\FactureModel;
@@ -14,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class FactureModelsList extends BaseListModel
 {
-    use EntityManagerTrait;
+    use EntityManagerTrait, RouterTrait;
 
     /**
      * Retrieves all elements managed by this list
@@ -80,7 +82,10 @@ class FactureModelsList extends BaseListModel
             ])
             ->addColumn('Supprimer', null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY => [
-                    RemoveAction::class
+                    RemoveAction::class,
+                    ModalAction::class => [
+                        ModalAction::ROUTE => function(FactureModel $model) { return $this->router->generate('ovesco.facturation.facture_model.edit_modal', ['id' => $model->getId()]); }
+                    ]
                 ]
             ])
             ;

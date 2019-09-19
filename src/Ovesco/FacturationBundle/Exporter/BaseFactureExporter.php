@@ -93,11 +93,12 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
         }
 
         foreach($items as $facture)
+            $this->printFacture($facture, $fpdf);
+
+        foreach($items as $facture) {
             if (!$facture->hasBeenPrinted())
                 $facture->setLatestImpression(new \DateTime());
-
-        foreach($items as $facture)
-            $this->printFacture($facture, $fpdf);
+        }
 
         // We've set impression date
         $this->manager->flush();

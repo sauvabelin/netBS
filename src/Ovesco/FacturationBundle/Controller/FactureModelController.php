@@ -56,4 +56,31 @@ class FactureModelController extends Controller
             'form' => $form->createView(),
         ], Modal::renderModal($form));
     }
+
+    /**
+     * @Route("/edit-modal/{id}", name="ovesco.facturation.facture_model.edit_modal")
+     * @param FactureModel $model
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function editModalAction(FactureModel $model, Request $request) {
+
+        $form = $this->createForm(FactureModelType::class, $model);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $em = $this->get('doctrine.orm.entity_manager');
+            $em->persist($model);
+            $em->flush();
+            $this->addFlash('success', "Modèle de facture mis à jour!");
+            return Modal::refresh();
+        }
+
+        return $this->render('@OvescoFacturation/model/add_facture_model.modal.twig', [
+            'form' => $form->createView(),
+        ], Modal::renderModal($form));
+    }
 }
