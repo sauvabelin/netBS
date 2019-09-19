@@ -6,7 +6,6 @@ use SauvabelinBundle\Entity\BSUser;
 use StreetWarBundle\Model\Participant;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -84,7 +83,7 @@ class ApiController extends Controller
 
     private function getParticipants() {
 
-        $content = file_get_contents(__DIR__ . "/pp.txt");
+        $content = file_get_contents(__DIR__ . "/../../../../streetwar/participants.txt");
         $content = explode(PHP_EOL, $content);
         return array_map(function($str) {
             $data = array_map(function($s) { return trim($s); }, explode(':', $str));
