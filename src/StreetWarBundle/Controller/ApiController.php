@@ -6,6 +6,7 @@ use SauvabelinBundle\Entity\BSUser;
 use StreetWarBundle\Model\Participant;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -66,7 +67,10 @@ class ApiController extends Controller
     public function ciblePhoto() {
 
         $participant = $this->getCurrentParticipant();
-        return new BinaryFileResponse(__DIR__ . "/../../../../streetwar/photos/" . $participant->cible . '.jpg');
+        $path = __DIR__ . "/../../../../streetwar/photos/" . $participant->cible . ".jpg";
+        if (file_exists($path))
+            return new BinaryFileResponse($path);
+        else return new BinaryFileResponse(__DIR__ . "/../Resources/assets/ayy.jpg");
     }
 
     /**
@@ -75,12 +79,12 @@ class ApiController extends Controller
     private function getCurrentParticipant() {
 
         $username = $this->getUser()->getUsername();
-        return array_filter($this->getParticipants(), function($p) use ($username) { return $p->user === $username; })[0];
+        return array_values(array_filter($this->getParticipants(), function($p) use ($username) { return $p->user === $username; }))[0];
     }
 
     private function getParticipants() {
 
-        $content = file_get_contents(__DIR__ . "/../../../../streetwar/participants.txt");
+        $content = file_get_contents(__DIR__ . "/pp.txt");
         $content = explode(PHP_EOL, $content);
         return array_map(function($str) {
             $data = array_map(function($s) { return trim($s); }, explode(':', $str));
