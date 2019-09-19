@@ -374,7 +374,7 @@ class Facture
             if($rappel->getDateImpression())
                 return $rappel->getDateImpression();
 
-        return $this->getDateImpression();
+        return $this->getDateImpression() === null ? $this->getDate() : $this->getDateImpression();
     }
 
     public function hasBeenPrinted() {
