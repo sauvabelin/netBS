@@ -14,6 +14,11 @@ tente:
     type:     annotation
     prefix:   /netBS/tente
 
+tente_api:
+    resource: "@TenteBundle/ApiController/"
+    type:     annotation
+    prefix:   /api/v1/public/netBS/tente
+
 ovesco_facturation:
     resource: "@OvescoFacturationBundle/Controller/"
     type:     annotation

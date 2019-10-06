@@ -43,7 +43,7 @@
         });
 
         $('#fb-editor').formBuilder({
-            disabledActionButtons: ['data', 'save', 'clear'],
+            disabledActionButtons: ['save', 'clear'],
             disableFields: ['autocomplete', 'button', 'paragraph', 'radio-group', 'file', 'hidden', 'starRating']
         }).promise.then(function(formBuilder) {
             formBuilder.actions.setData(items);

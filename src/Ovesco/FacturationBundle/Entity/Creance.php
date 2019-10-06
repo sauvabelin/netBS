@@ -5,7 +5,6 @@ namespace Ovesco\FacturationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\FichierBundle\Mapping\BaseFamille;
-use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
 use Ovesco\FacturationBundle\Util\DebiteurTrait;
 use Symfony\Component\Serializer\Annotation\Groups;

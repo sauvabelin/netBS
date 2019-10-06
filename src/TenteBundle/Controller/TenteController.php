@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use TenteBundle\Entity\FeuilleEtat;
 use TenteBundle\Entity\Tente;
+use TenteBundle\Form\TenteType;
 
 /**
  * @package TenteBundle\Controller
@@ -18,9 +19,11 @@ class TenteController extends Controller
      */
     public function viewAction(Tente $tente) {
 
+        $form = $this->createForm(TenteType::class, $tente);
         $em = $this->get('doctrine.orm.default_entity_manager');
         return $this->render('@Tente/tente/details_tente.html.twig', [
             'tente' => $tente,
+            'form' => $form->createView()
         ]);
     }
 

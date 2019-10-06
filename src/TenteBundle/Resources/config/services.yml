@@ -36,3 +36,8 @@ services:
         tags:
             - { name: netbs.searcher }
             - { name: netbs.list.model }
+
+    tente.serializer.tente_model_normalizer:
+        class: TenteBundle\Serializer\TenteModelNormalizer
+        tags:
+            - { name: serializer.normalizer }
