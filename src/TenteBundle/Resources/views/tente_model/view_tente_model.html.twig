@@ -1,0 +1,33 @@
+{% extends '@NetBSCore/layout/backend.layout.twig' %}
+
+{% set title = model.name %}
+
+{% block main %}
+    {{ registerJs(asset('bundles/netbscore/js/modal.js')) }}
+
+    <div class="container-fluid">
+        {% include '@NetBSCore/includes/header.include.twig' with {
+            header: model.name,
+            subHeader: 'Administration du modèle de tente',
+        } %}
+
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="btn-group">
+                    <button data-modal data-modal-url="{{ path('tente.tente_model.add_tentes', {id: model.id}) }}" class="btn btn-secondary">Enregistrer de nouvelles tentes</button>
+                </div>
+            </div>
+            <div class="co-12 col-md-8">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h3 class="card-title">Liste des tentes</h3>
+                        <h5 class="card-subtitle">Toutes les tentes de type {{ model.name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        {{ render_list('tente.tente_model_tentes', 'netbs', { modelId: model.id }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

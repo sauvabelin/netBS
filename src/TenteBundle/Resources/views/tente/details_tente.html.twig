@@ -1,0 +1,49 @@
+{% extends '@NetBSCore/layout/backend.layout.twig' %}
+
+{% block title %}{{ tente.numero }} - {{ tente.model.name }}{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        {% include '@NetBSCore/includes/header.include.twig' with {
+            header: tente.numero,
+            subHeader: 'Tente de type ' ~ tente.model.name
+        } %}
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Informations</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ fake_row('Numéro', tente.numero) }}
+                        {{ fake_row('Statut', tente.statutChoices[tente.status]) }}
+                        {{ fake_row('Ajoutée le', tente.createdAt|date('d.m.Y')) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-8">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h3 class="card-title">Réparations effectuées</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ render_list('tente.tente_reparations', 'basic') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h3 class="card-title">Feuilles d'état</h3>
+                        <h5 class="card-subtitle">Consulter les feuilles d'état numériques de cette tente</h5>
+                    </div>
+                    <div class="card-body">
+                        {{ render_list('tente.tente_feuilles_etat', 'netbs', { tente: tente }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

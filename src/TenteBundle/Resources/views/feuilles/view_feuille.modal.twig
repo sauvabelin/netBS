@@ -1,0 +1,79 @@
+{% extends '@NetBSCore/layout/modal.layout.twig' %}
+
+{% block widthClass %}modal-lg{% endblock %}
+
+{% set style %}
+<style>
+    .drawing-picture img {
+        width: 100%;
+    }
+</style>
+{% endset %}
+
+{% block content %}
+    {{ registerStyle(style) }}
+    <div class="border-bottom">
+        <h3 class="pt-3 pb-2">Feuille d'état du {{ feuille.createdAt|date('d.m.Y') }}</h3>
+    </div>
+    <div class="pt-4">
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td>Utilisateur</td>
+                            <td>{{ feuille.user }}</td>
+                        </tr>
+                        <tr>
+                            <td>Unité</td>
+                            <td>{{ feuille.groupe }}</td>
+                        </tr>
+                        <tr>
+                            <td>Activité</td>
+                            <td>{{ feuille.activity }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-md-8">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Champ</th>
+                        <th>Valeur</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set formData = feuille.formDataParsed %}
+                    {% for item in feuille.tente.model.parsedForm %}
+                        <tr>
+                            <td>{{ item.type == 'header' ? 'Titre' : item.label }}</td>
+                            <td>
+                                {% set itemValue = '' %}
+                                {% if item.name is defined and item.name in formData|keys %}
+                                    {% set itemValue = formData[item.name] %}
+                                {% endif %}
+                                {% include '@Tente/tente/form_field.twig' %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="mt-5">
+        <h3>Eléments dessinables</h3>
+        <div class="row">
+            {% set maxl = feuille.tente.model.drawingParts|length %}
+            {% for drawing in feuille.tente.model.drawingParts %}
+                <div class="col-12 col-md-6 {% if loop.index0 < maxl - 2 %}mb-5{% endif %}">
+                    <h5>{{ (drawing.nom|split('_')|join(' ')|split('.'))[0] }}</h5>
+                    <div class="drawing-picture">
+                        <img src="{{ asset('tentes/uploads/' ~ drawing.image) }}" alt="{{ drawing.image }}" />
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

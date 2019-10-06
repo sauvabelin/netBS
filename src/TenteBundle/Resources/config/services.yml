@@ -1,0 +1,38 @@
+services:
+    tente.listener.main_menu:
+        class: TenteBundle\Listener\MainMenuListener
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure }
+
+    tente.voter:
+        class: TenteBundle\Voter\TenteVoter
+        tags:
+            - { name: security.voter }
+
+    tente.list.tente_models:
+        class: TenteBundle\ListModel\TenteModelList
+        tags:
+            - { name: netbs.list.model }
+
+    tente.list.tente_models_tentes:
+        class: TenteBundle\ListModel\TenteModelTentesList
+        tags:
+            - { name: netbs.list.model }
+
+    tente.list.tente_feuilles_etat:
+        class: TenteBundle\ListModel\TenteFeuillesEtatList
+        tags:
+            - { name: netbs.list.model }
+
+    tente.list.tente_reparations:
+        class: TenteBundle\ListModel\TenteReparationsList
+        tags:
+            - { name: netbs.list.model }
+
+    tente.searcher.tentes:
+        class: TenteBundle\Searcher\TenteSearcher
+        tags:
+            - { name: netbs.searcher }
+            - { name: netbs.list.model }

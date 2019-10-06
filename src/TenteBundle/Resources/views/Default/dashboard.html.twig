@@ -1,0 +1,29 @@
+{% extends '@NetBSCore/layout/backend.layout.twig' %}
+
+{% set title = 'Tentes - administration' %}
+
+{% block main %}
+    <div class="container">
+        {% include '@NetBSCore/includes/header.include.twig' with {
+            header: 'Tentes',
+            subHeader: 'Administration de toutes les tentes'
+        } %}
+        <div class="row">
+            <div class="col-12 col-md-4"></div>
+            <div class="col-12 col-md-8">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h3 class="card-title">Modèles</h3>
+                        <h5 class="card-subtitle">Tous les modèles enregistrés</h5>
+                    </div>
+                    <div class="card-body">
+                        {{ render_list('tente.tente_model', 'basic') }}
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <a href="{{ path('tente.tente_model.add') }}" class="btn btn-secondary">Ajouter un modèle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

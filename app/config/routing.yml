@@ -9,6 +9,11 @@ ovesco_galerie:
     type:     annotation
     prefix:   /
 
+tente:
+    resource: "@TenteBundle/Controller/"
+    type:     annotation
+    prefix:   /netBS/tente
+
 ovesco_facturation:
     resource: "@OvescoFacturationBundle/Controller/"
     type:     annotation

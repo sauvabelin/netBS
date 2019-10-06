@@ -12,6 +12,7 @@
             "NetBS\\ListBundle\\": "src/NetBS/ListBundle",
             "SauvabelinBundle\\": "src/SauvabelinBundle",
             "GalerieBundle\\": "src/GalerieBundle",
+            "TenteBundle\\": "src/TenteBundle",
             "Ovesco\\GalerieBundle\\": "src/Ovesco/GalerieBundle",
             "Ovesco\\FacturationBundle\\": "src/Ovesco/FacturationBundle",
             "Ovesco\\WhatsappBundle\\": "src/Ovesco/WhatsappBundle",

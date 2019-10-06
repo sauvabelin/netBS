@@ -2,7 +2,7 @@
 
     {% set title %}{% block title %}{% endblock %}{% endset %}
 
-    <div class="modal-dialog {% block widthClass %}custom-width{% endblock %}">
+    <div class="modal-dialog {% block widthClass %}custom-width{% endblock %}" {% block modalAttrs %}{% endblock %}>
         <div class="modal-content">
             {% if title %}
                 <div class="modal-header">
@@ -26,6 +26,9 @@
 {% endset %}
 
 <!doctype HTML>
+
+{{ dumpStyle() }}
+
 {{ dumpCss() }}
 
 {{ dumpJs() }}
