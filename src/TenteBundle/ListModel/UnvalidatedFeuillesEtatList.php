@@ -14,9 +14,11 @@ use NetBS\ListBundle\Column\DateTimeColumn;
 use NetBS\ListBundle\Column\SimpleColumn;
 use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use TenteBundle\Entity\FeuilleEtat;
+use TenteBundle\Entity\Tente;
 
-class TenteFeuillesEtatList extends BaseListModel
+class UnvalidatedFeuillesEtatList extends BaseListModel
 {
     use EntityManagerTrait, RouterTrait;
 
@@ -26,7 +28,12 @@ class TenteFeuillesEtatList extends BaseListModel
      */
     protected function buildItemsList()
     {
-        return $this->getParameter('tente')->getFeuillesEtat();
+        return $this->entityManager->getRepository('TenteBundle:FeuilleEtat')
+            ->createQueryBuilder('f')
+            ->where('f.validated = FALSE')
+            ->orderBy('f.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -44,7 +51,7 @@ class TenteFeuillesEtatList extends BaseListModel
      */
     public function getAlias()
     {
-        return 'tente.tente_feuilles_etat';
+        return 'tente.unvalidated_feuilles_etat';
     }
 
     /**
@@ -54,20 +61,23 @@ class TenteFeuillesEtatList extends BaseListModel
     public function configureColumns(\NetBS\ListBundle\Model\ListColumnsConfiguration $configuration)
     {
         $configuration
+            ->addColumn('Statut', function(FeuilleEtat $feuilleEtat) {
+                if ($feuilleEtat->getStatut() === FeuilleEtat::STATUS_NO_OK)
+                    return "<span class='badge badge-danger'>Problème</span>";
+                return "<span class='badge badge-success'>Ok</span>";
+            }, SimpleColumn::class)
             ->addColumn("Rédacteur", 'user', HelperColumn::class)
             ->addColumn('Lue', null, XEditableColumn::class, [
                 XEditableColumn::TYPE_CLASS => SwitchType::class,
                 XEditableColumn::PROPERTY => 'validated'
             ])
             ->addColumn('Unité', 'groupe', HelperColumn::class)
-            ->addColumn('Activité', 'activity', SimpleColumn::class)
-            ->addColumn('Statut', function(FeuilleEtat $feuilleEtat) {
-                if ($feuilleEtat->getStatut() === FeuilleEtat::STATUS_NO_OK)
-                    return "<span class='label label-danger'>Problème</span>";
-                return 'Ok';
-            }, SimpleColumn::class)
-            ->addColumn('Début activité', 'debut', DateTimeColumn::class)
-            ->addColumn('Fin activité', 'fin', DateTimeColumn::class)
+            ->addColumn('N° Tente', 'tente.numero', SimpleColumn::class)
+            ->addColumn('Statut tente', 'tente', XEditableColumn::class, [
+                XEditableColumn::TYPE_CLASS => ChoiceType::class,
+                XEditableColumn::PROPERTY => 'status',
+                XEditableColumn::PARAMS => ['choices' => array_flip(Tente::getStatutChoices())]
+            ])
             ->addColumn('Rédigée le', 'createdAt', DateTimeColumn::class)
             ->addColumn('Actions', null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY => [

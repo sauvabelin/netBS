@@ -31,6 +31,11 @@ services:
         tags:
             - { name: netbs.list.model }
 
+    tente.list.unvalidated_feuilles_etat:
+        class: TenteBundle\ListModel\UnvalidatedFeuillesEtatList
+        tags:
+            - { name: netbs.list.model }
+
     tente.searcher.tentes:
         class: TenteBundle\Searcher\TenteSearcher
         tags:
@@ -41,3 +46,10 @@ services:
         class: TenteBundle\Serializer\TenteModelNormalizer
         tags:
             - { name: serializer.normalizer }
+
+    tente.renderer.netbs.toolbar_listener:
+        class: TenteBundle\Listener\ToolbarListener
+        arguments:
+            - "@twig"
+        tags:
+            - { name: kernel.event_listener, event: netbs.list_model.renderer.toolbar, method: extend }

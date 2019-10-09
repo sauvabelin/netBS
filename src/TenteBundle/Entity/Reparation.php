@@ -5,6 +5,7 @@ namespace TenteBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
+use TenteBundle\Model\ReparationPartie;
 
 /**
  * Reparation
@@ -44,7 +45,7 @@ class Reparation
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="recue", type="date")
+     * @ORM\Column(name="recue", type="date", nullable=true)
      */
     private $recue;
 
@@ -54,6 +55,13 @@ class Reparation
      * @ORM\ManyToOne(targetEntity="Tente", inversedBy="reparations")
      */
     private $tente;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="parties", type="array")
+     */
+    private $parties;
 
     /**
      * Get id.
@@ -78,6 +86,7 @@ class Reparation
     public function __construct()
     {
         $this->feuillesEtat = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->envoyee = new \DateTime();
     }
 
     /**
@@ -90,7 +99,7 @@ class Reparation
     public function setTente(\TenteBundle\Entity\Tente $tente = null)
     {
         $this->tente = $tente;
-
+        $tente->addReparation($this);
         return $this;
     }
 
@@ -154,6 +163,7 @@ class Reparation
     public function setRecue($recue)
     {
         $this->recue = $recue;
+        $this->setStatus(self::RECEPTIONNEE);
     }
 
     /**
@@ -186,5 +196,21 @@ class Reparation
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return ReparationPartie[]
+     */
+    public function getParties()
+    {
+        return $this->parties;
+    }
+
+    /**
+     * @param ReparationPartie[] $parties
+     */
+    public function setParties($parties)
+    {
+        $this->parties = $parties;
     }
 }

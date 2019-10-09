@@ -4,6 +4,7 @@ namespace TenteBundle\Searcher;
 
 use NetBS\CoreBundle\ListModel\Action\IconAction;
 use NetBS\CoreBundle\ListModel\Column\ActionColumn;
+use NetBS\CoreBundle\ListModel\Column\LinkColumn;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\CoreBundle\Model\BaseSearcher;
 use NetBS\CoreBundle\Utils\Traits\RouterTrait;
@@ -61,23 +62,15 @@ class TenteSearcher extends BaseSearcher
     public function configureColumns(\NetBS\ListBundle\Model\ListColumnsConfiguration $configuration)
     {
         $configuration
-            ->addColumn('Numero', null, XEditableColumn::class, [
-                XEditableColumn::PROPERTY => 'numero',
-                XEditableColumn::TYPE_CLASS => TextType::class,
+            ->addColumn('Numero', null, LinkColumn::class, [
+                LinkColumn::LABEL => function($t) { return $t->getNumero(); },
+                LinkColumn::ROUTE => function($t) { return $this->router->generate('tente.tente.details', ['id' => $t->getId()]); },
             ])
             ->addColumn('Statut', null, XEditableColumn::class, [
                 XEditableColumn::TYPE_CLASS => ChoiceType::class,
                 XEditableColumn::PROPERTY => 'status',
                 XEditableColumn::PARAMS => [
                     'choices' => array_flip(Tente::getStatutChoices()),
-                ],
-            ])
-            ->addColumn('Actions', null, ActionColumn::class, [
-                ActionColumn::ACTIONS_KEY => [
-                    IconAction::class => [
-                        IconAction::ROUTE => function($t) { return $this->router->generate('tente.tente.details', ['id' => $t->getId()]); },
-                        IconAction::ICON => 'fas fa-eye'
-                    ]
                 ],
             ]);
     }

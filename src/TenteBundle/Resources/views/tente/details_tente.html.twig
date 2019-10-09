@@ -2,9 +2,10 @@
 
 {% form_theme form '@NetBSCore/form/xeditable.theme.twig' %}
 
-{% block title %}{{ tente.numero }} - {{ tente.model.name }}{% endblock %}
+{% set title %}{{ tente.numero }} - {{ tente.model.name }}{% endset %}
 
 {% block main %}
+    {{ registerJs(asset('bundles/netbscore/js/modal.js')) }}
     <div class="container-fluid">
         {% include '@NetBSCore/includes/header.include.twig' with {
             header: tente.numero,
@@ -29,9 +30,10 @@
                         <h3 class="card-title">Réparations effectuées</h3>
                     </div>
                     <div class="card-body">
-                        {{ render_list('tente.tente_reparations', 'basic') }}
+                        {{ render_list('tente.tente_reparations', 'basic', {tenteId: tente.id}) }}
                     </div>
                 </div>
+                <button data-modal data-modal-url="{{ path('tente.tente.add_reparation_modal', {id: tente.id}) }}" class="btn btn-secondary">Ajouter une réparation</button>
             </div>
         </div>
         <div class="row">

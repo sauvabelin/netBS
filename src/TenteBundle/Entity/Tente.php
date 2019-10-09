@@ -19,6 +19,7 @@ class Tente
     const DISPONIBLE = 'disponible';
     const EN_ACTIVITE = 'en_activite';
     const EN_REPARATION = 'en_reparation';
+    const A_REPARER = 'a_reparer';
     const INDISPONIBLE = 'indisponible';
 
     /**
@@ -61,16 +62,9 @@ class Tente
     /**
      * @var Reparation[]
      *
-     * @ORM\OneToMany(targetEntity="Reparation", mappedBy="tente")
+     * @ORM\OneToMany(targetEntity="Reparation", mappedBy="tente", cascade={"PERSIST", "REMOVE"})
      */
     private $reparations;
-
-    /**
-     * @var Activity[]
-     *
-     * @ORM\ManyToMany(targetEntity="TenteBundle\Entity\Activity", mappedBy="tentes")
-     */
-    private $activities;
 
     /**
      * Get id.
@@ -87,6 +81,7 @@ class Tente
         return [
             self::DISPONIBLE => 'Disponible',
             self::INDISPONIBLE => 'Indisponible',
+            self::A_REPARER => 'A réparer/vérifier',
             self::EN_ACTIVITE => 'En activité',
             self::EN_REPARATION => 'En réparation',
         ];
@@ -219,7 +214,8 @@ class Tente
     public function addReparation(\TenteBundle\Entity\Reparation $reparation)
     {
         $this->reparations[] = $reparation;
-
+        if ($reparation->getStatus() === Reparation::EN_COURS)
+            $this->setStatus(self::EN_REPARATION);
         return $this;
     }
 
@@ -243,41 +239,5 @@ class Tente
     public function getReparations()
     {
         return $this->reparations;
-    }
-
-    /**
-     * Add activity.
-     *
-     * @param \TenteBundle\Entity\Activity $activity
-     *
-     * @return Tente
-     */
-    public function addActivity(\TenteBundle\Entity\Activity $activity)
-    {
-        $this->activities[] = $activity;
-
-        return $this;
-    }
-
-    /**
-     * Remove activity.
-     *
-     * @param \TenteBundle\Entity\Activity $activity
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeActivity(\TenteBundle\Entity\Activity $activity)
-    {
-        return $this->activities->removeElement($activity);
-    }
-
-    /**
-     * Get activities.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getActivities()
-    {
-        return $this->activities;
     }
 }

@@ -11,6 +11,7 @@ use TenteBundle\Entity\DrawingPart;
 use TenteBundle\Entity\Tente;
 use TenteBundle\Entity\TenteModel;
 use TenteBundle\Form\AddTentesType;
+use TenteBundle\Form\TenteModelNameType;
 use TenteBundle\Form\TenteModelType;
 
 /**
@@ -27,6 +28,7 @@ class TenteModelController extends Controller
 
         return $this->render('@Tente/tente_model/view_tente_model.html.twig', [
             'model' => $model,
+            'form' => $this->createForm(TenteModelNameType::class, $model)->createView()
         ]);
     }
 

@@ -6,6 +6,7 @@ use NetBS\CoreBundle\Form\Type\DatepickerType;
 use NetBS\CoreBundle\ListModel\Column\XEditableColumn;
 use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
 use NetBS\CoreBundle\Utils\Traits\RouterTrait;
+use NetBS\ListBundle\Column\SimpleColumn;
 use NetBS\ListBundle\Model\BaseListModel;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -66,6 +67,13 @@ class TenteReparationsList extends BaseListModel
                 XEditableColumn::PROPERTY => 'recue',
                 XEditableColumn::TYPE_CLASS => DatepickerType::class,
             ])
+            ->addColumn('Pièces', function(Reparation $reparation) {
+                $p = '';
+                foreach($reparation->getParties() as $partie)
+                    if ($partie->sent)
+                        $p .= $partie->nom . "<br/>";
+                return $p;
+            }, SimpleColumn::class)
             ->addColumn('Remarques', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY => 'remarques',
                 XEditableColumn::TYPE_CLASS => TextareaType::class,

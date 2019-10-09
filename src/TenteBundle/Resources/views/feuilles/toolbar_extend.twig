@@ -1,0 +1,25 @@
+{{ registerJs(asset('bundles/netbscore/js/post_link.js')) }}
+
+<div class="btn-group dropdown dropup">
+    <button type="button" id="mark-read" class="btn btn-primary">Marquer comme lues</button>
+    <button type="button" id="mark-unread" class="btn btn-secondary">Marquer comme non-lues</button>
+</div>
+
+{% set exportScript %}
+    <script type="text/javascript">
+        $('#mark-read').click(function() {
+            PostLink("{{ path('tente.feuille_etat.mark_validated') }}", {
+                validated: true,
+                selectedIds:    {{ tableId }}.getSelectedIds()
+            });
+        });
+        $('#mark-unread').click(function() {
+            PostLink("{{ path('tente.feuille_etat.mark_validated') }}", {
+                validated: false,
+                selectedIds:    {{ tableId }}.getSelectedIds()
+            });
+        });
+    </script>
+{% endset %}
+
+{{ registerScript(exportScript) }}

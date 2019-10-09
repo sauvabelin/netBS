@@ -46,8 +46,8 @@
                     <tbody>
                     {% set formData = feuille.formDataParsed %}
                     {% for item in feuille.tente.model.parsedForm %}
-                        <tr>
-                            <td>{{ item.type == 'header' ? 'Titre' : item.label }}</td>
+                        <tr {% if item.type == 'header' and item.subtype == 'h1' %}class="bg-primary text-white"{% endif %}>
+                            <td>{% if item.type == 'header' and item.subtype == 'h1' %}Section{% elseif item.type == 'header' %}Titre{% else %}{{ item.label }}{% endif %}</td>
                             <td>
                                 {% set itemValue = '' %}
                                 {% if item.name is defined and item.name in formData|keys %}

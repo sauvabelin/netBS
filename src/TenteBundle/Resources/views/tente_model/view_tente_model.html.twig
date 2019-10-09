@@ -1,5 +1,7 @@
 {% extends '@NetBSCore/layout/backend.layout.twig' %}
 
+{% form_theme form '@NetBSCore/form/xeditable.theme.twig' %}
+
 {% set title = model.name %}
 
 {% block main %}
@@ -13,6 +15,15 @@
 
         <div class="row">
             <div class="col-12 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Informations</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(form.name) }}
+                        {{ form_row(form.parties) }}
+                    </div>
+                </div>
                 <div class="btn-group">
                     <button data-modal data-modal-url="{{ path('tente.tente_model.add_tentes', {id: model.id}) }}" class="btn btn-secondary">Enregistrer de nouvelles tentes</button>
                 </div>

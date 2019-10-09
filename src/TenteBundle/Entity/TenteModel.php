@@ -54,6 +54,13 @@ class TenteModel
     private $tentes;
 
     /**
+     * @var string[]
+     *
+     * @ORM\Column(type="array", name="parties")
+     */
+    private $parties;
+
+    /**
      * Get id.
      *
      * @return int
@@ -197,5 +204,21 @@ class TenteModel
     public function getTentes()
     {
         return $this->tentes;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getParties()
+    {
+        return $this->parties;
+    }
+
+    /**
+     * @param string[] $parties
+     */
+    public function setParties($parties)
+    {
+        $this->parties = $parties;
     }
 }

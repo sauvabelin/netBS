@@ -34,7 +34,7 @@ class FeuilleEtat
     /**
      * @var Tente
      *
-     * @ORM\ManyToOne(targetEntity="Tente", inversedBy="reparations")
+     * @ORM\ManyToOne(targetEntity="Tente", inversedBy="feuillesEtat")
      */
     private $tente;
 
@@ -95,11 +95,11 @@ class FeuilleEtat
     private $formData;
 
     /**
-     * @var Reparation[]
+     * @var string
      *
-     * @ORM\ManyToMany(targetEntity="Reparation", inversedBy="feuillesEtat")
+     * @ORM\Column(name="drawing_data", type="text")
      */
-    private $reparations;
+    private $drawingData;
 
     /**
      * Get id.
@@ -115,7 +115,6 @@ class FeuilleEtat
      */
     public function __construct()
     {
-        $this->reparations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->debut = new \DateTime();
         $this->fin = new \DateTime();
     }
@@ -229,42 +228,6 @@ class FeuilleEtat
     }
 
     /**
-     * Add reparation.
-     *
-     * @param \TenteBundle\Entity\Reparation $reparation
-     *
-     * @return FeuilleEtat
-     */
-    public function addReparation(\TenteBundle\Entity\Reparation $reparation)
-    {
-        $this->reparations[] = $reparation;
-
-        return $this;
-    }
-
-    /**
-     * Remove reparation.
-     *
-     * @param \TenteBundle\Entity\Reparation $reparation
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeReparation(\TenteBundle\Entity\Reparation $reparation)
-    {
-        return $this->reparations->removeElement($reparation);
-    }
-
-    /**
-     * Get reparations.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getReparations()
-    {
-        return $this->reparations;
-    }
-
-    /**
      * @return string
      */
     public function getStatut()
@@ -342,5 +305,21 @@ class FeuilleEtat
     public function setFin($fin)
     {
         $this->fin = $fin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDrawingData()
+    {
+        return $this->drawingData;
+    }
+
+    /**
+     * @param string $drawingData
+     */
+    public function setDrawingData($drawingData)
+    {
+        $this->drawingData = $drawingData;
     }
 }
