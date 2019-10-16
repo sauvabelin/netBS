@@ -45,6 +45,7 @@ class UnloadBVRCommand extends ContainerAwareCommand
                         /** @var Facture $facture */
                         $facture = $paiement->getFacture();
                         $facture->removePaiement($paiement);
+                        $em->remove($paiement);
                         echo "Removing paiement from facture...\n";
                     }
                 }
