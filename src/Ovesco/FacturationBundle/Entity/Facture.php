@@ -266,7 +266,10 @@ class Facture
      */
     public function removePaiement(Paiement $paiement)
     {
-        return $this->paiements->removeElement($paiement);
+        $res = $this->paiements->removeElement($paiement);
+        if ($this->getStatut() === Facture::PAYEE && $this->getMontantEncoreDu() > 0)
+            $this->setStatut(Facture::OUVERTE);
+        return $res;
     }
 
     /**

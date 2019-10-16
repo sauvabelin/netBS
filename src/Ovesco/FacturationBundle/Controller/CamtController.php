@@ -100,20 +100,24 @@ class CamtController extends Controller
 
                         // facture déjà payée avant le paiement
                         if ($facture->getStatut() === Facture::PAYEE) {
-                            $alreadyPaid = true;
                             if ($samePaiement) $parsedBVR->addDoublePaiement($facture);
-                            else $parsedBVR->addAlreadyPaid($facture);
+                            else {
+                                $em->persist($paiement);
+                                $facture->addPaiement($paiement);
+                                $parsedBVR->addAlreadyPaid($facture);
+                            }
                         }
 
-                        $em->persist($paiement);
-                        $facture->addPaiement($paiement);
-
-                        if (!$alreadyPaid) {
-                            // Paiement à double
+                        // facture pas encore payée
+                        else {
+                            // Paiement déjà enregistré
                             if ($samePaiement) {
                                 $parsedBVR->addDoublePaiement($facture);
                             } // Normal
                             else {
+
+                                $em->persist($paiement);
+                                $facture->addPaiement($paiement);
                                 if ($facture->getStatut() === Facture::PAYEE)
                                     $parsedBVR->addFacture($facture);
                                 else
