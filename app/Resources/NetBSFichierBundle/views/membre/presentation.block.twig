@@ -7,5 +7,8 @@
     {{ form_row(form.numeroAvs) }}
     {{ form_row(form.naissance) }}
     {{ form_row(form.inscription) }}
+    {% if app.user.hasRole('ROLE_SG') %}
+        {{ form_row(form.desinscription) }}
+    {% endif %}
     {{ form_row(form.statut) }}
 </form>

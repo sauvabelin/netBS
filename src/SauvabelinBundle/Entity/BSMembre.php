@@ -55,17 +55,29 @@ class BSMembre extends BaseMembre
         return $this;
     }
 
+    public function setDesinscription($desinscription)
+    {
+        if ($desinscription <= new \DateTime()) $this->setStatut(self::DESINSCRIT);
+        return parent::setDesinscription($desinscription);
+    }
+
     public function setStatut($statut)
     {
         $this->statut = $statut;
         $close = [];
-        if($statut === self::DECEDE)
+        if($statut === self::DECEDE) {
             foreach ($this->getActivesAttributions() as $attribution)
                 $close[] = $attribution;
-        else if(in_array($statut, [self::DECEDE, self::AUTRE]))
+
+            if ($this->desinscription === null) $this->desinscription = new \DateTime();
+        }
+        else if(in_array($statut, [self::DESINSCRIT, self::AUTRE])) {
             foreach ($this->getActivesAttributions() as $attribution)
                 if ($attribution->getGroupeId() !== $this->_adabsId)
                     $close[] = $attribution;
+
+            if ($this->desinscription === null) $this->desinscription = new \DateTime();
+        }
 
         /** @var BaseAttribution $attribution */
         foreach($close as $attribution)
