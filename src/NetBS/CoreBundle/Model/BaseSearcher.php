@@ -4,11 +4,14 @@ namespace NetBS\CoreBundle\Model;
 
 use NetBS\CoreBundle\Service\ParameterManager;
 use NetBS\CoreBundle\Service\QueryMaker;
+use NetBS\CoreBundle\Utils\Traits\EntityManagerTrait;
 use NetBS\ListBundle\Model\BaseListModel;
 use Symfony\Component\Form\Form;
 
 abstract class BaseSearcher extends BaseListModel
 {
+    use EntityManagerTrait;
+
     /**
      * @var QueryMaker
      */
@@ -28,6 +31,8 @@ abstract class BaseSearcher extends BaseListModel
      * @var null|array
      */
     protected $results  = null;
+
+    protected $previousResults = [];
 
     /**
      * Returns the search form type class
@@ -53,6 +58,15 @@ abstract class BaseSearcher extends BaseListModel
         $this->queryMaker   = $queryMaker;
     }
 
+    public function addPreviousResults($ids) {
+        $this->previousResults = $this->entityManager->getRepository($this->getManagedItemsClass())
+            ->createQueryBuilder('x')
+            ->where('x.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function setParameterManager(ParameterManager $manager) {
 
         $this->parameterManager = $manager;
@@ -66,6 +80,7 @@ abstract class BaseSearcher extends BaseListModel
     {
         $limit      = $this->getMaxResults();
         $results    = $this->getResults();
+        $results    = array_unique(array_merge($results, $this->previousResults));
         return count($results) > intval($limit) ? [] : $results;
     }
 

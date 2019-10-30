@@ -1,7 +1,6 @@
 {% extends '@NetBSCore/searcher/searcher.html.twig' %}
 
 {% block searchForm %}
-    {{ form_start(form) }}
     <div class="row">
 
         <div class="col-12 col-md-6">
@@ -59,7 +58,4 @@
             {{ form_row(form.obtentionsDistinction.date.lowerThan) }}
         </div>
     </div>
-
-    <button class="btn btn-primary">Lancer la recherche</button>
-    {{ form_end(form) }}
 {% endblock %}

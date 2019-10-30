@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use TenteBundle\Entity\FeuilleEtat;
 
 /**
  * Class FeuilleEtatController
@@ -22,5 +23,44 @@ class FeuilleEtatController extends Controller
         $models = $em->getRepository('TenteBundle:TenteModel')->findAll();
 
         return new JsonResponse($this->get('serializer')->serialize($models, 'json'), 200, [], true);
+    }
+
+    /**
+     * @Route("/submit", name="tente.api.submit", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function submitFormAction(Request $request) {
+
+        $em = $this->get('doctrine.orm.default_entity_manager');
+        $content = json_decode($request->getContent(), true);
+
+        $feuilleEtat = new FeuilleEtat();
+        $identite = $content[0];
+        $tente = $em->getRepository('TenteBundle:Tente')->findOneBy(['numero' => $identite['numero']]);
+        $unite = $em->find('SauvabelinBundle:BSGroupe', $identite['unite']);
+
+        $feuilleEtat->setTente($tente);
+        $feuilleEtat->setGroupe($unite);
+        $feuilleEtat->setUser($this->getUser());
+        $feuilleEtat->setDebut(new \DateTime($identite['dateDebut']));
+        $feuilleEtat->setFin(new \DateTime($identite['dateFin']));
+        $feuilleEtat->setActivity($identite['activite']);
+
+        $drawings = [];
+        $steps = [];
+
+        for($i = 1; $i < count($content); $i++) {
+            $item = $content[$i];
+            if (in_array('drawing', array_keys($item)) && in_array('remarques', array_keys($item)))
+                $drawings[] = $item;
+            else $steps[] = $item;
+        }
+
+        $feuilleEtat->setDrawingData(json_encode($drawings));
+        $feuilleEtat->setFormData(json_encode($steps));
+
+        dump($feuilleEtat);
+        return new JsonResponse(['result' => 'OK']);
     }
 }

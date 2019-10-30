@@ -8,6 +8,7 @@ use NetBS\CoreBundle\Service\QueryMaker;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class SearcherManager
 {
@@ -93,11 +94,29 @@ class SearcherManager
 
     public function render(SearchInstance $instance, array $params = []) {
 
-        $form   = $instance->getForm();
+        $previous = $this->getPreviousIds();
+        $previous = is_array($previous) ? $previous : [];
+        if ($this->merge()) $instance->getSearcher()->addPreviousResults($previous);
 
+        $currentIds = array_unique(array_merge(
+            array_map(function($item) { return $item->getId(); }, $instance->getSearcher()->getResults()),
+            $previous
+        ));
+
+        $form   = $instance->getForm();
         return new Response($this->twig->render($instance->getSearcher()->getFormTemplate(), array_merge($params, [
             'form'          => $form->createView(),
             'searcher'      => $instance->getSearcher(),
+            'merge'         => $this->merge(),
+            'currentIds'    => $this->merge() ? serialize($currentIds) : serialize([]),
         ])));
+    }
+
+    private function merge() {
+        return $this->request->get('merge_with_previous') !== null;
+    }
+
+    private function getPreviousIds() {
+        return unserialize($this->request->request->get('previous_results'));
     }
 }

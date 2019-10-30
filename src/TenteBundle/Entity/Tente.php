@@ -67,6 +67,13 @@ class Tente
     private $reparations;
 
     /**
+     * @var Activity[]
+     *
+     * @ORM\ManyToMany(targetEntity="TenteBundle\Entity\Activity", inversedBy="tentes")
+     */
+    private $activities;
+
+    /**
      * Get id.
      *
      * @return int

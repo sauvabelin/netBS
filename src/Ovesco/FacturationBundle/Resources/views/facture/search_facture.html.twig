@@ -1,8 +1,6 @@
 {% extends '@NetBSCore/searcher/searcher.html.twig' %}
 
 {% block searchForm %}
-
-    {{ form_start(form) }}
     <div class="row">
         <div class="col-md-4">
             {{ form_row(form.factureId) }}
@@ -28,8 +26,4 @@
             {{ form_row(form.remarques) }}
         </div>
     </div>
-
-    <button class="btn btn-primary">Rechercher</button>
-    {{ form_end(form) }}
-
 {% endblock %}
