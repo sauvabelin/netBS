@@ -60,7 +60,7 @@ class Facture
     /**
      * @var Creance[]
      *
-     * @ORM\OneToMany(targetEntity="Creance", mappedBy="facture", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="Creance", mappedBy="facture", fetch="EAGER", cascade={"persist", "remove"})
      * @Groups({"facture_with_creances"})
      */
     protected $creances;

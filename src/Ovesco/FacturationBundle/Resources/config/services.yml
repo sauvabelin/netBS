@@ -225,3 +225,9 @@ services:
         class: Ovesco\FacturationBundle\ListModel\Column\FactureCreancesColumn
         tags:
             - { name: netbs.list.column }
+
+    ovesco.facturation.listener.remove_membre:
+        class: Ovesco\FacturationBundle\Listener\RemoveMembreListener
+        tags:
+            - { name: kernel.event_listener, event: netbs.remove.membre, method: onRemove }
+            - { name: kernel.event_listener, event: netbs.remove.famille, method: onRemoveFamille }

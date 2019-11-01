@@ -43,6 +43,9 @@ class DoctrineDebiteurSubscriber implements EventSubscriber
             : $this->config->getFamilleClass();
 
         $debiteur   = $args->getEntityManager()->find($class, $data[1]);
+        if ($debiteur === null) {
+            dump($args);
+        }
         $item->setDebiteur($debiteur);
     }
 

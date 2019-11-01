@@ -6,12 +6,13 @@ use NetBS\CoreBundle\Block\Model\Tab;
 use NetBS\CoreBundle\Block\CardBlock;
 use NetBS\CoreBundle\Block\TabsCardBlock;
 use NetBS\CoreBundle\Block\TemplateBlock;
+use NetBS\CoreBundle\Event\RemoveMembreEvent;
 use NetBS\FichierBundle\Form\Personne\MembreType;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class MembreController
@@ -108,5 +109,25 @@ class MembreController extends Controller
         $instance       = $searcher->bind($this->get('netbs.fichier.config')->getMembreClass());
 
         return $searcher->render($instance);
+    }
+
+    /**
+     * @Route("/remove/{id}", name="netbs.fichier.membre.remove")
+     */
+    public function removeMembreAction($id) {
+
+        if(!$this->isGranted('ROLE_SG'))
+            throw $this->createAccessDeniedException("Opération refusée!");
+
+        $config = $this->get('netbs.fichier.config');
+        $em = $this->getDoctrine()->getManager();
+        $membre = $em->find($config->getMembreClass(), $id);
+
+        $this->get('event_dispatcher')->dispatch(RemoveMembreEvent::NAME, new RemoveMembreEvent($membre, $em));
+
+        $em->remove($membre);
+        $em->flush();
+        $this->addFlash('success', 'Membre supprimé');
+        return $this->redirectToRoute('netbs.core.home.dashboard');
     }
 }

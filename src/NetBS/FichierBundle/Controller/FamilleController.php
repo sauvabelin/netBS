@@ -5,12 +5,14 @@ namespace NetBS\FichierBundle\Controller;
 use NetBS\CoreBundle\Block\Model\Tab;
 use NetBS\CoreBundle\Block\CardBlock;
 use NetBS\CoreBundle\Block\TabsCardBlock;
+use NetBS\CoreBundle\Block\TemplateBlock;
+use NetBS\CoreBundle\Event\RemoveFamilleEvent;
+use NetBS\CoreBundle\Event\RemoveMembreEvent;
 use NetBS\FichierBundle\Form\FamilleType;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -56,6 +58,16 @@ class FamilleController extends Controller
                             ])
                         ->close()
                     ->close()
+                    ->addRow()
+                        ->pushColumn(12)
+                            ->setBlock(TemplateBlock::class, [
+                                'template'  => '@NetBSFichier/block/famille_link.block.twig',
+                                'params'    => [
+                                    'famille' => $famille,
+                                ]
+                            ])
+                        ->close()
+                    ->close()
                 ->close()
                 ->pushColumn(9)
                     ->addRow()
@@ -88,4 +100,30 @@ class FamilleController extends Controller
         ]);
     }
 
+
+    /**
+     * @Route("/remove/{id}", name="netbs.fichier.famille.remove")
+     */
+    public function removeFamilleAction($id) {
+
+        if(!$this->isGranted('ROLE_SG'))
+            throw $this->createAccessDeniedException("Opération refusée!");
+
+        $config = $this->get('netbs.fichier.config');
+        $em = $this->getDoctrine()->getManager();
+        /** @var BaseFamille $famille */
+        $famille = $em->find($config->getFamilleClass(), $id);
+
+        foreach($famille->getMembres() as $membre) {
+            $this->get('event_dispatcher')->dispatch(RemoveMembreEvent::NAME, new RemoveMembreEvent($membre, $em));
+            $em->remove($membre);
+        }
+
+        $this->get('event_dispatcher')->dispatch(RemoveFamilleEvent::NAME, new RemoveFamilleEvent($famille, $em));
+
+        $em->remove($famille);
+        $em->flush();
+        $this->addFlash('success', 'Famille supprimée');
+        return $this->redirectToRoute('netbs.core.home.dashboard');
+    }
 }

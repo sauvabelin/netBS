@@ -33,6 +33,14 @@ services:
         tags:
             - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure, priority: 60 }
 
+    netbs.secure.listener.remove_membre:
+        class: NetBS\SecureBundle\Listener\RemoveMembreListener
+        arguments:
+            - "@netbs.secure.config"
+            - "@netbs.secure.user_manager"
+        tags:
+            - { name: kernel.event_listener, event: netbs.remove.membre, method: onRemove }
+
     netbs.secure.select2.roles_provider:
         class: NetBS\SecureBundle\Select2\RolesProvider
         tags:
