@@ -22,9 +22,12 @@ class MainMenuListener
     {
         /** @var BSUser $user */
         $menu   = $event->getMenu();
-        $tentes = $menu->registerCategory('tentes', 'tentes');
         $user   = $this->storage->getToken()->getUser();
 
+        if (!$user->hasRole('ROLE_ADMIN'))
+            return;
+
+        $tentes = $menu->registerCategory('tentes', 'tentes');
         $tentes->addLink('tentes.dashboard', 'Administration tentes', 'fas fa-campground', 'tente.dashboard');
         $tentes->addLink('tentes.search', 'Rechercher des tentes', 'fas fa-binoculars', 'tente.tente.search');
     }
