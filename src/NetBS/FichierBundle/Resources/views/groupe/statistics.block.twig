@@ -19,10 +19,16 @@
       labels: [],
       series: [],
     }, {
+      fullWidth: true,
       showPoint: false,
       axisX: {
-        labelInterpolationFnc: function(d) {
-          return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
+        labelInterpolationFnc: function(d, i, allSet) {
+          const all = allSet.length;
+          if (i === 0 || i === all - 1 || (i % Math.round(all / 12)) === 0) {
+            console.log(i);
+            return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
+          }
+          return null;
         }
       }
     });

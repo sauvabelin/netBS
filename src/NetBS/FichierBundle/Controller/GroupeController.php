@@ -39,6 +39,7 @@ class GroupeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $begin = new \DateTime($request->get('begin'));
         $end = new \DateTime($request->get('end'));
+
         $steps = $request->get('steps') ?: 50;
         $diff = $end->getTimestamp() - $begin->getTimestamp();
 
@@ -210,8 +211,6 @@ class GroupeController extends Controller
             $form->add('begin', DatepickerType::class, ['label' => 'Date de début'])
                 ->add('steps', NumberType::class, ['label' => 'Nombre de points'])
                 ->add('end', DatepickerType::class, ['label' => 'Date de fin']);
-
-            dump($form->getForm()->createView());
 
             $config->getRow(0)->getColumn(1)->addRow()->pushColumn(12)->setBlock(CardBlock::class, [
                 'title' => 'Statistiques',
