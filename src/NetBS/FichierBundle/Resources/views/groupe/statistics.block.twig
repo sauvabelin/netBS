@@ -1,0 +1,57 @@
+{% form_theme statsForm '@NetBSCore/form/base.theme.twig' %}
+{{ registerJs('//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js') }}
+{{ registerCss('//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css') }}
+{{ registerJs(asset('bundles/netbscore/lib/datetimepicker/bootstrap-datetimepicker.min.js')) }}
+{{ registerCss(asset('bundles/netbscore/lib/datetimepicker/bootstrap-datetimepicker.min.css')) }}
+
+<div class="d-flex stats-control">
+  <div class="mr-3">{{ form_row(statsForm.begin, { attr: { 'data-val': 'begin' } }) }}</div>
+  <div class="mr-3">{{ form_row(statsForm.steps, { attr: { 'data-val': 'steps' } }) }}</div>
+  <div>{{ form_row(statsForm.end, { attr: { 'data-val': 'end' } }) }}</div>
+</div>
+
+<div id="groupe-effectifs"></div>
+
+{% set chartScript %}
+<script>
+
+  const chart = new Chartist.Line('#groupe-effectifs', {
+      labels: [],
+      series: [],
+    }, {
+      showPoint: false,
+      axisX: {
+        labelInterpolationFnc: function(d) {
+          return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
+        }
+      }
+    });
+
+  const statsState = {
+    begin: $('.stats-control [data-val="begin"]').val(),
+    steps: $('.stats-control [data-val="steps"]').val(),
+    end: $('.stats-control [data-val="end"]').val(),
+  };
+
+  function refresh() {
+     NProgress.start();
+      const pathPart = 'begin=' + statsState.begin + '&end=' + statsState.end + '&steps=' + statsState.steps;
+      fetch('{{ path('netbs.fichier.groupe.statistics_effectifs', { id: groupe.id }) }}?' + pathPart).then(r => r.json()).then((data) => {
+        chart.update({
+          labels: data.map(it => new Date(it.pallier.date)),
+          series: [data.map(it => it.count)]
+        });
+        NProgress.done();
+      });
+    }
+
+  $('.stats-control input').change(function() {
+    statsState[$(this).attr('data-val')] = $(this).val();
+    refresh();
+  });
+
+  refresh();
+</script>
+{% endset %}
+
+{{ registerScript(chartScript) }}

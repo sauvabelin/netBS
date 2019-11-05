@@ -6,15 +6,19 @@ use NetBS\CoreBundle\Block\CardBlock;
 use NetBS\CoreBundle\Block\Model\Tab;
 use NetBS\CoreBundle\Block\TabsCardBlock;
 use NetBS\CoreBundle\Block\TemplateBlock;
+use NetBS\CoreBundle\Form\Type\DatepickerType;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\GroupeType;
+use NetBS\FichierBundle\Mapping\BaseAttribution;
 use NetBS\FichierBundle\Mapping\BaseGroupe;
 use NetBS\SecureBundle\Voter\CRUD;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class GroupeController
@@ -23,6 +27,49 @@ class GroupeController extends Controller
 {
     protected function getGroupeClass() {
         return $this->get('netbs.fichier.config')->getGroupeClass();
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @Route("/groupe/statistics/effectifs/{id}", name="netbs.fichier.groupe.statistics_effectifs")
+     * @throws \Exception
+     */
+    public function getGroupeEffectifsStats(Request $request, $id) {
+        $em = $this->getDoctrine()->getManager();
+        $begin = new \DateTime($request->get('begin'));
+        $end = new \DateTime($request->get('end'));
+        $steps = $request->get('steps') ?: 50;
+        $diff = $end->getTimestamp() - $begin->getTimestamp();
+
+        /** @var BaseGroupe $groupe */
+        $groupe = $em->find($this->getGroupeClass(), $id);
+        $attributions = $groupe->getRecursivesAttributions();
+
+        $stats = [];
+        for ($i = 0; $i < intval($steps); $i++) {
+            $palier = (int)ceil(($diff / $steps) * $i);
+            $date = ((new \DateTime('@' . ($begin->getTimestamp() + $palier)))->setTimezone($begin->getTimezone()));
+            $attributionsPallier = array_filter($attributions, function(BaseAttribution $attribution) use ($date) {
+                $aInt = $date->getTimestamp();
+                $aBegin = $attribution->getDateDebut()->getTimestamp();
+                $aEnd = $attribution->getDateFin();
+                return $aBegin <= $aInt && ($aEnd === null || $aEnd->getTimestamp() >= $aInt);
+            });
+
+            $attributionsCleaned = array_filter($attributionsPallier, function (BaseAttribution $attribution) use ($attributionsPallier) {
+                $count = 0;
+                /** @var BaseAttribution $attrs */
+                foreach($attributionsPallier as $attrs)
+                    if ($attrs->getMembreId() === $attribution->getMembreId())
+                        $count++;
+                return $count === 1;
+            });
+
+            $stats[] = ['count' => count($attributionsCleaned), 'pallier' => $date];
+        }
+
+        return new JsonResponse($stats);
     }
 
     /**
@@ -126,23 +173,53 @@ class GroupeController extends Controller
                             ])
                         ->close()
                         ->pushColumn(12)
-                            ->setBlock(TemplateBlock::class, [
-                                'template'  => '@NetBSFichier/groupe/children.block.twig',
-                                'params'    => [
-                                    'groupe'    => $groupe
-                                ]
-                            ])
+                            ->addRow()
+                                ->pushColumn(12)
+                                    ->setBlock(TemplateBlock::class, [
+                                        'template'  => '@NetBSFichier/groupe/children.block.twig',
+                                        'params'    => [
+                                            'groupe'    => $groupe
+                                        ]
+                                    ])
+                                ->close()
+                            ->close()
                         ->close()
                     ->close()
                 ->close()
                 ->pushColumn(9)
-                    ->setBlock(TabsCardBlock::class, [
-                        'tabs'  => $tabs,
-                        'table' => true
-                    ])
+                    ->addRow()
+                        ->pushColumn(12)
+                            ->setBlock(TabsCardBlock::class, [
+                                'tabs'  => $tabs,
+                                'table' => true
+                            ])
+                        ->close()
+                    ->close()
                 ->close()
             ->close()
         ;
+
+        if ($this->isGranted('ROLE_SG')) {
+
+            $now = new \DateTime();
+            $form = $this->createFormBuilder([
+                'begin' => new \DateTime('@' . ($now->getTimestamp() - (3600*24*365))),
+                'steps' => 50,
+                'end' =>$now,
+            ]);
+            $form->add('begin', DatepickerType::class, ['label' => 'Date de début'])
+                ->add('steps', NumberType::class, ['label' => 'Nombre de points'])
+                ->add('end', DatepickerType::class, ['label' => 'Date de fin']);
+
+            dump($form->getForm()->createView());
+
+            $config->getRow(0)->getColumn(1)->addRow()->pushColumn(12)->setBlock(CardBlock::class, [
+                'title' => 'Statistiques',
+                'subtitle' => 'Effectifs au cours du temps',
+                'template' => '@NetBSFichier/groupe/statistics.block.twig',
+                'params' => ['groupe' => $groupe, 'statsForm' => $form->getForm()->createView()],
+            ]);
+        }
 
         return $layout->renderResponse('netbs', $config, [
             'title' => $groupe->getNom(),

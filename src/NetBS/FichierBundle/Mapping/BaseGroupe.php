@@ -260,5 +260,17 @@ abstract class BaseGroupe implements ValidableInterface
 
         return $attrs;
     }
+
+    /**
+     * @return BaseAttribution[]
+     */
+    public function getRecursivesAttributions() {
+
+        $attrs = $this->getAttributions()->toArray();
+        foreach($this->getEnfantsRecursive() as $groupe)
+            $attrs = array_merge($attrs, $groupe->getAttributions()->toArray());
+
+        return $attrs;
+    }
 }
 

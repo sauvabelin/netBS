@@ -73,7 +73,6 @@ var BSModal = function(path, params) {
 
     this.handleSubmit = function(data, status, response) {
 
-        console.log(data);
         var code    = parseInt(response.status);
 
         if(data === "redirected")
