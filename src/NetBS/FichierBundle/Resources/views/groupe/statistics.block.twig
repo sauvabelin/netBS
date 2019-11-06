@@ -49,7 +49,11 @@
         }],
         yAxes: [{
           ticks: {
-            stepSize: 1,
+            callback: function(value) {
+              if (Math.floor(value) === value) {
+                return value;
+              }
+            }
           }
         }],
       },
