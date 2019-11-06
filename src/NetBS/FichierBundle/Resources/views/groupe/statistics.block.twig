@@ -1,6 +1,6 @@
 {% form_theme statsForm '@NetBSCore/form/base.theme.twig' %}
-{{ registerJs('//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js') }}
-{{ registerCss('//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css') }}
+{{ registerJs('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js') }}
+{{ registerCss('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css') }}
 {{ registerJs(asset('bundles/netbscore/lib/datetimepicker/bootstrap-datetimepicker.min.js')) }}
 {{ registerCss(asset('bundles/netbscore/lib/datetimepicker/bootstrap-datetimepicker.min.css')) }}
 
@@ -10,28 +10,40 @@
   <div>{{ form_row(statsForm.end, { attr: { 'data-val': 'end' } }) }}</div>
 </div>
 
+<canvas id="groupe-effectifs"></canvas>
 <div id="groupe-effectifs"></div>
 
 {% set chartScript %}
 <script>
 
-  const chart = new Chartist.Line('#groupe-effectifs', {
+  const chart = new Chart($('#groupe-effectifs'), {
+    type: 'line',
+    data: {
       labels: [],
-      series: [],
-    }, {
-      fullWidth: true,
-      showPoint: false,
-      axisX: {
-        labelInterpolationFnc: function(d, i, allSet) {
-          const all = allSet.length;
-          if (i === 0 || i === all - 1 || (i % Math.round(all / 12)) === 0) {
-            console.log(i);
-            return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
-          }
-          return null;
+      datasets: [
+        {
+          label: 'Effectifs',
+          data: [],
         }
-      }
-    });
+      ],
+    },
+    options: {
+      aspectRatio: 3,
+      legend: {
+        display: false,
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            callback: (d) => {
+              const pad0 = (v) => v < 10 ? '0' + v : v;
+              return pad0(d.getDate()) + '.' + pad0(d.getMonth() + 1) + '.' + d.getFullYear();
+            },
+          }
+        }]
+      },
+    }
+  });
 
   const statsState = {
     begin: $('.stats-control [data-val="begin"]').val(),
@@ -43,10 +55,15 @@
      NProgress.start();
       const pathPart = 'begin=' + statsState.begin + '&end=' + statsState.end + '&steps=' + statsState.steps;
       fetch('{{ path('netbs.fichier.groupe.statistics_effectifs', { id: groupe.id }) }}?' + pathPart).then(r => r.json()).then((data) => {
-        chart.update({
-          labels: data.map(it => new Date(it.pallier.date)),
-          series: [data.map(it => it.count)]
+
+        chart.data.labels.splice(0);
+        chart.data.datasets[0].data.splice(0);
+
+        data.forEach((it) => {
+          chart.data.labels.push(new Date(it.pallier.date));
+          chart.data.datasets[0].data.push(it.count);
         });
+        chart.update();
         NProgress.done();
       });
     }
