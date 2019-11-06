@@ -2,6 +2,7 @@
 
 namespace NetBS\FichierBundle\Controller;
 
+use Doctrine\ORM\Query\ResultSetMapping;
 use NetBS\CoreBundle\Block\CardBlock;
 use NetBS\CoreBundle\Block\Model\Tab;
 use NetBS\CoreBundle\Block\TabsCardBlock;
@@ -16,7 +17,6 @@ use NetBS\FichierBundle\Mapping\Personne;
 use NetBS\SecureBundle\Voter\CRUD;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,44 +39,66 @@ class GroupeController extends Controller
      * @throws \Exception
      */
     public function getGroupeEffectifsStats(Request $request, $id) {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->get('doctrine.orm.default_entity_manager');
+        $config = $this->get('netbs.fichier.config');
         $begin = new \DateTime($request->get('begin'));
         $end = new \DateTime($request->get('end'));
 
         $steps = $request->get('steps') ?: 50;
         $diff = $end->getTimestamp() - $begin->getTimestamp();
+        $groupClass = $config->getGroupeClass();
 
-        /** @var BaseGroupe $groupe */
-        $groupe = $em->find($this->getGroupeClass(), $id);
-        $attributions = $groupe->getRecursivesAttributions();
+        $rsm = new ResultSetMapping();
+        $rsm->addEntityResult($groupClass, 'u');
+        $rsm->addFieldResult('u', 'id', 'id');
+        $tableName = $em->getClassMetadata($groupClass)->getTableName();
+
+        $query = $em->createNativeQuery("
+select  id,
+        parent_id
+from    (select * from $tableName
+         order by parent_id, id) $tableName,
+        (select @pv := ?) initialisation
+where   find_in_set(parent_id, @pv) > 0
+and     @pv := concat(@pv, ',', id)
+        ", $rsm);
+
+        $query->setParameter(1, $id);
+        $groupIds = array_merge([$id], array_map(function($ar) { return $ar['id'];}, $query->getArrayResult()));
+        $attributions = $em->createQueryBuilder()
+            ->from($config->getAttributionClass(), 'a')
+            ->select('a, m')
+            ->where('a.groupe IN (:gids)')
+            ->setParameter('gids', $groupIds)
+            ->leftJoin('a.membre', 'm')
+            ->getQuery()
+            ->getResult();
 
         $stats = [];
         for ($i = 0; $i < intval($steps); $i++) {
             $palier = (int)ceil(($diff / $steps) * $i);
             $date = ((new \DateTime('@' . ($begin->getTimestamp() + $palier)))->setTimezone($begin->getTimezone()));
-            $attributionsPallier = array_filter($attributions, function(BaseAttribution $attribution) use ($date) {
-                $aInt = $date->getTimestamp();
+            $aInt = $date->getTimestamp();
+            $found = [];
+            $pallierData  = [
+                'pallier' => $date,
+                'countHomme' => 0,
+                'countAll' => 0,
+            ];
+
+            /** @var BaseAttribution $attribution */
+            foreach($attributions as $attribution) {
                 $aBegin = $attribution->getDateDebut()->getTimestamp();
                 $aEnd = $attribution->getDateFin();
-                return $aBegin <= $aInt && ($aEnd === null || $aEnd->getTimestamp() >= $aInt);
-            });
+                if(!($aBegin <= $aInt && ($aEnd === null || $aEnd->getTimestamp() >= $aInt))) continue;
+                if(in_array($attribution->getMembreId(), $found)) continue;
+                $found[] = $attribution->getMembreId();
+                $pallierData['countAll']++;
+                if ($attribution->getMembre()->getSexe() === Personne::HOMME)
+                    $pallierData['countHomme']++;
+            }
 
-            $attributionsCleaned = array_filter($attributionsPallier, function (BaseAttribution $attribution) use ($attributionsPallier) {
-                $count = 0;
-                /** @var BaseAttribution $attrs */
-                foreach($attributionsPallier as $attrs)
-                    if ($attrs->getMembreId() === $attribution->getMembreId())
-                        $count++;
-                return $count === 1;
-            });
-
-            $stats[] = [
-                'countHomme' => count(array_filter($attributionsCleaned, function (BaseAttribution $attribution) {
-                    return $attribution->getMembre()->getSexe() === Personne::HOMME;
-                })),
-                'countAll' => count($attributionsCleaned),
-                'pallier' => $date
-            ];
+            $stats[] = $pallierData;
         }
 
         return new JsonResponse($stats);

@@ -168,7 +168,7 @@
       (serieState.femmes ? minFemmes : Infinity),
     );
 
-    const diff = Math.ceil((max - min) / 10);
+    const diff = Math.ceil((max - min) / 20);
     const minSupp = min - diff;
     chart.options.scales.yAxes[0].ticks.suggestedMin = minSupp > 0 ? minSupp : 0;
     chart.options.scales.yAxes[0].ticks.suggestedMax = max + diff;
