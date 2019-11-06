@@ -7,13 +7,16 @@ use NetBS\CoreBundle\Block\Model\Tab;
 use NetBS\CoreBundle\Block\TabsCardBlock;
 use NetBS\CoreBundle\Block\TemplateBlock;
 use NetBS\CoreBundle\Form\Type\DatepickerType;
+use NetBS\CoreBundle\Form\Type\SwitchType;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\GroupeType;
 use NetBS\FichierBundle\Mapping\BaseAttribution;
 use NetBS\FichierBundle\Mapping\BaseGroupe;
+use NetBS\FichierBundle\Mapping\Personne;
 use NetBS\SecureBundle\Voter\CRUD;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,7 +70,13 @@ class GroupeController extends Controller
                 return $count === 1;
             });
 
-            $stats[] = ['count' => count($attributionsCleaned), 'pallier' => $date];
+            $stats[] = [
+                'countHomme' => count(array_filter($attributionsCleaned, function (BaseAttribution $attribution) {
+                    return $attribution->getMembre()->getSexe() === Personne::HOMME;
+                })),
+                'countAll' => count($attributionsCleaned),
+                'pallier' => $date
+            ];
         }
 
         return new JsonResponse($stats);
@@ -206,11 +215,18 @@ class GroupeController extends Controller
             $form = $this->createFormBuilder([
                 'begin' => new \DateTime('@' . ($now->getTimestamp() - (3600*24*365))),
                 'steps' => 50,
-                'end' =>$now,
+                'end'   => $now,
+                'total'   => true,
+                'hommes' => true,
+                'femmes' => true,
             ]);
             $form->add('begin', DatepickerType::class, ['label' => 'Date de début'])
                 ->add('steps', NumberType::class, ['label' => 'Nombre de points'])
-                ->add('end', DatepickerType::class, ['label' => 'Date de fin']);
+                ->add('end', DatepickerType::class, ['label' => 'Date de fin'])
+                ->add('total', SwitchType::class, ['label' => 'Total', 'required' => false])
+                ->add('hommes', SwitchType::class, ['label' => 'Hommes', 'required' => false])
+                ->add('femmes', SwitchType::class, ['label' => 'Femmes', 'required' => false])
+            ;
 
             $config->getRow(0)->getColumn(1)->addRow()->pushColumn(12)->setBlock(CardBlock::class, [
                 'title' => 'Statistiques',
