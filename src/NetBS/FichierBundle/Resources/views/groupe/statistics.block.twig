@@ -106,12 +106,15 @@
 
         chart.data.labels.splice(0);
         chart.data.datasets[0].data.splice(0);
+        chart.data.datasets[1].data.splice(0);
+        chart.data.datasets[2].data.splice(0);
 
         data.forEach((it) => {
           chart.data.labels.push(new Date(it.pallier.date));
           chart.data.datasets[0].data.push(it.countAll);
           chart.data.datasets[1].data.push(it.countHomme);
           chart.data.datasets[2].data.push(it.countAll - it.countHomme);
+          console.log(it);
         });
 
         toggleSeries();
