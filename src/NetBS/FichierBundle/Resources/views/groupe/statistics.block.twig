@@ -24,6 +24,12 @@
         {
           label: 'Effectifs',
           data: [],
+          backgroundColor: 'rgba(0,123,255,0.11)',
+          borderWidth: 3,
+          borderColor: '#007bff',
+          pointRadius: 1,
+          pointHoverRadius: 4,
+          pointHoverBackgroundColor: '#007bff',
         }
       ],
     },
@@ -40,7 +46,12 @@
               return pad0(d.getDate()) + '.' + pad0(d.getMonth() + 1) + '.' + d.getFullYear();
             },
           }
-        }]
+        }],
+        yAxes: [{
+          ticks: {
+            stepSize: 1,
+          }
+        }],
       },
     }
   });
@@ -58,11 +69,19 @@
 
         chart.data.labels.splice(0);
         chart.data.datasets[0].data.splice(0);
+        let min = Infinity;
+        let max = 0;
 
         data.forEach((it) => {
           chart.data.labels.push(new Date(it.pallier.date));
           chart.data.datasets[0].data.push(it.count);
+          if (min > it.count) min = it.count;
+          if (max < it.count) max = it.count;
         });
+
+        const diff = Math.ceil((max - min) / 10);
+        chart.options.scales.yAxes[0].ticks.suggestedMin = min - diff;
+        chart.options.scales.yAxes[0].ticks.suggestedMax = max + diff;
         chart.update();
         NProgress.done();
       });
