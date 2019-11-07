@@ -113,7 +113,7 @@
                     </thead>
                     <tbody>
                     {% set formData = feuille.formDataParsed %}
-                    {% for item in feuille.tente.model.parsedForm %}
+                    {% for item in feuille.tente.model.parsedForm if item.type != 'header' or item.subtype == 'h1' %}
                         <tr {% if item.type == 'header' and item.subtype == 'h1' %}class="bg-primary text-white"{% endif %}>
                             <td>
                                 {% if item.type == 'header' and item.subtype == 'h1' %}
