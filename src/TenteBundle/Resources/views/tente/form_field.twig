@@ -12,5 +12,5 @@
 {% elseif item.type in ['date', 'text', 'textarea', 'number'] %}
     <div>{{ itemValue }}</div>
 {% else %}
-    {{ dump(item) }}
+    {{ item.type }}
 {% endif %}
