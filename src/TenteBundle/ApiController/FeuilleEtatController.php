@@ -2,6 +2,7 @@
 
 namespace TenteBundle\ApiController;
 
+use NetBS\FichierBundle\Mapping\BaseGroupe;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,19 @@ class FeuilleEtatController extends Controller
         $models = $em->getRepository('TenteBundle:TenteModel')->findAll();
 
         return new JsonResponse($this->get('serializer')->serialize($models, 'json'), 200, [], true);
+    }
+
+    /**
+     * @Route("/groupes", name="tente.api.tente_unites")
+     */
+    public function listUnitesAction(Request $request) {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+        $config = $this->get('netbs.fichier.config');
+        $groupes = $em->getRepository($config->getGroupeClass())->findAll();
+        $result = array_map(function(BaseGroupe $groupe) {
+            return ['id' => $groupe->getId(), 'nom' => $groupe->getNom()];
+        }, $groupes);
+        return new JsonResponse($result);
     }
 
     /**
@@ -60,7 +74,8 @@ class FeuilleEtatController extends Controller
         $feuilleEtat->setDrawingData(json_encode($drawings));
         $feuilleEtat->setFormData(json_encode($steps));
 
-        dump($feuilleEtat);
+        $em->persist($feuilleEtat);
+        $em->flush();
         return new JsonResponse(['result' => 'OK']);
     }
 }

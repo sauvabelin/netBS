@@ -315,6 +315,11 @@ class FeuilleEtat
         return $this->drawingData;
     }
 
+    public function getDrawingDataParsed() {
+
+        return json_decode($this->drawingData, true);
+    }
+
     /**
      * @param string $drawingData
      */

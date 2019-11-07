@@ -164,6 +164,8 @@ class Reparation
     {
         $this->recue = $recue;
         $this->setStatus(self::RECEPTIONNEE);
+        if ($this->tente->getStatus() === Tente::EN_REPARATION)
+            $this->tente->setStatus(Tente::DISPONIBLE);
     }
 
     /**
