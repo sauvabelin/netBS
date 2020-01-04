@@ -69,7 +69,7 @@ class Tente
     /**
      * @var Activity[]
      *
-     * @ORM\ManyToMany(targetEntity="TenteBundle\Entity\Activity", inversedBy="tentes")
+     * @ORM\ManyToMany(targetEntity="TenteBundle\Entity\Activity", mappedBy="tentes")
      */
     private $activities;
 

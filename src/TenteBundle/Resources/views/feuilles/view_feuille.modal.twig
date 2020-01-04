@@ -4,16 +4,84 @@
 
 {% set style %}
 <style>
-    .drawing-picture img {
+    .drawing-picture {
+        position: relative;
+    }
+
+    .image-holder {
+        position: relative;
+        width:100%;
+        top:0;
+        left:0;
+    }
+
+    .image-holder img {
         width: 100%;
+    }
+
+    .canvas-holder {
+        position: absolute;
+        width:100%;
+        height:100%;
+        top:0;
+        left:0;
     }
 </style>
 {% endset %}
 
+{% set fabricScripts %}
+<script>
+
+  function mapData(data, ratio) {
+    console.log(data);
+    data.forEach((item) => {
+      item.left *= ratio;
+      item.top *= ratio;
+      item.width *= ratio;
+      item.height *= ratio;
+
+      item.path.forEach((path) => {
+        path.forEach((property, i) => {
+          if (i === 0) return;
+          path[i] *= ratio;
+        });
+      });
+    });
+
+    return data;
+  }
+
+
+  {% for drawingData in feuille.drawingDataParsed %}
+    {% set canvasVar = 'canvas' ~ uniqid() ~ loop.index0 %}
+    {% set dataVar = 'data' ~ uniqid() ~ loop.index0 %}
+      setTimeout(function() {
+        const data = {{ drawingData.drawing|json_encode|raw }};
+        const element = document.getElementById('fabric-canvas-{{ loop.index0 }}');
+        const width = element.parentNode.clientWidth;
+        const drawingWidth = data.width;
+        const drawingHeight = data.height;
+        const ratio = width / drawingWidth;
+        const height = ratio * drawingHeight;
+        const canvas = new fabric.Canvas(element, {
+          width: width,
+          height: height,
+        });
+
+        canvas.loadFromJSON({ objects: mapData(data.data, ratio)}, canvas.renderAll.bind(canvas), function(o, object) {
+          object.set('selectable', false);
+        });
+      }, 400);
+  {% endfor %}
+</script>
+{% endset %}
+
 {% block content %}
+    {{ registerJs(asset('bundles/tente/js/fabric.min.js')) }}
+    {{ registerScript(fabricScripts) }}
     {{ registerStyle(style) }}
     <div class="border-bottom">
-        <h3 class="pt-3 pb-2">Feuille d'état du {{ feuille.createdAt|date('d.m.Y') }}</h3>
+        <h3 class="pt-3 pb-2">{{ feuille.tente.numero }} - Feuille d'état du {{ feuille.createdAt|date('d.m.Y') }}</h3>
     </div>
     <div class="pt-4">
         <div class="row">
@@ -45,14 +113,24 @@
                     </thead>
                     <tbody>
                     {% set formData = feuille.formDataParsed %}
-                    {% for item in feuille.tente.model.parsedForm %}
+                    {% for item in feuille.tente.model.parsedForm if item.type != 'header' or item.subtype == 'h1' %}
                         <tr {% if item.type == 'header' and item.subtype == 'h1' %}class="bg-primary text-white"{% endif %}>
-                            <td>{% if item.type == 'header' and item.subtype == 'h1' %}Section{% elseif item.type == 'header' %}Titre{% else %}{{ item.label }}{% endif %}</td>
+                            <td>
+                                {% if item.type == 'header' and item.subtype == 'h1' %}
+                                    Section
+                                {% elseif item.type == 'header' %}
+                                    Titre
+                                {% else %}
+                                    {{ item.label|replace({'<br>' : ''}) }}
+                                {% endif %}
+                            </td>
                             <td>
                                 {% set itemValue = '' %}
-                                {% if item.name is defined and item.name in formData|keys %}
-                                    {% set itemValue = formData[item.name] %}
-                                {% endif %}
+                                {% for formItem in formData %}
+                                    {% if item.name is defined and item.name in formItem|keys %}
+                                        {% set itemValue = formItem[item.name] %}
+                                    {% endif %}
+                                {% endfor %}
                                 {% include '@Tente/tente/form_field.twig' %}
                             </td>
                         </tr>
@@ -64,14 +142,23 @@
     </div>
     <div class="mt-5">
         <h3>Eléments dessinables</h3>
-        <div class="row">
+        <div class="row pl-3 pr-3">
             {% set maxl = feuille.tente.model.drawingParts|length %}
             {% for drawing in feuille.tente.model.drawingParts %}
-                <div class="col-12 col-md-6 {% if loop.index0 < maxl - 2 %}mb-5{% endif %}">
-                    <h5>{{ (drawing.nom|split('_')|join(' ')|split('.'))[0] }}</h5>
+                {% set drawingData = feuille.drawingDataParsed[loop.index0] %}
+                <div class="col-12 col-md-6 border {% if loop.index0 < maxl - 2 %}mb-5{% endif %}">
+                    <h4 class="text-center border-bottom p-2">{{ (drawing.nom|split('_')|join(' ')|split('.'))[0] }}</h4>
                     <div class="drawing-picture">
-                        <img src="{{ asset('tentes/uploads/' ~ drawing.image) }}" alt="{{ drawing.image }}" />
+                        <div class="image-holder">
+                            <img src="{{ asset('tentes/uploads/' ~ drawing.image) }}" alt="{{ drawing.image }}" />
+                        </div>
+                        <div class="canvas-holder">
+                            <canvas id="fabric-canvas-{{ loop.index0 }}"></canvas>
+                        </div>
                     </div>
+                    <p>
+                        {{ drawingData.remarques }}
+                    </p>
                 </div>
             {% endfor %}
         </div>

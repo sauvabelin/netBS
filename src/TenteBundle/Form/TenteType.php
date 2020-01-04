@@ -2,6 +2,7 @@
 
 namespace TenteBundle\Form;
 
+use NetBS\FichierBundle\Utils\Form\RemarquesUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,6 +19,7 @@ class TenteType extends AbstractType
                 'label' => 'Statut',
                 'choices' => array_flip(Tente::getStatutChoices()),
             ]);
+        RemarquesUtils::addRemarquesField($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver)

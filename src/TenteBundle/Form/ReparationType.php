@@ -3,6 +3,7 @@
 namespace TenteBundle\Form;
 
 use NetBS\CoreBundle\Form\Type\DatepickerType;
+use NetBS\FichierBundle\Utils\Form\RemarquesUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -23,6 +24,7 @@ class ReparationType extends AbstractType
             ->add('envoyee', DatepickerType::class, ['label' => "Date d'envoi"])
             ->add('recue', DatepickerType::class, ['label' => "Date de réception", 'required' => false])
             ->add('status', ChoiceType::class, ['label' => 'Statut', 'choices' => array_flip(Reparation::getStatusChoices())]);
+        RemarquesUtils::addRemarquesField($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver)

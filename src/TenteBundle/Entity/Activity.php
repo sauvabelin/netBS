@@ -34,6 +34,7 @@ class Activity
      * @var Tente[]
      *
      * @ORM\ManyToMany(targetEntity="TenteBundle\Entity\Tente", inversedBy="activities")
+     * @ORM\JoinTable(name="netbs_tentes_activity_tentes")
      */
     private $tentes;
 }

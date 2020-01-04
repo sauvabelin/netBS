@@ -2,31 +2,6 @@
 
 {% set title = 'Tentes - administration' %}
 
-{% set editorScript %}
-    <script>
-        const items = [
-            {
-                "type": "textarea",
-                "label": "Text Area",
-                "className": "form-control",
-                "name": "textarea-1570026399406",
-                "subtype": "textarea"
-            },
-            {
-                "type": "number",
-                "label": "Number",
-                "className": "form-control",
-                "name": "number-1570026400612"
-            },
-            {
-                "type": "header",
-                "subtype": "h1",
-                "label": "Header"
-            }
-        ];
-    </script>
-{% endset %}
-
 {% set drawingPartsScript %}
     <script>
         const $holder = $('#drawing-parts-container');
@@ -43,12 +18,10 @@
         });
 
         $('#fb-editor').formBuilder({
-            disabledActionButtons: ['save', 'clear'],
+            disabledActionButtons: ['save', 'data', 'clear'],
             disableFields: ['autocomplete', 'button', 'paragraph', 'radio-group', 'file', 'hidden', 'starRating']
         }).promise.then(function(formBuilder) {
-            formBuilder.actions.setData(items);
-
-            $('#form-model').on('submit', function(e) {
+            $('#form-model').on('submit', function() {
                 const formBuilderData = formBuilder.actions.getData();
                 $formBuilderInput.val(JSON.stringify(formBuilderData));
                 return true;
@@ -60,7 +33,6 @@
 {% block main %}
     {{ registerJs('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js') }}
     {{ registerJs('https://cdn.jsdelivr.net/npm/formBuilder@3.2.5/dist/form-builder.min.js') }}
-    {{ registerScript(editorScript) }}
     {{ registerScript(drawingPartsScript) }}
     <div class="container">
         {% include '@NetBSCore/includes/header.include.twig' with {
@@ -75,6 +47,7 @@
                     </div>
                     <div class="card-body">
                         {{ form_row(form.name) }}
+                        {{ form_row(form.parties, { label: 'Parties de la tente pour réparation'}) }}
                     </div>
                 </div>
                 <div class="card">
@@ -102,7 +75,7 @@
                 </div>
             </div>
             <div class="col-12 d-flex justify-content-end">
-                <button class="btn btn-primary">Ajouter le modèle de tente</button>
+                <button type="submit" class="btn btn-primary">Ajouter le modèle de tente</button>
             </div>
         <div class="d-none">
             {{ form_rest(form) }}
