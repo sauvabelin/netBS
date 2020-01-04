@@ -112,6 +112,7 @@ services:
         arguments:
             - "@request_stack"
             - "@twig"
+            - "@security.token_storage"
         tags:
             - { name: kernel.event_listener, event: netbs.block.pre_render_layout, method: extendsMembreFamillePage }
 

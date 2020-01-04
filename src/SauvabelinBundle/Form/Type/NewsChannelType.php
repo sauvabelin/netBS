@@ -2,7 +2,6 @@
 
 namespace SauvabelinBundle\Form\Type;
 
-use SauvabelinBundle\Entity\NewsChannel;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Form\AbstractType;
@@ -27,8 +26,7 @@ class NewsChannelType extends AbstractType
 
         foreach($view->vars['choices'] as $i => $choice) {
 
-            /** @var NewsChannel $channel */
-            $channel    = $choice->data;
+            $channel = $choice->data;
 
             if(!empty($channel->getPostRule()) && !$eengine->evaluate($channel->getPostRule(), ['user' => $user]))
                 unset($choices[$i]);

@@ -6,6 +6,7 @@ use NetBS\CoreBundle\Block\Model\Tab;
 use NetBS\CoreBundle\Event\PreRenderLayoutEvent;
 use Ovesco\FacturationBundle\Subscriber\DoctrineDebiteurSubscriber;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class MembreFamillePageListener
 {
@@ -13,10 +14,13 @@ class MembreFamillePageListener
 
     protected $stack;
 
-    public function __construct(RequestStack $stack, \Twig_Environment $twig)
+    protected $storage;
+
+    public function __construct(RequestStack $stack, \Twig_Environment $twig, TokenStorage $tokenStorage)
     {
         $this->twig     = $twig;
         $this->stack    = $stack;
+        $this->storage  = $tokenStorage;
     }
 
     /**
@@ -30,6 +34,7 @@ class MembreFamillePageListener
         if (!in_array($route, ['netbs.fichier.membre.page_membre', 'netbs.fichier.famille.page_famille']))
             return;
 
+        if (!$this->storage->getToken()->getUser()->hasRole('ROLE_TRESORIER')) return;
         $block = $event->getConfigurator()->getRow(0)->getColumn(1)->getRow(0)->getColumn(0)->getBlock();
         $tabs = $block->getParameters()->get('tabs');
         $tabs[] = $this->getTab($event);
