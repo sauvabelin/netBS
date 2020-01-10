@@ -14,7 +14,8 @@ class SearchBaseMembreInformationType extends base
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('noAdabs', SearchNoAdabsType::class, ["label" => "Pas à l'ADABS", 'data' => true]);
+            ->add('noAdabs', SearchNoAdabsType::class, ["label" => "Pas à l'ADABS", 'data' => true])
+            ->add('noApmbs', SearchNoAPMBSType::class, ["label" => "Pas à l'APMBS", 'data' => true]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

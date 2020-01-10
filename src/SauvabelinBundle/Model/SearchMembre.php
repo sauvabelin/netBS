@@ -12,6 +12,11 @@ class SearchMembre extends SearchBaseMembreInformation
     private $noAdabs;
 
     /**
+     * @var boolean
+     */
+    private $noApmbs;
+
+    /**
      * @return bool
      */
     public function isNoAdabs()
@@ -25,5 +30,21 @@ class SearchMembre extends SearchBaseMembreInformation
     public function setNoAdabs($noAdabs)
     {
         $this->noAdabs = $noAdabs;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNoApmbs()
+    {
+        return $this->noApmbs;
+    }
+
+    /**
+     * @param bool $noApmbs
+     */
+    public function setNoApmbs($noApmbs)
+    {
+        $this->noApmbs = $noApmbs;
     }
 }
