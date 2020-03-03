@@ -164,8 +164,13 @@ class ListEngine
         if($accessor instanceof \Closure)
             return $accessor($item);
 
-        if(is_string($accessor))
-            return $this->accessor->getValue($item, $accessor);
+        if(is_string($accessor)) {
+            try {
+                return $this->accessor->getValue($item, $accessor);
+            } catch (\Exception $e) {
+                return '';
+            }
+        }
 
         throw new \Exception("Invalid accessor");
     }

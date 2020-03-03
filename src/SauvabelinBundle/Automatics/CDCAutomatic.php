@@ -52,8 +52,9 @@ class CDCAutomatic extends BaseAutomatic implements ConfigurableAutomaticInterfa
      */
     protected function getItems($data = null)
     {
-        $membres = $this->entityManager->getRepository($this->fichierConfig->getMembreClass())->findBy(['statut' => BaseMembre::INSCRIT]);
-        $adabs = array_map(function(BaseAttribution $attribution) {
+        $membres = $data['actifs'] ? $this->entityManager->getRepository($this->fichierConfig->getMembreClass())->findBy(['statut' => BaseMembre::INSCRIT]) : [];
+
+        $adabs = !$data['adabs'] ? [] : array_map(function(BaseAttribution $attribution) {
             return $attribution->getMembre();
         }, $this->entityManager->getRepository($this->fichierConfig->getGroupeClass())->find($this->parameterManager->getValue('bs', 'groupe.adabs_id'))->getActivesAttributions());
 
@@ -70,11 +71,11 @@ class CDCAutomatic extends BaseAutomatic implements ConfigurableAutomaticInterfa
         $amountItems = count($items);
         $amountAdressables = count($adressables);
 
-        if ($amountAdressables !== $amountItems) {
+        if ($data['sansAdresses'] && $amountAdressables !== $amountItems) {
             $this->session->getFlashBag()->add('warning', $amountItems - $amountAdressables . " n'ont pas d'adresses !");
         }
 
-        return $adressables;
+        return $data['sansAdresses'] ? $items : $adressables;
     }
 
     /**
@@ -92,7 +93,10 @@ class CDCAutomatic extends BaseAutomatic implements ConfigurableAutomaticInterfa
      */
     public function buildForm(FormBuilderInterface $builder)
     {
-        $builder->add('merge', SwitchType::class, ['label' => 'Fusionner les familles']);
+        $builder->add('merge', SwitchType::class, ['label' => 'Fusionner les familles', 'data' => true])
+            ->add('adabs', SwitchType::class, ['label' => 'Inclure l\'Adabs', 'data' => true])
+            ->add('actifs', SwitchType::class, ['label' => 'Inclure les actifs', 'data' => true])
+            ->add('sansAdresses', SwitchType::class, ['label' => 'Inclure les sans adresses', 'data' => false]);
     }
 
     /**
