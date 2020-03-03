@@ -14,6 +14,7 @@ use NetBS\FichierBundle\Mapping\BaseAttribution;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Model\AdressableInterface;
 use NetBS\FichierBundle\Utils\Traits\FichierConfigTrait;
+use NetBS\ListBundle\Column\DateTimeColumn;
 use NetBS\ListBundle\Column\SimpleColumn;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
 use NetBS\SecureBundle\Mapping\BaseUser;
@@ -52,11 +53,21 @@ class CDCAutomatic extends BaseAutomatic implements ConfigurableAutomaticInterfa
      */
     protected function getItems($data = null)
     {
-        $membres = $data['actifs'] ? $this->entityManager->getRepository($this->fichierConfig->getMembreClass())->findBy(['statut' => BaseMembre::INSCRIT]) : [];
+        $adabsId = $this->parameterManager->getValue('bs', 'groupe.adabs_id');
+        $membres = !$data['actifs'] ? [] : array_filter($this->entityManager->getRepository($this->fichierConfig->getMembreClass())->findBy(['statut' => BaseMembre::INSCRIT]),
+            function(BaseMembre $membre) use ($adabsId) {
+                if (count($membre->getAttributions()) === 0) return false;
+                foreach ($membre->getAttributions() as $attribution) {
+                    if ($attribution->getGroupeId() === intval($adabsId)) {
+                        return false;
+                    }
+                }
+                return true;
+        });
 
         $adabs = !$data['adabs'] ? [] : array_map(function(BaseAttribution $attribution) {
             return $attribution->getMembre();
-        }, $this->entityManager->getRepository($this->fichierConfig->getGroupeClass())->find($this->parameterManager->getValue('bs', 'groupe.adabs_id'))->getActivesAttributions());
+        }, $this->entityManager->getRepository($this->fichierConfig->getGroupeClass())->find($adabsId)->getActivesAttributions());
 
 
         $items = array_unique(array_merge($membres, $adabs));
