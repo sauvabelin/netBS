@@ -109,7 +109,6 @@ class ImportFacturesCommand extends ContainerAwareCommand
 
         $io->progressFinish();
         $manager->flush();
-        dump(count($this->notFound));
 
         /** @var WNGFacture $unpaid */
         $unpaid = array_filter($this->notFound, function(WNGFacture $facture) {
