@@ -130,7 +130,7 @@ class ApiGalerieController extends Controller
             'name'          => $directory->getName(),
             'path'          => $directory->getRelativePath(),
             'hashPath'      => $directory->getHashPath(),
-            'description'   => $directory->getDescription(),
+            'description'   => $parser->text($directory->getDescription()),
             'thumbnail'     => $directory->getThumbnail(),
             'children'      => $directory->getChildren(),
             'medias'        => $directory->getMedias()
