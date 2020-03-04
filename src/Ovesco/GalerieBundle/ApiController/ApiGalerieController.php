@@ -5,6 +5,7 @@ namespace Ovesco\GalerieBundle\ApiController;
 use Ovesco\GalerieBundle\Entity\DirectoryView;
 use Ovesco\GalerieBundle\Model\Directory;
 use Ovesco\GalerieBundle\Model\GalerieConfig;
+use Ovesco\GalerieBundle\Model\Markdown;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -123,7 +124,7 @@ class ApiGalerieController extends Controller
             throw $this->createNotFoundException("Directory with path $realPath not found");
 
         $directory      = new Directory($realPath, $config);
-        // $parser         = new Markdown($directory->getRelativePath());
+        $parser         = new Markdown($directory->getRelativePath());
 
         $data = [
             'name'          => $directory->getName(),
