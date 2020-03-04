@@ -38,7 +38,9 @@ class CSVFacturesPayees extends CSVExporter implements ConfigurableExporterInter
                 /** @var Paiement $loopPaiement */
                 foreach ($allPaiements as $loopPaiement) {
                     $sommeInitiale += $loopPaiement->getMontant();
-                    if ($loopPaiement === $paiement && $sommeInitiale >= $facture->getMontant()) return true;
+                    if ($sommeInitiale >= $facture->getMontant()) {
+                        return $loopPaiement === $paiement;
+                    }
                 }
                 return false;
             });
