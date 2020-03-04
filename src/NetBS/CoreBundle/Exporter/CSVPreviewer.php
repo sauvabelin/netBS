@@ -36,6 +36,7 @@ class CSVPreviewer implements PreviewerInterface
         if(!$exporter instanceof CSVExporter)
             throw new \Exception("Previewable excel exporter must be an instance of ExcelExporter!");
 
+        $items      = $exporter->filterItems($items);
         $data       = [];
         $config     = new CSVColumns();
 

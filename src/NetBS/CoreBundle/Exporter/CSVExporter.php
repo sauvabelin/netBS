@@ -39,6 +39,10 @@ abstract class CSVExporter implements ExporterInterface
      */
     abstract public function configureColumns(CSVColumns $columns);
 
+    public function filterItems($items) {
+        return $items;
+    }
+
     /**
      * Returns an exported representation of given items
      * @param \Traversable $items
@@ -50,7 +54,7 @@ abstract class CSVExporter implements ExporterInterface
         $this->configureColumns($config);
 
         $data   = [];
-
+        $items  = $this->filterItems($items);
         $data[] = array_map(function($column) {
             return $column['header'];
         }, $config->getColumns());

@@ -170,8 +170,8 @@ services:
             - { name: netbs.searcher }
             - { name: netbs.list.model }
 
-    ovesco.facturation.exporter.csv_membre:
-        class:  Ovesco\FacturationBundle\Exporter\CSVPaiement
+    ovesco.facturation.exporter.csv_factures_payees:
+        class:  Ovesco\FacturationBundle\Exporter\CSVFacturesPayees
         tags:
             - { name: netbs.exporter }
 

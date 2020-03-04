@@ -4,13 +4,9 @@ namespace Ovesco\FacturationBundle\Exporter\Config;
 
 use NetBS\CoreBundle\Model\ExporterConfigInterface;
 
-class CSVPaiementConfig implements ExporterConfigInterface
+class CSVFactureConfig implements ExporterConfigInterface
 {
-    public $compte = true;
-
-    public $creances = true;
-
-    public $montantFacture = true;
+    public $closedWithPayement = true;
 
     /**
      * @return string
