@@ -44,6 +44,7 @@ class NetBSRenderer implements RendererInterface
 
         $this->dispatcher->dispatch(NetbsRendererToolbarEvent::NAME, $event);
 
+        dump($table);
         return $this->engine->render('@NetBSCore/renderer/netbs.renderer.twig', array(
             'table'     => $table,
             'tableId'   => $tableId,

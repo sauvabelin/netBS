@@ -35,6 +35,7 @@ class MainMenuListener
         $search = $category->addSubMenu('facturation.search', 'Rechercher', 'fas fa-search');
         $search->addSubLink('Créances', 'ovesco.facturation.search_creances');
         $search->addSubLink('Factures', 'ovesco.facturation.search_factures');
+        $search->addSubLink('Paiements', 'ovesco.facturation.search_paiements');
         $autre = $category->addSubMenu('facturation.autre', 'Autre', 'fas fa-bomb');
         $autre->addSubLink('Liste des comptes', 'ovesco.facturation.compte.list');
         $autre->addSubLink('Importer un fichier BVR', 'ovesco.facturation.camt.import');

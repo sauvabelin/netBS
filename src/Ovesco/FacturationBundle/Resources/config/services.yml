@@ -164,6 +164,17 @@ services:
             - { name: netbs.searcher }
             - { name: netbs.list.model }
 
+    ovesco.facturation.searcher.paiement:
+        class: Ovesco\FacturationBundle\Searcher\PaiementSearcher
+        tags:
+            - { name: netbs.searcher }
+            - { name: netbs.list.model }
+
+    ovesco.facturation.exporter.csv_membre:
+        class:  Ovesco\FacturationBundle\Exporter\CSVPaiement
+        tags:
+            - { name: netbs.exporter }
+
     ovesco.facturation.searcher.factures:
         class: Ovesco\FacturationBundle\Searcher\FactureSearcher
         tags:

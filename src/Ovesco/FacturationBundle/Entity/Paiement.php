@@ -195,4 +195,9 @@ class Paiement
             ? $this->getTransactionDetails()->getRelatedDates()->getAcceptanceDateTime()
             : $this->date;
     }
+
+    public function __toString()
+    {
+        return "paiement_" . $this->getId();
+    }
 }

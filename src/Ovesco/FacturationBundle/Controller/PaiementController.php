@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class CompteController
  * @package Ovesco\FacturationBundle\Controller
- * @Route("/paiement/{id}")
+ * @Route("/paiement")
  */
 class PaiementController extends Controller
 {
@@ -23,7 +23,7 @@ class PaiementController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @Route("/modal-add", name="ovesco.facturation.paiement.modal_add")
+     * @Route("/{id}/modal-add", name="ovesco.facturation.paiement.modal_add")
      */
     public function modalAddAction(Facture $facture, Request $request) {
 
@@ -45,5 +45,15 @@ class PaiementController extends Controller
             'form'  => $form->createView()
         ), Modal::renderModal($form));
 
+    }
+
+    /**
+     * @Route("/search", name="ovesco.facturation.search_paiements")
+     */
+    public function searchPaiementsAction() {
+
+        $searcher       = $this->get('netbs.core.searcher_manager');
+        $instance       = $searcher->bind(Paiement::class);
+        return $searcher->render($instance);
     }
 }

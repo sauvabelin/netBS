@@ -81,6 +81,7 @@ abstract class BaseSearcher extends BaseListModel
         $limit      = $this->getMaxResults();
         $results    = $this->getResults();
         $results    = array_unique(array_merge($results, $this->previousResults));
+        dump($results);
         return count($results) > intval($limit) ? [] : $results;
     }
 
