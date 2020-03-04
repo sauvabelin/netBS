@@ -2,6 +2,8 @@
 
 namespace Ovesco\GalerieBundle\Model;
 
+use NetBS\CoreBundle\Utils\StrUtil;
+
 class Directory
 {
     private $path;
@@ -114,6 +116,12 @@ class Directory
         $data = array_map(function($item) {return base64_encode(str_replace('?', '__intermark', $item));}, $data);
 
         return implode("/", $data);
+    }
+
+    public static function hash2($str) {
+        $data = explode('/', $str);
+        $data = array_map(function ($item) { return preg_replace("/^galerie-/", '', StrUtil::slugify($item));}, $data);
+        return implode('/', $data);
     }
 
     public static function unhashPath($path) {

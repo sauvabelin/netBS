@@ -4,6 +4,7 @@ namespace Ovesco\GalerieBundle\ApiController;
 
 use Ovesco\GalerieBundle\Entity\DirectoryView;
 use Ovesco\GalerieBundle\Model\Directory;
+use Ovesco\GalerieBundle\Model\GalerieConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -116,11 +117,10 @@ class ApiGalerieController extends Controller
     private function generateDirectoryResponse(Request $request) {
 
         $config         = $this->get('ovesco.galerie.config');
-        $path           = Directory::unhashPath($request->get('path'));
-        $realPath       = $config->getFullMappedDirectory() . (empty($path) ? "" : "/" . trim($path, "/"));
+        $realPath       = $this->getRealPath($config, $request->get('path'));
 
         if(!is_dir($realPath))
-            throw $this->createNotFoundException("Directory with path $path not found");
+            throw $this->createNotFoundException("Directory with path $realPath not found");
 
         $directory      = new Directory($realPath, $config);
         // $parser         = new Markdown($directory->getRelativePath());
@@ -137,6 +137,25 @@ class ApiGalerieController extends Controller
 
         // $this->logDirectoryView($directory);
         return new JsonResponse($this->get('serializer')->serialize($data, 'json'), 200, [], true);
+    }
+
+    private function getRealPath(GalerieConfig $config, $hashPath) {
+        $parts = explode('/', $hashPath);
+
+        $currentRealPath = $config->getFullMappedDirectory();
+        $currentPath = $config->getFullMappedDirectory();
+        foreach($parts as $pathPart) {
+            $directories = scandir($currentRealPath);
+            foreach($directories as $possibleDir) {
+                $possibleHash = $currentPath . "/" . Directory::hash2($possibleDir);
+                if ($possibleHash === $currentPath . "/" . $pathPart) {
+                    $currentPath .= "/" . $pathPart;
+                    $currentRealPath .= "/" . $possibleDir;
+                }
+            }
+        }
+
+        return $currentRealPath;
     }
 
     /**
