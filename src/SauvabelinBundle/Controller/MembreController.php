@@ -74,7 +74,7 @@ class MembreController extends Controller
 
         $term       = $request->get('term');
         $provider   = $this->get('netbs.fichier.select2.famille_provider');
-        $results    = $provider->search($term, 5);
+        $results    = $provider->search($term, 10);
         $serializer = $this->get('serializer');
 
         $response   = new Response($serializer->serialize($results, 'json', array(
