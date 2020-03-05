@@ -2,10 +2,12 @@
 
 namespace Ovesco\FacturationBundle\Searcher;
 
+use NetBS\CoreBundle\ListModel\Action\ModalAction;
 use NetBS\CoreBundle\ListModel\Action\RemoveAction;
 use NetBS\CoreBundle\ListModel\Column\ActionColumn;
 use NetBS\CoreBundle\ListModel\Column\HelperColumn;
 use NetBS\CoreBundle\Model\BaseSearcher;
+use NetBS\CoreBundle\Utils\Traits\RouterTrait;
 use NetBS\ListBundle\Column\DateTimeColumn;
 use NetBS\ListBundle\Column\SimpleColumn;
 use NetBS\ListBundle\Model\ListColumnsConfiguration;
@@ -16,6 +18,8 @@ use Ovesco\FacturationBundle\Model\SearchPaiement;
 
 class PaiementSearcher extends BaseSearcher
 {
+    use RouterTrait;
+
     /**
      * Returns the search form type class
      * @return string
@@ -68,8 +72,11 @@ class PaiementSearcher extends BaseSearcher
             ->addColumn('Remarques', 'remarques', SimpleColumn::class)
             ->addColumn('', null, ActionColumn::class, [
                 ActionColumn::ACTIONS_KEY => [
-                    RemoveAction::class
-                ]
+                    RemoveAction::class,
+                    ModalAction::class => [
+                        ModalAction::ROUTE => function(Paiement $paiement) { return $this->router->generate('ovesco.facturation.paiement.modal_details', ['id' => $paiement->getId()]); },
+                    ]
+                ],
             ])
 
         ;

@@ -44,6 +44,16 @@ class PaiementController extends Controller
         return $this->render('@NetBSFichier/generic/add_generic.modal.twig', array(
             'form'  => $form->createView()
         ), Modal::renderModal($form));
+    }
+
+    /**
+     * @param Paiement $paiement
+     * @Route("/details/{id}", name="ovesco.facturation.paiement.modal_details")
+     */
+    public function modalDetailsAction(Paiement $paiement) {
+        return $this->render('@OvescoFacturation/paiement/modal_details.html.twig', array(
+            'paiement' => $paiement,
+        ));
 
     }
 
