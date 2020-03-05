@@ -1,5 +1,5 @@
 {% extends '@NetBSCore/layout/modal.layout.twig' %}
 
 {% block content %}
-    {{ dump(paiement.transactionDetails) }}
+    <pre>{{ paiement.getTransactionDetails(true)|raw }}</pre>
 {% endblock %}

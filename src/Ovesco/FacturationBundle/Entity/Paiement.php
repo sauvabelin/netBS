@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Genkgo\Camt\DTO\EntryTransactionDetail;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
+use NetBS\FichierBundle\Utils\FichierHelper;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -168,10 +169,12 @@ class Paiement
     /**
      * @return EntryTransactionDetail
      */
-    public function getTransactionDetails()
+    public function getTransactionDetails($array = false)
     {
-        if ($this->transactionDetails)
-            return unserialize($this->transactionDetails);
+        if ($this->transactionDetails) {
+            $result = unserialize($this->transactionDetails);
+            return $array ? FichierHelper::arrayToString(FichierHelper::objectToArray($result)) : $result;
+        }
         return null;
     }
 
