@@ -75,6 +75,7 @@ class PaiementSearcher extends BaseSearcher
                     RemoveAction::class,
                     ModalAction::class => [
                         ModalAction::ROUTE => function(Paiement $paiement) { return $this->router->generate('ovesco.facturation.paiement.modal_details', ['id' => $paiement->getId()]); },
+                        ModalAction::ICON => 'fas fa-info'
                     ]
                 ],
             ])
