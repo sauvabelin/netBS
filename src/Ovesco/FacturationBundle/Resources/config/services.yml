@@ -31,6 +31,11 @@ services:
         tags:
             - { name: netbs.exporter }
 
+    ovesco.facturation.exporter.paiements:
+        class: Ovesco\FacturationBundle\Exporter\CSVPaiements
+        tags:
+            - { name: netbs.exporter }
+
     ovesco.facturation.exporter.pdf_qr_factures:
         class: Ovesco\FacturationBundle\Exporter\PDFQrFacture
         arguments:
