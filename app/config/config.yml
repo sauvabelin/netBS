@@ -167,4 +167,4 @@ ovesco_galerie:
     prefix_directory: "/web"
     mapped_directory: "/galerie/originals"
     cache_directory:  "/galerie/cache"
-    image_extensions: ["jpg", "png"]
+    image_extensions: ["jpg", "jpeg", "png"]
