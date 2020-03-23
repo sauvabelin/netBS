@@ -28,7 +28,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('image_extensions')
                     ->scalarPrototype()->end()
                 ->end()
-                ->scalarNode('description_filename')->defaultValue("description.md")->end()
+                ->scalarNode('description_filename')->defaultValue("description.md|readme.md|Readme.md")->end()
             ->end();
 
         return $treeBuilder;

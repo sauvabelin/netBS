@@ -92,8 +92,12 @@ class Directory
 
     public function getDescription() {
 
-        $descriptionFilePath    = $this->path . "/" . $this->config->getDescriptionFilename();
-        return !is_file($descriptionFilePath) ? null : file_get_contents($descriptionFilePath);
+        $filenames = explode('|', $this->config->getDescriptionFilename());
+        foreach ($filenames as $filename) {
+            $descriptionFilePath = $this->path . "/" . $filename;
+            if (is_file($descriptionFilePath)) return file_get_contents($descriptionFilePath);
+        }
+        return null;
     }
 
     /**
