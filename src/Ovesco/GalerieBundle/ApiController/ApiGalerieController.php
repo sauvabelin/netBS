@@ -69,6 +69,7 @@ class ApiGalerieController extends Controller
             if(isset($aggr[$description['mtime']]))
                 unset($aggr[$description['mtime']]);
 
+      	$countt = 0;
         foreach($aggr as $items) {
             usort($items, function ($l1, $l2) {
                 return strlen($l1['path']) > strlen($l2['path']) ? -1 : 1;
@@ -80,6 +81,9 @@ class ApiGalerieController extends Controller
                 'name' => utf8_encode($items[0]['name']),
                 'date' => date("d.m.Y", $items[0]['mtime'])
             ];
+          
+          	$countt += 1;
+          	if ($countt == 10) break;
         }
 
         return new JsonResponse($res);
@@ -176,4 +180,5 @@ class ApiGalerieController extends Controller
         $em->flush();
     }
 }
+
 
