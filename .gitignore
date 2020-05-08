@@ -21,3 +21,5 @@
 /frontend/node_modules/
 **/Importator.php
 web/galerie
+web/tentes/uploads
+
