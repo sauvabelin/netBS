@@ -1,38 +1,7 @@
-street_war:
-    resource: "@StreetWarBundle/Controller/"
-    type:     annotation
-    prefix:   /api/v1/netBS/streetwar
-
-
-ovesco_galerie:
-    resource: "@OvescoGalerieBundle/ApiController/"
-    type:     annotation
-    prefix:   /
-
-tente:
-    resource: "@TenteBundle/Controller/"
-    type:     annotation
-    prefix:   /netBS/tente
-
-tente_api:
-    resource: "@TenteBundle/ApiController/"
-    type:     annotation
-    prefix:   /api/v1/netBS/tente
-
 ovesco_facturation:
     resource: "@OvescoFacturationBundle/Controller/"
     type:     annotation
     prefix:   /netBS/facturation
-
-sauvabelin:
-    resource: "@SauvabelinBundle/Controller/"
-    type:     annotation
-    prefix:   /netBS/bs
-
-sauvabelin_api:
-    resource: "@SauvabelinBundle/ApiController/"
-    type:     annotation
-    prefix:   /
 
 netbs:
     resource: '@NetBSCoreBundle/Resources/config/routing.yml'
@@ -41,9 +10,6 @@ netbs:
 netbs_api:
     resource: '@NetBSCoreBundle/Resources/config/routing_api.yml'
     prefix: /api/v1/netBS
-
-_liip_imagine:
-    resource: "@LiipImagineBundle/Resources/config/routing.yaml"
 
 home:
     path: /

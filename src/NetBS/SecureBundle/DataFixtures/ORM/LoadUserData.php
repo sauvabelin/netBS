@@ -33,6 +33,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         $user->setPassword($password);
 
         $user->addRole($manager->getRepository('NetBSSecureBundle:Role')->findOneBy(array('role' => 'ROLE_ADMIN')));
+        $user->addRole($manager->getRepository('NetBSSecureBundle:Role')->findOneBy(array('role' => 'ROLE_USER')));
 
         $manager->persist($user);
         $manager->flush();

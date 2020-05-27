@@ -33,6 +33,7 @@ class LoadRolesData extends AbstractFixture implements OrderedFixtureInterface, 
         $manager->flush();
 
         $this->addReference('ROLE_ADMIN', $manager->getRepository('NetBSSecureBundle:Role')->findOneBy(array('role' => 'ROLE_ADMIN')));
+        $this->addReference('ROLE_USER', $manager->getRepository('NetBSSecureBundle:Role')->findOneBy(array('role' => 'ROLE_USER')));
     }
 
     public function loadRole(array $data, ObjectManager $manager) {
@@ -43,7 +44,8 @@ class LoadRolesData extends AbstractFixture implements OrderedFixtureInterface, 
 
         foreach($data as $name => $params) {
 
-            $role   = new $rc($name, $params['poids'], $params['description']);
+            $description = isset($params['description']) ? $params['description'] : '';
+            $role   = new $rc($name, $params['poids'], $description);
 
             if(isset($params['children'])) {
 

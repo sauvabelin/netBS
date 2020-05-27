@@ -18,7 +18,6 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
-            new Liip\ImagineBundle\LiipImagineBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
@@ -29,12 +28,7 @@ class AppKernel extends Kernel
             new NetBS\FichierBundle\NetBSFichierBundle(),
             new NetBS\SecureBundle\NetBSSecureBundle(),
             new NetBS\ListBundle\NetBSListBundle(),
-            new SauvabelinBundle\SauvabelinBundle(),
-            new Ovesco\GalerieBundle\OvescoGalerieBundle(),
             new Ovesco\FacturationBundle\OvescoFacturationBundle(),
-            // new Ovesco\WhatsappBundle\OvescoWhatsappBundle(),
-            new StreetWarBundle\StreetWarBundle(),
-            new TenteBundle\TenteBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

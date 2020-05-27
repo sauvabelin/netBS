@@ -5,9 +5,6 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: dql_functions.yml }
-    - { resource: "@SauvabelinBundle/Resources/config/services.yml" }
-    - { resource: "@StreetWarBundle/Resources/config/services.yml" }
-    - { resource: "@TenteBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -99,21 +96,6 @@ stof_doctrine_extensions:
             timestampable: true
             softdeleteable: true
 
-liip_imagine:
-    loaders:
-        ovesco_galerie:
-            filesystem:
-                data_root: "%kernel.project_dir%/web/galerie/originals"
-
-    filter_sets:
-        thumbnail:
-            data_loader: ovesco_galerie
-            cache: ovesco.galerie_cache_resolver
-            quality: 75
-            filters:
-                thumbnail: { size: [200,200], mode: outbound }
-                auto_rotate: ~
-
 nelmio_cors:
     defaults:
         allow_credentials: false
@@ -156,15 +138,9 @@ net_bs_core:
 
 net_bs_fichier:
     entities:
-        membre_class: SauvabelinBundle\Entity\BSMembre
-        groupe_class: SauvabelinBundle\Entity\BSGroupe
+        membre_class: NetBS\FichierBundle\Entity\Membre
+        groupe_class: NetBS\FichierBundle\Entity\Groupe
 
 net_bs_secure:
     entities:
         user_class: "%netbs_secure_user_class%"
-
-ovesco_galerie:
-    prefix_directory: "/web"
-    mapped_directory: "/galerie/originals"
-    cache_directory:  "/galerie/cache"
-    image_extensions: ["jpg", "jpeg", "png"]

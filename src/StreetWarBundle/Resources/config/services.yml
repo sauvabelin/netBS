@@ -1,4 +1,0 @@
-services:
-#    street_war.example:
-#        class: StreetWarBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
