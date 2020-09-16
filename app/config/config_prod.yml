@@ -15,7 +15,7 @@ services:
             - { method: auth, arguments: ['%redis_pass%'] }
             - { method: select, arguments: ['%redis_db_index%'] }
 
-            
+
 doctrine:
     orm:
         metadata_cache_driver:

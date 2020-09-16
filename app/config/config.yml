@@ -1,10 +1,9 @@
 imports:
-#    - { resource: parameters.base.yml }
-#    - { resource: ReadEnvParams.php }
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: dql_functions.yml }
+    - { resource: "@TDGLBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -138,8 +137,8 @@ net_bs_core:
 
 net_bs_fichier:
     entities:
-        membre_class: NetBS\FichierBundle\Entity\Membre
-        groupe_class: NetBS\FichierBundle\Entity\Groupe
+        membre_class: TDGLBundle\Entity\TDGLMembre
+        famille_class: TDGLBundle\Entity\TDGLFamille
 
 net_bs_secure:
     entities:

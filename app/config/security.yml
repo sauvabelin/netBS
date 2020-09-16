@@ -54,6 +54,7 @@ security:
 
     access_control:
         - { path: ^/api/v1/netBS/gettoken,          roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/netBS/facturation,       roles: [ ROLE_TRESORIER ] }
         - { path: ^/api/v1/netBS,                   roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/netBS/secure/login,             roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/netBS/secure/user/my-account,   roles: [ ROLE_USER ] }

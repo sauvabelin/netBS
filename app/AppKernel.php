@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new NetBS\SecureBundle\NetBSSecureBundle(),
             new NetBS\ListBundle\NetBSListBundle(),
             new Ovesco\FacturationBundle\OvescoFacturationBundle(),
+            new TDGLBundle\TDGLBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

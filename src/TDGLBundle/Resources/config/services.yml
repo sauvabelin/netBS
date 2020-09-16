@@ -1,0 +1,25 @@
+services:
+
+  tdgl.form.membre_extension:
+    class: TDGLBundle\Form\Extension\MembreExtension
+    tags:
+      - { name: form.type_extension, extended_type: NetBS\FichierBundle\Form\Personne\MembreType }
+
+  tdgl.form.famille_extension:
+    class: TDGLBundle\Form\Extension\FamilleExtension
+    tags:
+      - { name: form.type_extension, extended_type: NetBS\FichierBundle\Form\FamilleType }
+
+  tdgl.form.search_base_membre_information:
+    class: TDGLBundle\Form\TDGLMembreSearchType
+    arguments:
+      - "@netbs.fichier.config"
+    tags:
+      - { name: form.type }
+
+  tdgl.listener.main_menu:
+    class: TDGLBundle\Listener\MainMenuListener
+    arguments:
+      - "@security.token_storage"
+    tags:
+      - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure, priority: 60 }

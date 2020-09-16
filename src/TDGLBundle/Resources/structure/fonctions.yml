@@ -1,0 +1,83 @@
+fonctions:
+  chef de groupe:
+    abbr: CG
+    poids: 1000
+    roles: ["ROLE_ADMIN"]
+
+  chef de groupe adjoint:
+    abbr: CGa
+    poids: 9500
+    roles: ["ROLE_ADMIN"]
+
+  responsable matériel:
+    abbr: Matériel
+    poids: 3000
+    roles: ["ROLE_READ"]
+
+  caissier:
+    abbr: Caissier
+    poids: 3000
+    roles: ["ROLE_READ"]
+
+  responsable économat:
+    abbr: Economat
+    poids: 3000
+    roles: ["ROLE_READ"]
+
+  routier:
+    abbr: Routier
+    poids: 2500
+    roles: ["ROLE_READ"]
+
+  chef picos:
+    abbr: CPO
+    poids: 5000
+    roles: ["ROLE_READ", "ROLE_UPDATE", "ROLE_CREATE", "ROLE_DELETE"]
+
+  chef picos adjoint:
+    abbr: CPOa
+    poids: 4500
+    roles: ["ROLE_READ", "ROLE_UPDATE", "ROLE_CREATE"]
+
+  pico:
+    abbr: Pico
+    poids: 1000
+
+  chef de meute:
+    abbr: CM
+    poids: 5000
+    roles: ["ROLE_READ", "ROLE_UPDATE", "ROLE_CREATE", "ROLE_DELETE"]
+
+  chef de meute adjoint:
+    abbr: CMa
+    poids: 4500
+    roles: ["ROLE_READ", "ROLE_UPDATE", "ROLE_CREATE"]
+
+  louveteau-ette:
+    abbr: lvt-e
+    poids: 500
+
+  chef de troupe:
+    abbr: CT
+    poids: 5000
+    roles: ["ROLE_READ", "ROLE_UPDATE", "ROLE_CREATE", "ROLE_DELETE"]
+
+  chef de troupe adjoint:
+    abbr: CTa
+    poids: 4500
+    roles: ["ROLE_READ", "ROLE_UPDATE", "ROLE_CREATE"]
+
+  chef de patrouille:
+    abbr: CP
+    poids: 2000
+    roles: ["ROLE_READ", "ROLE_UPDATE", "ROLE_CREATE"]
+
+  sous-CP:
+    abbr: SCP
+    poids: 900
+
+  éclaireur-euse:
+    abbr: éclai
+    poids: 500
+
+
