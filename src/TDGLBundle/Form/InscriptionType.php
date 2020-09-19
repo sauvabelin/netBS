@@ -3,6 +3,7 @@
 namespace TDGLBundle\Form;
 
 use NetBS\CoreBundle\Form\Type\DateMaskType;
+use NetBS\CoreBundle\Form\Type\MaskType;
 use NetBS\CoreBundle\Form\Type\Select2DocumentType;
 use NetBS\CoreBundle\Form\Type\SexeType;
 use NetBS\CoreBundle\Form\Type\TelephoneMaskType;
@@ -26,6 +27,7 @@ class InscriptionType extends AbstractType
             ->add('prenom', TextType::class, ['label' => 'Prénom'])
             ->add('sexe', SexeType::class, ['label' => 'Sexe'])
             ->add('naissance', DateMaskType::class, ['label' => 'Date de naissance'])
+            ->add('numeroAvs', MaskType::class, ['label' => 'Numéro AVS', 'required' => false, 'mask' => "'mask' : '999.9999.9999.99'"])
             ->add('adresse', TextType::class, ['label' => 'Adresse', 'required' => false])
             ->add('npa', TextType::class, ['label' => 'NPA', 'required' => false])
             ->add('localite', TextType::class, ['label' => 'Localité', 'required' => false])

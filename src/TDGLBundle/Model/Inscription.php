@@ -46,6 +46,11 @@ class Inscription implements GroupSequenceProviderInterface
     public $nom;
 
     /**
+     * @var string
+     */
+    public $numeroAvs;
+
+    /**
      * @var \DateTime
      * @Assert\NotBlank(groups={"default"})
      * @Assert\DateTime
@@ -131,6 +136,7 @@ class Inscription implements GroupSequenceProviderInterface
         $membre = new TDGLMembre();
         $membre->setContactInformation(new ContactInformation());
         $membre->setStatut(BaseMembre::INSCRIT)
+            ->setNumeroAvs($this->numeroAvs)
             ->setInscription($this->inscription)
             ->setNaissance($this->naissance)
             ->setPrenom($this->prenom)
