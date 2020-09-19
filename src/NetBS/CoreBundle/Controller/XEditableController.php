@@ -7,7 +7,7 @@ use NetBS\CoreBundle\Exceptions\UserConstraintException;
 use NetBS\CoreBundle\Model\XEditable;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

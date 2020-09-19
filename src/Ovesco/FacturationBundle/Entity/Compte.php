@@ -27,7 +27,8 @@ class Compte
 
     /**
      * @var string
-     * @ORM\Column(name="ccp", type="string", length=255, nullable=false, unique=true)
+     *
+     * @ORM\Column(name="ccp", type="string", length=255, nullable=false, unique=false)
      * @Assert\Regex("/^[0-9-]+$/", message="Ne peut contenir que des numéros [0-9] et des traits [-]")
      * @Groups({"default"})
      */

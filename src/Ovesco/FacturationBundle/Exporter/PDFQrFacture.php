@@ -2,17 +2,18 @@
 
 namespace Ovesco\FacturationBundle\Exporter;
 
+use kmukku\phpIso11649\phpIso11649;
 use NetBS\CoreBundle\Exporter\PDFPreviewer;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Form\QrFactureConfigType;
 use Ovesco\FacturationBundle\Model\QrFactureConfig;
-use Ovesco\FacturationBundle\Util\BVR;
 use Sprain\SwissQrBill\DataGroup\Element\CombinedAddress;
 use Sprain\SwissQrBill\DataGroup\Element\CreditorInformation;
 use Sprain\SwissQrBill\DataGroup\Element\PaymentAmountInformation;
 use Sprain\SwissQrBill\DataGroup\Element\PaymentReference;
 use Sprain\SwissQrBill\QrBill;
 use Sprain\SwissQrBill\Reference\QrPaymentReferenceGenerator;
+use Sprain\SwissQrBill\Reference\RfCreditorReferenceGenerator;
 
 class PDFQrFacture extends BaseFactureExporter
 {
@@ -119,7 +120,7 @@ class PDFQrFacture extends BaseFactureExporter
         $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 9, 'Reference');
         $fpdf->SetXY($left, $top + $margin + 34);
         $fpdf->SetFont('Arial', '', 8);
-        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 4, BVR::getCleanReference($facture));
+        // $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 4, BVR::getCleanReference($facture, $this->paramBag->getValue('facturation', 'client_identification_number')));
 
         // Payable by
         $fpdf->SetXY($left, $top + $margin + 38);
@@ -190,6 +191,7 @@ class PDFQrFacture extends BaseFactureExporter
         $compte = $facture->getCompteToUse();
         $debiteur = $facture->getDebiteur();
         $adresse = $debiteur->getSendableAdresse();
+        $qrData = $this->getQRData($facture);
 
         if ($this->getConfiguration()->border) {
             $fpdf->SetDrawColor(255,0,0);
@@ -214,7 +216,7 @@ class PDFQrFacture extends BaseFactureExporter
         $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 7, 'Payment part');
 
         // Print qr
-        $fpdf->Image($this->getQrCode($facture), $left, $top + 2*$margin + 7, 46, 46, 'png');
+        $fpdf->Image('data://text/plain;base64,' . base64_encode($qrData->getQrCode()->writeString()), $left, $top + 2*$margin + 7, 46, 46, 'png');
 
         // Montant
         $fpdf->SetXY($left, $top + 3*$margin + 7 + 46);
@@ -263,7 +265,7 @@ class PDFQrFacture extends BaseFactureExporter
         $fpdf->SetXY($sleft, $top + $margin + 5);
         $fpdf->SetFont('Arial', '', 10);
         $fpdf->MultiCell(87, 5, implode("\n", [
-            'CH56 1234 5678 0034 5453 5', //utf8_decode($compte->getIban()),
+            utf8_decode($compte->getIban()),
             utf8_decode($compte->getLine1()),
             utf8_decode($compte->getLine2()),
             utf8_decode($compte->getLine3()),
@@ -275,7 +277,8 @@ class PDFQrFacture extends BaseFactureExporter
         $fpdf->Cell(87, 11, 'Reference');
         $fpdf->SetXY($sleft, $top + $margin + 33);
         $fpdf->SetFont('Arial', '', 10);
-        $fpdf->Cell(87, 4, BVR::getCleanReference($facture));
+        // $fpdf->Cell(87, 4, BVR::getCleanReference($facture));
+        $fpdf->Cell(87, 4, $qrData->getPaymentReference()->getFormattedReference());
 
         // Informations additionnelles
         $fpdf->SetXY($sleft, $top + $margin + 36);
@@ -300,18 +303,18 @@ class PDFQrFacture extends BaseFactureExporter
         ]));
     }
 
-    private function getQrCode(Facture $facture) {
+    private function getQRData(Facture $facture) {
 
         $adresse = $facture->getDebiteur()->getSendableAdresse();
         $qrBill = QrBill::create();
         $qrBill->setCreditor(CombinedAddress::create(
-            'Brigade de Sauvabelin',
-            'Case postale 5455',
-            '1002 Lausanne',
+            $facture->getCompteToUse()->getLine1(),
+            $facture->getCompteToUse()->getLine2(),
+            $facture->getCompteToUse()->getLine3(),
             'CH'
         ));
 
-        $qrBill->setCreditorInformation(CreditorInformation::create('CH4431999123000889012'));
+        $qrBill->setCreditorInformation(CreditorInformation::create($facture->getCompteToUse()->getIban()));
 
         $qrBill->setUltimateDebtor(CombinedAddress::create(
             $facture->getDebiteur()->__toString(),
@@ -320,21 +323,15 @@ class PDFQrFacture extends BaseFactureExporter
             'CH'
         ));
 
+        $cin = $this->paramBag->getValue('facturation', 'client_identification_number');
+        $cin = empty($cin) ? null : $cin;
         $qrBill->setPaymentAmountInformation(PaymentAmountInformation::create('CHF', null));
         $qrBill->setPaymentReference(PaymentReference::create(
-            PaymentReference::TYPE_QR,
-            QrPaymentReferenceGenerator::generate(
-                '123456',
-                $facture->getFactureId()
-            )
+            PaymentReference::TYPE_SCOR,
+            RfCreditorReferenceGenerator::generate($facture->getId())
         ));
 
-        try {
-            return 'data://text/plain;base64,' . base64_encode($qrBill->getQrCode()->writeString());
-        } catch (\Exception $e) {
-            dump($qrBill->getViolations());
-            throw $e;
-        }
+        return $qrBill;
     }
 
     /**

@@ -2,16 +2,14 @@
 
 namespace NetBS\SecureBundle\ApiController;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiAuthController extends Controller
 {
     /**
-     * @Route("/gettoken", name="netbs_secure_api_gettoken")
-     * @Method({"POST"})
+     * @Route("/gettoken", name="netbs_secure_api_gettoken", methods={"POST"})
      */
     public function getTokenAction()
     {

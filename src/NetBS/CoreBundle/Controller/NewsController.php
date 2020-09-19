@@ -7,7 +7,7 @@ use NetBS\CoreBundle\Entity\NewsChannel;
 use NetBS\CoreBundle\Form\NewsChannelType;
 use NetBS\CoreBundle\Form\NewsType;
 use NetBS\CoreBundle\Utils\Modal;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

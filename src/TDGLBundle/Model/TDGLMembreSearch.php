@@ -8,6 +8,8 @@ class TDGLMembreSearch extends SearchBaseMembreInformation
 {
     protected $totem;
 
+    protected $anciens;
+
     /**
      * @return mixed
      */
@@ -22,5 +24,21 @@ class TDGLMembreSearch extends SearchBaseMembreInformation
     public function setTotem($totem)
     {
         $this->totem = $totem;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAnciens()
+    {
+        return $this->anciens;
+    }
+
+    /**
+     * @param mixed $anciens
+     */
+    public function setAnciens($anciens)
+    {
+        $this->anciens = $anciens;
     }
 }

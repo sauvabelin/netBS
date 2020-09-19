@@ -16,12 +16,13 @@ class BVR
      * @param Facture $facture
      * @return array
      */
-    public static function getReferenceNumber(Facture $facture){
+    public static function getReferenceNumber(Facture $facture, $cin){
         $chaine     = '04';
         $chaine    .= self::getControlNumber($chaine);
         $tab[0]     = $chaine;
 
-        $chaine     = sprintf("%026s", $facture->getFactureId());
+        $cleanCin   = str_pad($cin, 6, '0', STR_PAD_LEFT);
+        $chaine     = $cleanCin . sprintf("%020s", $facture->getFactureId());
         $chaine    .= self::getControlNumber($chaine);
         $tab[1]     = $chaine;
 
@@ -30,8 +31,8 @@ class BVR
         return $tab;
     }
 
-    public static function getCleanReference(Facture $facture) {
-        $ref = self::getReferenceNumber($facture);
+    public static function getCleanReference(Facture $facture, $cin) {
+        $ref = self::getReferenceNumber($facture, $cin);
         return sprintf("%s %s %s %s %s %s", substr($ref[1], 0, 2), substr($ref[1], 2, 5), substr($ref[1], 7, 5),
             substr($ref[1], 12, 5), substr($ref[1], 17, 5), substr($ref[1], 22, 5));
     }

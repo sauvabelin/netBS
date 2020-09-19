@@ -6,7 +6,7 @@ use NetBS\FichierBundle\Form\Personne\GeniteurType;
 use NetBS\FichierBundle\Mapping\BaseGeniteur;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

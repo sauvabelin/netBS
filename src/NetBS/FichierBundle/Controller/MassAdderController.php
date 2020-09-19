@@ -6,7 +6,7 @@ use NetBS\CoreBundle\Controller\MassUpdaterController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class MassUpdaterController

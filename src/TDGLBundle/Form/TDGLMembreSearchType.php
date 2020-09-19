@@ -14,6 +14,7 @@ class TDGLMembreSearchType extends base
     {
         parent::buildForm($builder, $options);
         $builder->add('totem', TextType::class, ["label" => "Totem", 'required' => false]);
+        $builder->add('anciens', AncienType::class, ["label" => "Inclure les anciens", 'required' => false]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

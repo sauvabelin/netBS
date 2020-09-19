@@ -4,7 +4,7 @@ namespace NetBS\CoreBundle\Controller;
 
 use NetBS\CoreBundle\Event\ExtendMainMenuEvent;
 use NetBS\CoreBundle\Menu\MainMenu;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -7,7 +7,7 @@ use NetBS\CoreBundle\Form\DynamicListType;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

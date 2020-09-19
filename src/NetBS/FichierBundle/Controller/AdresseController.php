@@ -5,7 +5,7 @@ namespace NetBS\FichierBundle\Controller;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\Contact\AdresseType;
 use NetBS\SecureBundle\Voter\CRUD;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

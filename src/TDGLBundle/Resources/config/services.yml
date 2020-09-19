@@ -23,3 +23,19 @@ services:
       - "@security.token_storage"
     tags:
       - { name: kernel.event_listener, event: netbs.menu.extend, method: onMenuConfigure, priority: 60 }
+
+
+  tdgl.search_binder.anciens:
+    class: TDGLBundle\Searcher\AncienBinder
+    arguments:
+      - "@netbs.fichier.config"
+      - "@doctrine.orm.entity_manager"
+      - "@netbs.params"
+    tags:
+      - { name: netbs.searcher.binder }
+
+  tdgl.automatic.canard:
+    class: TDGLBundle\Automatics\CanardAutomatic
+    tags:
+      - { name: netbs.list.model }
+      - { name: netbs.automatic_list }

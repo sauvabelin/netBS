@@ -28,6 +28,7 @@ services:
         class: Ovesco\FacturationBundle\Exporter\PDFFacture
         arguments:
             - "@doctrine.orm.entity_manager"
+            - "@netbs.params"
         tags:
             - { name: netbs.exporter }
 
@@ -40,6 +41,7 @@ services:
         class: Ovesco\FacturationBundle\Exporter\PDFQrFacture
         arguments:
             - "@doctrine.orm.entity_manager"
+            - "@netbs.params"
         tags:
             - { name: netbs.exporter }
 

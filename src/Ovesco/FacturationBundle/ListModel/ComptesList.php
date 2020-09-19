@@ -47,16 +47,10 @@ class ComptesList extends BaseListModel
     public function configureColumns(ListColumnsConfiguration $configuration)
     {
         $configuration
-            ->addColumn('CCP', null, XEditableColumn::class, [
-                XEditableColumn::PROPERTY   => 'ccp',
-                XEditableColumn::TYPE_CLASS => TextType::class
-            ])
-            /*
             ->addColumn('IBAN', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY   => 'iban',
                 XEditableColumn::TYPE_CLASS => TextType::class
             ])
-            */
             ->addColumn('Ligne 1', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY   => 'line1',
                 XEditableColumn::TYPE_CLASS => TextType::class

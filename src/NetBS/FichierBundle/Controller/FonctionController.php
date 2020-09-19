@@ -7,7 +7,7 @@ use NetBS\FichierBundle\Form\FonctionType;
 use NetBS\FichierBundle\Mapping\BaseFonction;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

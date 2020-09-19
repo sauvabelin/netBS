@@ -47,7 +47,8 @@ class PDFFacture extends BaseFactureExporter
         $debiteur = $facture->getDebiteur();
 
         // Print BVR stuff
-        $ref    = BVR::getReferenceNumber($facture);
+        $ref    = BVR::getReferenceNumber($facture, $this->paramBag->getValue('facturation', 'client_identification_number'));
+
         $ms     = $config->margeHaut;
         $mg     = $config->margeGauche;
         $haddr  = $ms + $config->haddr;

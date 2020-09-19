@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use NetBS\CoreBundle\Exporter\PDFPreviewer;
 use NetBS\CoreBundle\Model\ConfigurableExporterInterface;
 use NetBS\CoreBundle\Model\ExporterInterface;
+use NetBS\CoreBundle\Service\ParameterManager;
 use NetBS\CoreBundle\Utils\Countries;
 use NetBS\CoreBundle\Utils\StrUtil;
 use NetBS\CoreBundle\Utils\Traits\ConfigurableExporterTrait;
@@ -25,9 +26,12 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
 
     private $engine;
 
-    public function __construct(EntityManager $manager)
+    protected $paramBag;
+
+    public function __construct(EntityManager $manager, ParameterManager $paramBag)
     {
         $this->manager = $manager;
+        $this->paramBag = $paramBag;
         $this->engine = new ExpressionLanguage();
     }
 
@@ -155,7 +159,7 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
         $date = $config->date instanceof \DateTime ? $config->date : $facture->getDate();
 
         $fpdf->AddPage();
-        $fpdf->Image(__DIR__ . '/Facture/logo.png', 15, 20, 16, 16);
+        $fpdf->Image(__DIR__ . '/../../../../web/bundles/netbscore/img/logo.png', 15, 20, 16, 16);
         $fpdf->SetFont('OpenSans', 'B', 10);
 
         // Print adresse

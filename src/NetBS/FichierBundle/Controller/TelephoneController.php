@@ -7,7 +7,7 @@ use NetBS\FichierBundle\Entity\Telephone;
 use NetBS\FichierBundle\Form\Contact\TelephoneType;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
