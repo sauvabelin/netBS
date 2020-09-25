@@ -8,7 +8,6 @@ use NetBS\CoreBundle\Utils\StrUtil;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Mapping\Personne;
 use NetBS\FichierBundle\Service\FichierConfig;
-use SauvabelinBundle\Import\Model\WNGHelper;
 
 class CSVRega extends CSVExporter
 {
@@ -17,6 +16,12 @@ class CSVRega extends CSVExporter
     public function __construct(FichierConfig $config)
     {
         $this->config   = $config;
+    }
+
+    private static function similar($s1, $s2) {
+
+        similar_text(strtolower($s1), strtolower($s2), $percent);
+        return $percent;
     }
 
     private static function convert($ville) {
@@ -42,7 +47,7 @@ class CSVRega extends CSVExporter
         ];
 
         foreach($villes as $key => $result)
-            if (WNGHelper::similar($key, $ville) > 92)
+            if (self::similar($key, $ville) > 92)
                 return $result;
 
         return $ville;

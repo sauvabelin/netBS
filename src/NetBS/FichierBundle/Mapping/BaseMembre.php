@@ -426,7 +426,8 @@ abstract class BaseMembre extends Personne implements EqualInterface
     public function getNumeroAvs()
     {
         $num = $this->numeroAvs;
-        if ($num) {
+        dump($num);
+        if ($num && strlen($num) === 13) {
             return $num[0] .
                 $num[1] .
                 $num[2] . '.' .
