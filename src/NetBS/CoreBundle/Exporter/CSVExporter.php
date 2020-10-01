@@ -56,7 +56,7 @@ abstract class CSVExporter implements ExporterInterface
         $data   = [];
         $items  = $this->filterItems($items);
         $data[] = array_map(function($column) {
-            return $column['header'];
+            return utf8_decode($column['header']);
         }, $config->getColumns());
 
         foreach($items as $item) {
@@ -67,7 +67,7 @@ abstract class CSVExporter implements ExporterInterface
 
                 $accessor   = $column['accessor'];
                 $value      = is_string($accessor) ? $this->accessor->getValue($item, $accessor) : $accessor($item);
-                $row[]      = $value;
+                $row[]      = utf8_decode($value);
             }
 
             $data[] = $row;

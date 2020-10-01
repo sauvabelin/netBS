@@ -11,8 +11,6 @@ services:
         class: NetBS\FichierBundle\Exporter\PDFListMembres
         arguments:
             - "@netbs.fichier.config"
-        tags:
-            - { name: netbs.exporter }
 
     netbs.fichier.exporter.pdf_list_groupe:
         class: NetBS\FichierBundle\Exporter\PDFListGroupe
