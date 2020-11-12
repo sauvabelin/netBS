@@ -4,7 +4,6 @@ namespace Ovesco\FacturationBundle\Controller;
 
 use Genkgo\Camt\Config;
 use Genkgo\Camt\DTO\EntryTransactionDetail;
-use NetBS\FichierBundle\Mapping\BaseFamille;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Entity\Paiement;
 use Ovesco\FacturationBundle\Model\ParsedBVR;
@@ -68,7 +67,7 @@ class CamtController extends Controller
             foreach($statement->getEntries() as $entry) {
 
                 $query = $em->getRepository('OvescoFacturationBundle:Compte')->createQueryBuilder('c');
-                $compte = $query->where("REPLACE(c.ccp, '-', '') = :ccp")->setParameter('ccp', $entry->getReference())->getQuery()->getResult();
+                $compte = $query->where("REPLACE(c.qrIban, ' ', '') = REPLACE(:iban, ' ', '')")->setParameter('iban', $entry->getReference())->getQuery()->getResult();
                 if (count($compte) !== 1) throw new \Exception("Aucun compte enregistré pour le CCP " . $entry->getReference());
                 foreach ($entry->getTransactionDetails() as $transactionDetail) {
 

@@ -6,7 +6,6 @@ use NetBS\CoreBundle\Exporter\PDFPreviewer;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Form\QrFactureConfigType;
 use Ovesco\FacturationBundle\Model\QrFactureConfig;
-use Ovesco\FacturationBundle\Util\BVR;
 use Sprain\SwissQrBill\DataGroup\Element\CombinedAddress;
 use Sprain\SwissQrBill\DataGroup\Element\CreditorInformation;
 use Sprain\SwissQrBill\DataGroup\Element\PaymentAmountInformation;
@@ -17,7 +16,6 @@ use Sprain\SwissQrBill\Reference\QrPaymentReferenceGenerator;
 class PDFQrFacture extends BaseFactureExporter
 {
     const PART_HEIGHT = 105;
-    const A4_WIDTH = 210;
     const A4_HEIGHT = 297;
     const PAYMENT_WIDTH = 148;
     const DEBTOR_WIDTH = 62;
@@ -61,11 +59,12 @@ class PDFQrFacture extends BaseFactureExporter
 
     protected function printDetails(Facture $facture, \FPDF $fpdf) {
 
-        $this->printReceiptPart($facture, $fpdf);
-        $this->printPaymentPart($facture, $fpdf);
+        $qrData = $this->getQRData($facture);
+        $this->printReceiptPart($facture, $qrData, $fpdf);
+        $this->printPaymentPart($facture, $qrData, $fpdf);
     }
 
-    private function printReceiptPart(Facture $facture, \FPDF $fpdf) {
+    private function printReceiptPart(Facture $facture, QrBill $qrData, \FPDF $fpdf) {
 
         $top = self::A4_HEIGHT - self::PART_HEIGHT;
         $margin = self::PART_MARGIN;
@@ -96,18 +95,18 @@ class PDFQrFacture extends BaseFactureExporter
         // TITRE
         $fpdf->SetXY($left, $top + $margin);
         $fpdf->SetFont('Arial', 'B', 11);
-        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 7, 'Receipt');
+        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 7, utf8_decode('Récépissé'));
 
         // payable to
         $fpdf->SetXY($left, $top + $margin + 7);
         $fpdf->SetFont('Arial', 'B', 6);
-        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 5, 'Account / Payable to');
+        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 5, utf8_decode('Compte / Payable à'));
 
 
         $fpdf->SetXY($left, $top + $margin + 11);
         $fpdf->SetFont('Arial', '', 8);
         $fpdf->MultiCell(self::DEBTOR_WIDTH - 2*$margin, 4, implode("\n", [
-            'CH56 1234 5678 0034 5453 5', //utf8_decode($compte->getIban()),
+            utf8_decode($compte->getQrIban()),
             utf8_decode($compte->getLine1()),
             utf8_decode($compte->getLine2()),
             utf8_decode($compte->getLine3()),
@@ -116,15 +115,15 @@ class PDFQrFacture extends BaseFactureExporter
         // Reference
         $fpdf->SetXY($left, $top + $margin + 28);
         $fpdf->SetFont('Arial', 'B', 6);
-        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 9, 'Reference');
+        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 9, utf8_decode('Référence'));
         $fpdf->SetXY($left, $top + $margin + 34);
         $fpdf->SetFont('Arial', '', 8);
-        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 4, BVR::getCleanReference($facture));
+        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 4, $qrData->getPaymentReference()->getFormattedReference());
 
         // Payable by
         $fpdf->SetXY($left, $top + $margin + 38);
         $fpdf->SetFont('Arial', 'B', 6);
-        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 9, 'Payable by');
+        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 9, 'Payable par');
 
         $fpdf->SetXY($left, $top + $margin + 44);
         $fpdf->SetFont('Arial', '', 8);
@@ -137,9 +136,9 @@ class PDFQrFacture extends BaseFactureExporter
         // Currency
         $fpdf->SetXY($left, $top + 7 + 56 + $margin);
         $fpdf->SetFont('Arial', 'B', 6);
-        $fpdf->Cell(11, 5, 'Currency');
+        $fpdf->Cell(11, 5, 'Monnaie');
         $fpdf->SetXY($left + 11, $top + 7 + 56 + $margin);
-        $fpdf->Cell(10, 5, 'Amount');
+        $fpdf->Cell(10, 5, 'Montant');
 
         $fpdf->SetXY($left, $top + 7 + 56 + $margin + 4);
         $fpdf->SetFont('Arial', '', 8);
@@ -174,10 +173,10 @@ class PDFQrFacture extends BaseFactureExporter
         // Acceptance point
         $fpdf->SetFont('Arial', 'B', 6);
         $fpdf->SetXY($left, $top + $margin + 7 + 56 + 14);
-        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 5, 'Acceptance point', 0, 0, 'R');
+        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 5, utf8_decode('Point de dépôt'), 0, 0, 'R');
     }
 
-    private function printPaymentPart(Facture $facture, \FPDF $fpdf) {
+    private function printPaymentPart(Facture $facture, QrBill $qrData, \FPDF $fpdf) {
 
         $top = self::A4_HEIGHT - self::PART_HEIGHT;
         $margin = self::PART_MARGIN;
@@ -190,6 +189,7 @@ class PDFQrFacture extends BaseFactureExporter
         $compte = $facture->getCompteToUse();
         $debiteur = $facture->getDebiteur();
         $adresse = $debiteur->getSendableAdresse();
+
 
         if ($this->getConfiguration()->border) {
             $fpdf->SetDrawColor(255,0,0);
@@ -211,17 +211,17 @@ class PDFQrFacture extends BaseFactureExporter
 
         $fpdf->SetXY($left, $top + $margin);
         $fpdf->SetFont('Arial', 'B', 11);
-        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 7, 'Payment part');
+        $fpdf->Cell(self::DEBTOR_WIDTH - 2*$margin, 7, 'Section paiement');
 
         // Print qr
-        $fpdf->Image($this->getQrCode($facture), $left, $top + 2*$margin + 7, 46, 46, 'png');
+        $fpdf->Image('data://text/plain;base64,' . base64_encode($qrData->getQrCode()->writeString()), $left, $top + 2*$margin + 7, 46, 46, 'png');
 
         // Montant
         $fpdf->SetXY($left, $top + 3*$margin + 7 + 46);
         $fpdf->SetFont('Arial', 'B', 8);
-        $fpdf->Cell(14, 5, 'Currency');
+        $fpdf->Cell(14, 5, 'Monnaie');
         $fpdf->SetXY($left + 14, $top + 3*$margin + 7 + 46);
-        $fpdf->Cell(10, 5, 'Amount');
+        $fpdf->Cell(10, 5, 'Montant');
 
         $fpdf->SetXY($left, $top + 3*$margin + 7 + 46 + 5);
         $fpdf->SetFont('Arial', '', 10);
@@ -257,13 +257,13 @@ class PDFQrFacture extends BaseFactureExporter
         $sleft = $left + 51;
         $fpdf->SetXY($sleft, $top + $margin);
         $fpdf->SetFont('Arial', 'B', 8);
-        $fpdf->Cell(14, 5, 'Account / Payable to');
+        $fpdf->Cell(14, 5, utf8_decode('Compte / Payable à'));
 
         // address
         $fpdf->SetXY($sleft, $top + $margin + 5);
         $fpdf->SetFont('Arial', '', 10);
         $fpdf->MultiCell(87, 5, implode("\n", [
-            'CH56 1234 5678 0034 5453 5', //utf8_decode($compte->getIban()),
+            $compte->getQrIban(),
             utf8_decode($compte->getLine1()),
             utf8_decode($compte->getLine2()),
             utf8_decode($compte->getLine3()),
@@ -272,15 +272,15 @@ class PDFQrFacture extends BaseFactureExporter
         // Référence
         $fpdf->SetXY($sleft, $top + $margin + 25);
         $fpdf->SetFont('Arial', 'B', 8);
-        $fpdf->Cell(87, 11, 'Reference');
+        $fpdf->Cell(87, 11, utf8_decode('Référence'));
         $fpdf->SetXY($sleft, $top + $margin + 33);
         $fpdf->SetFont('Arial', '', 10);
-        $fpdf->Cell(87, 4, BVR::getCleanReference($facture));
+        $fpdf->Cell(87, 4, $qrData->getPaymentReference()->getFormattedReference());
 
         // Informations additionnelles
         $fpdf->SetXY($sleft, $top + $margin + 36);
         $fpdf->SetFont('Arial', 'B', 8);
-        $fpdf->Cell(87, 11, 'Additional information');
+        $fpdf->Cell(87, 11, utf8_decode('Informations supplémentaires'));
         $fpdf->SetXY($sleft, $top + $margin + 44);
         $fpdf->SetFont('Arial', '', 10);
         $fpdf->Cell(87, 4, utf8_decode("Facture n. " . $facture->getFactureId()));
@@ -288,7 +288,7 @@ class PDFQrFacture extends BaseFactureExporter
         // Payable by
         $fpdf->SetXY($sleft, $top + $margin + 48);
         $fpdf->SetFont('Arial', 'B', 8);
-        $fpdf->Cell(87, 11, 'Payable by');
+        $fpdf->Cell(87, 11, 'Payable par');
 
         // address
         $fpdf->SetXY($sleft, $top + $margin + 56);
@@ -300,18 +300,18 @@ class PDFQrFacture extends BaseFactureExporter
         ]));
     }
 
-    private function getQrCode(Facture $facture) {
+    private function getQRData(Facture $facture) {
 
         $adresse = $facture->getDebiteur()->getSendableAdresse();
         $qrBill = QrBill::create();
         $qrBill->setCreditor(CombinedAddress::create(
-            'Brigade de Sauvabelin',
-            'Case postale 5455',
-            '1002 Lausanne',
+            $facture->getCompteToUse()->getLine1(),
+            $facture->getCompteToUse()->getLine2(),
+            $facture->getCompteToUse()->getLine3(),
             'CH'
         ));
 
-        $qrBill->setCreditorInformation(CreditorInformation::create('CH4431999123000889012'));
+        $qrBill->setCreditorInformation(CreditorInformation::create($facture->getCompteToUse()->getQrIban()));
 
         $qrBill->setUltimateDebtor(CombinedAddress::create(
             $facture->getDebiteur()->__toString(),
@@ -321,20 +321,11 @@ class PDFQrFacture extends BaseFactureExporter
         ));
 
         $qrBill->setPaymentAmountInformation(PaymentAmountInformation::create('CHF', null));
-        $qrBill->setPaymentReference(PaymentReference::create(
-            PaymentReference::TYPE_QR,
-            QrPaymentReferenceGenerator::generate(
-                '123456',
-                $facture->getFactureId()
-            )
-        ));
 
-        try {
-            return 'data://text/plain;base64,' . base64_encode($qrBill->getQrCode()->writeString());
-        } catch (\Exception $e) {
-            dump($qrBill->getViolations());
-            throw $e;
-        }
+        $refNum = QrPaymentReferenceGenerator::generate(null, $facture->getId());
+        $qrBill->setPaymentReference(PaymentReference::create(PaymentReference::TYPE_QR, $refNum));
+
+        return $qrBill;
     }
 
     /**

@@ -141,8 +141,6 @@ class PDFFacture extends BaseFactureExporter
         $fpdf->Cell(50, $interligne, $compte->getLine2());
         $fpdf->SetXY($x , $y + 2*$interligne);
         $fpdf->Cell(50, $interligne, $compte->getLine3());
-        $fpdf->SetXY($x , $y + 3*$interligne);
-        $fpdf->Cell(50, $interligne, $compte->getLine4());
     }
 
     /**

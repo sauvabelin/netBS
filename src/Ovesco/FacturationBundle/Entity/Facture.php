@@ -357,8 +357,8 @@ class Facture
         usort($rappels, function(Rappel $a, Rappel $b) {
             if (!$a->getDateImpression() && !$b->getDateImpression())
                 return $a->getDate() > $b->getDate() ? 1 : -1;
-            if (!$a->getDateImpression()) return -1;
-            if (!$b->getDateImpression()) return 1;
+            if (!$a->getDateImpression()) return 1;
+            if (!$b->getDateImpression()) return -1;
             return $a->getDateImpression() > $b->getDateImpression() ? 1 : -1;
         });
         return $rappels;
@@ -373,11 +373,13 @@ class Facture
     }
 
     public function getLatestImpression() {
-        foreach($this->sortRappelsByImpression() as $rappel)
+        $sortedASC = $this->sortRappelsByImpression();
+        $sortedDSC = array_reverse($sortedASC);
+        foreach($sortedDSC as $rappel)
             if($rappel->getDateImpression())
                 return $rappel->getDateImpression();
 
-        return $this->getDateImpression() === null ? $this->getDate() : $this->getDateImpression();
+        return $this->getDateImpression();
     }
 
     public function hasBeenPrinted() {

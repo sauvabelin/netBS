@@ -5,7 +5,6 @@ namespace Ovesco\FacturationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use NetBS\FichierBundle\Utils\Entity\RemarqueTrait;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -27,17 +26,21 @@ class Compte
 
     /**
      * @var string
-     * @ORM\Column(name="ccp", type="string", length=255, nullable=false, unique=true)
-     * @Assert\Regex("/^[0-9-]+$/", message="Ne peut contenir que des numéros [0-9] et des traits [-]")
-     * @Groups({"default"})
+     * @ORM\Column(name="nom", type="string", length=255, nullable=false, unique=true)
      */
-    protected $ccp;
+    protected $nom;
 
     /**
      * @var string
-     * @ORM\Column(name="iban", type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(name="qr_iban", type="string", length=255, nullable=false, unique=true)
      */
-    protected $iban;
+    protected $qrIban;
+
+    /**
+     * @var string
+     * @ORM\Column(name="ccp", type="string", length=255, nullable=false, unique=true)
+     */
+    protected $ccp;
 
     /**
      * @var string
@@ -60,16 +63,9 @@ class Compte
      */
     protected $line3;
 
-    /**
-     * @var string
-     * @ORM\Column(name="addresse4", type="string", length=255, nullable=true, unique=false)
-     * @Groups({"default"})
-     */
-    protected $line4;
-
     public function __toString()
     {
-        return $this->ccp;
+        return $this->nom;
     }
 
     /**
@@ -131,17 +127,33 @@ class Compte
     /**
      * @return string
      */
-    public function getLine4()
+    public function getNom()
     {
-        return $this->line4;
+        return $this->nom;
     }
 
     /**
-     * @param string $line4
+     * @param string $nom
      */
-    public function setLine4($line4)
+    public function setNom($nom)
     {
-        $this->line4 = $line4;
+        $this->nom = $nom;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQrIban()
+    {
+        return $this->qrIban;
+    }
+
+    /**
+     * @param string $qrIban
+     */
+    public function setQrIban($qrIban)
+    {
+        $this->qrIban = $qrIban;
     }
 
     /**
@@ -158,21 +170,5 @@ class Compte
     public function setCcp($ccp)
     {
         $this->ccp = $ccp;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIban()
-    {
-        return $this->iban;
-    }
-
-    /**
-     * @param string $iban
-     */
-    public function setIban($iban)
-    {
-        $this->iban = $iban;
     }
 }

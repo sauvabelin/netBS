@@ -47,16 +47,18 @@ class ComptesList extends BaseListModel
     public function configureColumns(ListColumnsConfiguration $configuration)
     {
         $configuration
+            ->addColumn('Nom du compte', null, XEditableColumn::class, [
+                XEditableColumn::PROPERTY   => 'nom',
+                XEditableColumn::TYPE_CLASS => TextType::class
+            ])
             ->addColumn('CCP', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY   => 'ccp',
                 XEditableColumn::TYPE_CLASS => TextType::class
             ])
-            /*
-            ->addColumn('IBAN', null, XEditableColumn::class, [
-                XEditableColumn::PROPERTY   => 'iban',
+            ->addColumn('QR-IBAN', null, XEditableColumn::class, [
+                XEditableColumn::PROPERTY   => 'qrIban',
                 XEditableColumn::TYPE_CLASS => TextType::class
             ])
-            */
             ->addColumn('Ligne 1', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY   => 'line1',
                 XEditableColumn::TYPE_CLASS => TextType::class
@@ -67,10 +69,6 @@ class ComptesList extends BaseListModel
             ])
             ->addColumn('Ligne 3', null, XEditableColumn::class, [
                 XEditableColumn::PROPERTY   => 'line3',
-                XEditableColumn::TYPE_CLASS => TextType::class
-            ])
-            ->addColumn('Ligne 4', null, XEditableColumn::class, [
-                XEditableColumn::PROPERTY   => 'line4',
                 XEditableColumn::TYPE_CLASS => TextType::class
             ])
             ->addColumn('Remarques', null, XEditableColumn::class, [

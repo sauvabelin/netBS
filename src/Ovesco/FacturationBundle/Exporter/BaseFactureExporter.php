@@ -145,6 +145,11 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
         return $res;
     }
 
+    private function factureLatestDate(Facture $facture) {
+        if (count($facture->getRappels()) === 0) return $facture->getDate();
+        return $facture->getLatestRappel()->getDate();
+    }
+
     private function printFacture(Facture $facture, \FPDF $fpdf) {
 
         if (!$facture->getDebiteur()->getSendableAdresse()) return;
@@ -152,8 +157,7 @@ abstract class BaseFactureExporter implements ExporterInterface, ConfigurableExp
         /** @var FactureConfig $config */
         $config = $this->getConfiguration();
         $model = $this->getModel($facture);
-        $date = $config->date instanceof \DateTime ? $config->date : $facture->getDate();
-
+        $date = $config->date instanceof \DateTime ? $config->date : $this->factureLatestDate($facture);
         $fpdf->AddPage();
         $fpdf->Image(__DIR__ . '/Facture/logo.png', 15, 20, 16, 16);
         $fpdf->SetFont('OpenSans', 'B', 10);
