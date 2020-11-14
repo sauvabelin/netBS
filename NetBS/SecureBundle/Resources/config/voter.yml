@@ -1,0 +1,27 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    NetBS\SecureBundle\Voter\UserVoter:
+#        arguments:
+#            - "@netbs.secure.config"
+        tags:
+            - { name: security.voter }
+
+    NetBS\SecureBundle\Voter\AutorisationVoter:
+#        arguments:
+#        - "@netbs.secure.config"
+        tags:
+        - { name: security.voter }
+
+    NetBS\SecureBundle\Voter\BSRoleVoter:
+#        arguments:
+#            - "@netbs.secure.config"
+        tags:
+            - { name: security.voter }
+
+    NetBS\SecureBundle\Voter\RoleVoter:
+        tags:
+            - { name: security.voter }

@@ -1,0 +1,111 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+
+#actions
+    NetBS\CoreBundle\ListModel\Action\LinkAction:
+#        arguments:
+#            - "@router"
+        tags:
+            - {name: netbs.list_action }
+
+    NetBS\CoreBundle\ListModel\Action\IconAction:
+#        arguments:
+#            - "@router"
+        tags:
+            - {name: netbs.list_action }
+
+    NetBS\CoreBundle\ListModel\Action\RemoveAction:
+#        arguments:
+#            - "@security.authorization_checker"
+#            - "@router"
+        tags:
+            - {name: netbs.list_action }
+
+    NetBS\CoreBundle\ListModel\Action\ModalAction:
+        arguments:
+            - "@twig.extension.assets"
+#            - "@netbs.core.twig.assets_extension"
+#            - "@router"
+        tags:
+            - {name: netbs.list_action }
+
+#listes
+
+    NetBS\CoreBundle\ListModel\NewsList:
+        tags:
+            - { name: netbs.list.model }
+
+    NetBS\CoreBundle\ListModel\NewsChannelsList:
+        tags:
+            - { name: netbs.list.model }
+
+    NetBS\CoreBundle\ListModel\ParametersList:
+        tags:
+            - { name: netbs.list.model }
+
+    NetBS\CoreBundle\ListModel\BasicRenderer:
+#        arguments:
+#            - "@twig"
+        tags:
+            - { name: netbs.list.renderer }
+
+    NetBS\CoreBundle\ListModel\NetBSRenderer:
+#        arguments:
+#            - "@twig"
+#            - "@event_dispatcher"
+        tags:
+            - { name: netbs.list.renderer }
+
+    NetBS\CoreBundle\ListModel\HugeListRenderer:
+#        arguments:
+#            - "@twig"
+        tags:
+            - { name: netbs.list.renderer }
+
+    NetBS\CoreBundle\ListModel\Column\ActionColumn:
+#        arguments:
+#            - "@netbs.core.list_actions_manager"
+        tags:
+            - { name: netbs.list.column }
+
+    NetBS\CoreBundle\ListModel\Column\LinkColumn:
+#        arguments:
+#            - "@router.default"
+        tags:
+            - { name: netbs.list.column }
+
+    NetBS\CoreBundle\ListModel\Column\RemoveFromDynamicColumn:
+#        arguments:
+#            - "@router.default"
+        tags:
+            - { name: netbs.list.column }
+
+    NetBS\CoreBundle\ListModel\Column\PopoverColumn:
+        tags:
+            - { name: netbs.list.column }
+
+    NetBS\CoreBundle\ListModel\Column\ArrayColumn:
+        tags:
+            - { name: netbs.list.column }
+
+    NetBS\CoreBundle\ListModel\Column\HelperColumn:
+#        arguments:
+#            - "@netbs.core.twig.helper_extension"
+#            - "@netbs.core.helper_manager"
+#            - "@security.authorization_checker"
+        tags:
+            - { name: netbs.list.column }
+
+    NetBS\CoreBundle\ListModel\Column\XEditableColumn:
+#        arguments:
+#            - "@netbs.core.twig.xeditable_extension"
+        tags:
+            - { name: netbs.list.column }
+
+    NetBS\CoreBundle\ListModel\LoggedChangesList:
+        tags:
+            - { name: netbs.list.model }

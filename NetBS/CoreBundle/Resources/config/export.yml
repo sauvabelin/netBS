@@ -1,0 +1,17 @@
+
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    NetBS\CoreBundle\Exporter\PDFPreviewer:
+        tags:
+            - { name: netbs.previewer }
+
+    NetBS\CoreBundle\Exporter\CSVPreviewer:
+#        arguments:
+#            - "@property_accessor"
+#            - "@twig"
+        tags:
+            - { name: netbs.previewer }

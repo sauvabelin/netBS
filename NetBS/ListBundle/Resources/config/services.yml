@@ -1,0 +1,52 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    NetBS\ListBundle\Service\ListEngine:
+        public: true
+#        arguments:
+#            - "@netbs.list.model_manager"
+#            - "@netbs.list.renderer_manager"
+#            - "@netbs.list.column_manager"
+#            - "@property_accessor"
+#            - "@event_dispatcher"
+#            - "@debug.stopwatch"
+
+    NetBS\ListBundle\Twig\ListExtension:
+#        arguments:
+#            - "@service_container"
+        tags:
+            - { name: twig.extension }
+
+    NetBS\ListBundle\Column\SimpleColumn:
+        tags:
+            - { name: netbs.list.column }
+
+    NetBS\ListBundle\Column\ClosureColumn:
+        tags:
+            - { name: netbs.list.column }
+
+    NetBS\ListBundle\Column\DateTimeColumn:
+#        arguments:
+#            - "@netbs.params"
+        tags:
+            - { name: netbs.list.column }
+
+    NetBS\ListBundle\Service\ListManager:
+        public: true
+
+    NetBS\ListBundle\Service\RendererManager:
+        public: true
+
+    NetBS\ListBundle\Service\ColumnManager:
+        public: true
+
+    NetBS\ListBundle\Profiler\ListCollector:
+#        arguments:
+#            - "@netbs.list.model_manager"
+#            - "@netbs.list.renderer_manager"
+#            - "@netbs.list.engine"
+        tags:
+            - { name: data_collector, template: '@NetBSList/Profiler/layout.html.twig', id: 'netbs.list.collector' }

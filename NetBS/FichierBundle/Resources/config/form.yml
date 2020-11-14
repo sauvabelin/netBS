@@ -1,0 +1,110 @@
+
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    NetBS\FichierBundle\Form\Personne\GeniteurType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\Personne\MembreType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\Search\SearchAttributionType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\Search\SearchBaseMembreInformationType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\Search\SearchObtentionDistinctionType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\MembreUpdaterType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+
+    NetBS\FichierBundle\Form\AttributionType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\DistinctionType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\FamilleType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\FonctionType:
+#        arguments:
+#            - "@netbs.fichier.config"
+#            - "@netbs.secure.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\GroupeCategorieType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\GroupeType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\GroupeTypeType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\ObtentionDistinctionType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\Contact\AdresseType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\Contact\BSEmailType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }
+
+    NetBS\FichierBundle\Form\Contact\TelephoneType:
+#        arguments:
+#            - "@netbs.fichier.config"
+        tags:
+            - { name: form.type }

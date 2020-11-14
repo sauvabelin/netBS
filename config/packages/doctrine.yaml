@@ -1,0 +1,34 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
+
+        # IMPORTANT: You MUST configure your server version,
+        # either here or in the DATABASE_URL env var (see .env file)
+        #server_version: '5.7'
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        filters:
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true
+        mappings:
+            NetBSCoreBundle:
+                type: annotation
+                dir: 'Entity'
+                is_bundle: true
+                prefix: NetBS\CoreBundle\Entity
+                alias: NetBSCoreBundle
+            NetBSFichierBundle:
+                type: annotation
+                dir: 'Entity'
+                is_bundle: true
+                prefix: NetBS\FichierBundle\Entity
+                alias: NetBSFichierBundle
+            NetBSSecureBundle:
+                type: annotation
+                dir: 'Entity'
+                is_bundle: true
+                prefix: NetBS\SecureBundle\Entity
+                alias: NetBSSecureBundle

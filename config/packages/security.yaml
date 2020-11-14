@@ -1,0 +1,43 @@
+security:
+    encoders:
+        NetBS\SecureBundle\Entity\User:
+            algorithm: sha512
+            iterations: 5000
+
+    providers:
+        database:
+            entity:
+                class: NetBS\SecureBundle\Entity\User
+                property: username
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        netbs:
+            anonymous:  true
+            switch_user: true
+            pattern:    ^/netBS
+            form_login:
+                login_path:   netbs.secure.login.login
+                check_path:   netbs.secure.login.login
+                default_target_path:  netbs.core.home.dashboard
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800
+                path:     /netBS
+            logout:
+                path:   netbs.secure.login.logout
+                target: netbs.secure.login.login
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/api/v1/netBS/gettoken,          roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/netBS,                   roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/netBS/secure/login,             roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+        - { path: ^/netBS/secure/user/my-account,   roles: [ ROLE_USER ] }
+        - { path: ^/netBS/secure,                   roles: [ ROLE_ADMIN ] }
+        - { path: ^/netBS,                          roles: [ IS_AUTHENTICATED_FULLY, ROLE_USER ] }

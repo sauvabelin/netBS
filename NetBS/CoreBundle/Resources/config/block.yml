@@ -1,0 +1,42 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    NetBS\CoreBundle\Block\LayoutManager:
+#        arguments:
+#            - "@netbs.core.blocks_manager"
+#            - "@event_dispatcher"
+        public: true
+
+    NetBS\CoreBundle\Block\BlockManager:
+        public: true
+
+    NetBS\CoreBundle\Block\TemplateBlock:
+        tags:
+            - { name: netbs.block }
+
+    NetBS\CoreBundle\Block\Layout\NetBSLayout:
+#        arguments:
+#            - "@twig"
+        tags:
+            - { name: netbs.block.layout }
+
+    NetBS\CoreBundle\Block\BasicCardBlock:
+        tags:
+            - { name: netbs.block }
+
+    NetBS\CoreBundle\Block\CardBlock:
+        tags:
+            - { name: netbs.block }
+
+    NetBS\CoreBundle\Block\ListBlock:
+#        arguments:
+#            - "@netbs.list.engine"
+        tags:
+            - { name: netbs.block }
+
+    NetBS\CoreBundle\Block\TabsCardBlock:
+        tags:
+            - { name: netbs.block }

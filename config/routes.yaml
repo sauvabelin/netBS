@@ -1,0 +1,7 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+netbs:
+    resource: '@NetBSCoreBundle/Resources/config/routing.yml'
+    prefix: /netBS
