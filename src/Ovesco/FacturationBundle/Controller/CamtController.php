@@ -3,6 +3,7 @@
 namespace Ovesco\FacturationBundle\Controller;
 
 use Genkgo\Camt\Config;
+use Genkgo\Camt\DTO\Entry;
 use Genkgo\Camt\DTO\EntryTransactionDetail;
 use Ovesco\FacturationBundle\Entity\Facture;
 use Ovesco\FacturationBundle\Entity\Paiement;
@@ -66,15 +67,27 @@ class CamtController extends Controller
         foreach($statements as $statement) {
             foreach($statement->getEntries() as $entry) {
 
-                $query = $em->getRepository('OvescoFacturationBundle:Compte')->createQueryBuilder('c');
-                $compte = $query->where("REPLACE(c.qrIban, ' ', '') = REPLACE(:iban, ' ', '')")->setParameter('iban', $entry->getReference())->getQuery()->getResult();
-                if (count($compte) !== 1) throw new \Exception("Aucun compte enregistré pour le CCP " . $entry->getReference());
                 foreach ($entry->getTransactionDetails() as $transactionDetail) {
 
-                    /** @var Facture $facture */
+                    $query = $em->getRepository('OvescoFacturationBundle:Compte')->createQueryBuilder('c');
+                    $givenAccount = $entry->getReference();
+                    if ($givenAccount === null) $givenAccount = $statement->getAccount()->getIdentification();
+                    $compte = $query->where("REPLACE(c.qrIban, ' ', '') = REPLACE(:acc, ' ', '')")
+                        ->orWhere("REPLACE(c.iban, ' ', '') = REPLACE(:acc, ' ', '')")
+                        ->orWhere("REPLACE(c.ccp, '-', '') = REPLACE(:acc, ' ', '')")->setParameter('acc', $givenAccount)->getQuery()->getResult();
+                    if (count($compte) !== 1) throw new \Exception("Aucun compte enregistré pour le CCP " . $entry->getReference());
 
-                    $facture = $factureRepo->findByFactureId($this->getFactureId($transactionDetail));
-                    $paiement = $this->transactionToPaiement($transactionDetail);
+                    /** @var Facture $facture */
+                    $facture = null;
+                    if ($this->getRemittanceInformation($transactionDetail) && $transactionDetail->getRemittanceInformation()->getCreditorReferenceInformation()) {
+                        $refNumber  = $transactionDetail->getRemittanceInformation()->getCreditorReferenceInformation()->getRef(); //Get reference number
+                        $refNumber  = ltrim($refNumber, 0); //Enlever tous les 0 de remplissage
+                        $refNumber  = substr($refNumber, 0, -1); //Enlever la somme de contrôle
+                        $factureId  = intval($refNumber);
+                        $facture    = $factureRepo->findByFactureId($factureId);
+                    }
+
+                    $paiement = $this->transactionToPaiement($transactionDetail, $entry);
                     $paiement->setCompte($compte[0]);
 
                     if ($facture) {
@@ -134,21 +147,28 @@ class CamtController extends Controller
         return $parsedBVR;
     }
 
-    private function getFactureId(EntryTransactionDetail $entryTransactionDetail) {
-
-        $refNumber  = $entryTransactionDetail->getRemittanceInformation()->getCreditorReferenceInformation()->getRef(); //Get reference number
-        $refNumber  = ltrim($refNumber, 0); //Enlever tous les 0 de remplissage
-        $refNumber  = substr($refNumber, 0, -1); //Enlever la somme de contrôle
-        return intval($refNumber);
+    private function getRemittanceInformation(EntryTransactionDetail $detail) {
+        try {
+            return $detail->getRemittanceInformation();
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
-    protected function transactionToPaiement(EntryTransactionDetail $transactionDetail) {
+    protected function transactionToPaiement(EntryTransactionDetail $transactionDetail, Entry $entry) {
 
         $paiement   = new Paiement();
+        $date = $transactionDetail->getRelatedDates()
+            ? $transactionDetail->getRelatedDates()->getAcceptanceDateTime()
+            : $entry->getValueDate();
+
         $paiement
             ->setMontant($transactionDetail->getAmount()->getAmount()->getAmount() / 100)
-            ->setDate($transactionDetail->getRelatedDates()->getAcceptanceDateTime())
+            ->setDate($date)
             ->setTransactionDetails($transactionDetail);
+
+        $remitt = $this->getRemittanceInformation($transactionDetail);
+        if ($remitt) $paiement->setRemarques($remitt->getMessage());
 
         return $paiement;
     }

@@ -16,6 +16,7 @@ class CompteType extends AbstractType
         $builder
             ->add('nom', TextType::class, ['label' => 'Nom du compte'])
             ->add('qrIban', TextType::class, ['label' => 'QR-IBAN'])
+            ->add('iban', TextType::class, ['label' => 'IBAN'])
             ->add('ccp', TextType::class, ['label' => 'CCP (01-234567-89)'])
             ->add('line1', TextType::class, ['label' => "Première ligne d'adresse", 'required' => false])
             ->add('line2', TextType::class, ['label' => "Seconde ligne d'adresse", 'required' => false])

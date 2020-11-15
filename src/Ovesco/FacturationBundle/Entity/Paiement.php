@@ -189,12 +189,22 @@ class Paiement
         return $this;
     }
 
+    public function getRemittanceInformation() {
+        try {
+            return $this->getTransactionDetails() ?
+                $this->getTransactionDetails()->getRemittanceInformation()
+                : null;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     /**
      * @return \DateTime|\DateTimeImmutable
      */
     public function getDateEffectivePaiement() {
 
-        return $this->getTransactionDetails()
+        return $this->getTransactionDetails() && $this->getTransactionDetails()->getRelatedDates()
             ? $this->getTransactionDetails()->getRelatedDates()->getAcceptanceDateTime()
             : $this->date;
     }

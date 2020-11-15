@@ -96,7 +96,8 @@
                         </div>
                         <div class="card-body text-white">
                             Des paiements orphelins (qui n'ont pas pu être rattachés à une facture) étaient présents dans le
-                            fichier chargé. Les informations sont marquées ci-contre.
+                            fichier chargé. Les informations sont marquées ci-contre.<br/>
+                            Pour des détails supplémentaires, vous pouvez essayer de charger votre fichier ici: <a class="btn btn-secondary" href="http://camt.li/index-fr.html">Camt.li</a>
                         </div>
                     </div>
                 </div>
@@ -135,13 +136,13 @@
                                         </td>
                                         <td>{{ paiement.montant }}</td>
                                         <td>
-                                            {% if details.remittanceInformation %}
-                                                {{ details.remittanceInformation.message }}
+                                            {% if paiement.remittanceInformation %}
+                                                {{ paiement.remittanceInformation.message }}
                                             {% endif %}
                                         </td>
                                         <td>
-                                            {% if details.remittanceInformation %}
-                                                {{ details.remittanceInformation.message[20:][:6]|number_format(0, '', '') }}
+                                            {% if paiement.remittanceInformation %}
+                                                {{ paiement.remittanceInformation.message[20:][:6]|number_format(0, '', '') }}
                                             {% endif %}
                                         </td>
                                         <td>

@@ -16,6 +16,8 @@ class ParsedBVR
 
     private $orphanPaiements = [];
 
+    private $notFound = [];
+
     public function getAlreadyPaid() {
         return $this->alreadyPaid;
     }
