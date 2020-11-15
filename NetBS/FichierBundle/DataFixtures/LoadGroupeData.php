@@ -1,26 +1,21 @@
 <?php
 
-namespace NetBS\FichierBundle\DataFixtures\Fill;
+namespace NetBS\FichierBundle\DataFixtures;
 
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
-use NetBS\FichierBundle\Entity\Groupe;
-use NetBS\FichierBundle\Entity\GroupeCategorie;
-use NetBS\FichierBundle\Entity\GroupeType;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Doctrine\Persistence\ObjectManager;
+use NetBS\FichierBundle\Service\FichierConfig;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadGroupeData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadGroupeData extends AbstractFixture implements OrderedFixtureInterface, FixtureGroupInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    private $fichierConfig;
 
-    public function setContainer(ContainerInterface $container = null)
+    public function __construct(FichierConfig $config)
     {
-        $this->container    = $container;
+        $this->fichierConfig = $config;
     }
 
     /**
@@ -30,7 +25,7 @@ class LoadGroupeData extends AbstractFixture implements OrderedFixtureInterface,
      */
     public function load(ObjectManager $manager)
     {
-        $config     = $this->container->get('netbs.fichier.config');
+        $config     = $this->fichierConfig;
 
         $gc         = $config->createGroupeCategorie('unité');
         $gt         = $config->createGroupeType();
@@ -65,6 +60,11 @@ class LoadGroupeData extends AbstractFixture implements OrderedFixtureInterface,
 
         $this->addReference('p2', $groupe);
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['fill'];
     }
 
     /**

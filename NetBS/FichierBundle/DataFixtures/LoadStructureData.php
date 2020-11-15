@@ -1,25 +1,20 @@
 <?php
 
-namespace NetBS\FichierBundle\DataFixtures\Fill;
+namespace NetBS\FichierBundle\DataFixtures;
 
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
-use NetBS\FichierBundle\Entity\Distinction;
-use NetBS\FichierBundle\Entity\Fonction;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Persistence\ObjectManager;
+use NetBS\FichierBundle\Service\FichierConfig;
 
-class LoadStructureData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadStructureData extends AbstractFixture implements OrderedFixtureInterface, FixtureGroupInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    private $fichierConfig;
 
-    public function setContainer(ContainerInterface $container = null)
+    public function __construct(FichierConfig $config)
     {
-        $this->container    = $container;
+        $this->fichierConfig = $config;
     }
 
     /**
@@ -29,7 +24,7 @@ class LoadStructureData extends AbstractFixture implements OrderedFixtureInterfa
      */
     public function load(ObjectManager $manager)
     {
-        $config         = $this->container->get('netbs.fichier.config');
+        $config         = $this->fichierConfig;
 
         $distinctions   = ['Badge feu', 'Badge cuistot', 'Badge recycleur', 'Betterave de qualité', 'Culture BIO'];
         foreach($distinctions as $k => $distinction) {
@@ -59,6 +54,11 @@ class LoadStructureData extends AbstractFixture implements OrderedFixtureInterfa
 
             $this->addReference($d[1], $fonction);
         }
+    }
+
+    public static function getGroups(): array
+    {
+        return ['fill'];
     }
 
     /**

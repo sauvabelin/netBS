@@ -1,26 +1,23 @@
 <?php
 
-namespace NetBS\FichierBundle\DataFixtures\Fill;
+namespace NetBS\FichierBundle\DataFixtures;
 
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use NetBS\FichierBundle\Mapping\BaseGeniteur;
 use NetBS\FichierBundle\Mapping\Personne;
 use NetBS\FichierBundle\Service\FichierConfig;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadFamilleData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadFamilleData extends AbstractFixture implements OrderedFixtureInterface, FixtureGroupInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
 
-    public function setContainer(ContainerInterface $container = null)
+    private $fichierConfig;
+
+    public function __construct(FichierConfig $config)
     {
-        $this->container    = $container;
+        $this->fichierConfig = $config;
     }
 
     /**
@@ -30,7 +27,7 @@ class LoadFamilleData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $config     = $this->container->get('netbs.fichier.config');
+        $config     = $this->fichierConfig;
         $f1         = $this->loadF1($manager, $config);
         $f2         = $this->loadF2($manager, $config);
 
@@ -80,6 +77,11 @@ class LoadFamilleData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($famille);
 
         return $famille;
+    }
+
+    public static function getGroups(): array
+    {
+        return ['fill'];
     }
 
     /**

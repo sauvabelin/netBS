@@ -1,30 +1,25 @@
 <?php
 
-namespace NetBS\SecureBundle\DataFixtures\ORM;
+namespace NetBS\SecureBundle\DataFixtures;
 
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
-use NetBS\SecureBundle\Entity\Role;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Persistence\ObjectManager;
+use NetBS\SecureBundle\Service\SecureConfig;
 use Symfony\Component\Yaml\Yaml;
 
-class LoadRolesData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadRolesData extends AbstractFixture implements OrderedFixtureInterface, FixtureGroupInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    private $secureConfig;
 
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container    = $container;
+    public function __construct(SecureConfig $config) {
+        $this->secureConfig = $config;
     }
 
     public function load(ObjectManager $manager)
     {
-        $config = Yaml::parse(file_get_contents(__DIR__ . "/../../Resources/security/system_roles.yml"));
+        $config = Yaml::parse(file_get_contents(__DIR__ . "/../Resources/security/system_roles.yml"));
         $roles  = $this->loadRole($config['roles'], $manager);
 
         foreach($roles as $role)
@@ -37,13 +32,13 @@ class LoadRolesData extends AbstractFixture implements OrderedFixtureInterface, 
 
     public function loadRole(array $data, ObjectManager $manager) {
 
-        $rc     = $this->container->get('netbs.secure.config')->getRoleClass();
+        $rc     = $this->secureConfig->getRoleClass();
 
         $roles  = [];
 
         foreach($data as $name => $params) {
 
-            $role   = new $rc($name, $params['poids'], $params['description']);
+            $role   = new $rc($name, $params['poids'], isset($params['description']) ? $params['description'] : '');
 
             if(isset($params['children'])) {
 
@@ -58,6 +53,11 @@ class LoadRolesData extends AbstractFixture implements OrderedFixtureInterface, 
         }
 
         return $roles;
+    }
+
+    public static function getGroups(): array
+    {
+        return ['fill', 'main'];
     }
 
     public function getOrder()

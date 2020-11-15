@@ -57,8 +57,6 @@ class BaseRole
         $this->poids        = $poids;
         $this->description  = $description;
         $this->children     = new ArrayCollection();
-
-        parent::__construct($this->role);
     }
 
     /**
@@ -189,6 +187,5 @@ class BaseRole
 
         return $roles;
     }
-
 }
 

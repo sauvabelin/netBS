@@ -1,25 +1,22 @@
 <?php
 
-namespace NetBS\FichierBundle\DataFixtures\Fill;
+namespace NetBS\FichierBundle\DataFixtures;
 
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Mapping\Personne;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use NetBS\FichierBundle\Service\FichierConfig;
 
-class LoadMembreData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadMembreData extends AbstractFixture implements OrderedFixtureInterface, FixtureGroupInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    private $fichierConfig;
 
-    public function setContainer(ContainerInterface $container = null)
+    public function __construct(FichierConfig $config)
     {
-        $this->container    = $container;
+        $this->fichierConfig = $config;
     }
 
     /**
@@ -29,7 +26,7 @@ class LoadMembreData extends AbstractFixture implements OrderedFixtureInterface,
      */
     public function load(ObjectManager $manager)
     {
-        $config             = $this->container->get('netbs.fichier.config');
+        $config             = $this->fichierConfig;
 
         $data   = [
             ['Alphonse', Personne::HOMME, $this->getReference('p1'), $this->getReference('CP'), $this->getReference('d1')],
@@ -71,6 +68,11 @@ class LoadMembreData extends AbstractFixture implements OrderedFixtureInterface,
             $manager->persist($membre);
             $manager->flush();
         }
+    }
+
+    public static function getGroups(): array
+    {
+        return ['fill'];
     }
 
     /**

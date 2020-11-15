@@ -16,6 +16,13 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
+    NetBS\CoreBundle\Command\:
+        resource: '../../Command'
+
+    NetBS\CoreBundle\DataFixtures\:
+        resource: '../../DataFixtures'
+        tags: ['doctrine.fixture.orm']
+
 #validator
     NetBS\CoreBundle\Validator\Constraints\UserValidator:
         arguments:

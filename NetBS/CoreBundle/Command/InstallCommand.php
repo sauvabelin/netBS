@@ -2,16 +2,28 @@
 
 namespace NetBS\CoreBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use NetBS\CoreBundle\Service\PostInstallScriptManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-class InstallCommand extends ContainerAwareCommand
+class InstallCommand extends Command
 {
+    private $postInstallScriptManager;
+
+    private $kernel;
+
+    public function __construct(KernelInterface $kernel, PostInstallScriptManager $postInstallScriptManager)
+    {
+        parent::__construct();
+        $this->postInstallScriptManager = $postInstallScriptManager;
+        $this->kernel = $kernel;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -48,7 +60,10 @@ class InstallCommand extends ContainerAwareCommand
         }
 
         $io->writeln("Loading fixtures");
-        $this->getApplication()->find('doctrine:fixtures:load')->run(new ArrayInput(['--append' => true]), $output);
+        $this->getApplication()->find('doctrine:fixtures:load')->run(new ArrayInput([
+            '--append' => true,
+            '--group' => 'main'
+        ]), $output);
 
         $dummy      = $dummy === null
             ? $io->ask("Would you like to load some dummy data? [y/n]", 'y') == 'y'
@@ -57,7 +72,7 @@ class InstallCommand extends ContainerAwareCommand
         if($dummy)
             $this->loadDummyData($io, $output);
 
-        $scripts    = $this->getContainer()->get('netbs.core.post_install_script_manager')->getScripts();
+        $scripts    = $this->postInstallScriptManager->getScripts();
         if(count($scripts))
             $io->writeln("Running post install scripts");
 
@@ -80,7 +95,8 @@ class InstallCommand extends ContainerAwareCommand
 
     protected function loadDummyData(SymfonyStyle $io, OutputInterface $output) {
 
-        $bundles = $this->getContainer()->get('kernel')->getBundles();
+        /*
+        $bundles = $this->kernel->getBundles();
 
         foreach($bundles as $bundle) {
 
@@ -88,10 +104,14 @@ class InstallCommand extends ContainerAwareCommand
             if(is_dir($path)) {
                 $this->getApplication()->find('doctrine:fixtures:load')->run(new ArrayInput([
                     '--append'      => true,
-                    '--fixtures'    => $path
                 ]), $output);
             }
         }
+        */
+        $this->getApplication()->find('doctrine:fixtures:load')->run(new ArrayInput([
+            '--append'      => true,
+            '--group'       => 'fill'
+        ]), $output);
     }
 
     protected function getBoolValue($val) {

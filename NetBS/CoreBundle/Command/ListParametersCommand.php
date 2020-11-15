@@ -2,14 +2,23 @@
 
 namespace NetBS\CoreBundle\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Entity\Parameter;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ListParametersCommand extends ContainerAwareCommand
+class ListParametersCommand extends Command
 {
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        parent::__construct();
+        $this->entityManager = $entityManager;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -26,7 +35,7 @@ class ListParametersCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io         = new SymfonyStyle($input, $output);
-        $manager    = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $manager    = $this->entityManager;
         $bags       = $manager->getRepository('NetBSCoreBundle:ParameterBag')->findAll();
         $params     = [];
 

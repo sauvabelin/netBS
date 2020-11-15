@@ -1,25 +1,26 @@
 <?php
 
-namespace NetBS\CoreBundle\DataFixtures\ORM;
+namespace NetBS\CoreBundle\DataFixtures;
 
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use NetBS\CoreBundle\Entity\Parameter;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class LoadParametersData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
+class LoadParametersData extends AbstractFixture implements OrderedFixtureInterface, FixtureGroupInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected $kernel;
+
+    public function __construct(KernelInterface $kernel) {
+        $this->kernel = $kernel;
+    }
 
     public function load(ObjectManager $manager)
     {
-        $bundles    = $this->container->get('kernel')->getBundles();
+        $bundles    = $this->kernel->getBundles();
 
         foreach($bundles as $bundle) {
 
@@ -52,11 +53,6 @@ class LoadParametersData extends AbstractFixture implements ContainerAwareInterf
         $manager->flush();
     }
 
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container    = $container;
-    }
-
     /**
      * Get the order of this fixture
      *
@@ -65,5 +61,10 @@ class LoadParametersData extends AbstractFixture implements ContainerAwareInterf
     public function getOrder()
     {
         return 10;
+    }
+
+    public static function getGroups(): array
+    {
+        return ['main', 'fill'];
     }
 }

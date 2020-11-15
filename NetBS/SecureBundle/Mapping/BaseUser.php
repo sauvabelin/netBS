@@ -17,7 +17,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class BaseUser implements
     \Serializable,
-    EquatableInterface
+    EquatableInterface,
+    UserInterface
 {
     /**
      * @var int
