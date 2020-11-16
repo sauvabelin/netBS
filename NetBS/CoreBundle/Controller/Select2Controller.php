@@ -2,6 +2,7 @@
 
 namespace NetBS\CoreBundle\Controller;
 
+use NetBS\CoreBundle\Select2\Select2ProviderManager;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,12 +17,12 @@ class Select2Controller extends AbstractController
      * @Route("/netbs/select2/results", name="netbs.core.select2.results")
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function resultsAction(Request $request) {
+    public function resultsAction(Request $request, Select2ProviderManager $select2ProviderManager) {
 
 
         $class      = $request->get('ajaxClass');
         $nullOption = $request->get('nullOption') === '1';
-        $provider   = $this->get('netbs.core.select2_providers_manager')->getProvider(base64_decode($class));
+        $provider   = $select2ProviderManager->getProvider(base64_decode($class));
         $search     = $request->get(self::SEARCH_NEEDLE);
         $items      = $provider->search($search);
 

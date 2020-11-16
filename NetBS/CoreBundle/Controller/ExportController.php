@@ -2,11 +2,16 @@
 
 namespace NetBS\CoreBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Entity\ExportConfiguration;
 use NetBS\CoreBundle\Exporter\ExportBlob;
 use NetBS\CoreBundle\Model\ConfigurableExporterInterface;
 use NetBS\CoreBundle\Model\ExporterConfigInterface;
 use NetBS\CoreBundle\Model\ExporterInterface;
+use NetBS\CoreBundle\Service\ExporterManager;
+use NetBS\CoreBundle\Service\ListBridgeManager;
+use NetBS\CoreBundle\Service\LoaderManager;
+use NetBS\CoreBundle\Service\PreviewerManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,21 +28,21 @@ class ExportController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function generateExportBlobAction(Request $request) {
+    public function generateExportBlobAction(Request $request, ExporterManager $manager, EntityManagerInterface $em, LoaderManager $loaderManager, ListBridgeManager $listBridgeManager) {
 
         $session    = $this->get('session');
         $blob       = new ExportBlob($request);
-        $exporter   = $this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias());
+        $exporter   = $manager->getExporterByAlias($blob->getExporterAlias());
 
         if(!$exporter instanceof ConfigurableExporterInterface) {
 
             $session->set($blob->getKey(), serialize($blob));
-            return $this->generateExportAction($blob->getKey());
+            return $this->generateExportAction($blob->getKey(), $manager, $em, $loaderManager, $listBridgeManager);
         }
 
         else {
 
-            $configs = $this->getUserConfigurations($exporter);
+            $configs = $this->getUserConfigurations($exporter, $em);
             $blob->setConfigId($configs[0]->getId());
             $session->set($blob->getKey(), serialize($blob));
         }
@@ -51,25 +56,24 @@ class ExportController extends AbstractController
      * @param $configId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function switchConfigAction($blobKey, $configId) {
+    public function switchConfigAction($blobKey, $configId, ExporterManager $manager, EntityManagerInterface $em) {
 
         /** @var ExportBlob $blob */
         $blob       = unserialize($this->get('session')->get($blobKey));
-        $em         = $this->get('doctrine.orm.entity_manager');
         /** @var ConfigurableExporterInterface $exporter */
-        $exporter   = $this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias());
+        $exporter   = $manager->getExporterByAlias($blob->getExporterAlias());
         $data       = explode("__", $configId);
         $config     = null;
 
         if($configId === 'new')
-            $config = $this->getNewConfig($exporter->getBasicConfig(), $exporter->getAlias());
+            $config = $this->getNewConfig($exporter->getBasicConfig(), $exporter->getAlias(), $em);
 
         elseif($data[0] === "model") {
             $base = array_filter($exporter->getBasicConfig(), function($config) use ($data) {
                 return get_class($config) === base64_decode($data[1]);
             });
 
-            $config = $this->getNewConfig(array_shift($base), $exporter->getAlias());
+            $config = $this->getNewConfig(array_shift($base), $exporter->getAlias(), $em);
         }
 
         else
@@ -92,12 +96,11 @@ class ExportController extends AbstractController
      * @param $configId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function removeConfigAction($blobKey, $configId) {
+    public function removeConfigAction($blobKey, $configId, EntityManagerInterface $em, ExporterManager $manager) {
 
         /** @var ExportBlob $blob */
         $blob   = unserialize($this->get('session')->get($blobKey));
-        $export = $this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias());
-        $em     = $this->get('doctrine.orm.entity_manager');
+        $export = $manager->getExporterByAlias($blob->getExporterAlias());
         $config = $em->getRepository('NetBSCoreBundle:ExportConfiguration')->findOneBy([
             'user'  => $this->getUser(),
             'id'    => $configId
@@ -109,7 +112,7 @@ class ExportController extends AbstractController
         $em->remove($config);
         $em->flush();
 
-        $configs    = $this->getUserConfigurations($export);
+        $configs    = $this->getUserConfigurations($export, $em);
         $config     = $configs[0];
 
         $blob->setConfigId($config->getId());
@@ -124,14 +127,13 @@ class ExportController extends AbstractController
      * @param $blobKey
      * @return Response
      */
-    public function exportSettingsViewAction(Request $request, $blobKey) {
+    public function exportSettingsViewAction(Request $request, $blobKey, EntityManagerInterface $em, ExporterManager $manager) {
 
         /** @var ExportBlob $blob */
         /** @var ConfigurableExporterInterface $exporter */
         $blob               = unserialize($this->get('session')->get($blobKey));
-        $em                 = $this->getDoctrine()->getManager();
-        $exporter           = $this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias());
-        $configs            = $this->getUserConfigurations($exporter);
+        $exporter           = $manager->getExporterByAlias($blob->getExporterAlias());
+        $configs            = $this->getUserConfigurations($exporter, $em);
         $configContainer    = $em->find('NetBSCoreBundle:ExportConfiguration', $blob->getConfigId());
         $form               = $this->createForm($exporter->getConfigFormClass(), $configContainer->getConfiguration());
 
@@ -162,12 +164,12 @@ class ExportController extends AbstractController
      * @throws \Exception
      * @Route("/preview/{blobKey}", name="netbs.core.export.preview")
      */
-    public function previewExportAction($blobKey) {
+    public function previewExportAction($blobKey, ExporterManager $manager, PreviewerManager $previewerManager, EntityManagerInterface $em, LoaderManager $loaderManager, ListBridgeManager $listBridgeManager) {
 
         $session    = $this->get('session');
         $blob       = unserialize($session->get($blobKey));
-        $items      = $this->getItems($blob);
-        $exporter   = $this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias());
+        $items      = $this->getItems($blob, $manager, $em, $loaderManager, $listBridgeManager);
+        $exporter   = $manager->getExporterByAlias($blob->getExporterAlias());
 
         if(!$exporter instanceof ConfigurableExporterInterface)
             throw new \Exception("Cant preview file, exporter doesnt support previewing");
@@ -175,8 +177,8 @@ class ExportController extends AbstractController
         if(!$exporter->getPreviewer())
             return new Response();
 
-        $this->configureExporter($exporter, $blob);
-        $previewer  = $this->get('netbs.core.previewer_manager')->getPreviewer($exporter->getPreviewer());
+        $this->configureExporter($exporter, $blob, $em);
+        $previewer  = $previewerManager->getPreviewer($exporter->getPreviewer());
         return $previewer->preview($items, $exporter);
     }
 
@@ -186,16 +188,16 @@ class ExportController extends AbstractController
      * @return Response
      * @Route("/generate-export/{blobKey}", name="netbs.core.export.generate")
      */
-    public function generateExportAction($blobKey) {
+    public function generateExportAction($blobKey, ExporterManager $manager, EntityManagerInterface $em, LoaderManager $loaderManager, ListBridgeManager $listBridgeManager) {
 
         /** @var ExportBlob $blob */
         $session        = $this->get('session');
         $blob           = unserialize($session->get($blobKey));
 
-        $items          = $this->getItems($blob);
-        $exporter       = $this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias());
+        $items          = $this->getItems($blob, $manager, $em, $loaderManager, $listBridgeManager);
+        $exporter       = $manager->getExporterByAlias($blob->getExporterAlias());
 
-        $this->configureExporter($exporter, $blob);
+        $this->configureExporter($exporter, $blob, $em);
 
         return $exporter->export($items);
     }
@@ -204,10 +206,7 @@ class ExportController extends AbstractController
      * @param ExporterInterface $exporter
      * @param ExportBlob $blob
      */
-    protected function configureExporter(ExporterInterface $exporter, ExportBlob $blob) {
-
-        $em = $this->get('doctrine.orm.entity_manager');
-
+    protected function configureExporter(ExporterInterface $exporter, ExportBlob $blob, EntityManagerInterface $em) {
         if($exporter instanceof ConfigurableExporterInterface) {
             $config    = $em->find('NetBSCoreBundle:ExportConfiguration', $blob->getConfigId());
             $exporter->setConfig($config->getConfiguration());
@@ -218,12 +217,10 @@ class ExportController extends AbstractController
      * @param ExportBlob $blob
      * @return array
      */
-    protected function getItems(ExportBlob $blob) {
+    protected function getItems(ExportBlob $blob, ExporterManager $manager, EntityManagerInterface $em, LoaderManager $loaders, ListBridgeManager $listBridgeManager) {
 
         $listItems      = $blob->getIds();
-        $em             = $this->get('doctrine.orm.entity_manager');
-        $exporter       = $this->get('netbs.core.exporter_manager')->getExporterByAlias($blob->getExporterAlias());
-        $loaders        = $this->get('netbs.core.loader_manager');
+        $exporter       = $manager->getExporterByAlias($blob->getExporterAlias());
         $elements       = [];
 
         if ($loaders->hasLoader($blob->getItemsClass())) {
@@ -241,17 +238,16 @@ class ExportController extends AbstractController
                 ->execute();
         }
 
-        return $this->get('netbs.core.bridge_manager')->convertItems($elements, $exporter->getExportableClass());
+        return $listBridgeManager->convertItems($elements, $exporter->getExportableClass());
     }
 
     /**
      * @param ConfigurableExporterInterface $exporter
      * @return ExportConfiguration[]
      */
-    protected function getUserConfigurations(ConfigurableExporterInterface $exporter) {
+    protected function getUserConfigurations(ConfigurableExporterInterface $exporter, EntityManagerInterface $em) {
 
         $user   = $this->getUser();
-        $em     = $this->get('doctrine.orm.default_entity_manager');
         $repo   = $em->getRepository('NetBSCoreBundle:ExportConfiguration');
 
         $configs= $repo->findBy(array(
@@ -261,7 +257,7 @@ class ExportController extends AbstractController
 
         if(count($configs) == 0) {
             $class = is_array($exporter->getBasicConfig()) ? $exporter->getBasicConfig()[0] : $exporter->getBasicConfig();
-            $configs[] = $this->getNewConfig($class, $exporter->getAlias());
+            $configs[] = $this->getNewConfig($class, $exporter->getAlias(), $em);
         }
 
         return $configs;
@@ -272,9 +268,8 @@ class ExportController extends AbstractController
      * @param null $model
      * @return ExportConfiguration
      */
-    protected function getNewConfig(ExporterConfigInterface $base, $alias) {
+    protected function getNewConfig(ExporterConfigInterface $base, $alias, EntityManagerInterface $em) {
 
-        $em     = $this->get('doctrine.orm.entity_manager');
         $config = new ExportConfiguration();
         /** @var ExporterConfigInterface $item */
 

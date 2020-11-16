@@ -29,7 +29,7 @@ abstract class BaseObtentionDistinction
     /**
      * @var \DateTime
      * @Assert\NotBlank()
-     * @Assert\DateTime()
+     * @Assert\Type("\DateTimeInterface")
      * @ORM\Column(name="date", type="datetime")
      */
     protected $date;

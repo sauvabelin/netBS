@@ -79,12 +79,12 @@
 {{ registerJs(asset('bundles/netbscore/js/modal.js')) }}
 
 <div class="news-container">
-    {% for item in news if item.isPinned %}
+    {% for item in news | filter(it => it.isPinned) %}
         {{ swag.news(item) }}
         <hr/>
     {% endfor %}
 
-    {% for item in news if not item.isPinned %}
+    {% for item in news | filter(it => not it.isPinned) %}
         {{ swag.news(item) }}
         <hr/>
     {% endfor %}

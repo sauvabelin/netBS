@@ -3,6 +3,7 @@
 namespace NetBS\CoreBundle\Controller;
 
 use NetBS\CoreBundle\Model\ConfigurableAutomaticInterface;
+use NetBS\CoreBundle\Service\AutomaticListsManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -18,10 +19,7 @@ class AutomaticListController extends AbstractController
      * @Route("/view/lists", name="netbs.core.automatic_list.view_lists")
      * @Security("is_granted('ROLE_READ_EVERYWHERE')")
      */
-    public function viewListsAction() {
-
-        $automatics = $this->get('netbs.core.automatic_lists_manager');
-
+    public function viewListsAction(AutomaticListsManager $automatics) {
         return $this->render('@NetBSCore/automatics/view_automatics.page.twig', array(
             'models'    => $automatics->getAutomatics()
         ));
@@ -34,9 +32,9 @@ class AutomaticListController extends AbstractController
      * @Security("is_granted('ROLE_READ_EVERYWHERE')")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewListAction(Request $request, $alias) {
+    public function viewListAction($alias, Request $request, AutomaticListsManager $manager) {
 
-        $model  = $this->get('netbs.core.automatic_lists_manager')->getAutomaticByAlias($alias);
+        $model  = $manager->getAutomaticByAlias($alias);
         $form   = null;
 
         if (!$model->isAllowed($this->getUser()))
@@ -51,7 +49,7 @@ class AutomaticListController extends AbstractController
 
             $form->handleRequest($request);
 
-            if($form->isValid() && $form->isSubmitted())
+            if($form->isSubmitted() && $form->isValid())
                 $model->_setAutomaticData($form->getData());
 
             $form = $form->createView();

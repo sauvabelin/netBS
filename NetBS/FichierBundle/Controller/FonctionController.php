@@ -2,9 +2,11 @@
 
 namespace NetBS\FichierBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\FonctionType;
 use NetBS\FichierBundle\Mapping\BaseFonction;
+use NetBS\FichierBundle\Service\FichierConfig;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +18,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class FonctionController extends AbstractController
 {
+    protected $config;
+
+    public function __construct(FichierConfig $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @Route("/manage", name="netbs.fichier.fonction.page_fonctions")
      * @Security("is_granted('ROLE_READ_EVERYWHERE')")
@@ -36,19 +45,16 @@ class FonctionController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @Security("is_granted('ROLE_CREATE_EVERYWHERE')")
      */
-    public function addFonctionModalAction(Request $request) {
+    public function addFonctionModalAction(Request $request, EntityManagerInterface $em) {
 
-        $configurator   = $this->get('netbs.fichier.config');
-        $class          = $configurator->getFonctionClass();
+        $class          = $this->config->getFonctionClass();
 
         /** @var BaseFonction $fonction */
         $fonction       = new $class();
         $form           = $this->createForm(FonctionType::class, $fonction);
 
         $form->handleRequest($request);
-        if($form->isValid() && $form->isSubmitted()) {
-
-            $em         = $this->get('doctrine.orm.entity_manager');
+        if($form->isSubmitted() && $form->isValid()) {
             $em->persist($form->getData());
             $em->flush();
 

@@ -4,25 +4,22 @@ namespace NetBS\CoreBundle\Form;
 
 use NetBS\CoreBundle\Entity\News;
 use NetBS\CoreBundle\Entity\NewsChannel;
-use NetBS\CoreBundle\Form\Type\QuillType;
+use NetBS\CoreBundle\Form\Type\Select2DocumentType;
 use NetBS\CoreBundle\Form\Type\SwitchType;
 use NetBS\CoreBundle\Form\Type\TrumbowygType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use SauvabelinBundle\Form\Type\NewsChannelType as NC;
 
 class NewsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add("channel", NC::class, [
+            ->add("channel", Select2DocumentType::class, [
                 'label'         => 'Channel',
                 'class'         => NewsChannel::class,
                 'choice_label'  => "nom"

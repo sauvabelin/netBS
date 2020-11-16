@@ -13,7 +13,7 @@
 
         <div class="row">
 
-            {% for model in models if model.isAllowed(app.user) %}
+            {% for model in models | filter(model => model.isAllowed(app.user)) %}
                 <div class="col-12 col-sm-6 col-md-3">
                     <a href="{{ path('netbs.core.automatic_list.view_list', {alias: model.alias}) }}" class="card text-white bg-info mb-3">
                         <div class="card-header">

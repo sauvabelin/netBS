@@ -2,8 +2,10 @@
 
 namespace NetBS\CoreBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Entity\DynamicList;
 use NetBS\CoreBundle\Form\DynamicListType;
+use NetBS\CoreBundle\Service\DynamicListManager;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,9 +21,7 @@ class DynamicListController extends AbstractController
     /**
      * @Route("/manage/lists", name="netbs.core.dynamics_list.manage_lists")
      */
-    public function manageListsAction() {
-
-        $dynamics   = $this->get('netbs.core.dynamic_list_manager');
+    public function manageListsAction(DynamicListManager $dynamics) {
 
         return $this->render('@NetBSCore/dynamics/manage_dynamic_lists.html.twig', array(
             'lists' => $dynamics->getCurrentUserLists()
@@ -36,9 +36,8 @@ class DynamicListController extends AbstractController
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function removeElementFromListAction(Request $request, DynamicList $list) {
+    public function removeElementFromListAction(Request $request, DynamicList $list, EntityManagerInterface $em) {
 
-        $em     = $this->get('doctrine.orm.entity_manager');
         $ids    = json_decode($request->get('data'), true)['removed_ids'];
         $ids    = array_map(function($id) {return intval($id);}, $ids);
 
@@ -63,12 +62,10 @@ class DynamicListController extends AbstractController
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function removeListAction(DynamicList $list) {
+    public function removeListAction(DynamicList $list, EntityManagerInterface $em) {
 
         if(!$this->isGranted(CRUD::DELETE, $list))
             throw $this->createAccessDeniedException();
-
-        $em     = $this->get('doctrine.orm.entity_manager');
 
         $em->remove($list);
         $em->flush();
@@ -82,12 +79,12 @@ class DynamicListController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \NetBS\ListBundle\Exceptions\ListModelNotFoundException
      */
-    public function manageListAction(DynamicList $list) {
+    public function manageListAction(DynamicList $list, DynamicListManager $manager) {
 
         if(!$this->isGranted(CRUD::READ, $list))
             throw $this->createAccessDeniedException();
 
-        $model      = $this->get('netbs.core.dynamic_list_manager')->getModelForClass($list->getItemsClass());
+        $model      = $manager->getModelForClass($list->getItemsClass());
         $form       = $this->createForm(DynamicListType::class, $list);
 
         return $this->render('@NetBSCore/dynamics/manage_dynamic_list.html.twig', array(
@@ -102,20 +99,16 @@ class DynamicListController extends AbstractController
      * @param Request $request
      * @return DynamicList|null|object
      */
-    public function addItemsToList(Request $request) {
+    public function addItemsToList(Request $request, DynamicListManager $dynamics, EntityManagerInterface $em) {
 
         $listId     = $request->get('listId');
         $listItems  = $request->get('selectedIds');
         $itemsClass = base64_decode($request->get('itemsClass'));
 
-        return $this->successResponse($this->performListAddage($listId, $listItems, $itemsClass));
+        return $this->successResponse($this->performListAddage($listId, $listItems, $itemsClass, $em, $dynamics));
     }
 
-    protected function performListAddage($listId, $listItems, $itemsClass) {
-
-        $dynamics   = $this->get('netbs.core.dynamic_list_manager');
-        $em         = $this->get('doctrine.orm.entity_manager');
-
+    protected function performListAddage($listId, $listItems, $itemsClass, $em, $dynamics) {
         $list       = $em->getRepository('NetBSCoreBundle:DynamicList')
             ->findOneBy(array(
                 'owner' => $this->getUser(),
@@ -151,12 +144,11 @@ class DynamicListController extends AbstractController
      * @Route("/modal/add-list", name="netbs.core.dynamic_list.modal_add")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addListModalAction(Request $request) {
+    public function addListModalAction(Request $request, DynamicListManager $dynamics) {
 
         $encoded    = $request->request->get('itemClass');
         $class      = $encoded ? base64_decode($encoded) : null;
 
-        $dynamics   = $this->get('netbs.core.dynamic_list_manager');
         $list       = new DynamicList();
         $form       = $this->createForm(DynamicListType::class, $list, [
             'itemClass' => $class,

@@ -2,7 +2,7 @@
 
 namespace NetBS\CoreBundle\Validator\Constraints;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -27,7 +27,7 @@ class UserValidator extends ConstraintValidator
 
     private $parser;
 
-    public function __construct(TokenStorageInterface $storage, AdapterInterface $cache, EntityManagerInterface $manager, AnnotationReader $parser)
+    public function __construct(TokenStorageInterface $storage, AdapterInterface $cache, EntityManagerInterface $manager, Reader $parser)
     {
         $this->storage  = $storage;
         $this->cache    = $cache;

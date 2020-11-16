@@ -3,7 +3,7 @@
 namespace NetBS\SecureBundle\Event;
 
 use NetBS\SecureBundle\Mapping\BaseUser;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class UserPasswordChangeEvent extends Event
 {

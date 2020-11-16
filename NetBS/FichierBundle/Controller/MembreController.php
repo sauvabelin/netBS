@@ -2,15 +2,22 @@
 
 namespace NetBS\FichierBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use NetBS\CoreBundle\Block\LayoutManager;
 use NetBS\CoreBundle\Block\Model\Tab;
 use NetBS\CoreBundle\Block\CardBlock;
 use NetBS\CoreBundle\Block\TabsCardBlock;
 use NetBS\CoreBundle\Block\TemplateBlock;
 use NetBS\CoreBundle\Event\RemoveMembreEvent;
+use NetBS\CoreBundle\Searcher\SearcherManager;
+use NetBS\CoreBundle\Service\DynamicListManager;
+use NetBS\CoreBundle\Service\ExporterManager;
 use NetBS\FichierBundle\Form\Personne\MembreType;
 use NetBS\FichierBundle\Mapping\BaseMembre;
+use NetBS\FichierBundle\Service\FichierConfig;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,18 +27,24 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MembreController extends AbstractController
 {
+    protected $config;
+
+    public function __construct(FichierConfig $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @param int $id
      * @Route("/page/{id}", name="netbs.fichier.membre.page_membre")
      * @return Response
      */
-    public function pageMembreAction($id) {
+    public function pageMembreAction($id, ExporterManager $exporterManager, EntityManagerInterface $em, LayoutManager $designer, DynamicListManager $dynamics) {
 
-        $config     = $this->get('netbs.fichier.config');
-        $exporters  = $this->get('netbs.core.exporter_manager')->getExportersForClass($config->getMembreClass());
+        $exporters  = $exporterManager->getExportersForClass($this->config->getMembreClass());
 
         /** @var BaseMembre $membre */
-        $membre     = $this->get('doctrine.orm.entity_manager')->find($config->getMembreClass(), $id);
+        $membre     = $em->find($this->config->getMembreClass(), $id);
         $form       = $this->createForm(MembreType::class, $membre)->createView();
 
         if(!$membre)
@@ -40,10 +53,8 @@ class MembreController extends AbstractController
         if(!$this->isGranted(CRUD::READ, $membre))
             throw $this->createAccessDeniedException("Accès à la page de {$membre->getFullName()} refusé");
 
-        $designer   = $this->get('netbs.core.block.layout');
-        $lists      = $this->get('netbs.core.dynamic_list_manager')->getAvailableLists($config->getMembreClass());
-
-        $config     = $designer::configurator()
+        $lists = $dynamics->getAvailableLists($this->config->getMembreClass());
+        $config = $designer::configurator()
             ->addRow()
                 ->pushColumn(3)
                     ->addRow()
@@ -65,7 +76,7 @@ class MembreController extends AbstractController
                                     'membre'        => $membre,
                                     'lists'         => $lists,
                                     'exporters'     => $exporters,
-                                    'exportClass'   => base64_encode($config->getMembreClass()),
+                                    'exportClass'   => base64_encode($this->config->getMembreClass()),
                                 ]
                             ])
                         ->close()
@@ -103,27 +114,23 @@ class MembreController extends AbstractController
      * @Route("/search", name="netbs.fichier.membre.search")
      * @return Response
      */
-    public function searchMembreAction() {
-
-        $searcher       = $this->get('netbs.core.searcher_manager');
-        $instance       = $searcher->bind($this->get('netbs.fichier.config')->getMembreClass());
-
+    public function searchMembreAction(SearcherManager $searcher) {
+        $instance = $searcher->bind($this->config->getMembreClass());
         return $searcher->render($instance);
     }
 
     /**
      * @Route("/remove/{id}", name="netbs.fichier.membre.remove")
      */
-    public function removeMembreAction($id) {
+    public function removeMembreAction($id, EventDispatcherInterface $dispatcher) {
 
         if(!$this->isGranted('ROLE_SG'))
             throw $this->createAccessDeniedException("Opération refusée!");
 
-        $config = $this->get('netbs.fichier.config');
         $em = $this->getDoctrine()->getManager();
-        $membre = $em->find($config->getMembreClass(), $id);
+        $membre = $em->find($this->config->getMembreClass(), $id);
 
-        $this->get('event_dispatcher')->dispatch(RemoveMembreEvent::NAME, new RemoveMembreEvent($membre, $em));
+        $dispatcher->dispatch(new RemoveMembreEvent($membre, $em), RemoveMembreEvent::NAME);
 
         $em->remove($membre);
         $em->flush();

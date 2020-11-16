@@ -2,6 +2,7 @@
 
 namespace NetBS\CoreBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Entity\LoggedChange;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,13 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 class ChangelogController extends AbstractController
 {
     /**
-     * @param Request $request
      * @Route("/list", name="netbs.core.changelog.list")
      * @return \Symfony\Component\HttpFoundation\Response
      * @Security("is_granted('ROLE_SG')")
      */
-    public function lookupChangesAction(Request $request) {
-
+    public function lookupChangesAction() {
         return $this->render('@NetBSCore/changelog/list_changes.html.twig');
     }
 
@@ -31,10 +30,9 @@ class ChangelogController extends AbstractController
      * @return Response
      * @Security("is_granted('ROLE_SG')")
      */
-    public function approveChangesAction(Request $request) {
+    public function approveChangesAction(Request $request, EntityManagerInterface $em) {
 
         $data       = json_decode($request->request->get('data'), true);
-        $em         = $this->get('doctrine.orm.entity_manager');
 
         $changes    = $em->createQueryBuilder()->select('c')
             ->from('NetBSCoreBundle:LoggedChange', 'c')
@@ -60,10 +58,9 @@ class ChangelogController extends AbstractController
      * @return Response
      * @Security("is_granted('ROLE_SG')")
      */
-    public function ajaxPreviewChangeAction(Request $request) {
+    public function ajaxPreviewChangeAction(Request $request, EntityManagerInterface $em) {
 
         $id     = $request->get('logId');
-        $em     = $this->get('doctrine.orm.entity_manager');
         $change = $em->find('NetBSCoreBundle:LoggedChange', $id);
 
         if(!$change)

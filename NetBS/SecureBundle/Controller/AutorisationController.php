@@ -2,7 +2,9 @@
 
 namespace NetBS\SecureBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\SecureBundle\Form\AutorisationType;
+use NetBS\SecureBundle\Service\SecureConfig;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,15 +26,12 @@ class AutorisationController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addUserAction(Request $request) {
-
-        $config     = $this->get('netbs.secure.config');
-        $em         = $this->get('doctrine.orm.default_entity_manager');
+    public function addUserAction(Request $request, SecureConfig $config, EntityManagerInterface $em) {
         $autr       = $config->createAutorisation();
         $form       = $this->createForm(AutorisationType::class, $autr);
 
         $form->handleRequest($request);
-        if($form->isValid() && $form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
 
             $em->persist($form->getData());
             $em->flush();
@@ -56,10 +55,7 @@ class AutorisationController extends AbstractController
      * @throws \Doctrine\ORM\TransactionRequiredException
      * @Route("/autorisation/delete/{id}", name="netbs.secure.autorisation.delete")
      */
-    public function deleteAutorisationAction($id) {
-
-        $em             = $this->get('doctrine.orm.entity_manager');
-        $secureConfig   = $this->get('netbs.secure.config');
+    public function deleteAutorisationAction($id, SecureConfig $secureConfig, EntityManagerInterface $em) {
         $autorisation   = $em->find($secureConfig->getAutorisationClass(), $id);
 
         try {

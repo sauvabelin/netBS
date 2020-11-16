@@ -16,6 +16,7 @@ use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterLogRepresentersPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterPostInstallScriptsPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterPreviewersPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterSearcherPass;
+use NetBS\CoreBundle\DependencyInjection\Compiler\RegisterTypesPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\Select2ProviderPass;
 use NetBS\CoreBundle\DependencyInjection\Compiler\TraitFeederPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -43,6 +44,7 @@ class NetBSCoreBundle extends Bundle
         $container->addCompilerPass(new RegisterListActionsPass());
         $container->addCompilerPass(new RegisterDeleterPass());
         $container->addCompilerPass(new RegisterLoaderPass());
+        $container->addCompilerPass(new RegisterTypesPass());
     }
 
 }

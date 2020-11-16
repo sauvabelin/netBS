@@ -2,7 +2,12 @@
 
 namespace NetBS\FichierBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Controller\MassUpdaterController;
+use NetBS\CoreBundle\Service\History;
+use NetBS\CoreBundle\Service\ListBridgeManager;
+use NetBS\CoreBundle\Service\MassUpdaterManager;
+use NetBS\FichierBundle\Service\FichierConfig;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,16 +19,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MassAdderController extends MassUpdaterController
 {
+    protected $config;
+
+    public function __construct(FichierConfig $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @Route("/adder", name="netbs.fichier.mass.add")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Security("is_granted('ROLE_CREATE_EVERYWHERE')")
      */
-    public function dataCreateAction(Request $request) {
-
-        $config = $this->get('netbs.fichier.config');
-
+    public function dataCreateAction(Request $request, ListBridgeManager $bridges, MassUpdaterManager $mass, EntityManagerInterface $em, History $history) {
         if($request->getMethod() !== 'POST') {
 
             $this->addFlash('warning', "Opération  d'ajout interrompue, veuillez réessayer.");
@@ -38,16 +47,15 @@ class MassAdderController extends MassUpdaterController
 
             $updatedClass   = $data[self::CLASS_KEY];
 
-            if($updatedClass === 'attribution')        $updatedClass = $config->getAttributionClass();
-            elseif($updatedClass === 'distinction')    $updatedClass = $config->getObtentionDistinctionClass();
+            if($updatedClass === 'attribution')        $updatedClass = $this->config->getAttributionClass();
+            elseif($updatedClass === 'distinction')    $updatedClass = $this->config->getObtentionDistinctionClass();
             else throw $this->createAccessDeniedException();
 
             $ownerClass = base64_decode($data['ownerClass']);
             $ownerIds   = $data['ownerIds'];
 
-            $bridges    = $this->get('netbs.core.bridge_manager');
             $owners     = $this->getMassItems($ownerClass, $ownerIds);
-            $membres    = $bridges->convertItems($owners, $config->getMembreClass());
+            $membres    = $bridges->convertItems($owners, $this->config->getMembreClass());
 
             foreach($membres as $membre) {
 
@@ -66,6 +74,6 @@ class MassAdderController extends MassUpdaterController
             'updatedClass'  => base64_encode($updatedClass)
         ];
 
-        return $this->handleUpdater($request, $formData, $this->get('netbs.core.mass_updater_manager')->getUpdaterForClass($updatedClass));
+        return $this->handleUpdater($request, $formData, $mass->getUpdaterForClass($updatedClass), $em, $history);
     }
 }

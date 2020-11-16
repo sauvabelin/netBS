@@ -2,8 +2,10 @@
 
 namespace NetBS\FichierBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use NetBS\CoreBundle\Block\CardBlock;
+use NetBS\CoreBundle\Block\LayoutManager;
 use NetBS\CoreBundle\Block\Model\Tab;
 use NetBS\CoreBundle\Block\TabsCardBlock;
 use NetBS\CoreBundle\Block\TemplateBlock;
@@ -14,6 +16,7 @@ use NetBS\FichierBundle\Form\GroupeType;
 use NetBS\FichierBundle\Mapping\BaseAttribution;
 use NetBS\FichierBundle\Mapping\BaseGroupe;
 use NetBS\FichierBundle\Mapping\Personne;
+use NetBS\FichierBundle\Service\FichierConfig;
 use NetBS\SecureBundle\Voter\CRUD;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,8 +31,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class GroupeController extends AbstractController
 {
+    protected $config;
+
+    public function __construct(FichierConfig $config)
+    {
+        $this->config = $config;
+    }
+
     protected function getGroupeClass() {
-        return $this->get('netbs.fichier.config')->getGroupeClass();
+        return $this->config->getGroupeClass();
     }
 
     /**
@@ -38,15 +48,13 @@ class GroupeController extends AbstractController
      * @Route("/groupe/statistics/effectifs/{id}", name="netbs.fichier.groupe.statistics_effectifs")
      * @throws \Exception
      */
-    public function getGroupeEffectifsStats(Request $request, $id) {
-        $em = $this->get('doctrine.orm.default_entity_manager');
-        $config = $this->get('netbs.fichier.config');
+    public function getGroupeEffectifsStats(Request $request, $id, EntityManagerInterface $em) {
         $begin = new \DateTime($request->get('begin'));
         $end = new \DateTime($request->get('end'));
 
         $steps = $request->get('steps') ?: 50;
         $diff = $end->getTimestamp() - $begin->getTimestamp();
-        $groupClass = $config->getGroupeClass();
+        $groupClass = $this->config->getGroupeClass();
 
         $rsm = new ResultSetMapping();
         $rsm->addEntityResult($groupClass, 'u');
@@ -66,7 +74,7 @@ and     @pv := concat(@pv, ',', id)
         $query->setParameter(1, $id);
         $groupIds = array_merge([$id], array_map(function($ar) { return $ar['id'];}, $query->getArrayResult()));
         $attributions = $em->createQueryBuilder()
-            ->from($config->getAttributionClass(), 'a')
+            ->from($this->config->getAttributionClass(), 'a')
             ->select('a, m')
             ->where('a.groupe IN (:gids)')
             ->setParameter('gids', $groupIds)
@@ -110,7 +118,7 @@ and     @pv := concat(@pv, ',', id)
      * @return \Symfony\Component\HttpFoundation\Response
      * @Security("is_granted('ROLE_CREATE_EVERYWHERE')")
      */
-    public function addGroupeModalAction(Request $request) {
+    public function addGroupeModalAction(Request $request, EntityManagerInterface $em) {
 
         $gclass         = $this->getGroupeClass();
         $groupe         = new $gclass();
@@ -118,9 +126,7 @@ and     @pv := concat(@pv, ',', id)
 
         $form->handleRequest($request);
 
-        if($form->isValid() && $form->isSubmitted()) {
-
-            $em         = $this->get('doctrine.orm.entity_manager');
+        if($form->isSubmitted() && $form->isValid()) {
             $em->persist($form->getData());
             $em->flush();
 
@@ -138,16 +144,14 @@ and     @pv := concat(@pv, ',', id)
      * @Security("is_granted('ROLE_READ_EVERYWHERE')")
      * @return Response
      */
-    public function pageGroupesHierarchyAction() {
+    public function pageGroupesHierarchyAction(EntityManagerInterface $em) {
 
-        $em         = $this->get('doctrine.orm.default_entity_manager');
-        $config     = $this->get('netbs.fichier.config');
         $repo       = $em->getRepository($this->getGroupeClass());
 
         /** @var BaseGroupe[] $groupes */
         $groupes    = $repo->findAll();
-        $types      = $em->getRepository($config->getGroupeTypeClass())->findAll();
-        $categories = $em->getRepository($config->getGroupeCategorieClass())->findAll();
+        $types      = $em->getRepository($this->config->getGroupeTypeClass())->findAll();
+        $categories = $em->getRepository($this->config->getGroupeCategorieClass())->findAll();
 
         return $this->render('@NetBSFichier/groupe/page_groupes_hierarchy.html.twig', array(
             'groupes'       => $groupes,
@@ -160,11 +164,11 @@ and     @pv := concat(@pv, ',', id)
      * @Route("/groupe/{id}", name="netbs.fichier.groupe.page_groupe")
      * @return Response
      */
-    public function pageGroupeAction($id) {
+    public function pageGroupeAction($id, EntityManagerInterface $em, LayoutManager $layout) {
 
         /** @var BaseGroupe $groupe */
         $class  = $this->getGroupeClass();
-        $groupe = $this->get('doctrine.orm.entity_manager')->find($class, $id);
+        $groupe = $em->find($class, $id);
 
         if(!$groupe)
             throw $this->createNotFoundException();
@@ -172,7 +176,6 @@ and     @pv := concat(@pv, ',', id)
         if(!$this->isGranted(CRUD::READ, $groupe))
             throw $this->createAccessDeniedException("Vous n'avez pas les accès requis pour consulter ce groupe");
 
-        $layout = $this->get('netbs.core.block.layout');
         $form   = $this->createForm(GroupeType::class, $groupe)->createView();
         $config = $layout::configurator();
 
@@ -262,52 +265,5 @@ and     @pv := concat(@pv, ',', id)
             'title' => $groupe->getNom(),
             'item'  => $groupe
         ]);
-    }
-
-    /**
-     * @param $id
-     * @param $type
-     * @return Response|\Symfony\Component\HttpFoundation\StreamedResponse
-     * @Route("/groupe/export/{type}/{id}", name="netbs.fichier.groupe.export_groupe")
-     */
-    public function exportGroupeAction($id, $type) {
-
-        $em     = $this->get('doctrine.orm.entity_manager');
-        $groupe = $em->find($this->getGroupeClass(), $id);
-
-        if(!$groupe)
-            throw $this->createNotFoundException();
-
-        if(!$this->isGranted(CRUD::READ, $groupe))
-            throw $this->createAccessDeniedException("Vous n'avez pas les accès requis pour consulter ce groupe");
-
-        if(!in_array($type, ['pdf', 'excel']))
-            throw $this->createAccessDeniedException("Type $type is not allowed!");
-
-        $ids        = [$groupe->getId()];
-        $exporter   = $type == 'excel'
-            ? $this->get('netbs.fichier.exporter.excel_membre')
-            : $this->get('netbs.fichier.exporter.pdf_list_groupe');
-
-        $class      = $type == 'excel'
-            ? $this->get('netbs.fichier.config')->getMembreClass()
-            : $this->getGroupeClass();
-
-        if($type == 'excel') {
-
-            $ids    = [];
-            $grps   = array_merge([$groupe], $groupe->getEnfantsRecursive());
-
-            /** @var BaseGroupe $grp */
-            foreach($grps as $grp)
-                foreach($grp->getActivesAttributions() as $attribution)
-                    $ids[] = $attribution->getMembre()->getId();
-        }
-
-        return $this->forward('NetBSCoreBundle:Export:generateExportBlob', ['data' => json_encode([
-            'itemsClass'    => base64_encode($class),
-            'selectedIds'   => $ids,
-            'exporterAlias' => $exporter->getAlias()
-        ])]);
     }
 }

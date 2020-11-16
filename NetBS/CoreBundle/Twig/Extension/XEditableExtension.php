@@ -77,9 +77,9 @@ class XEditableExtension extends AbstractExtension
 
         $form = $this->form->createBuilder(FormType::class, $object, array('csrf_protection' => false));
         $form->add($field, $type, $typeParams);
-
+        $view = $form->getForm()->createView();
         return $this->twig->render('@NetBSCore/column/xeditable.column.twig', array(
-            'form'  => $form->getForm()->createView()
+            'form'  => $view
         ));
     }
 

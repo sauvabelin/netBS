@@ -28,7 +28,7 @@ class DoctrineMapperSubscriber implements EventSubscriber
             Events::loadClassMetadata
         ];
     }
-    
+
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs) {
 
         switch($eventArgs->getClassMetadata()->getName()) {
@@ -87,7 +87,8 @@ class DoctrineMapperSubscriber implements EventSubscriber
         $eventArgs->getClassMetadata()->mapOneToMany([
             'fieldName'     => 'autorisations',
             'targetEntity'  => $this->secureConfig->getAutorisationClass(),
-            'mappedBy'      => 'user'
+            'mappedBy'      => 'user',
+            'cascade'       => ['remove']
         ]);
     }
 

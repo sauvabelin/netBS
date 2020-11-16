@@ -8,7 +8,7 @@
     <div class="menu-content">
 
         <ul>
-            {% for category in menu.categories if not category.empty %}
+            {% for category in menu.categories|filter(c => not c.empty) %}
 
                 <li class="menu-category">{{ category.name }}</li>
 

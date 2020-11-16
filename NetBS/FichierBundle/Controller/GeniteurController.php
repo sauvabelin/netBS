@@ -2,8 +2,10 @@
 
 namespace NetBS\FichierBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\FichierBundle\Form\Personne\GeniteurType;
 use NetBS\FichierBundle\Mapping\BaseGeniteur;
+use NetBS\FichierBundle\Service\FichierConfig;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,15 +17,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class GeniteurController extends AbstractController
 {
+    protected $config;
+
+    public function __construct(FichierConfig $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @Route("/create-for-famille/{id}", name="netbs.fichier.geniteur.create")
      */
-    public function createGeniteurAction(Request $request, $id) {
+    public function createGeniteurAction(Request $request, $id, EntityManagerInterface $em) {
 
-        $configurator   = $this->get('netbs.fichier.config');
-        $class          = $configurator->getGeniteurClass();
-        $familleClass   = $configurator->getFamilleClass();
-        $em             = $this->get('doctrine.orm.entity_manager');
+        $class          = $this->config->getGeniteurClass();
+        $familleClass   = $this->config->getFamilleClass();
         $famille        = $em->find($familleClass, $id);
 
         if(!$famille)
@@ -33,13 +40,13 @@ class GeniteurController extends AbstractController
             throw $this->createAccessDeniedException("Ajout de géniteur refusé");
 
         /** @var BaseGeniteur $geniteur */
-        $geniteur       = $configurator->createGeniteur();
+        $geniteur       = $this->config->createGeniteur();
         $geniteur->setFamille($famille);
 
         $form       = $this->createForm(GeniteurType::class, $geniteur);
         $form->handleRequest($request);
 
-        if($form->isValid() && $form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($geniteur);
@@ -62,11 +69,9 @@ class GeniteurController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/remove/{id}", name="netbs.fichier.geniteur.remove")
      */
-    public function removeGeniteurAction($id) {
+    public function removeGeniteurAction($id, EntityManagerInterface $em) {
 
-        $configurator   = $this->get('netbs.fichier.config');
-        $class          = $configurator->getGeniteurClass();
-        $em             = $this->get('doctrine.orm.entity_manager');
+        $class          = $this->config->getGeniteurClass();
         $geniteur       = $em->find($class, $id);
 
         if(!$geniteur)

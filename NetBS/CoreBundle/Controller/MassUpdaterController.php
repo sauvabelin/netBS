@@ -2,7 +2,10 @@
 
 namespace NetBS\CoreBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Model\BaseMassUpdater;
+use NetBS\CoreBundle\Service\History;
+use NetBS\CoreBundle\Service\MassUpdaterManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -28,7 +31,7 @@ class MassUpdaterController extends AbstractController
      * @Route("/update-data", name="netbs.core.mass_updater.data_update")
      * @Security("is_granted('ROLE_UPDATE_EVERYWHERE')")
      */
-    public function dataUpdateAction(Request $request) {
+    public function dataUpdateAction(Request $request, MassUpdaterManager $mass, EntityManagerInterface $em, History $history) {
 
         if($request->getMethod() !== 'POST') {
 
@@ -53,7 +56,6 @@ class MassUpdaterController extends AbstractController
             $ids    = isset($data['ids']) ? json_decode($data['ids']) : [];
         }
 
-        $mass           = $this->get('netbs.core.mass_updater_manager');
         $updater        = $mass->getUpdaterForClass(base64_decode($class));
         $items          = $this->getMassItems(base64_decode($class), $ids);
 
@@ -63,7 +65,7 @@ class MassUpdaterController extends AbstractController
             'ids'           => json_encode($ids)
         ];
 
-        return $this->handleUpdater($request, $data, $updater);
+        return $this->handleUpdater($request, $data, $updater, $em, $history);
     }
 
     /**
@@ -73,7 +75,7 @@ class MassUpdaterController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @Security("is_granted('ROLE_UPDATE_EVERYWHERE')")
      */
-    protected function handleUpdater(Request $request, array $data, BaseMassUpdater $updater) {
+    protected function handleUpdater(Request $request, array $data, BaseMassUpdater $updater, EntityManagerInterface $em, History $history) {
 
         $genericForm    = $this->createForm($updater->getItemForm());
 
@@ -92,16 +94,14 @@ class MassUpdaterController extends AbstractController
 
         if($massForm->isSubmitted() && $massForm->isValid()) {
 
-            $em     = $this->get('doctrine.orm.entity_manager');
             $items  = $massForm->getData()['items'];
-
             foreach($items as $item)
                 $em->persist($item);
 
             $em->flush();
 
             $this->addFlash('success', "Modifications enregistrées pour " . count($items) . " éléments");
-            return $this->get('netbs.core.history')->getPreviousRoute(3);
+            return $history->getPreviousRoute(3);
         }
 
         return $this->render('@NetBSCore/updater/updater.html.twig', array(
@@ -117,10 +117,7 @@ class MassUpdaterController extends AbstractController
      * @return array
      */
     public function getMassItems($class, array $ids) {
-
-        $em         = $this->get('doctrine.orm.entity_manager');
-
-        $items      = $em->createQueryBuilder()
+        $items      = $this->getDoctrine()->getManager()->createQueryBuilder()
             ->select('x')
             ->from($class, 'x')
             ->where('x.id IN (:ids)')

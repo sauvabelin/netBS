@@ -2,8 +2,11 @@
 
 namespace NetBS\FichierBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use NetBS\CoreBundle\Service\History;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\Contact\BSEmailType;
+use NetBS\FichierBundle\Service\FichierConfig;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class EmailController extends AbstractController
 {
+    protected $config;
+
+    public function __construct(FichierConfig $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @Route("/delete/{ownerType}/{ownerId}/{emailId}", name="netbs.fichier.email.delete")
      * @param $ownerType
@@ -23,10 +33,9 @@ class EmailController extends AbstractController
      * @param $emailId
      * @return Response
      */
-    public function deleteEmailAction($ownerType, $ownerId, $emailId) {
+    public function deleteEmailAction($ownerType, $ownerId, $emailId, EntityManagerInterface $em, History $history) {
 
-        $class  = $this->get('netbs.fichier.config')->getEmailClass();
-        $em     = $this->get('doctrine.orm.entity_manager');
+        $class  = $this->config->getEmailClass();
         $owner  = $em->getRepository(base64_decode($ownerType))->find($ownerId);
         $email  = $em->getRepository($class)->find($emailId);
 
@@ -38,7 +47,7 @@ class EmailController extends AbstractController
         $em->flush();
 
         $this->addFlash("info", "Email " . $email->getEmail() . " correctement supprimé");
-        return $this->get('netbs.core.history')->getPreviousRoute();
+        return $history->getPreviousRoute();
     }
 
     /**
@@ -48,16 +57,15 @@ class EmailController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function modalAddAction($ownerType, $ownerId, Request $request) {
+    public function modalAddAction($ownerType, $ownerId, Request $request, EntityManagerInterface $em) {
 
-        $class  = $this->get('netbs.fichier.config')->getEmailClass();
+        $class  = $this->config->getEmailClass();
         $form   = $this->createForm(BSEmailType::class, new $class());
 
         $form->handleRequest($request);
 
-        if($form->isValid() && $form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
 
-            $em     = $this->get('doctrine.orm.entity_manager');
             $holder = $em->getRepository(base64_decode($ownerType))->find($ownerId);
             $holder->addEmail($form->getData());
 

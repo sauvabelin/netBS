@@ -2,17 +2,17 @@
 
 namespace NetBS\ListBundle\Twig;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use NetBS\ListBundle\Service\ListEngine;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class ListExtension extends AbstractExtension
 {
-    protected $container;
+    protected $engine;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ListEngine $engine)
     {
-        $this->container    = $container;
+        $this->engine = $engine;
     }
 
     public function getFunctions() {
@@ -24,6 +24,6 @@ class ListExtension extends AbstractExtension
 
     public function renderListFunction($list, $renderer, array $params = []) {
 
-        return $this->container->get('netbs.list.engine')->render($list, $renderer, $params)->getContent();
+        return $this->engine->render($list, $renderer, $params)->getContent();
     }
 }

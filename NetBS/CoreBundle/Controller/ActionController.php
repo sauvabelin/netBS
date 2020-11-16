@@ -2,6 +2,9 @@
 
 namespace NetBS\CoreBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use NetBS\CoreBundle\Service\DeleterManager;
+use NetBS\CoreBundle\Service\History;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +18,9 @@ class ActionController extends AbstractController
      * @return Response
      * @Route("/app/actions/remove-item/{itemId}/{itemClass}", name="netbs.core.action.remove_item")
      */
-    public function removeItemAction($itemId, $itemClass) {
+    public function removeItemAction($itemId, $itemClass, DeleterManager $manager, EntityManagerInterface $em, History $history) {
 
         $itemClass  = base64_decode($itemClass);
-        $manager    = $this->get('netbs.core.deleter_manager');
 
         if($manager->getDeleter($itemClass)) {
             try {
@@ -30,7 +32,6 @@ class ActionController extends AbstractController
         }
 
         else {
-            $em = $this->get('doctrine.orm.entity_manager');
             $item = $em->find($itemClass, $itemId);
 
             if ($item) {
@@ -49,6 +50,6 @@ class ActionController extends AbstractController
             }
         }
 
-        return $this->get('netbs.core.history')->getPreviousRoute();
+        return $history->getPreviousRoute();
     }
 }

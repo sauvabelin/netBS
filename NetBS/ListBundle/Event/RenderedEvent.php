@@ -4,7 +4,7 @@ namespace NetBS\ListBundle\Event;
 
 use NetBS\ListBundle\Model\ListModelInterface;
 use NetBS\ListBundle\Model\RendererInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 abstract class RenderedEvent extends Event
 {

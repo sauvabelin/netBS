@@ -2,6 +2,7 @@
 
 namespace NetBS\CoreBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Entity\News;
 use NetBS\CoreBundle\Entity\NewsChannel;
 use NetBS\CoreBundle\Form\NewsChannelType;
@@ -12,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class NewsController
@@ -33,10 +35,9 @@ class NewsController extends AbstractController
      * @return Response
      * @Route("/read", name="netbs.core.news.read_news")
      */
-    public function readNewsAction() {
+    public function readNewsAction(EntityManagerInterface $em, TokenStorageInterface $tokenStorage) {
 
-        $em = $this->get('doctrine.orm.entity_manager');
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $user = $tokenStorage->getToken()->getUser();
         $channels = $em->getRepository('NetBSCoreBundle:NewsChannel')->findReadableChannels($user);
         return $this->render('@NetBSCore/news/read_news.html.twig', [
             'channels' => $channels
@@ -51,9 +52,8 @@ class NewsController extends AbstractController
      * @route("/modal/add-channel/{id}", defaults={"id"=null}, name="netbs.core.news.modal_add_channel")
      * @Security("is_granted('ROLE_SG')")
      */
-    public function addNewsChannelModalAction(Request $request, $id) {
+    public function addNewsChannelModalAction(Request $request, $id, EntityManagerInterface $em) {
 
-        $em         = $this->get('doctrine.orm.entity_manager');
         $title      = $id ? "Modifier" : "Créer";
         $channel    = $id ? $em->find('NetBSCoreBundle:NewsChannel', $id) : new NewsChannel();
 
@@ -82,9 +82,8 @@ class NewsController extends AbstractController
      * @throws \Doctrine\ORM\OptimisticLockException
      * @Route("/modal-add-edit-news/{id}", defaults={"id"=null}, name="netbs.core.news.modal_edit_news")
      */
-    public function modalAddEditNewsAction(Request $request, $id) {
+    public function modalAddEditNewsAction(Request $request, $id, EntityManagerInterface $em) {
 
-        $em     = $this->get('doctrine.orm.entity_manager');
         $title  = $id ? "Modifier" : "Publier";
         $news   = new News();
 

@@ -2,9 +2,11 @@
 
 namespace NetBS\FichierBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\ObtentionDistinctionType;
 use NetBS\FichierBundle\Mapping\BaseObtentionDistinction;
+use NetBS\FichierBundle\Service\FichierConfig;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,21 +18,25 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ObtentionDistinctionController extends AbstractController
 {
+    protected $config;
+
+    public function __construct(FichierConfig $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @Route("/modal/creation/{membreId}", defaults={"membreId"=null}, name="netbs.fichier.obtention_distinction.modal_creation")
      * @param Request $request
      * @param $membreId
      * @return Response
      */
-    public function modalAddAction(Request $request, $membreId) {
-
-        $em             = $this->get('doctrine.orm.entity_manager');
-        $config         = $this->get('netbs.fichier.config');
-        $odClass        = $config->getObtentionDistinctionClass();
+    public function modalAddAction(Request $request, $membreId, EntityManagerInterface $em) {
+        $odClass        = $this->config->getObtentionDistinctionClass();
 
         /** @var BaseObtentionDistinction $od */
         $od             = new $odClass();
-        $membre         = $em->find($config->getMembreClass(), $membreId);
+        $membre         = $em->find($this->config->getMembreClass(), $membreId);
 
         if(!$membre)
             throw $this->createNotFoundException();
@@ -43,7 +49,7 @@ class ObtentionDistinctionController extends AbstractController
         $form           = $this->createForm(ObtentionDistinctionType::class, $od);
 
         $form->handleRequest($request);
-        if($form->isValid() && $form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
 
             $em->persist($form->getData());
             $em->flush();

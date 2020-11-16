@@ -2,8 +2,11 @@
 
 namespace NetBS\FichierBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use NetBS\CoreBundle\Service\History;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\Contact\AdresseType;
+use NetBS\FichierBundle\Service\FichierConfig;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,8 +19,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AdresseController extends AbstractController
 {
+    protected $config;
+
+    public function __construct(FichierConfig $config)
+    {
+        $this->config = $config;
+    }
+
     protected function getClass() {
-        return $this->get('netbs.fichier.config')->getAdresseClass();
+        return $this->config->getAdresseClass();
     }
 
     /**
@@ -26,10 +36,9 @@ class AdresseController extends AbstractController
      * @param $ownerId
      * @return Response
      */
-    public function deleteAdresseAction($ownerType, $ownerId, $adresseId) {
+    public function deleteAdresseAction($ownerType, $ownerId, $adresseId, EntityManagerInterface $em, History $history) {
 
         $class  = $this->getClass();
-        $em     = $this->get('doctrine.orm.entity_manager');
         $owner  = $em->getRepository(base64_decode($ownerType))->find($ownerId);
         $adrss  = $em->getRepository($class)->find($adresseId);
 
@@ -42,23 +51,22 @@ class AdresseController extends AbstractController
 
         $this->addFlash("info", "Adresse supprimée avec succès");
 
-        return $this->get('netbs.core.history')->getPreviousRoute();
+        return $history->getPreviousRoute();
     }
 
     /**
      * @Route("/modal/creation/{ownerType}/{ownerId}", name="netbs.fichier.adresse.modal_creation")
      * @return Response
      */
-    public function modalCreationAction($ownerType, $ownerId, Request $request) {
+    public function modalCreationAction($ownerType, $ownerId, Request $request, EntityManagerInterface $em) {
 
         $class  = $this->getClass();
         $form   = $this->createForm(AdresseType::class, new $class());
-        $em     = $this->get('doctrine.orm.entity_manager');
         $holder = $em->getRepository(base64_decode($ownerType))->find($ownerId);
 
         $form->handleRequest($request);
 
-        if($form->isValid() && $form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
 
             if(!$this->isGranted(CRUD::UPDATE, $holder))
                 throw $this->createAccessDeniedException("Vous n'avez pas le droit d'ajouter d'adresse ici.");

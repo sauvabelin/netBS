@@ -2,6 +2,7 @@
 
 namespace NetBS\SecureBundle\Listener;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Event\RemoveMembreEvent;
 use NetBS\SecureBundle\Service\SecureConfig;
 use NetBS\SecureBundle\Service\UserManager;

@@ -59,18 +59,16 @@ class InstallCommand extends Command
             $this->getApplication()->find('doctrine:schema:update')->run(new ArrayInput(['--force' => true]), $output);
         }
 
-        $io->writeln("Loading fixtures");
-        $this->getApplication()->find('doctrine:fixtures:load')->run(new ArrayInput([
-            '--append' => true,
-            '--group' => 'main'
-        ]), $output);
-
-        $dummy      = $dummy === null
+        $dummy = $dummy === null
             ? $io->ask("Would you like to load some dummy data? [y/n]", 'y') == 'y'
             : $dummy;
 
-        if($dummy)
-            $this->loadDummyData($io, $output);
+        $io->writeln("Loading fixtures");
+
+        $this->getApplication()->find('doctrine:fixtures:load')->run(new ArrayInput([
+            '--append' => true,
+            '--group' => $dummy ? 'fill' : 'main',
+        ]), $output);
 
         $scripts    = $this->postInstallScriptManager->getScripts();
         if(count($scripts))
@@ -91,27 +89,6 @@ class InstallCommand extends Command
 
         $io->writeln("clearing cache");
         $this->getApplication()->find('cache:clear')->run(new ArrayInput([]), $output);
-    }
-
-    protected function loadDummyData(SymfonyStyle $io, OutputInterface $output) {
-
-        /*
-        $bundles = $this->kernel->getBundles();
-
-        foreach($bundles as $bundle) {
-
-            $path   = $bundle->getPath() . "/DataFixtures/Fill";
-            if(is_dir($path)) {
-                $this->getApplication()->find('doctrine:fixtures:load')->run(new ArrayInput([
-                    '--append'      => true,
-                ]), $output);
-            }
-        }
-        */
-        $this->getApplication()->find('doctrine:fixtures:load')->run(new ArrayInput([
-            '--append'      => true,
-            '--group'       => 'fill'
-        ]), $output);
     }
 
     protected function getBoolValue($val) {

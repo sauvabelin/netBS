@@ -46,7 +46,7 @@ abstract class BaseMembre extends Personne implements EqualInterface
 
     /**
      * @var \DateTime
-     * @Assert\DateTime
+     * @Assert\Type("\DateTimeInterface")
      * @Assert\NotBlank
      * @Groups({"default"})
      * @ORM\Column(name="naissance", type="datetime")
@@ -55,7 +55,7 @@ abstract class BaseMembre extends Personne implements EqualInterface
 
     /**
      * @var \DateTime
-     * @Assert\DateTime
+     * @Assert\Type("\DateTimeInterface")
      * @Assert\NotBlank
      * @ORM\Column(name="inscription", type="datetime")
      * @Groups({"default"})
@@ -64,7 +64,7 @@ abstract class BaseMembre extends Personne implements EqualInterface
 
     /**
      * @var \DateTime
-     * @Assert\DateTime
+     * @Assert\Type("\DateTimeInterface")
      * @ORM\Column(name="desinscription", type="datetime", nullable=true)
      * @Groups({"default"})
      */

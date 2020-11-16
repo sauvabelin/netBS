@@ -5,6 +5,9 @@ namespace NetBS\CoreBundle\Controller;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseGroupe;
 use NetBS\FichierBundle\Mapping\BaseMembre;
+use NetBS\FichierBundle\Select2\FamilleProvider;
+use NetBS\FichierBundle\Select2\GroupeProvider;
+use NetBS\FichierBundle\Select2\MembreProvider;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,13 +21,13 @@ class UIController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function globalSearchAction(Request $request)
+    public function globalSearchAction(Request $request, MembreProvider $membreProvider, GroupeProvider $groupeProvider, FamilleProvider $familleProvider)
     {
         $term           = $request->get('query');
         $router         = $this->get('router');
-        $membres        = $this->get('netbs.fichier.select2.membre_provider')->search($term, 20);
-        $groupes        = $this->get('netbs.fichier.select2.groupe_provider')->search($term, 20);
-        $familles       = $this->get('netbs.fichier.select2.famille_provider')->search($term, 20);
+        $membres        = $membreProvider->search($term, 20);
+        $groupes        = $groupeProvider->search($term, 20);
+        $familles       = $familleProvider->search($term, 20);
         $results        = [];
 
         /** @var BaseMembre $membre */

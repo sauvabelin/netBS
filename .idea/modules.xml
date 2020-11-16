@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/netBS.iml" filepath="$PROJECT_DIR$/.idea/netBS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/netbs5.iml" filepath="$PROJECT_DIR$/.idea/netbs5.iml" />
     </modules>
   </component>
 </project>

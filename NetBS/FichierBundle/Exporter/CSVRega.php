@@ -41,9 +41,10 @@ class CSVRega extends CSVExporter
             "Fiaugères" => "St-Martin FR"
         ];
 
-        foreach($villes as $key => $result)
-            if (WNGHelper::similar($key, $ville) > 92)
-                return $result;
+        foreach($villes as $key => $result) {
+            similar_text($key, $ville, $perc);
+            if ($perc > 92) return $result;
+        }
 
         return $ville;
     }

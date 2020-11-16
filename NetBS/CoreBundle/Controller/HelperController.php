@@ -2,6 +2,7 @@
 
 namespace NetBS\CoreBundle\Controller;
 
+use NetBS\CoreBundle\Service\HelperManager;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,9 +16,8 @@ class HelperController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function getHelpAction(Request $request)
+    public function getHelpAction(Request $request, HelperManager $helperManager)
     {
-        $helperManager  = $this->get('netbs.core.helper_manager');
         $class          = base64_decode($request->request->get('class'));
         $id             = $request->request->get('id');
         $item           = $this->getDoctrine()->getRepository($class)->find($id);

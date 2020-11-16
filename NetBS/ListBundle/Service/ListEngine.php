@@ -114,12 +114,12 @@ class ListEngine
 
         $this->stopwatch->start($list->getAlias());
 
-        $this->dispatcher->dispatch(ListEvents::PRE_RENDER, new PreRenderListEvent($list, $renderer));
+        $this->dispatcher->dispatch( new PreRenderListEvent($list, $renderer), ListEvents::PRE_RENDER);
         $snapshot = $this->generateSnaphot($list);
         $content = new RenderedContent($renderer->render($snapshot, $list->getRendererVariables()));
 
         $this->stopwatch->lap($list->getAlias());
-        $this->dispatcher->dispatch(ListEvents::POST_RENDER, new PostRenderListEvent($list, $renderer, $content));
+        $this->dispatcher->dispatch(new PostRenderListEvent($list, $renderer, $content), ListEvents::POST_RENDER);
 
         $this->renderedLists[]  = new RenderedList($list, $renderer, $this->stopwatch->stop($list->getAlias()));
 

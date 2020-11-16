@@ -2,16 +2,24 @@
 
 namespace NetBS\SecureBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Block\CardBlock;
+use NetBS\CoreBundle\Block\LayoutManager;
+use NetBS\CoreBundle\Service\History;
 use NetBS\SecureBundle\Event\UserPasswordChangeEvent;
 use NetBS\SecureBundle\Form\ChangePasswordType;
 use NetBS\SecureBundle\Form\UserType;
 use NetBS\SecureBundle\Mapping\BaseUser;
 use NetBS\SecureBundle\Model\ChangePassword;
+use NetBS\SecureBundle\Service\SecureConfig;
+use NetBS\SecureBundle\Service\UserManager;
 use NetBS\SecureBundle\Voter\CRUD;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class UserController
@@ -35,14 +43,12 @@ class UserController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function updateUserAction(Request $request, $id) {
-
-        $manager    = $this->get('netbs.secure.user_manager');
+    public function updateUserAction(Request $request, $id, UserManager $manager) {
         $user       = $manager->find($id);
         $form       = $this->createForm(UserType::class, $user, ['operation' => CRUD::UPDATE]);
 
         $form->handleRequest($request);
-        if($form->isValid() && $form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
 
             $user   = $form->getData();
 
@@ -65,12 +71,9 @@ class UserController extends AbstractController
      * @throws \Doctrine\ORM\TransactionRequiredException
      * @Route("/user/delete/{id}", name="netbs.secure.user.delete_user")
      */
-    public function deleteUserAction($id) {
+    public function deleteUserAction($id, SecureConfig $secureConfig, UserManager $manager, EntityManagerInterface $em, History $history) {
 
-        $em             = $this->get('doctrine.orm.entity_manager');
-        $secureConfig   = $this->get('netbs.secure.config');
         $user           = $em->find($secureConfig->getUserClass(), $id);
-        $manager        = $this->get('netbs.secure.user_manager');
 
         try {
             $manager->deleteUser($user);
@@ -78,7 +81,7 @@ class UserController extends AbstractController
             $this->addFlash('danger', $e->getMessage());
         }
 
-        return $this->get('netbs.core.history')->getPreviousRoute();
+        return $history->getPreviousRoute();
     }
 
     /**
@@ -86,16 +89,13 @@ class UserController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addUserAction(Request $request) {
-
-        $config     = $this->get('netbs.secure.config');
-        $manager    = $this->get('netbs.secure.user_manager');
+    public function addUserAction(Request $request, SecureConfig $config, UserManager $manager) {
         $user       = $config->createUser();
         $form       = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
-        if($form->isValid() && $form->isSubmitted()) {
+        if($form->isSubmitted() && $form->isValid()) {
 
             $user       = $form->getData();
             $password   = $manager->encodePassword($user, $user->getPassword());
@@ -117,11 +117,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/my-account", name="netbs.secure.user.account_page")
      */
-    public function accountPageAction(Request $request) {
-
-        $manager            = $this->get('netbs.secure.user_manager');
-        $designer           = $this->get('netbs.core.block.layout');
-
+    public function accountPageAction(Request $request, UserManager $manager, LayoutManager $designer, EventDispatcherInterface $dispatcher, UserPasswordEncoderInterface $encoder) {
         /** @var BaseUser $user */
         $user               = $this->getUser();
         $userForm           = $this->createForm(UserType::class, $user);
@@ -130,15 +126,15 @@ class UserController extends AbstractController
 
         $changePasswordForm->handleRequest($request);
 
-        if($changePasswordForm->isValid() && $changePasswordForm->isSubmitted()) {
+        if($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
 
             $newPassword    = $changePassword->getNewPassword();
-            $password       = $this->get('security.password_encoder')->encodePassword($user, $newPassword);
+            $password       = $encoder->encodePassword($user, $newPassword);
 
             $user->setPassword($password);
             $manager->updateUser($user);
 
-            $this->get('event_dispatcher')->dispatch(UserPasswordChangeEvent::NAME, new UserPasswordChangeEvent($user, $newPassword));
+            $dispatcher->dispatch(new UserPasswordChangeEvent($user, $newPassword), UserPasswordChangeEvent::NAME);
 
             $this->addFlash("success", "Mot de passe changé avec succès!");
             return $this->redirectToRoute('netbs.secure.user.account_page');

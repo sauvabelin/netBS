@@ -10,6 +10,9 @@ class RoleVoter extends RV
 {
     public function extractRoles(TokenInterface $token)
     {
-        return $token->getUser() instanceof BaseUser ? $token->getUser()->getAllRoles() : [];
+        $roles = $token->getUser() instanceof BaseUser ? $token->getUser()->getAllRoles() : [];
+        return array_unique(array_map(function ($role) {
+            return $role->getRole();
+        }, $roles));
     }
 }

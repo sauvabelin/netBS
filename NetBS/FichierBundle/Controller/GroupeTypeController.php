@@ -2,8 +2,10 @@
 
 namespace NetBS\FichierBundle\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use NetBS\CoreBundle\Utils\Modal;
 use NetBS\FichierBundle\Form\GroupeTypeType;
+use NetBS\FichierBundle\Service\FichierConfig;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class GroupeTypeController extends AbstractController
 {
+    protected $config;
+
+    public function __construct(FichierConfig $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @Route("/manage", name="netbs.fichier.groupe_type.page_groupe_types")
      * @Security("is_granted('ROLE_READ_EVERYWHERE')")
@@ -34,17 +43,14 @@ class GroupeTypeController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @Security("is_granted('ROLE_CREATE_EVERYWHERE')")
      */
-    public function addGroupeTypeModalAction(Request $request) {
+    public function addGroupeTypeModalAction(Request $request, EntityManagerInterface $em) {
 
-        $config         = $this->get('netbs.fichier.config');
-        $class          = $config->getGroupeTypeClass();
+        $class          = $this->config->getGroupeTypeClass();
         $gtype          = new $class();
         $form           = $this->createForm(GroupeTypeType::class, $gtype);
 
         $form->handleRequest($request);
-        if($form->isValid() && $form->isSubmitted()) {
-
-            $em         = $this->get('doctrine.orm.entity_manager');
+        if($form->isSubmitted() && $form->isValid()) {
             $em->persist($form->getData());
             $em->flush();
 
