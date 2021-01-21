@@ -69,7 +69,11 @@ class PDFEtiquettesV2 implements ExporterInterface, ConfigurableExporterInterfac
             return $adressable->getSendableAdresse() === null;
         });
         $members = array_diff($items, $noAdress);
-        $set = $config->mergeFamilles ? self::merge($members) : $members;
+
+        $set = $members;
+        if ($config->mergeOption === 1) $set = self::merge($members);
+        else if ($config->mergeOption === 2) $set = self::mergeBySameAddress($members);
+
         $fpdf = new \FPDF();
         $fpdf->SetFont('Arial');
         $fpdf->SetFontSize($config->fontSize);
@@ -143,6 +147,32 @@ class PDFEtiquettesV2 implements ExporterInterface, ConfigurableExporterInterfac
         return  new StreamedResponse(function() use ($fpdf) {
             $fpdf->Output();
         });
+    }
+
+    /**
+     * @param AdressableInterface[] $adressables
+     * @return array
+     */
+    public static function mergeBySameAddress($adressables) {
+
+        $result = [];
+        foreach ($adressables as $adressable) {
+            $adresseId = $adressable->getSendableAdresse()->getId();
+
+            if (isset($result[$adresseId])) {
+                $result[$adresseId][] = $adressable;
+            } else {
+                $result[$adresseId] = [$adressable];
+            }
+        }
+
+        return array_map(function($set) {
+            /** @var AdressableInterface[] $set */
+            if (count($set) === 1) return $set[0];
+            else {
+                return $set[0]->getSendableAdresse()->getOwner();
+            }
+        }, $result);
     }
 
     /**

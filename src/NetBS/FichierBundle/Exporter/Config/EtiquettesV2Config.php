@@ -31,6 +31,8 @@ class EtiquettesV2Config implements ExporterConfigInterface
 
     public $mergeFamilles = true;
 
+    public $mergeOption = 1;
+
     /**
      * @return string
      */
