@@ -157,6 +157,7 @@ class PDFEtiquettesV2 implements ExporterInterface, ConfigurableExporterInterfac
 
         $result = [];
         foreach ($adressables as $adressable) {
+            if (!$adressable->getSendableAdresse()) continue;
             $adresseId = $adressable->getSendableAdresse()->getId();
 
             if (isset($result[$adresseId])) {
