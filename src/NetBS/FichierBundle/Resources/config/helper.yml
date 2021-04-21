@@ -21,3 +21,10 @@ services:
             - "@netbs.fichier.config"
         tags:
             - { name: netbs.helper }
+            
+    netbs.fichier.helper.geniteur:
+        class: NetBS\FichierBundle\Helper\GeniteurHelper
+        arguments:
+            - "@netbs.fichier.config"
+        tags:
+            - { name: netbs.helper }

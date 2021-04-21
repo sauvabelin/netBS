@@ -1,0 +1,23 @@
+{% extends '@NetBSCore/helper/base.helper.twig' %}
+
+{% block helper %}
+
+    {% set adresse      = geniteur.sendableAdresse %}
+    {% set telephone    = geniteur.sendableTelephone %}
+    {% set email        = geniteur.sendableEmail %}
+
+    {% if telephone %}
+        <p>{{ telephone.telephone }}</p>
+    {% endif %}
+    {% if email %}
+        <p>{{ email.email }}</p>
+    {% endif %}
+
+    {% if adresse %}
+        <b>Adresse</b>
+        <p>{{ adresse.rue }}</p>
+        <p>{{ adresse.npa }} {{ adresse.localite }}</p>
+    {% endif %}
+
+
+{% endblock %}

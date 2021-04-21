@@ -4,7 +4,6 @@ namespace Ovesco\FacturationBundle\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreFlushEventArgs;
 use NetBS\FichierBundle\Mapping\BaseFamille;
 use NetBS\FichierBundle\Mapping\BaseMembre;
 use NetBS\FichierBundle\Service\FichierConfig;
@@ -15,6 +14,7 @@ class DoctrineDebiteurSubscriber implements EventSubscriber
 {
     const MEMBRE    = 'membre';
     const FAMILLE   = 'famille';
+    const GENITEUR  = 'geniteur';
 
     private $config;
 
@@ -38,13 +38,13 @@ class DoctrineDebiteurSubscriber implements EventSubscriber
             return;
 
         $data       = explode(':', $item->_getDebiteurId());
-        $class      = $data[0] === self::MEMBRE
-            ? $this->config->getMembreClass()
-            : $this->config->getFamilleClass();
+        $class      = $this->config->getGeniteurClass();
+        if ($data[0] === self::MEMBRE) $class = $this->config->getMembreClass();
+        else if ($data[0] === self::FAMILLE) $class = $this->config->getFamilleClass();
 
         $debiteur   = $args->getEntityManager()->find($class, $data[1]);
         if ($debiteur === null) {
-            dump($args);
+            throw new \Exception("Debiteur introuvable");
         }
         $item->setDebiteur($debiteur);
     }
@@ -55,7 +55,11 @@ class DoctrineDebiteurSubscriber implements EventSubscriber
      * @return string
      */
     public static function createId($debiteur) {
+        $str = self::GENITEUR;
+        if ($debiteur instanceof BaseFamille) $str = self::FAMILLE;
+        else if ($debiteur instanceof BaseMembre) $str = self::MEMBRE;
 
-        return ($debiteur instanceof BaseMembre ? self::MEMBRE : self::FAMILLE) . ":" . $debiteur->getId();
+        return $str . ":" . $debiteur->getId();
     }
 }
+
