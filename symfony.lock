@@ -35,6 +35,9 @@
     "doctrine/dbal": {
         "version": "2.12.0"
     },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
+    },
     "doctrine/doctrine-bundle": {
         "version": "2.0",
         "recipe": {
@@ -102,8 +105,17 @@
     "egulias/email-validator": {
         "version": "2.1.23"
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.5"
+    },
     "gedmo/doctrine-extensions": {
         "version": "v3.0.0"
+    },
+    "genkgo/camt": {
+        "version": "2.3.0"
+    },
+    "jschaedl/iban-validation": {
+        "version": "v1.8.1"
     },
     "laminas/laminas-code": {
         "version": "3.5.0"
@@ -113,6 +125,9 @@
     },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
+    },
+    "lcobucci/clock": {
+        "version": "2.1.0"
     },
     "lcobucci/jwt": {
         "version": "3.3.3"
@@ -128,6 +143,9 @@
         "files": [
             "./config/packages/lexik_jwt_authentication.yaml"
         ]
+    },
+    "moneyphp/money": {
+        "version": "v4.0.3"
     },
     "monolog/monolog": {
         "version": "2.1.1"
@@ -427,6 +445,9 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.20.0"
+    },
+    "symfony/polyfill-php81": {
+        "version": "v1.24.0"
     },
     "symfony/process": {
         "version": "v5.1.8"

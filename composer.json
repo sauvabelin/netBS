@@ -12,6 +12,7 @@
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
+        "genkgo/camt": "^2.3",
         "lexik/jwt-authentication-bundle": "^2.9",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.2",
@@ -60,7 +61,10 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": true
+        }
     },
     "autoload": {
         "psr-4": {
@@ -68,7 +72,8 @@
             "NetBS\\CoreBundle\\": "NetBS/CoreBundle",
             "NetBS\\SecureBundle\\": "NetBS/SecureBundle",
             "NetBS\\FichierBundle\\": "NetBS/FichierBundle",
-            "NetBS\\ListBundle\\": "NetBS/ListBundle"
+            "NetBS\\ListBundle\\": "NetBS/ListBundle",
+            "Ovesco\\FacturationBundle\\": "Ovesco/FacturationBundle"
         }
     },
     "autoload-dev": {
