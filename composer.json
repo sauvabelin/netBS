@@ -5,6 +5,7 @@
         "php": ">=7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-pdo": "*",
         "beberlei/doctrineextensions": "^1.2",
         "composer/package-versions-deprecated": "1.11.99.1",
         "doctrine/annotations": "^1.0",
@@ -12,8 +13,10 @@
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
+        "erusev/parsedown": "^1.7",
         "genkgo/camt": "^2.3",
         "lexik/jwt-authentication-bundle": "^2.9",
+        "liip/imagine-bundle": "^2.7",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
@@ -73,7 +76,8 @@
             "NetBS\\SecureBundle\\": "NetBS/SecureBundle",
             "NetBS\\FichierBundle\\": "NetBS/FichierBundle",
             "NetBS\\ListBundle\\": "NetBS/ListBundle",
-            "Ovesco\\FacturationBundle\\": "Ovesco/FacturationBundle"
+            "Ovesco\\FacturationBundle\\": "Ovesco/FacturationBundle",
+            "Ovesco\\GalerieBundle\\": "Ovesco/GalerieBundle"
         }
     },
     "autoload-dev": {

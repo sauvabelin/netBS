@@ -1,0 +1,30 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Ovesco\GalerieBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+    Ovesco\GalerieBundle\Imagine\GalerieCacheResolver:
+        arguments:
+            - "%web_path%"
+            - "@ovesco.galerie.config"
+            - "@filesystem"
+        tags:
+            - { name: "liip_imagine.cache.resolver", resolver: ovesco.galerie_cache_resolver }
+
+    Ovesco\GalerieBundle\Serializer\MediaNormalizer:
+        arguments:
+            - "%web_path%"
+            - "@liip_imagine.cache.manager"
+            - "@twig.extension.assets"
+            - "@ovesco.galerie.config"
+        tags:
+            - { name: serializer.normalizer }
+
+    Ovesco\GalerieBundle\Serializer\DirectoryNormalizer:
+        tags:
+            - { name: serializer.normalizer }

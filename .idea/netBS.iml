@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/NetBS/ListBundle" isTestSource="false" packagePrefix="NetBS\ListBundle\" />
       <sourceFolder url="file://$MODULE_DIR$/NetBS/SecureBundle" isTestSource="false" packagePrefix="NetBS\SecureBundle\" />
       <sourceFolder url="file://$MODULE_DIR$/Ovesco/FacturationBundle" isTestSource="false" packagePrefix="Ovesco\FacturationBundle\" />
+      <sourceFolder url="file://$MODULE_DIR$/Ovesco/GalerieBundle" isTestSource="false" packagePrefix="Ovesco\GalerieBundle\" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
@@ -125,6 +126,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/jschaedl/iban-validation" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/moneyphp/money" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/genkgo/camt" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/erusev/parsedown" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/liip/imagine-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/imagine/imagine" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

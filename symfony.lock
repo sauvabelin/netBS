@@ -105,6 +105,9 @@
     "egulias/email-validator": {
         "version": "2.1.23"
     },
+    "erusev/parsedown": {
+        "version": "1.7.4"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
     },
@@ -113,6 +116,9 @@
     },
     "genkgo/camt": {
         "version": "2.3.0"
+    },
+    "imagine/imagine": {
+        "version": "1.2.4"
     },
     "jschaedl/iban-validation": {
         "version": "v1.8.1"
@@ -142,6 +148,19 @@
         },
         "files": [
             "./config/packages/lexik_jwt_authentication.yaml"
+        ]
+    },
+    "liip/imagine-bundle": {
+        "version": "2.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.8",
+            "ref": "d1227d002b70d1a1f941d91845fcd7ac7fbfc929"
+        },
+        "files": [
+            "./config/packages/liip_imagine.yaml",
+            "./config/routes/liip_imagine.yaml"
         ]
     },
     "moneyphp/money": {
